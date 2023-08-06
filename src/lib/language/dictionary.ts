@@ -1,3 +1,3 @@
 export const dictionary = {
-    APP_NAME: "GAINZ",
+	APP_NAME: "GAINZ",
 };

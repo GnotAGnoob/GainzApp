@@ -2,8 +2,7 @@
 <script>
     import { page } from "$app/stores";
 	import { getPageTitle } from "$lib/getPageTitle";
-
-    const x = "1";
+	import Header from "../components/Header.svelte";
 </script>
 
 <svelte:head>
@@ -11,5 +10,6 @@
 </svelte:head>
 
 <main>
+    <Header />
     <slot />
 </main>

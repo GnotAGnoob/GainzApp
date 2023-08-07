@@ -5,16 +5,16 @@
 	export let text: string;
 
     const isActive = $page.url.pathname === href;
-    console.log(isActive, $page.url.pathname, href);
 </script>
 
-<li><a class="link" href={href}>{text}</a></li>
+<li><a class="link" class:link_active={isActive} href={href}>{text}</a></li>
 
 <style lang="scss">
     .link {
         marker: none;
-    }
-    .active {
-        color: green;
+
+        &_active {
+            color: green;
+        }
     }
 </style>

@@ -1,10 +1,8 @@
-import { timeout } from '$lib';
 
 export async function load() {
-    // await timeout(1000);
-    console.log('load');
+	// await timeout(1000);
 
-    return {
-        test: 'test'
-    };
+	return {
+		test: "test",
+	};
 }

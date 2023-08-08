@@ -1,28 +1,51 @@
 <script>
 	import Icon from "@iconify/svelte";
-	import { Burger, MediaQuery } from "@svelteuidev/core";
-	import NavbarLinks from "./NavbarLinks.svelte";
-
-	const x = 960;
+	import NavDesktop from "./NavDesktop.svelte";
+	import NavMobile from "./NavMobile.svelte";
 </script>
 
-<header>
+<header class="header">
 	<a href="/">
-		<Icon icon="mdi:home" />
+		<Icon class="icon" icon="mdi:home" />
 	</a>
-	<div class="burger">
-		<Burger opened={false} />
-		<MediaQuery query="(min-width: {x}px)">
-			<NavbarLinks />
-		</MediaQuery>
+	<div class="mobile">
+		<NavMobile />
+	</div>
+
+	<div class="desktop">
+		<NavDesktop />
 	</div>
 </header>
 
 <style lang="scss">
-	@import "$variables/breakpoints.scss";
+	@import "./header.sass";
 
-	@media (max-width: $bp-960) {
-		.burger {
+	.header {
+		display: flex;
+
+		width: 100%;
+		height: 3.2rem;
+		padding: 0.6rem 1.2rem;
+
+		align-items: center;
+		justify-content: space-between;
+
+		background-color: red;
+	}
+
+	.header :global(.icon) {
+		height: 2rem;
+		width: 2rem;
+	}
+
+	@media (min-width: $bp-header) {
+		.mobile {
+			display: none;
+		}
+	}
+
+	@media (max-width: $bp-header) {
+		.desktop {
 			display: none;
 		}
 	}

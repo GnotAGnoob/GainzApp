@@ -1,20 +1,32 @@
 <script lang="ts">
-    import { page } from "$app/stores";
+	import { page } from "$app/stores";
 
 	export let href: string;
 	export let text: string;
 
-    const isActive = $page.url.pathname === href;
+	$: isActive = $page.url.pathname === href;
 </script>
 
-<li><a class="link" class:link_active={isActive} href={href}>{text}</a></li>
+<li><a class="link" class:link_active={isActive} {href}>{text}</a></li>
 
 <style lang="scss">
-    .link {
-        marker: none;
+	@import "./header.sass";
 
-        &_active {
-            color: green;
-        }
-    }
+	.link {
+		display: block;
+
+		marker: none;
+		padding-block: 0.2rem;
+		color: blue;
+
+		&_active {
+			@media (max-width: $bp-header) {
+				font-weight: 700;
+			}
+
+			@media (min-width: $bp-header) {
+				border-bottom: 0.1rem solid white;
+			}
+		}
+	}
 </style>

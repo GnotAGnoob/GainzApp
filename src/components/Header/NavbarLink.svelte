@@ -3,14 +3,15 @@
 
 	export let href: string;
 	export let text: string;
+	export let clientWidth: number | undefined = undefined;
 
 	$: isActive = $page.url.pathname === href;
 </script>
 
-<li><a class="link" class:link_active={isActive} {href}>{text}</a></li>
+<li bind:clientWidth><a class="link" class:link_active={isActive} {href}>{text}</a></li>
 
 <style lang="scss">
-	@import "./header.sass";
+	@import "./header.scss";
 
 	.link {
 		display: block;

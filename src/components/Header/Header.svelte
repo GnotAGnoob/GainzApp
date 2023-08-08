@@ -18,7 +18,7 @@
 </header>
 
 <style lang="scss">
-	@import "./header.sass";
+	@import "./header.scss";
 
 	.header {
 		display: flex;

@@ -9,7 +9,7 @@
     <title>{getPageTitle($page.route.id)}</title>
 </svelte:head>
 
+<Header />
 <main>
-    <Header />
     <slot />
 </main>

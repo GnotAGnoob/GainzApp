@@ -4,30 +4,36 @@
 	export let href: string;
 	export let text: string;
 	export let clientWidth: number | undefined = undefined;
+	export let onClick: (index: number) => void;
+	export let index: number;
 
 	$: isActive = $page.url.pathname === href;
+
+	const handleClick = () => {
+		onClick(index);
+	};
 </script>
 
-<li bind:clientWidth><a class="link" class:link_active={isActive} {href}>{text}</a></li>
+<li bind:clientWidth>
+	<a class="link" class:link_active={isActive} {href} on:click={handleClick} {...$$restProps}>
+		{text}
+	</a>
+</li>
 
 <style lang="scss">
 	@import "./header.scss";
 
 	.link {
+		--_hover-color: skyblue;
+
 		display: block;
 
 		marker: none;
 		padding-block: 0.2rem;
 		color: blue;
 
-		&_active {
-			@media (max-width: $bp-header) {
-				font-weight: 700;
-			}
-
-			@media (min-width: $bp-header) {
-				border-bottom: 0.1rem solid white;
-			}
+		&:hover {
+			color: var(--_hover-color);
 		}
 	}
 </style>

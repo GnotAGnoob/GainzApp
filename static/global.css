@@ -1,11 +1,11 @@
 @import "node_modules/normalize.css/normalize.css";
 
 :root {
-	--test: yellow;
 }
 
 html {
 	box-sizing: border-box;
+	overflow-x: hidden;
 }
 
 :where(*, *:before, *:after) {
@@ -15,6 +15,9 @@ html {
 }
 
 body {
+	position: relative;
+	overflow-x: hidden;
+
 	font-family: "Lato", sans-serif;
 }
 

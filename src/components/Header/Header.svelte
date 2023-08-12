@@ -23,8 +23,9 @@
 	.header {
 		display: flex;
 
+		position: relative;
 		width: 100%;
-		height: 3.2rem;
+		height: $header-height;
 		padding: 0.6rem 1.2rem;
 
 		align-items: center;

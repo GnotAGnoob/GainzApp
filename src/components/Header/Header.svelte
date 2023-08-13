@@ -31,7 +31,7 @@
 		align-items: center;
 		justify-content: space-between;
 
-		background-color: red;
+		border-bottom: $header-border-height solid var(--accent-neutral-200);
 	}
 
 	.header :global(.icon) {

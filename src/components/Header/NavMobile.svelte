@@ -1,29 +1,33 @@
 <script lang="ts">
+	import paths from "$lib/paths";
 	import { Burger } from "@svelteuidev/core";
-	import NavbarLinks from "./NavbarLinks.svelte";
+	import NavbarLink from "./NavbarLink.svelte";
 
 	let opened = false;
 </script>
 
-<div class="nav">
-	<Burger {opened} on:click={() => (opened = !opened)} />
-	<div class="navLinksWrapper" class:navLinksWrapper_opened={opened}>
-		<NavbarLinks class="navLinks" />
-	</div>
-</div>
+<Burger {opened} on:click={() => (opened = !opened)} />
+<nav class="nav" class:nav_opened={opened}>
+	<ul class="navLinks">
+		{#each Object.entries(paths) as [href, text], index (href)}
+			<NavbarLink {href} {text} {index} />
+		{/each}
+	</ul>
+</nav>
 
 <style lang="scss">
 	@import "./header.scss";
 
-	.navLinksWrapper {
+	.nav {
 		position: absolute;
-		top: 100%;
+
+		top: calc(100% + $header-border-height);
 		left: 100%;
 
 		width: 100%;
-		min-height: calc(100vh - $header-height);
+		min-height: calc(100vh - $header-height - $header-border-height);
 
-		background-color: white;
+		background-color: var(--accent-neutral-100);
 
 		transition: left 0.1s ease-out;
 
@@ -33,7 +37,7 @@
 			left: 0;
 		}
 
-		& :global(.navLinks) {
+		&Links {
 			display: flex;
 
 			flex-direction: column;

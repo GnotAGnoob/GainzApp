@@ -4,12 +4,14 @@
 	export let href: string;
 	export let text: string;
 	export let clientWidth: number | undefined = undefined;
-	export let onClick: (index: number) => void;
-	export let index: number;
+	export let onClick: undefined | ((index: number) => void) = undefined;
+	export let index: number | undefined = undefined;
 
 	$: isActive = $page.url.pathname === href;
 
 	const handleClick = () => {
+		if (!onClick || index === undefined) return;
+
 		onClick(index);
 	};
 </script>
@@ -24,11 +26,7 @@
 	@import "./header.scss";
 
 	.link {
-		--_hover-color: skyblue;
-
 		display: block;
-
-		color: blue;
 
 		@media (max-width: $bp-header) {
 			position: relative;
@@ -62,12 +60,8 @@
 		@media (min-width: $bp-header) {
 			padding-block: 0.2rem;
 
-			&:hover {
-				color: var(--_hover-color);
-			}
-
 			&_active {
-				color: var(--_hover-color);
+				color: var(--text-primary--hover);
 			}
 		}
 	}

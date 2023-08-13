@@ -1,0 +1,46 @@
+@import "./variables/colors.scss";
+@import "$nodeModules/normalize.css/normalize.css";
+
+$abx: hsl(0, 0%, 5%);
+
+:root {
+	--text-primary: #{$color-gray-900};
+	--text-primary--hover: #{$color-gray-500};
+
+	--background-color: #{$color-gray-50};
+
+	--accent-neutral-100: #{$color-gray-100};
+	--accent-neutral-200: #{$color-gray-200};
+}
+
+html {
+	box-sizing: border-box;
+	overflow-x: hidden;
+}
+
+:where(*, *:before, *:after) {
+	box-sizing: inherit;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	position: relative;
+
+	font-family: "Lato", sans-serif;
+	color: var(--text-primary);
+	background-color: var(--background-color);
+}
+
+:where(li) {
+	list-style: none;
+}
+
+:where(a) {
+	text-decoration: none;
+	color: inherit;
+
+	&:hover {
+		color: var(--text-primary--hover);
+	}
+}

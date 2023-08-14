@@ -11,11 +11,13 @@
 	const elements: number[] = [];
 	let timeoutId: number;
 	let parentElement: HTMLUListElement;
-	let activeElement: number = Object.keys(paths).findIndex((path) => path === $page.url.pathname);
+	let activeElement = Object.keys(paths).findIndex((path) => path === $page.url.pathname);
 	let right: number;
 	let left: number;
 
 	const calculateLine = (isDelay?: boolean) => {
+		if (activeElement === -1) return;
+
 		let leftTemp = 0;
 		const gap = parseInt(getComputedStyle(parentElement).gap) || 0;
 
@@ -44,21 +46,26 @@
 		}
 	};
 
+	const onResize = () => {
+		if (parentElement.clientWidth === 0) return;
+		calculateLine();
+	};
+
 	const onClick = (index: number) => {
 		activeElement = index;
 		calculateLine(true);
 	};
 
 	onMount(() => {
-		if (activeElement >= 0) {
-			calculateLine();
-		}
+		calculateLine();
 	});
 
 	onDestroy(() => {
 		clearTimeout(timeoutId);
 	});
 </script>
+
+<svelte:window on:resize={onResize} />
 
 <nav class="nav">
 	<ul class="navLinks" bind:this={parentElement}>

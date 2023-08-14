@@ -1,7 +1,7 @@
 @import "./variables/colors.scss";
 @import "$nodeModules/normalize.css/normalize.css";
 
-$abx: hsl(0, 0%, 5%);
+// TODO vsechny importy na @use
 
 :root {
 	--text-primary: #{$color-gray-900};

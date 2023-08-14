@@ -1,8 +1,57 @@
-
 export async function load() {
-	// await timeout(1000);
+	const bestSet = {
+		date: "2020-01-01",
+		sets: [
+			{
+				reps: 11,
+				weight: 10,
+			},
+			{
+				reps: 10,
+				weight: 10,
+			},
+			{
+				reps: 9,
+				weight: 10,
+			},
+		],
+	};
 
 	return {
-		test: "test",
+		nextWorkouts: [
+			//todo
+		],
+		workoutsHistory: [],
+		categories: [
+			{
+				category: "Biceps",
+				exercises: [
+					{
+						name: "Biceps Curl",
+						bestSet,
+						history: [
+							bestSet,
+							{
+								date: "2020-01-02",
+								sets: [
+									{
+										reps: 6,
+										weight: 12,
+									},
+									{
+										reps: 10,
+										weight: 10,
+									},
+									{
+										reps: 9,
+										weight: 10,
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+		],
 	};
 }

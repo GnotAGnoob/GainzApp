@@ -1,8 +1,4 @@
-@import "./spacings.scss";
-
-@function pxToRem($px) {
-	@return calc($px / $rem * 1rem);
-}
+@use "$sass/functions.scss" as *;
 
 $bp-960: pxToRem(960);
 $bp-512: pxToRem(512);

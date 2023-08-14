@@ -28,6 +28,8 @@
 	.link {
 		display: block;
 
+		font-size: $header-font-size;
+
 		@media (max-width: $bp-header) {
 			position: relative;
 
@@ -41,7 +43,7 @@
 				position: absolute;
 
 				width: 100%;
-				height: 0.125rem;
+				height: pxToRem(2);
 				bottom: -0.4rem;
 
 				background-color: black;

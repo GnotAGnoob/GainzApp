@@ -80,7 +80,7 @@
 
 			align-items: center;
 			justify-content: center;
-			gap: 2rem;
+			gap: $space-lg;
 		}
 	}
 
@@ -92,7 +92,7 @@
 		left: 0;
 		bottom: 0;
 
-		height: 0.1rem;
+		height: $space-xxs;
 
 		background-color: var(--text-primary--hover);
 

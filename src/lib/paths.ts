@@ -1,5 +1,7 @@
+import { dictionary } from "./language/dictionary";
+
 export default {
-	"/": "Home",
-	"/create": "Create",
-	"/list": "List",
+	"/": dictionary.HOME,
+	"/create": dictionary.CREATE,
+	"/list": dictionary.LIST,
 } as const;

@@ -5,15 +5,16 @@
 </script>
 
 <header class="header">
-	<a href="/">
-		<Icon class="icon" icon="mdi:home" />
-	</a>
-	<div class="mobile">
-		<NavMobile />
-	</div>
-
-	<div class="desktop">
-		<NavDesktop />
+	<div class="wrapper">
+		<a href="/">
+			<Icon class="icon" icon="mdi:home" />
+		</a>
+		<div class="mobile">
+			<NavMobile />
+		</div>
+		<div class="desktop">
+			<NavDesktop />
+		</div>
 	</div>
 </header>
 
@@ -21,15 +22,9 @@
 	@import "./header.scss";
 
 	.header {
-		display: flex;
-
 		position: relative;
 		width: 100%;
 		height: $header-height;
-		padding: 0.6rem 1.2rem;
-
-		align-items: center;
-		justify-content: space-between;
 
 		border-bottom: $header-border-height solid var(--accent-neutral-200);
 	}
@@ -49,5 +44,16 @@
 		.desktop {
 			display: none;
 		}
+	}
+
+	.wrapper {
+		display: flex;
+
+		max-width: $max-width;
+		margin-inline: auto;
+		padding: 0.6rem 1.2rem;
+
+		align-items: center;
+		justify-content: space-between;
 	}
 </style>

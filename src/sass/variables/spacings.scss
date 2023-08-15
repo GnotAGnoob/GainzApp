@@ -12,3 +12,7 @@ $space-lg: $base-size * math.pow($koeficient, 4);
 $space-xl: $base-size * math.pow($koeficient, 5);
 $space-xxl: $base-size * math.pow($koeficient, 6);
 $space-xxxl: $base-size * math.pow($koeficient, 7);
+
+$site-padding: $space-sm;
+
+$border: $space-sm;

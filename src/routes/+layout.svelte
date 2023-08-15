@@ -11,6 +11,17 @@
 </svelte:head>
 
 <Header />
-<main>
-	<slot />
-</main>
+<div class="wrapper">
+	<main>
+		<slot />
+	</main>
+</div>
+
+<style lang="scss">
+	.wrapper {
+		max-width: $max-width;
+		margin: auto;
+
+		padding-inline: $site-padding;
+	}
+</style>

@@ -1,0 +1,13 @@
+@use "sass:math";
+
+$base-size: 0.7rem;
+$koeficient: 1.35;
+
+$font-xxs: $base-size;
+$font-xs: $base-size * math.pow($koeficient, 1);
+$font-sm: $base-size * math.pow($koeficient, 2);
+$font-md: $base-size * math.pow($koeficient, 3);
+$font-lg: $base-size * math.pow($koeficient, 4);
+$font-xl: $base-size * math.pow($koeficient, 5);
+$font-xxl: $base-size * math.pow($koeficient, 6);
+$font-xxxl: $base-size * math.pow($koeficient, 7);

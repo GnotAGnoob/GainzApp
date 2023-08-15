@@ -16,9 +16,9 @@
 	};
 </script>
 
-<li class="linkWrapper" bind:clientWidth>
-	<a class="link" class:link_active={isActive} {href} on:click={handleClick} {...$$restProps}>
-		{text}
+<li bind:clientWidth>
+	<a class="linkWrapper" {href} on:click={handleClick} {...$$restProps}>
+		<span class="link" class:link_active={isActive}>{text}</span>
 	</a>
 </li>
 
@@ -26,14 +26,14 @@
 	@import "./header.scss";
 
 	.link {
-		display: block;
-
-		font-size: $header-font-size;
+		&Wrapper {
+			display: block;
+		}
 
 		@media (max-width: $bp-header) {
 			position: relative;
 
-			width: fit-content;
+			font-size: $text-menu-mobile;
 			margin: auto;
 
 			&_active::after {
@@ -44,26 +44,28 @@
 
 				width: 100%;
 				height: pxToRem(2);
-				bottom: -0.4rem;
+				left: 0;
+				bottom: -$space-xs;
 
-				background-color: black;
+				background-color: var(--text-primary);
 			}
 
 			&Wrapper {
-				width: 100%;
-				padding: 0.8rem 2rem;
+				text-align: center;
+				padding: $space-md $space-lg;
 
 				&:hover {
-					background-color: gray;
+					background-color: var(--background-color);
+					color: inherit;
 				}
 			}
 		}
 
 		@media (min-width: $bp-header) {
-			padding-block: 0.2rem;
-
-			&_active {
-				color: var(--text-primary--hover);
+			&Wrapper {
+				&_active {
+					color: var(--text-primary--hover);
+				}
 			}
 		}
 	}

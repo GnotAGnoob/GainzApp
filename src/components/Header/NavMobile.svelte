@@ -6,7 +6,7 @@
 	let opened = false;
 </script>
 
-<Burger {opened} on:click={() => (opened = !opened)} />
+<Burger {opened} on:click={() => (opened = !opened)} color="var(--text-primary)" />
 <nav class="nav" class:nav_opened={opened}>
 	<ul class="navLinks">
 		{#each Object.entries(paths) as [href, text], index (href)}

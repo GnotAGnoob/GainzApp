@@ -1,4 +1,4 @@
-@import "./variables/colors.scss";
+@use "./variables/colors.scss" as *;
 @import "$nodeModules/normalize.css/normalize.css";
 
 // TODO vsechny importy na @use
@@ -6,6 +6,8 @@
 :root {
 	--text-primary: #{$color-gray-900};
 	--text-primary--hover: #{$color-gray-500};
+
+	--text-secondary: #{$color-gray-600};
 
 	--background-color: #{$color-gray-50};
 
@@ -28,8 +30,13 @@ body {
 	position: relative;
 
 	font-family: "Lato", sans-serif;
+
 	color: var(--text-primary);
 	background-color: var(--background-color);
+}
+
+:where(body):where(*, *:before, *:after) {
+	font-size: $text;
 }
 
 :where(li) {
@@ -43,4 +50,12 @@ body {
 	&:hover {
 		color: var(--text-primary--hover);
 	}
+}
+
+:where(h1, h2) {
+	font-size: $text-heading;
+}
+
+:where(h3, h4, h5, h6) {
+	font-size: $text-subheading;
 }

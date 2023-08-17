@@ -1,8 +1,9 @@
 @use "$variables/base/typography" as font;
 
-$text: font.$font-xs;
-$text-heading: font.$font-xxs;
+$text: font.$font-sm;
+$text-heading: font.$font-md;
 $text-subheading: font.$font-xs;
 $text-tag: font.$font-xxs;
+$text-smallest: font.$font-xxxs;
 
-$text-menu-mobile: font.$font-sm;
+$text-menu-mobile: font.$font-xl;

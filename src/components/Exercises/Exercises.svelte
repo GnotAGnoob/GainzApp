@@ -1,26 +1,20 @@
 <script lang="ts">
 	import type { load } from "$src/routes/+page.server";
+	import Exercise from "./Exercise.svelte";
 
+	// TODO: vylepsit typ
 	export let categories: Awaited<ReturnType<typeof load>>["categories"];
 </script>
 
 <div class="categories">
 	{#each categories as category (category.category)}
-		<section class="category">
+		<section>
 			<h3>{category.category}</h3>
-			{#each category.exercises as exercise (exercise.name)}
-				<h4>{exercise.name}</h4>
-				<date>{exercise.bestSet.date}</date>
-				{#each exercise.bestSet.sets as bestSet}
-					<p>{bestSet.weight} x {bestSet.reps}</p>
+			<ul class="category">
+				{#each category.exercises as exercise (exercise.name)}
+					<Exercise {exercise} />
 				{/each}
-				{#each exercise.history as workout}
-					<date>{workout.date}</date>
-					{#each workout.sets as set}
-						<p>{set.weight} x {set.reps}</p>
-					{/each}
-				{/each}
-			{/each}
+			</ul>
 		</section>
 	{/each}
 </div>
@@ -29,7 +23,7 @@
 	.categories {
 		display: flex;
 
-		margin-top: $space-md;
+		margin-top: $space-sm;
 
 		flex-direction: column;
 
@@ -37,7 +31,10 @@
 	}
 
 	.category {
-		border-radius: $border;
-		background-color: var(--accent-neutral-200);
+		margin-top: $space-xs;
+		padding: $space-sm $space-sm;
+		border-radius: $border-md;
+
+		background-color: var(--accent-neutral-100);
 	}
 </style>

@@ -7,12 +7,27 @@
 	--text-primary: #{$color-gray-900};
 	--text-primary--hover: #{$color-gray-500};
 
-	--text-secondary: #{$color-gray-600};
+	--text-secondary: #{$color-gray-500};
+	--text-secondary-2: #{$color-gray-400};
 
 	--background-color: #{$color-gray-50};
 
 	--accent-neutral-100: #{$color-gray-100};
 	--accent-neutral-200: #{$color-gray-200};
+	--accent-neutral-300: #{$color-gray-300};
+	--accent-neutral-400: #{$color-gray-400};
+	--accent-neutral-500: #{$color-gray-500};
+
+	--accent-positive-50: #{$color-green-50};
+	--accent-positive-100: #{$color-green-100};
+	--accent-positive-200: #{$color-green-200};
+	--accent-positive-300: #{$color-green-300};
+	--accent-positive-400: #{$color-green-400};
+	--accent-positive-500: #{$color-green-500};
+	--accent-positive-600: #{$color-green-600};
+	--accent-positive-700: #{$color-green-700};
+	--accent-positive-800: #{$color-green-800};
+	--accent-positive-900: #{$color-green-900};
 }
 
 html {
@@ -28,6 +43,8 @@ html {
 
 body {
 	position: relative;
+
+	min-height: 100vh;
 
 	font-family: "Lato", sans-serif;
 

@@ -1,6 +1,6 @@
 export async function load() {
-	const bestSet = {
-		date: "2020-01-01",
+	const bestWorkout = {
+		date: new Date(),
 		sets: [
 			{
 				reps: 11,
@@ -27,12 +27,12 @@ export async function load() {
 				category: "Biceps",
 				exercises: [
 					{
-						name: "Biceps Curl",
-						bestSet,
+						name: "Curl",
+						bestWorkout,
 						history: [
-							bestSet,
+							bestWorkout,
 							{
-								date: "2020-01-02",
+								date: new Date(),
 								sets: [
 									{
 										reps: 6,

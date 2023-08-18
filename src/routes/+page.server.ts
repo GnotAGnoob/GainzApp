@@ -162,6 +162,22 @@ export async function load() {
 										reps: 9,
 										weight: 10,
 									},
+									{
+										reps: 10,
+										weight: 10,
+									},
+									{
+										reps: 9,
+										weight: 10,
+									},
+									{
+										reps: 10,
+										weight: 10,
+									},
+									{
+										reps: 9,
+										weight: 10,
+									},
 								],
 							},
 						],

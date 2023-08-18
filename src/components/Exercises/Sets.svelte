@@ -4,6 +4,8 @@
 	import Set from "./Set.svelte";
 	import Icon from "@iconify/svelte";
 
+	const SCROLL_REDUCTION = 0.8;
+
 	export let sets: Awaited<ReturnType<typeof load>>["categories"][0]["exercises"][0]["history"][0]["sets"];
 
 	let scrollElement: HTMLDivElement;
@@ -24,7 +26,7 @@
 		const scrollDirection = direction === "left" ? -1 : 1;
 
 		scrollElement.scrollBy({
-			left: scrollElement.scrollWidth * scrollDirection,
+			left: scrollElement.clientWidth * scrollDirection * SCROLL_REDUCTION,
 			behavior: "smooth",
 		});
 	};

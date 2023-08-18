@@ -12,12 +12,13 @@
 </svelte:head>
 
 <Header />
+<BackToTop />
 <div class="wrapper">
 	<main>
 		<slot />
 	</main>
+	<footer class="footer">© 2023 Daniel Svátek</footer>
 </div>
-<BackToTop />
 
 <style lang="scss">
 	.wrapper {
@@ -25,5 +26,12 @@
 		margin: auto;
 
 		padding-inline: $site-padding;
+	}
+
+	.footer {
+		padding-block: $space-sm $space-xs;
+
+		font-size: $text-copyright;
+		color: var(--text-secondary);
 	}
 </style>

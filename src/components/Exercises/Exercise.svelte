@@ -8,7 +8,7 @@
 </script>
 
 <li class="exercise">
-	<h4>{exercise.name}</h4>
+	<h4 class="name">{exercise.name}</h4>
 	<div class="workouts">
 		<Workout title={dictionary.BEST_WORKOUT} workout={exercise.bestWorkout} type={"best"} />
 		<Workout title={dictionary.LAST_WORKOUT} workout={exercise.history[exercise.history.length - 1]} />
@@ -23,10 +23,20 @@
 {/each} -->
 
 <style lang="scss">
+	.exercise {
+		color: var(--text-secondary);
+	}
+
+	.name {
+		text-align: center;
+		font-size: $text-smallest;
+		font-weight: 900;
+	}
+
 	.workouts {
 		display: grid;
 
-		margin-top: $space-sm;
+		margin-top: $space-xs;
 		grid-template-columns: 1fr 1fr;
 	}
 </style>

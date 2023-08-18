@@ -32,12 +32,12 @@
 
 <div class="arrowsWrapper">
 	{#if isOverflowingLeft}
-		<button class="button button--left" on:click={() => scroll("left")}>
+		<button class="button button_left" on:click={() => scroll("left")}>
 			<Icon icon="solar:alt-arrow-left-bold" />
 		</button>
 	{/if}
 	{#if isOverflowingRight}
-		<button class="button button--right" on:click={() => scroll("right")}>
+		<button class="button button_right" on:click={() => scroll("right")}>
 			<Icon icon="solar:alt-arrow-right-bold" />
 		</button>
 	{/if}
@@ -113,18 +113,18 @@
 		font-size: $icon;
 		background-color: var(--_background-color);
 
-		z-index: 1;
+		z-index: 10;
 
 		&:hover {
 			background-color: var(--_button-background-hover);
 		}
 
-		&--left {
+		&_left {
 			border-top-right-radius: $border-sm;
 			border-bottom-right-radius: $border-sm;
 		}
 
-		&--right {
+		&_right {
 			border-top-left-radius: $border-sm;
 			border-bottom-left-radius: $border-sm;
 			right: 0;

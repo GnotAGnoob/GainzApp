@@ -3,6 +3,7 @@
 	import { page } from "$app/stores";
 	import { getPageTitle } from "$lib/getPageTitle";
 	import Header from "../components/Header/Header.svelte";
+	import BackToTop from "$src/components/BackToTop.svelte";
 	import "$sass/global.scss";
 </script>
 
@@ -16,6 +17,7 @@
 		<slot />
 	</main>
 </div>
+<BackToTop />
 
 <style lang="scss">
 	.wrapper {

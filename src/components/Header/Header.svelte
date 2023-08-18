@@ -2,12 +2,14 @@
 	import Icon from "@iconify/svelte";
 	import NavDesktop from "./NavDesktop.svelte";
 	import NavMobile from "./NavMobile.svelte";
+
+	// TODO: hiddable header
 </script>
 
 <header class="header">
 	<div class="wrapper">
 		<a href="/">
-			<Icon class="icon" icon="mdi:home" />
+			<Icon class="icon" icon="solar:donut-bitten-bold-duotone" />
 		</a>
 		<div class="mobile">
 			<NavMobile />
@@ -22,11 +24,17 @@
 	@import "./header.scss";
 
 	.header {
-		position: relative;
+		position: sticky;
+
+		top: 0;
+
 		width: 100%;
 		height: $header-height;
-
 		border-bottom: $header-border-height solid var(--accent-neutral-200);
+
+		background-color: var(--background-color);
+
+		z-index: 100;
 	}
 
 	.header :global(.icon) {

@@ -31,8 +31,6 @@
 
 		transition: left 0.1s ease-out;
 
-		z-index: 1;
-
 		&_opened {
 			left: 0;
 		}

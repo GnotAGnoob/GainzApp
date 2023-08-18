@@ -8,7 +8,7 @@
 	export let type: "default" | "best" = "default";
 </script>
 
-<div class="workout workout--{type}">
+<div class="workout workout_{type}">
 	<p class="title">
 		<span>{title}</span>
 		<date class="date">{dateFormat(workout.date)}</date>
@@ -52,7 +52,7 @@
 			border-bottom-right-radius: $_border;
 		}
 
-		&--best {
+		&_best {
 			--_border-color: var(--accent-positive-400);
 			--_text-color: var(--accent-positive-800);
 			--_button-background-hover: var(--accent-positive-300);

@@ -82,6 +82,7 @@ body {
 :where(button) {
 	border: none;
 	background-color: unset;
+	cursor: pointer;
 
 	&:hover {
 		background-color: unset;

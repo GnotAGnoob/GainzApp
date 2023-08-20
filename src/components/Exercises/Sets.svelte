@@ -1,60 +1,23 @@
 <script lang="ts">
 	import type { load } from "$src/routes/+page.server";
-	import { onMount } from "svelte";
 	import Set from "./Set.svelte";
-	import Icon from "@iconify/svelte";
-
-	const SCROLL_REDUCTION = 0.8;
+	import type { workoutType } from "./Exercises";
 
 	export let sets: Awaited<ReturnType<typeof load>>["categories"][0]["exercises"][0]["history"][0]["sets"];
-
-	let scrollElement: HTMLDivElement;
-	let isOverflowingLeft = false;
-	let isOverflowingRight = false;
-
-	const setOverflowing = () => {
-		isOverflowingLeft = scrollElement.scrollLeft > 0 ? true : false;
-		const isScrollEnd = scrollElement.scrollLeft + scrollElement.clientWidth === scrollElement.scrollWidth;
-		isOverflowingRight = isScrollEnd ? false : true;
-	};
-
-	onMount(() => {
-		setOverflowing();
-	});
-
-	const scroll = (direction: "left" | "right") => {
-		const scrollDirection = direction === "left" ? -1 : 1;
-
-		scrollElement.scrollBy({
-			left: scrollElement.clientWidth * scrollDirection * SCROLL_REDUCTION,
-			behavior: "smooth",
-		});
-	};
+	export let type: workoutType = "default";
 </script>
 
-<div class="arrowsWrapper">
-	{#if isOverflowingLeft}
-		<button class="button button_left" on:click={() => scroll("left")}>
-			<Icon icon="solar:alt-arrow-left-bold" />
-		</button>
-	{/if}
-	{#if isOverflowingRight}
-		<button class="button button_right" on:click={() => scroll("right")}>
-			<Icon icon="solar:alt-arrow-right-bold" />
-		</button>
-	{/if}
-	<div class="setsWrapper">
-		<div class="setsContainer" bind:this={scrollElement} on:scroll={setOverflowing}>
-			<ul class="sets">
-				{#each sets as set, index}
-					<Set setNumber={index + 1} weight={set.weight} reps={set.reps} />
-				{/each}
-			</ul>
-		</div>
-	</div>
+<div class="setsWrapper">
+	<ul class="sets">
+		{#each sets as set, index}
+			<Set {type} setNumber={index + 1} weight={set.weight} reps={set.reps} />
+		{/each}
+	</ul>
 </div>
 
 <style lang="scss">
+	@import "./Exercises.scss";
+
 	.sets {
 		display: grid;
 
@@ -64,72 +27,8 @@
 		grid-auto-columns: 1fr;
 		grid-auto-flow: column;
 
-		&Container {
-			width: 100%;
-
-			padding-bottom: $space-sm;
-			overflow-x: scroll;
-		}
-
 		&Wrapper {
-			position: relative;
-
-			&::after,
-			&::before {
-				content: "";
-
-				position: absolute;
-
-				top: 0;
-				bottom: 0;
-
-				width: var(--_item-side-padding);
-
-				background: transparent;
-				background: linear-gradient(90deg, var(--_background-color) 0%, transparent 100%);
-			}
-
-			&::before {
-				left: 0;
-			}
-
-			&::after {
-				right: 0;
-				transform: rotate(180deg);
-			}
-		}
-	}
-
-	.arrowsWrapper {
-		position: relative;
-	}
-
-	.button {
-		display: flex;
-		position: absolute;
-
-		justify-content: center;
-		align-items: center;
-
-		color: var(--_text-secondary-color);
-		font-size: $icon;
-		background-color: var(--_background-color);
-
-		z-index: 10;
-
-		&:hover {
-			background-color: var(--_button-background-hover);
-		}
-
-		&_left {
-			border-top-right-radius: $border-sm;
-			border-bottom-right-radius: $border-sm;
-		}
-
-		&_right {
-			border-top-left-radius: $border-sm;
-			border-bottom-left-radius: $border-sm;
-			right: 0;
+			margin-inline: auto;
 		}
 	}
 </style>

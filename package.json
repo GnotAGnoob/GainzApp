@@ -34,9 +34,9 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@svelteuidev/composables": "^0.14.0",
-		"@svelteuidev/core": "^0.14.0",
-		"@svelteuidev/dates": "^0.14.0",
+		"@svelteuidev/composables": "^0.15.0",
+		"@svelteuidev/core": "^0.15.0",
+		"@svelteuidev/dates": "^0.15.0",
 		"dayjs": "^1.11.9",
 		"normalize.css": "^8.0.1"
 	}

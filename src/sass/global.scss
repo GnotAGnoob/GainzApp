@@ -8,7 +8,7 @@
 	--text-primary--hover: #{$color-gray-500};
 
 	--text-secondary: #{$color-gray-500};
-	--text-secondary-2: #{$color-gray-400};
+	--text-secondary-2: #{$color-gray-600};
 
 	--background-color: #{$color-gray-50};
 
@@ -17,6 +17,10 @@
 	--accent-neutral-300: #{$color-gray-300};
 	--accent-neutral-400: #{$color-gray-400};
 	--accent-neutral-500: #{$color-gray-500};
+	--accent-neutral-600: #{$color-gray-600};
+	--accent-neutral-700: #{$color-gray-700};
+	--accent-neutral-800: #{$color-gray-800};
+	--accent-neutral-900: #{$color-gray-900};
 
 	--accent-positive-50: #{$color-green-50};
 	--accent-positive-100: #{$color-green-100};
@@ -28,9 +32,32 @@
 	--accent-positive-700: #{$color-green-700};
 	--accent-positive-800: #{$color-green-800};
 	--accent-positive-900: #{$color-green-900};
+
+	--accent-info-50: #{$color-blue-50};
+	--accent-info-100: #{$color-blue-100};
+	--accent-info-200: #{$color-blue-200};
+	--accent-info-300: #{$color-blue-300};
+	--accent-info-400: #{$color-blue-400};
+	--accent-info-500: #{$color-blue-500};
+	--accent-info-600: #{$color-blue-600};
+	--accent-info-700: #{$color-blue-700};
+	--accent-info-800: #{$color-blue-800};
+	--accent-info-900: #{$color-blue-900};
+
+	--site-padding: #{$space-sm};
+
+	@media (min-width: $bp-512) {
+		--site-padding: #{$space-md};
+	}
+
+	@media (min-width: $bp-900) {
+		--site-padding: #{$space-lg};
+	}
 }
 
 html {
+	height: 100%;
+
 	box-sizing: border-box;
 	overflow-x: hidden;
 
@@ -44,10 +71,13 @@ html {
 }
 
 body {
+	display: flex;
 	position: relative;
 
+	height: 100%;
 	min-height: 100vh;
 
+	flex-direction: column;
 	font-family: "Lato", sans-serif;
 
 	color: var(--text-primary);

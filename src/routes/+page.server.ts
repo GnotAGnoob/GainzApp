@@ -14,30 +14,6 @@ export async function load() {
 				reps: 9,
 				weight: 10,
 			},
-			{
-				reps: 10,
-				weight: 10,
-			},
-			{
-				reps: 9,
-				weight: 10,
-			},
-			{
-				reps: 10,
-				weight: 10,
-			},
-			{
-				reps: 9,
-				weight: 10,
-			},
-			{
-				reps: 10,
-				weight: 10,
-			},
-			{
-				reps: 9,
-				weight: 10,
-			},
 		],
 	};
 
@@ -56,7 +32,7 @@ export async function load() {
 						history: [
 							bestWorkout,
 							{
-								date: new Date(),
+								date: new Date(1692300971241),
 								sets: [
 									{
 										reps: 6,
@@ -84,6 +60,7 @@ export async function load() {
 									},
 								],
 							},
+							bestWorkout,
 						],
 					},
 					{

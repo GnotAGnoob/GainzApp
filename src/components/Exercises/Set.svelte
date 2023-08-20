@@ -1,10 +1,13 @@
 <script lang="ts">
+	import type { workoutType } from "./Exercises";
+
 	export let setNumber: number;
 	export let weight: number;
 	export let reps: number;
+	export let type: workoutType = "default";
 </script>
 
-<li class="set">
+<li class="set set_{type}">
 	<div class="setNumberWrapper">
 		<div class="setNumber">{setNumber}</div>
 	</div>
@@ -20,12 +23,32 @@
 </li>
 
 <style lang="scss">
+	@import "./Exercises.scss";
+
 	.set {
+		--_border-color: #{$border-color-default};
+		--_text-secondary-color: #{$text-secondary-color-default};
+
 		display: flex;
 
 		gap: $space-xs;
 		flex-direction: column;
 		align-items: flex-end;
+
+		&_best {
+			--_border-color: #{$border-color-best};
+			--_text-secondary-color: #{$text-secondary-color-best};
+		}
+
+		&_history {
+			--_border-color: #{$border-color-history};
+			--_text-secondary-color: #{$text-secondary-color-history};
+		}
+
+		&_history2 {
+			--_border-color: #{$border-color-history-2};
+			--_text-secondary-color: #{$text-secondary-color-history-2};
+		}
 
 		&Inner {
 			display: flex;
@@ -42,7 +65,7 @@
 		}
 
 		&BorderWrapper {
-			margin-inline: var(--_item-side-padding);
+			margin-inline: $item-side-padding;
 			line-height: 1;
 		}
 
@@ -56,7 +79,7 @@
 
 			&Wrapper {
 				width: 100%;
-				padding-inline: var(--_item-side-padding);
+				padding-inline: $item-side-padding;
 
 				text-align: center;
 			}

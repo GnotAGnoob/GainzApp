@@ -6,14 +6,14 @@ settings:
 
 dependencies:
   '@svelteuidev/composables':
-    specifier: ^0.14.0
-    version: 0.14.0(svelte@4.1.1)
+    specifier: ^0.15.0
+    version: 0.15.0(svelte@4.1.1)
   '@svelteuidev/core':
-    specifier: ^0.14.0
-    version: 0.14.0(@svelteuidev/composables@0.14.0)(svelte@4.1.1)
+    specifier: ^0.15.0
+    version: 0.15.0(@svelteuidev/composables@0.15.0)(svelte@4.1.1)
   '@svelteuidev/dates':
-    specifier: ^0.14.0
-    version: 0.14.0(@svelteuidev/composables@0.14.0)(@svelteuidev/core@0.14.0)(svelte@4.1.1)
+    specifier: ^0.15.0
+    version: 0.15.0(@svelteuidev/composables@0.15.0)(@svelteuidev/core@0.15.0)(svelte@4.1.1)
   dayjs:
     specifier: ^1.11.9
     version: 1.11.9
@@ -515,35 +515,35 @@ packages:
       - supports-color
     dev: true
 
-  /@svelteuidev/composables@0.14.0(svelte@4.1.1):
-    resolution: {integrity: sha512-6xkw0SPUFlI3IhRymVH9ei4IUxBLeP6UeMUmDECKaDsH5pFwD9po9tiXYx2r475E4YoKJ9lY98c2yPvLOv1rVg==}
+  /@svelteuidev/composables@0.15.0(svelte@4.1.1):
+    resolution: {integrity: sha512-lSrxi/i2Zc7X08hiPcJJCYtts9R3c8F/erwjiLnpLtYpiNl5hQFOfBeP+m7Z7L6SczOG0axE/Y0WperTsRnZPA==}
     peerDependencies:
       svelte: '>=3.55.0'
     dependencies:
       svelte: 4.1.1
     dev: false
 
-  /@svelteuidev/core@0.14.0(@svelteuidev/composables@0.14.0)(svelte@4.1.1):
-    resolution: {integrity: sha512-gEo61WRZlPCEhGplwVe94CcV48euyF6y2u1xF0ngCj5A2WTZ6wYMWRkNVxSNP9HTv9+W+Uo5AuLt3D35S7HHmQ==}
+  /@svelteuidev/core@0.15.0(@svelteuidev/composables@0.15.0)(svelte@4.1.1):
+    resolution: {integrity: sha512-jer1cwUjwTYw9mOd98naBgZpx7MwIPEuweXIUpc7F4QMTh3rLT3w3K2z9vMEcDAhqOGUGa9IhnGO5hxsEFbHow==}
     peerDependencies:
-      '@svelteuidev/composables': 0.14.0
+      '@svelteuidev/composables': 0.15.0
       svelte: '>=3.55.0'
     dependencies:
       '@floating-ui/dom': 1.2.8
       '@stitches/core': 1.2.8
-      '@svelteuidev/composables': 0.14.0(svelte@4.1.1)
+      '@svelteuidev/composables': 0.15.0(svelte@4.1.1)
       svelte: 4.1.1
     dev: false
 
-  /@svelteuidev/dates@0.14.0(@svelteuidev/composables@0.14.0)(@svelteuidev/core@0.14.0)(svelte@4.1.1):
-    resolution: {integrity: sha512-8OqUIr3iuOB3T02iKht5lM80Dva2DLxUWBV43HUZyFxRv0HQ2bCz8ZC6+qj1hOsw77QedmIX7oq0K87lEeSRsA==}
+  /@svelteuidev/dates@0.15.0(@svelteuidev/composables@0.15.0)(@svelteuidev/core@0.15.0)(svelte@4.1.1):
+    resolution: {integrity: sha512-F72Z4rfDm1/cjhUbgNxjfYhhBFNYkn8e/+B7vJMBysSlVFw1SfPHcmXRZTt/OSm/C0B/rmU5joxUsNNG/lyyGA==}
     peerDependencies:
-      '@svelteuidev/composables': 0.14.0
-      '@svelteuidev/core': 0.14.0
+      '@svelteuidev/composables': 0.15.0
+      '@svelteuidev/core': 0.15.0
       svelte: '>=3.55.0'
     dependencies:
-      '@svelteuidev/composables': 0.14.0(svelte@4.1.1)
-      '@svelteuidev/core': 0.14.0(@svelteuidev/composables@0.14.0)(svelte@4.1.1)
+      '@svelteuidev/composables': 0.15.0(svelte@4.1.1)
+      '@svelteuidev/core': 0.15.0(@svelteuidev/composables@0.15.0)(svelte@4.1.1)
       dayjs: 1.11.1
       svelte: 4.1.1
     dev: false

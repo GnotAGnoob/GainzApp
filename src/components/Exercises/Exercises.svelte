@@ -44,5 +44,29 @@
 		&Title {
 			text-align: center;
 		}
+
+		@media (min-width: $bp-512) {
+			display: grid;
+
+			// grid-auto-flow: column;
+			grid-template-columns: repeat(2, 1fr);
+			align-items: flex-start;
+		}
+
+		@media (min-width: $bp-760) {
+			display: grid;
+
+			// grid-auto-flow: column;
+			grid-template-columns: repeat(3, 1fr);
+			align-items: flex-start;
+		}
+
+		@media (min-width: $bp-1096) {
+			display: grid;
+
+			// grid-auto-flow: column;
+			grid-template-columns: repeat(4, 1fr);
+			align-items: flex-start;
+		}
 	}
 </style>

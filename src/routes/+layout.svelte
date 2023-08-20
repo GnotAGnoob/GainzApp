@@ -13,19 +13,25 @@
 
 <Header />
 <BackToTop />
-<div class="wrapper">
-	<main>
-		<slot />
-	</main>
-	<footer class="footer">© 2023 Daniel Svátek</footer>
+<div class="container">
+	<div class="wrapper">
+		<main>
+			<slot />
+		</main>
+		<footer class="footer">© 2023 Daniel Svátek</footer>
+	</div>
 </div>
 
 <style lang="scss">
 	.wrapper {
-		max-width: $max-width;
-		margin: auto;
+		display: flex;
 
-		padding-inline: $site-padding;
+		max-width: $max-width;
+		padding-inline: var(--site-padding);
+		height: 100%;
+
+		flex-direction: column;
+		justify-content: space-between;
 	}
 
 	.footer {
@@ -33,5 +39,11 @@
 
 		font-size: $text-copyright;
 		color: var(--text-secondary);
+	}
+
+	.container {
+		height: 100%;
+		max-width: 100%;
+		margin-inline: auto;
 	}
 </style>

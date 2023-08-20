@@ -4,6 +4,8 @@ export const dictionary = {
 	CREATE: "Create",
 	LIST: "List",
 	EXERCISES: "Exercises",
-	LAST_WORKOUT: "Last workout",
-	BEST_WORKOUT: "Best workout",
+	LAST: "Last",
+	BEST: "Best",
+	BEST_AND_LAST: "Best & last",
+	HISTORY: "History",
 };

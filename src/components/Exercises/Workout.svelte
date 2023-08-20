@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { dateFormat } from "$src/lib/date";
 	import type { load } from "$src/routes/+page.server";
+	import type { workoutType } from "./Exercises";
+	import Scroller from "./Scroller.svelte";
 	import Sets from "./Sets.svelte";
 
 	export let workout: Awaited<ReturnType<typeof load>>["categories"][0]["exercises"][0]["history"][0];
 	export let title: string;
-	export let type: "default" | "best" = "default";
+	export let type: workoutType = "default";
 </script>
 
 <div class="workout workout_{type}">
@@ -13,20 +15,17 @@
 		<span>{title}</span>
 		<date class="date">{dateFormat(workout.date)}</date>
 	</p>
-	<Sets sets={workout.sets} />
+	<Scroller {type}>
+		<Sets {type} sets={workout.sets} />
+	</Scroller>
 </div>
 
 <style lang="scss">
-	$_border: $border-md;
+	@import "./Exercises.scss";
 
 	.workout {
-		--_border-color: var(--accent-neutral-300);
-		--_background-color: var(--accent-neutral-200);
-		--_button-background-hover: var(--accent-neutral-300);
-		--_text-color: inherit;
-		--_text-secondary-color: var(--text-secondary);
-
-		--_item-side-padding: #{$space-sm};
+		--_background-color: #{$background-color-default};
+		--_text-color: #{$text-color-default};
 
 		display: flex;
 
@@ -43,21 +42,23 @@
 		overflow-x: hidden;
 
 		&:first-child {
-			border-top-left-radius: $_border;
-			border-bottom-left-radius: $_border;
+			border-top-left-radius: $border-radius;
+			border-bottom-left-radius: $border-radius;
 		}
 
 		&:last-child {
-			border-top-right-radius: $_border;
-			border-bottom-right-radius: $_border;
+			border-top-right-radius: $border-radius;
+			border-bottom-right-radius: $border-radius;
 		}
 
 		&_best {
-			--_border-color: var(--accent-positive-400);
-			--_text-color: var(--accent-positive-800);
-			--_button-background-hover: var(--accent-positive-300);
-			--_background-color: var(--accent-positive-200);
-			--_text-secondary-color: var(--accent-positive-700);
+			--_text-color: #{$text-color-best};
+			--_background-color: #{$background-color-best};
+		}
+
+		&_history {
+			--_text-color: #{$text-color-history};
+			--_background-color: #{$background-color-history};
 		}
 	}
 
@@ -68,8 +69,8 @@
 
 		justify-content: space-between;
 
-		font-weight: 900;
-		font-size: $text-tag;
+		font-weight: $text-title-weight;
+		font-size: $text-title;
 		text-transform: capitalize;
 	}
 </style>

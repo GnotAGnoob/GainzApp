@@ -3,7 +3,7 @@
 	import { page } from "$app/stores";
 	import { getPageTitle } from "$lib/getPageTitle";
 	import Header from "../components/Header/Header.svelte";
-	import BackToTop from "$src/components/BackToTop.svelte";
+	import FloatingCorner from "$src/components/FloatingCorner.svelte";
 	import "$sass/global.scss";
 </script>
 
@@ -12,7 +12,7 @@
 </svelte:head>
 
 <Header />
-<BackToTop />
+<FloatingCorner />
 <div class="container">
 	<div class="wrapper">
 		<main>

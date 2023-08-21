@@ -17,8 +17,6 @@
 		const isOverflowLeft = normalizedScrollLeft > 0;
 		const isOverflowRight = normalizedScrollLeft + scrollElement.clientWidth < scrollElement.scrollWidth;
 
-		console.log("setOverflowing", normalizedScrollLeft, scrollElement.clientWidth, scrollElement.scrollWidth);
-
 		if (isScrollReverse) {
 			isOverflowingLeft = isOverflowRight;
 			isOverflowingRight = isOverflowLeft;

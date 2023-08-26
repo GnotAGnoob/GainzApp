@@ -5,7 +5,9 @@ import type { InferSelectModel, InferInsertModel } from "drizzle-orm";
 
 export const user = pgTable("user", {
 	id: serial("id").primaryKey(),
-	name: varchar("name", { length: 32 }).notNull(),
+	name: varchar("name", { length: 64 }),
+	email: varchar("name", { length: 64 }).notNull().unique(),
+	image: varchar("name", { length: 64 }),
 
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 	updatedAt: timestamp("updated_at").notNull().defaultNow(),

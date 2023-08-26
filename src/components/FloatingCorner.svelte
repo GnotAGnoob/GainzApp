@@ -7,7 +7,6 @@
 
 	let isVisible = false;
 	let isAddExerciseOpen = false;
-	console.log(isAddExerciseOpen, "kek");
 
 	const goToTop = () => {
 		window.scrollTo({
@@ -28,7 +27,7 @@
 <svelte:window on:scroll={setVisibility} />
 
 <div class="floatingCorner">
-	{#if $page.data.floatedCorner.includes("addExercise")}
+	{#if $page.data.floatedCorner?.includes("addExercise")}
 		<button class="icon" on:click={switchAddExerciseModal}>
 			<!-- Solar nema normalni plus... -->
 			<Icon icon="iconoir:plus" />

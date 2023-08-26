@@ -4,6 +4,7 @@
 	import { getPageTitle } from "$lib/getPageTitle";
 	import Header from "../components/Header/Header.svelte";
 	import FloatingCorner from "$src/components/FloatingCorner.svelte";
+	import { Toaster } from "svelte-french-toast";
 	import "$sass/global.scss";
 </script>
 
@@ -13,6 +14,7 @@
 
 <Header />
 <FloatingCorner />
+<Toaster />
 <div class="container">
 	<div class="wrapper">
 		<main>

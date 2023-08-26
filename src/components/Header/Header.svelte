@@ -23,6 +23,10 @@
 <style lang="scss">
 	@import "./header.scss";
 
+	:global(.toaster) {
+		top: $header-height + $space-md !important;
+	}
+
 	.header {
 		position: sticky;
 

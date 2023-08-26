@@ -11,6 +11,7 @@
 	--text-secondary-2: #{$color-gray-600};
 
 	--background-color: #{$color-gray-50};
+	--background-color-toast: #{$color-gray-25};
 
 	--accent-neutral-100: #{$color-gray-100};
 	--accent-neutral-200: #{$color-gray-200};
@@ -116,5 +117,17 @@ body {
 
 	&:hover {
 		background-color: unset;
+	}
+}
+
+.toaster {
+	// top nastaven v headeru
+	z-index: 90 !important;
+
+	& .base {
+		max-width: 30rem !important;
+
+		color: var(--text-primary) !important;
+		background-color: var(--background-color-toast) !important;
 	}
 }

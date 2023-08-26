@@ -44,6 +44,8 @@
 				left = leftTemp;
 			}, TIMEOUT);
 		}
+
+		console.log(left, right);
 	};
 
 	const onResize = () => {

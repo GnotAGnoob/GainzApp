@@ -16,6 +16,7 @@ const config = {
 			$variables: "./src/sass/variables",
 			$nodeModules: "./node_modules",
 			$src: "./src",
+			$components: "./src/components",
 		},
 	},
 };

@@ -52,6 +52,7 @@
 		"dotenv": "^16.3.1",
 		"drizzle-orm": "^0.28.5",
 		"normalize.css": "^8.0.1",
-		"postgres": "^3.3.5"
+		"postgres": "^3.3.5",
+		"svelte-french-toast": "^1.2.0"
 	}
 }

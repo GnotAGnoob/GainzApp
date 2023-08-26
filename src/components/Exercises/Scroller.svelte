@@ -103,7 +103,7 @@
 			width: 100%;
 
 			padding-bottom: $scroller-padding;
-			overflow-x: scroll;
+			overflow-x: auto;
 
 			&_reverse {
 				flex-direction: row-reverse;

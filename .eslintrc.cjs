@@ -71,5 +71,6 @@ module.exports = {
 		"default-param-last": "warn",
 		"function-paren-newline": "off",
 		"function-call-argument-newline": "off",
+		"@typescript-eslint/ban-ts-comment": "off",
 	},
 };

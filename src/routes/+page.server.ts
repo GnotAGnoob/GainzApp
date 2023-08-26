@@ -1,4 +1,8 @@
+// import db from "$src/lib/server/db";
+
 export async function load() {
+	// const result = await db.select().from("user");
+	console.log(import.meta.env.MODE, import.meta.env);
 	const bestWorkout = {
 		date: new Date(),
 		sets: [

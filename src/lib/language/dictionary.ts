@@ -1,5 +1,5 @@
 export const dictionary = {
-	APP_NAME: "GAINZ",
+	APP_NAME: "LiftTrckr",
 	HOME: "Home",
 	CREATE: "Create",
 	LIST: "List",

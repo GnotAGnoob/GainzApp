@@ -4,10 +4,16 @@ Everything you need to build a Svelte project, powered by [`create-svelte`](http
 
 ## Developing
 
-Install dependencies with `pnpm install` and start a development server:
+Install dependencies with `pnpm add` and start a development server:
 
 ```bash
-pnpm run dev
+pnpm dev
+```
+
+### Master version mode in dev
+
+```bash
+pnpm master
 ```
 
 ## Building
@@ -15,13 +21,48 @@ pnpm run dev
 To create a production version of your app:
 
 ```bash
-pnpm run build
+pnpm build
 ```
 
 You can preview the production build with `npm run preview`.
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+## Database
 
+### Local Database
+
+to run a local postgres database, install docker-desktop and run it. then run the following command:
+
+```bash
+pnpm docker
+```
+
+### Generate migration files
+
+```bash
+pnpm docker
+```
+
+### Migration
+
+for making changes to the database
+
+```bash
+pnpm migrate
+```
+
+### Introspect
+
+something about what happened
+
+```bash
+pnpm introspect
+```
+
+## Run Test
+
+```bash
+pnpm test
+```
 
 ## Component library
 

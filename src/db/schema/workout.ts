@@ -1,4 +1,4 @@
-import { integer, pgTable, serial, timestamp, unique } from "drizzle-orm/pg-core";
+import { integer, pgTable, serial, text, timestamp, unique } from "drizzle-orm/pg-core";
 import { user } from "./user";
 import { status } from "./status";
 import { relations } from "drizzle-orm";
@@ -15,8 +15,8 @@ export const workout = pgTable(
 		createdAt: timestamp("created_at").notNull().defaultNow(),
 		updatedAt: timestamp("updated_at").notNull().defaultNow(),
 
-		userId: integer("user_id")
-			.references(() => user.id)
+		userId: text("userId")
+			.references(() => user.id, { onDelete: "cascade" })
 			.notNull(),
 		statusId: integer("status_id")
 			.references(() => status.id)
@@ -38,7 +38,7 @@ export const exerciseRelations = relations(workout, ({ many, one }) => ({
 		references: [status.id],
 	}),
 
-	// supersets: many(superset),
+	supersets: many(superset),
 }));
 
 export type Workout = InferSelectModel<typeof workout>;

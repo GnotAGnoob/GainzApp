@@ -10,10 +10,10 @@ Install dependencies with `pnpm add` and start a development server:
 pnpm dev
 ```
 
-### Master version mode in dev
+### staging version mode in dev
 
 ```bash
-pnpm master
+pnpm staging
 ```
 
 ## Building
@@ -39,7 +39,7 @@ pnpm docker
 ### Generate migration files
 
 ```bash
-pnpm docker
+pnpm db:generate
 ```
 
 ### Migration
@@ -47,7 +47,7 @@ pnpm docker
 for making changes to the database
 
 ```bash
-pnpm migrate
+pnpm db:migrate
 ```
 
 ### Introspect
@@ -55,7 +55,7 @@ pnpm migrate
 something about what happened
 
 ```bash
-pnpm introspect
+pnpm db:introspect
 ```
 
 ## Run Test

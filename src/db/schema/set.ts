@@ -13,10 +13,10 @@ export const set = pgTable("set", {
 	updatedAt: timestamp("updated_at").notNull().defaultNow(),
 
 	exerciseID: integer("exercise_id")
-		.references(() => exercise.id)
+		.references(() => exercise.id, { onDelete: "cascade" })
 		.notNull(),
 	supersetID: integer("superset_id")
-		.references(() => superset.id)
+		.references(() => superset.id, { onDelete: "cascade" })
 		.notNull(),
 });
 

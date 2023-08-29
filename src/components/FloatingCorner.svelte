@@ -2,6 +2,7 @@
 	import Icon from "@iconify/svelte";
 	import { page } from "$app/stores";
 	import { Modal } from "@svelteuidev/core";
+	import { onMount } from "svelte";
 
 	const BOUNDARY = 200;
 
@@ -22,6 +23,10 @@
 	const switchAddExerciseModal = () => {
 		isAddExerciseOpen = !isAddExerciseOpen;
 	};
+
+	onMount(() => {
+		setVisibility();
+	});
 </script>
 
 <svelte:window on:scroll={setVisibility} />
@@ -55,8 +60,9 @@
 
 	.icon {
 		padding: $space-sm;
-		border: $space-xxs solid var(--accent-neutral-200);
+		// border: $space-xxs solid var(--accent-neutral-200);
 		border-radius: $border-md;
+		box-shadow: 0 0 $space-sm var(--accent-neutral-300);
 
 		background-color: var(--background-color);
 
@@ -78,14 +84,15 @@
 
 		justify-content: flex-end;
 
-		transition: width $transition, opacity $transition, transform $transition;
+		transition: width $transition, margin-left $transition, opacity $transition, transform $transition;
 
 		&:not(:first-child) {
-			margin-left: $space-xs;
+			margin-left: $space-sm;
 		}
 
 		&_invisible {
 			width: 0;
+			margin-left: 0 !important;
 
 			opacity: 0;
 			transform: translateY($space-xl);

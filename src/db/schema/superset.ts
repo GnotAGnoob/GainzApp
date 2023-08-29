@@ -11,7 +11,7 @@ export const superset = pgTable("superset", {
 	updatedAt: timestamp("updated_at").notNull().defaultNow(),
 
 	workoutId: integer("workout_id")
-		.references(() => workout.id)
+		.references(() => workout.id, { onDelete: "cascade" })
 		.notNull(),
 });
 

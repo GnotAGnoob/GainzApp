@@ -12,7 +12,7 @@ export const unit = pgTable("unit", {
 });
 
 export const unitRelations = relations(unit, ({ many }) => ({
-	// exercises: many(exercise),
+	exercises: many(exercise),
 }));
 
 export type Unit = InferSelectModel<typeof unit>;

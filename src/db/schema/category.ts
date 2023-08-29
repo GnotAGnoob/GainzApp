@@ -1,4 +1,4 @@
-import { integer, pgTable, serial, timestamp, unique, varchar } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, timestamp, unique, varchar } from "drizzle-orm/pg-core";
 import { user } from "./user";
 import { relations } from "drizzle-orm";
 import { exercise } from "./exercise";
@@ -11,11 +11,12 @@ export const category = pgTable(
 		name: varchar("name", { length: 32 }).notNull(),
 
 		createdAt: timestamp("created_at").notNull().defaultNow(),
+		// TODO Trigger na update on update u vsech
 		updatedAt: timestamp("updated_at").notNull().defaultNow(),
 
-		userId: integer("user_id")
-			.references(() => user.id)
-			.notNull(),
+		userId: text("userId")
+			.notNull()
+			.references(() => user.id, { onDelete: "cascade" }),
 	},
 	// user cannot have two categories with the same name
 	(table) => ({

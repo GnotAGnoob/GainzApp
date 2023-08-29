@@ -8,7 +8,7 @@
 
 <header class="header">
 	<div class="wrapper">
-		<a href="/">
+		<a class="iconWrapper" href="/">
 			<Icon class="icon" icon="solar:donut-bitten-bold-duotone" />
 		</a>
 		<div class="mobile">
@@ -41,9 +41,14 @@
 		z-index: 100;
 	}
 
-	.header :global(.icon) {
+	.iconWrapper {
 		height: 2rem;
 		width: 2rem;
+	}
+
+	.header :global(.icon) {
+		height: 100%;
+		width: 100%;
 	}
 
 	@media (min-width: $bp-header) {

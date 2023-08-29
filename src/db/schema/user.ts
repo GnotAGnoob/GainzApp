@@ -1,13 +1,14 @@
 import { relations } from "drizzle-orm";
-import { pgTable, serial, timestamp, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { category } from "./category";
 import type { InferSelectModel, InferInsertModel } from "drizzle-orm";
 
 export const user = pgTable("user", {
-	id: serial("id").primaryKey(),
-	name: varchar("name", { length: 64 }),
-	email: varchar("name", { length: 64 }).notNull().unique(),
-	image: varchar("name", { length: 64 }),
+	id: text("id").notNull().primaryKey(),
+	name: text("name"),
+	email: text("email").notNull().unique(),
+	emailVerified: timestamp("emailVerified", { mode: "date" }),
+	image: text("image"),
 
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 	updatedAt: timestamp("updated_at").notNull().defaultNow(),

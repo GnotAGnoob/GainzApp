@@ -3,24 +3,28 @@ import { drizzle, type PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import { drizzle as neonDrizzle, type NeonHttpDatabase } from "drizzle-orm/neon-http";
 
 import { neon, neonConfig } from "@neondatabase/serverless";
-// import { migrate } from "drizzle-orm/postgres-js/migrator";
 import postgres from "postgres";
 import { sql } from "drizzle-orm";
+import { envError } from "../error";
 
-// @ts-ignore
-let db: PostgresJsDatabase | NeonHttpDatabase = global.db;
+if (!DATABASE_URL) throw envError("DATABASE_URL");
+// TODO Fix @ts-ignore
+
+let db: PostgresJsDatabase | NeonHttpDatabase;
 neonConfig.fetchConnectionCache = true;
 
-if (!db) {
-	if (import.meta.env.MODE === "development") {
+if (import.meta.env.MODE === "development") {
+	// @ts-ignore
+	if (!global._db) {
 		const queryClient = postgres(DATABASE_URL, { max: 1 });
-		db = drizzle(queryClient);
 		// @ts-ignore
-		global.db = db;
-	} else {
-		const sql = neon(DATABASE_URL);
-		db = neonDrizzle(sql);
+		global._db = drizzle(queryClient);
 	}
+	// @ts-ignore
+	db = global._db;
+} else {
+	const sql = neon(DATABASE_URL);
+	db = neonDrizzle(sql);
 }
 
 try {

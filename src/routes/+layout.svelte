@@ -37,6 +37,7 @@
 	}
 
 	.footer {
+		margin-top: $space-md;
 		padding-block: $space-sm $space-xs;
 
 		font-size: $text-copyright;

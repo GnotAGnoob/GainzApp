@@ -15,7 +15,7 @@ export const exercise = pgTable(
 		updatedAt: timestamp("updated_at").notNull().defaultNow(),
 
 		categoryId: integer("category_id")
-			.references(() => category.id)
+			.references(() => category.id, { onDelete: "cascade" })
 			.notNull(),
 		unitId: integer("unit_id")
 			.references(() => unit.id)

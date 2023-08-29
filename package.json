@@ -4,10 +4,10 @@
 	"private": true,
 	"scripts": {
 		"dev": "vite dev --port 9001",
-		"master": "vite dev --port 9001 --mode master",
+		"staging": "vite dev --port 9001 --mode staging",
 		"prod": "vite dev --port 9001 --mode production",
 		"build": "vite build",
-		"build:master": "vite build",
+		"build:staging": "vite build --mode staging",
 		"docker": "docker compose up -d",
 		"preview": "vite preview --port 9001",
 		"test": "playwright test",
@@ -15,9 +15,9 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write .",
-		"introspect": "drizzle-kit introspect:pg",
-		"generate": "drizzle-kit generate:pg",
-		"migrate": "tsx -r dotenv/config ./src/db/migrate.ts"
+		"db:introspect": "drizzle-kit introspect:pg",
+		"db:generate": "drizzle-kit generate:pg",
+		"db:migrate": "tsx -r dotenv/config ./src/db/migrate.ts"
 	},
 	"devDependencies": {
 		"@iconify/svelte": "^3.1.4",
@@ -44,15 +44,18 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@auth/core": "^0.12.0",
+		"@auth/drizzle-adapter": "^0.3.2",
+		"@auth/sveltekit": "^0.3.6",
 		"@neondatabase/serverless": "^0.6.0",
-		"@svelteuidev/composables": "^0.15.0",
+		"@svelteuidev/composables": "^0.15.3",
 		"@svelteuidev/core": "^0.15.0",
-		"@svelteuidev/dates": "^0.15.0",
-		"dayjs": "^1.11.9",
 		"dotenv": "^16.3.1",
 		"drizzle-orm": "^0.28.5",
+		"drizzle-zod": "^0.5.1",
 		"normalize.css": "^8.0.1",
 		"postgres": "^3.3.5",
-		"svelte-french-toast": "^1.2.0"
+		"svelte-french-toast": "^1.2.0",
+		"zod": "^3.22.2"
 	}
 }

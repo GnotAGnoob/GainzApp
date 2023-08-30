@@ -6,12 +6,18 @@
 	import FloatingCorner from "$src/components/FloatingCorner.svelte";
 	import { Toaster } from "svelte-french-toast";
 	import "$sass/global.scss";
+	import EnvironmentBanner from "$src/components/EnvironmentBanner.svelte";
 </script>
 
 <svelte:head>
 	<title>{getPageTitle($page.route.id)}</title>
 </svelte:head>
 
+{#if import.meta.env.MODE === "development" || import.meta.env.MODE === "staging"}
+	<EnvironmentBanner type={import.meta.env.MODE === "development" ? "positive" : "info"}>
+		This is a <span class="bannerText">{import.meta.env.MODE}</span> environment!
+	</EnvironmentBanner>
+{/if}
 <Header />
 <FloatingCorner />
 <Toaster />
@@ -48,5 +54,9 @@
 		height: 100%;
 		max-width: 100%;
 		margin-inline: auto;
+	}
+
+	.bannerText {
+		font-weight: 700;
 	}
 </style>

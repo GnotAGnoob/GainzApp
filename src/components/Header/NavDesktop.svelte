@@ -72,18 +72,17 @@
 		{#each Object.entries(paths) as [href, text], index (href)}
 			<NavbarLink {href} {text} bind:clientWidth={elements[index]} {onClick} {index} />
 		{/each}
+		<span class="line" style={`right: ${right}px; left: ${left}px`} />
 	</ul>
-	<span class="line" style={`right: ${right}px; left: ${left}px`} />
 </nav>
 
 <style lang="scss">
 	@import "./header.scss";
 
 	.nav {
-		position: relative;
-
 		&Links {
 			display: flex;
+			position: relative;
 
 			align-items: center;
 			justify-content: center;

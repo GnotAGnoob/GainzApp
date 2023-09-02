@@ -2,11 +2,14 @@
 	import paths from "$lib/paths";
 	import { Burger } from "@svelteuidev/core";
 	import NavbarLink from "./NavbarLink.svelte";
+	import Profile from "./Profile.svelte";
 
 	let opened = false;
 </script>
 
-<Burger {opened} on:click={() => (opened = !opened)} color="var(--text-primary)" />
+<div class="burgerWrapper">
+	<Burger class="burger" {opened} on:click={() => (opened = !opened)} color="var(--text-primary)" />
+</div>
 <nav class="nav" class:nav_opened={opened}>
 	<ul class="navLinks">
 		{#each Object.entries(paths) as [href, text], index (href)}
@@ -17,6 +20,12 @@
 
 <style lang="scss">
 	@import "./header.scss";
+
+	.burger {
+		&Wrapper :global(.burger) {
+			transform: scale(1.25);
+		}
+	}
 
 	.nav {
 		position: absolute;

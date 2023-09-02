@@ -1,12 +1,9 @@
 <script lang="ts">
-	import { signOut } from "@auth/sveltekit/client";
 	import Icon from "@iconify/svelte";
 	import NavDesktop from "./NavDesktop.svelte";
 	import NavMobile from "./NavMobile.svelte";
-	import { getContext } from "svelte";
+	import { session } from "$src/lib/stores/session";
 	import Profile from "./Profile.svelte";
-
-	const session = getContext("session");
 
 	// TODO: hiddable header
 </script>
@@ -18,11 +15,12 @@
 		</a>
 		{#if $session !== null}
 			<div class="mobile">
-				<Profile />
+				<Profile class="profile" />
 				<NavMobile />
 			</div>
 			<div class="desktop">
 				<NavDesktop />
+				<Profile class="profile" />
 			</div>
 		{/if}
 	</div>
@@ -30,6 +28,13 @@
 
 <style lang="scss">
 	@import "./header.scss";
+
+	.mobile {
+		display: flex;
+
+		gap: $space-sm + $space-xs;
+		align-items: center;
+	}
 
 	:global(.toaster) {
 		top: $header-height + $space-md !important;
@@ -47,6 +52,10 @@
 		background-color: var(--background-color);
 
 		z-index: 100;
+
+		:global(.profile) {
+			margin-top: $space-px;
+		}
 	}
 
 	.iconWrapper {
@@ -59,15 +68,24 @@
 		width: 100%;
 	}
 
-	@media (min-width: $bp-header) {
-		.mobile {
+	.mobile {
+		@media (min-width: $bp-header) {
 			display: none;
 		}
 	}
 
-	@media (max-width: $bp-header) {
-		.desktop {
+	.desktop {
+		display: grid;
+
+		grid-template-columns: 3fr 1fr;
+		justify-items: center;
+
+		@media (max-width: $bp-header) {
 			display: none;
+		}
+
+		:global(.profile) {
+			justify-self: flex-end;
 		}
 	}
 
@@ -80,5 +98,11 @@
 
 		align-items: center;
 		justify-content: space-between;
+
+		@media (min-width: $bp-header) {
+			display: grid;
+
+			grid-template-columns: 1fr 4fr;
+		}
 	}
 </style>

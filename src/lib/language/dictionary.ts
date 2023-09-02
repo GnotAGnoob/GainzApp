@@ -10,6 +10,7 @@ export const dictionary = {
 	HISTORY: "History",
 	SIGN_IN: "Sign in",
 	SIGN_IN_WITH: "Sign in with",
+	SIGN_OUT: "Sign out",
 	OR: "or",
 	PASSWORD: "password",
 };

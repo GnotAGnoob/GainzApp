@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Button from "$src/components/Button.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
-	import { signIn, signOut } from "@auth/sveltekit/client";
+	import { signIn } from "@auth/sveltekit/client";
 	import Icon from "@iconify/svelte";
 	import { TextInput } from "@svelteuidev/core";
 </script>
@@ -14,7 +14,7 @@
 		<TextInput label={dictionary.PASSWORD} class="input">
 			<Icon icon="solar:lock-unlocked-bold" slot="icon" />
 		</TextInput>
-		<Button type="info2" class="submit" on:click={() => signIn("google")}>
+		<Button type="infoInverse" class="submit" on:click={() => signIn("google")}>
 			{dictionary.SIGN_IN}
 		</Button>
 	</div>

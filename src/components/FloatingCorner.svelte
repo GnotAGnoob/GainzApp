@@ -8,6 +8,7 @@
 
 	let isVisible = false;
 	let isAddExerciseOpen = false;
+	console.log(page.data);
 
 	const goToTop = () => {
 		window.scrollTo({

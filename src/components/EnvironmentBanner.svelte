@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { signIn, signOut } from "@auth/sveltekit/client";
+
 	export let type: "positive" | "info" = "positive";
 </script>
 

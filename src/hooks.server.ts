@@ -19,14 +19,19 @@ const authHandler = SvelteKitAuth({
 });
 
 const authorization: Handle = async ({ event, resolve }) => {
+	const session = await event.locals.getSession();
 	if (!event.url.pathname.startsWith("/auth")) {
-		// Protect any routes under /authenticated
-		const session = await event.locals.getSession();
+		// Protect any routes
 		if (!session) {
 			throw redirect(303, "/auth/login");
 		}
 	}
 
+	if (event.url.pathname.startsWith("/auth/login")) {
+		if (session) {
+			throw redirect(303, "/");
+		}
+	}
 	// If the request is still here, just proceed as normally
 	return resolve(event);
 };

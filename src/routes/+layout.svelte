@@ -7,6 +7,11 @@
 	import { Toaster } from "svelte-french-toast";
 	import "$sass/global.scss";
 	import EnvironmentBanner from "$src/components/EnvironmentBanner.svelte";
+	import { session } from "$src/lib/stores/session";
+
+	export let data;
+
+	session.set(data.session);
 </script>
 
 <svelte:head>
@@ -23,7 +28,7 @@
 <Toaster />
 <div class="container">
 	<div class="wrapper">
-		<main>
+		<main class="main">
 			<slot />
 		</main>
 		<footer class="footer">© 2023 Daniel Svátek</footer>
@@ -40,6 +45,10 @@
 
 		flex-direction: column;
 		justify-content: space-between;
+	}
+
+	.main {
+		height: 100%;
 	}
 
 	.footer {

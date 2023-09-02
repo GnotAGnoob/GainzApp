@@ -8,4 +8,8 @@ export const dictionary = {
 	BEST: "Best",
 	BEST_AND_LAST: "Best & last",
 	HISTORY: "History",
+	SIGN_IN: "Sign in",
+	SIGN_IN_WITH: "Sign in with",
+	OR: "or",
+	PASSWORD: "password",
 };

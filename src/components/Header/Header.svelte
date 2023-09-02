@@ -1,7 +1,12 @@
-<script>
+<script lang="ts">
+	import { signOut } from "@auth/sveltekit/client";
 	import Icon from "@iconify/svelte";
 	import NavDesktop from "./NavDesktop.svelte";
 	import NavMobile from "./NavMobile.svelte";
+	import { getContext } from "svelte";
+	import Profile from "./Profile.svelte";
+
+	const session = getContext("session");
 
 	// TODO: hiddable header
 </script>
@@ -11,12 +16,15 @@
 		<a class="iconWrapper" href="/">
 			<Icon class="icon" icon="solar:donut-bitten-bold-duotone" />
 		</a>
-		<div class="mobile">
-			<NavMobile />
-		</div>
-		<div class="desktop">
-			<NavDesktop />
-		</div>
+		{#if $session !== null}
+			<div class="mobile">
+				<Profile />
+				<NavMobile />
+			</div>
+			<div class="desktop">
+				<NavDesktop />
+			</div>
+		{/if}
 	</div>
 </header>
 

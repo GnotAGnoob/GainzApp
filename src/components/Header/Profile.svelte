@@ -4,6 +4,7 @@
 	import { Menu } from "@svelteuidev/core";
 	import { signOut } from "@auth/sveltekit/client";
 	import { dictionary } from "$src/lib/language/dictionary";
+	import { session } from "$src/lib/stores/session";
 
 	export let className = "";
 	export { className as class };
@@ -11,9 +12,15 @@
 
 <div class="wrapper {className}">
 	<Menu class="menu" placement="center" gutter={14}>
-		<Button slot="control" class="profileButton" isRounded isPaddingSame padding="xs" type="neutral">
-			<Icon icon="solar:user-bold" />
-		</Button>
+		<div slot="control">
+			{#if $session?.user?.image}
+				<img class="profileButton image" src={$session.user.image} alt="profile" />
+			{:else}
+				<Button class="profileButton" isRounded isPaddingSame padding="xs" type="neutral">
+					<Icon class="profileIcon" icon="solar:user-bold" />
+				</Button>
+			{/if}
+		</div>
 		<Menu.Item on:click={signOut}>
 			<div class="button">
 				<Icon class="buttonIcon" icon="solar:logout-2-linear" />
@@ -24,6 +31,8 @@
 </div>
 
 <style lang="scss">
+	$icon-size: $space-lg;
+
 	:global(.svelteui-Menu-body) {
 		padding: 0;
 		border: unset;
@@ -44,12 +53,23 @@
 	}
 
 	.wrapper {
+		display: flex;
+
+		height: 100%;
+		min-height: 0;
+
 		:global(.profileButton) {
-			width: $space-lg;
-			height: $space-lg;
+			width: $icon-size;
+			height: $icon-size;
 
 			place-items: center;
 			place-content: center;
+
+			overflow: hidden;
+		}
+
+		:global(.profileIcon) {
+			margin-top: $space-px * 2;
 		}
 	}
 
@@ -68,6 +88,22 @@
 			width: $dimension;
 
 			color: var(--text-secondary);
+		}
+	}
+
+	.image {
+		display: block;
+
+		border-radius: 20rem;
+
+		cursor: pointer;
+
+		&:hover {
+			filter: brightness(0.9);
+		}
+
+		&:active {
+			filter: brightness(0.8);
 		}
 	}
 </style>

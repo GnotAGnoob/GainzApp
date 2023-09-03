@@ -2,7 +2,6 @@
 	import paths from "$lib/paths";
 	import { Burger } from "@svelteuidev/core";
 	import NavbarLink from "./NavbarLink.svelte";
-	import Profile from "./Profile.svelte";
 
 	let opened = false;
 </script>
@@ -34,7 +33,7 @@
 		left: 100%;
 
 		width: 100%;
-		min-height: calc(100vh - $header-height - $header-border-height);
+		// min-height: calc(100vh - $header-height - $header-border-height);
 
 		background-color: var(--accent-neutral-100);
 

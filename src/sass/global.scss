@@ -85,6 +85,10 @@ body {
 	background-color: var(--background-color);
 }
 
+img {
+	max-width: 100%;
+}
+
 :where(body):where(*, *:before, *:after) {
 	font-size: $text;
 }

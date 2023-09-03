@@ -33,31 +33,30 @@
 		@media (max-width: $bp-header) {
 			position: relative;
 
-			font-size: $text-menu-mobile;
 			margin: auto;
 
-			&_active::after {
-				content: "";
+			// &_active::after {
+			// 	content: "";
 
-				display: block;
-				position: absolute;
+			// 	display: block;
+			// 	position: absolute;
 
-				width: 100%;
-				height: pxToRem(2);
-				left: 0;
-				bottom: -$space-xs;
+			// 	width: 100%;
+			// 	height: pxToRem(2);
+			// 	left: 0;
+			// 	bottom: -$space-xs;
 
-				background-color: var(--text-primary);
-			}
+			// 	background-color: var(--text-primary);
+			// }
 
 			&Wrapper {
 				text-align: center;
-				padding: $space-md $space-lg;
+				padding-block: $space-xxs;
 
-				&:hover {
-					background-color: var(--background-color);
-					color: inherit;
-				}
+				// &:hover {
+				// 	background-color: var(--background-color);
+				// 	color: inherit;
+				// }
 			}
 		}
 

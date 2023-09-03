@@ -1,9 +1,10 @@
 <script lang="ts">
 	import Icon from "@iconify/svelte";
-	import NavDesktop from "./NavDesktop.svelte";
+	import Navigation from "./Navigation.svelte";
 	import NavMobile from "./NavMobile.svelte";
 	import { session } from "$src/lib/stores/session";
 	import Profile from "./Profile.svelte";
+	import Scroller from "../Scroller.svelte";
 
 	// TODO: hiddable header
 </script>
@@ -14,26 +15,36 @@
 			<Icon class="icon" icon="solar:donut-bitten-bold-duotone" />
 		</a>
 		{#if $session !== null}
-			<div class="mobile">
+			<div class="mobile mobile_top">
 				<Profile class="profile" />
-				<NavMobile />
 			</div>
 			<div class="desktop">
-				<NavDesktop />
+				<Navigation />
 				<Profile class="profile" />
 			</div>
 		{/if}
 	</div>
+	{#if $session !== null}
+		<div class="mobile mobile_bottom">
+			<Scroller>
+				<Navigation />
+			</Scroller>
+		</div>
+	{/if}
 </header>
 
 <style lang="scss">
 	@import "./header.scss";
+	$sitePadding: $space-md;
 
 	.mobile {
-		display: flex;
+		@media (min-width: $bp-header) {
+			display: none;
+		}
 
-		gap: $space-sm + $space-xs;
-		align-items: center;
+		&_bottom {
+			padding-bottom: $space-xxs;
+		}
 	}
 
 	:global(.toaster) {
@@ -41,13 +52,15 @@
 	}
 
 	.header {
+		display: flex;
 		position: sticky;
 
 		top: 0;
 
 		width: 100%;
-		height: $header-height;
 		border-bottom: $header-border-height solid var(--accent-neutral-200);
+
+		flex-direction: column;
 
 		background-color: var(--background-color);
 
@@ -68,17 +81,16 @@
 		width: 100%;
 	}
 
-	.mobile {
-		@media (min-width: $bp-header) {
-			display: none;
-		}
-	}
-
 	.desktop {
 		display: grid;
 
+		min-height: 0;
+		height: 100%;
+
 		grid-template-columns: 3fr 1fr;
+		grid-template-rows: 1fr;
 		justify-items: center;
+		align-items: center;
 
 		@media (max-width: $bp-header) {
 			display: none;
@@ -92,15 +104,19 @@
 	.wrapper {
 		display: flex;
 
+		height: 100%;
+		width: 100%;
 		max-width: $max-width;
 		margin-inline: auto;
-		padding: 0.6rem 1.2rem;
+		padding: $space-sm $space-md $space-xs;
 
 		align-items: center;
 		justify-content: space-between;
 
 		@media (min-width: $bp-header) {
 			display: grid;
+
+			padding: $space-sm $space-md;
 
 			grid-template-columns: 1fr 4fr;
 		}

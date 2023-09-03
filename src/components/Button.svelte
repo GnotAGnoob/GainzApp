@@ -17,9 +17,15 @@
 	class:paddingSame={isPaddingSame}
 	on:click
 >
-	<slot name="leftIcon" />
-	<slot />
-	<slot name="rightIcon" />
+	<span class="icon">
+		<slot name="leftIcon" />
+	</span>
+	<span>
+		<slot />
+	</span>
+	<span class="icon">
+		<slot name="rightIcon" />
+	</span>
 </button>
 
 <style lang="scss">
@@ -33,7 +39,12 @@
 
 		border-radius: $border-sm;
 
+		gap: $space-sm;
+		align-items: flex-end;
+		justify-content: space-between;
+
 		font-size: $text;
+		font-weight: 700;
 
 		color: var(--color);
 		background-color: var(--background);
@@ -68,17 +79,24 @@
 		}
 	}
 
+	.icon {
+		line-height: 0;
+	}
+
 	.rounded {
 		border-radius: 20rem;
 	}
 
 	.padding {
+		--padding-block: #{$space-sm + $space-xs};
+		--padding-inline: #{$space-md};
 		padding: var(--padding-block) var(--padding-inline);
 
 		&_xs {
 			--padding-block: #{$space-xs};
 			--padding-inline: #{$space-sm};
 		}
+
 		&Same {
 			padding: var(--padding-block);
 		}

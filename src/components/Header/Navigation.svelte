@@ -80,12 +80,17 @@
 	@import "./header.scss";
 
 	.nav {
+		@media (max-width: $bp-header) {
+			min-width: $space-xxxl;
+		}
+
 		&Links {
 			display: flex;
 			position: relative;
 
 			align-items: center;
-			justify-content: center;
+			justify-content: space-between;
+
 			gap: $space-lg;
 		}
 	}
@@ -96,7 +101,7 @@
 		position: absolute;
 
 		left: 0;
-		bottom: -$space-xs;
+		bottom: -$space-xxs;
 
 		height: $space-xxs;
 
@@ -104,8 +109,8 @@
 
 		transition: right var(--_transition), left var(--_transition);
 
-		@media (max-width: $bp-header) {
-			display: none;
+		@media (min-width: $bp-header) {
+			min-width: -$space-xs;
 		}
 	}
 </style>

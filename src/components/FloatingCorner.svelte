@@ -3,12 +3,12 @@
 	import { page } from "$app/stores";
 	import { Modal } from "@svelteuidev/core";
 	import { onMount } from "svelte";
+	import ExerciseForm from "./Exercises/ExerciseForm.svelte";
 
 	const BOUNDARY = 200;
 
 	let isVisible = false;
 	let isAddExerciseOpen = false;
-	console.log(page.data);
 
 	const goToTop = () => {
 		window.scrollTo({
@@ -38,7 +38,9 @@
 			<!-- Solar nema normalni plus... -->
 			<Icon icon="iconoir:plus" />
 		</button>
-		<Modal target="body" opened={isAddExerciseOpen} on:close={switchAddExerciseModal}>ahoj</Modal>
+		<Modal target="body" opened={isAddExerciseOpen} on:close={switchAddExerciseModal} size="lg">
+			<ExerciseForm />
+		</Modal>
 	{/if}
 	<div class="animated" class:animated_invisible={!isVisible}>
 		<button class="icon" on:click={goToTop}>
@@ -56,14 +58,15 @@
 		right: $space-md;
 		justify-content: flex-end;
 
-		z-index: 50;
+		z-index: 100;
 	}
 
 	.icon {
-		padding: $space-sm;
-		// border: $space-xxs solid var(--accent-neutral-200);
 		border-radius: $border-md;
-		box-shadow: 0 0 $space-sm var(--accent-neutral-300);
+		box-shadow: $box-shadow;
+
+		width: $space-lg + $space-sm;
+		height: $space-lg + $space-sm;
 
 		background-color: var(--background-color);
 

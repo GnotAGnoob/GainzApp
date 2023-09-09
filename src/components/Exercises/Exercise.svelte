@@ -15,7 +15,8 @@
 		const bestWorkout = exercise.bestWorkout;
 
 		return lastWorkout.sets.every(
-			(set, index) => set.weight === bestWorkout.sets[index].weight && set.reps === bestWorkout.sets[index].reps,
+			(set, index) =>
+				set.weight === bestWorkout.sets[index].weight && set.reps === bestWorkout.sets[index].reps,
 		);
 	};
 
@@ -42,13 +43,6 @@
 		</Collapse>
 	</li>
 </button>
-
-<!-- {#each exercise.history as workout}
-    <date>{workout.date}</date>
-    {#each workout.sets as set}
-        <p>{set.weight} x {set.reps}</p>
-    {/each}
-{/each} -->
 
 <style lang="scss">
 	@import "./Exercises.scss";

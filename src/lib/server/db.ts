@@ -4,7 +4,6 @@ import { drizzle as neonDrizzle, type NeonHttpDatabase } from "drizzle-orm/neon-
 
 import { neon, neonConfig } from "@neondatabase/serverless";
 import postgres from "postgres";
-import { sql } from "drizzle-orm";
 import { envError } from "../error";
 
 if (!DATABASE_URL) throw envError("DATABASE_URL");
@@ -25,12 +24,6 @@ if (import.meta.env.MODE === "development") {
 } else {
 	const sql = neon(DATABASE_URL);
 	db = neonDrizzle(sql);
-}
-
-try {
-	const res = await db.execute(sql`select version()`);
-	console.log(res);
-} finally {
 }
 
 export default db;

@@ -23,6 +23,10 @@ const authorization: Handle = async ({ event, resolve }) => {
 	if (!event.url.pathname.startsWith("/auth")) {
 		// Protect any routes
 		if (!session) {
+			if (event.url.pathname.startsWith("/api")) {
+				return new Response("Unauthorized", { status: 401 });
+			}
+
 			throw redirect(303, "/auth/login");
 		}
 	}
@@ -32,6 +36,7 @@ const authorization: Handle = async ({ event, resolve }) => {
 			throw redirect(303, "/");
 		}
 	}
+
 	// If the request is still here, just proceed as normally
 	return resolve(event);
 };

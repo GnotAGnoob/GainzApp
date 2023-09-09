@@ -13,6 +13,7 @@
 	--background-color: #{$color-gray-50};
 	--background-color-toast: #{$color-gray-25};
 
+	--accent-neutral-50: #{$color-gray-50};
 	--accent-neutral-100: #{$color-gray-100};
 	--accent-neutral-200: #{$color-gray-200};
 	--accent-neutral-300: #{$color-gray-300};
@@ -44,6 +45,17 @@
 	--accent-info-700: #{$color-blue-700};
 	--accent-info-800: #{$color-blue-800};
 	--accent-info-900: #{$color-blue-900};
+
+	--accent-negative-50: #{$color-red-50};
+	--accent-negative-100: #{$color-red-100};
+	--accent-negative-200: #{$color-red-200};
+	--accent-negative-300: #{$color-red-300};
+	--accent-negative-400: #{$color-red-400};
+	--accent-negative-500: #{$color-red-500};
+	--accent-negative-600: #{$color-red-600};
+	--accent-negative-700: #{$color-red-700};
+	--accent-negative-800: #{$color-red-800};
+	--accent-negative-900: #{$color-red-900};
 
 	--site-padding: #{$space-sm};
 
@@ -125,8 +137,7 @@ img {
 }
 
 .toaster {
-	// top nastaven v headeru
-	z-index: 90 !important;
+	z-index: 500 !important;
 
 	& .base {
 		max-width: 30rem !important;
@@ -134,4 +145,12 @@ img {
 		color: var(--text-primary) !important;
 		background-color: var(--background-color-toast) !important;
 	}
+}
+
+.svelteui-Modal-header {
+	margin: 0 !important;
+}
+
+.svelteui-Modal-modal {
+	background-color: var(--background-color) !important;
 }

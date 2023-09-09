@@ -5,6 +5,7 @@ const handler = (originalFunction: typeof toaster.success) => {
 		const opts: ToastOptions = {
 			duration: 3000,
 			style: "",
+			position: "bottom-center",
 		};
 		return originalFunction(message, { ...opts, ...options });
 	};

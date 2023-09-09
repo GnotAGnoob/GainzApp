@@ -1,31 +1,37 @@
 <script lang="ts">
 	export let isLoading = false;
-	export let type: "info" | "positive" | "infoInverse" | "neutral" = "info";
+	export let type: "info" | "positive" | "infoInverse" | "neutral" | "background" | "negative" = "info";
 	export let isFullSize = false;
 	export let isRounded = false;
 	export let isPaddingSame = false;
+	export let isDisabled = false;
 	export let padding: "xs" | "sm" | "md" = "md";
+	export let borderRadius: "none" | "sm" | "md" = "sm";
 	export let className = "";
 	export { className as class };
 </script>
 
 <button
-	class="button button_{type} padding padding_{padding} {className}"
+	class="button button_{type} padding padding_{padding} {className} borderRadius_{borderRadius}"
 	class:loading={isLoading}
 	class:rounded={isRounded}
 	class:fullSize={isFullSize}
 	class:paddingSame={isPaddingSame}
+	class:disabled={isDisabled}
 	on:click
+	disabled={isDisabled}
 >
-	<span class="icon">
-		<slot name="leftIcon" />
-	</span>
-	<span>
-		<slot />
-	</span>
-	<span class="icon">
-		<slot name="rightIcon" />
-	</span>
+	{#if $$slots.leftIcon}
+		<span class="icon">
+			<slot name="leftIcon" />
+		</span>
+	{/if}
+	<slot />
+	{#if $$slots.rightIcon}
+		<span class="icon">
+			<slot name="rightIcon" />
+		</span>
+	{/if}
 </button>
 
 <style lang="scss">
@@ -41,7 +47,7 @@
 
 		gap: $space-sm;
 		align-items: flex-end;
-		justify-content: space-between;
+		justify-content: center;
 
 		font-size: $text;
 		font-weight: 700;
@@ -64,11 +70,25 @@
 			--background-active: var(--accent-positive-300);
 		}
 
+		&_negative {
+			--color: var(--accent-negative-600);
+			--background: var(--accent-negative-50);
+			--background-hover: var(--accent-negative-100);
+			--background-active: var(--accent-negative-200);
+		}
+
 		&_neutral {
 			--color: var(--accent-neutral-700);
 			--background: var(--accent-neutral-200);
 			--background-hover: var(--accent-neutral-300);
 			--background-active: var(--accent-neutral-400);
+		}
+
+		&_background {
+			--color: var(--accent-neutral-700);
+			--background: var(--background-color);
+			--background-hover: var(--accent-neutral-100);
+			--background-active: var(--accent-neutral-200);
 		}
 
 		&_infoInverse {
@@ -92,17 +112,53 @@
 		--padding-inline: #{$space-md};
 		padding: var(--padding-block) var(--padding-inline);
 
-		&_xs {
+		&_sm {
 			--padding-block: #{$space-xs};
 			--padding-inline: #{$space-sm};
 		}
 
 		&Same {
-			padding: var(--padding-block);
+			--dimensions: #{$space-lg};
+
+			padding: 0;
+			padding-top: $space-px;
+			width: var(--dimensions);
+			height: var(--dimensions);
+
+			align-items: center;
+
+			&.padding {
+				&_sm {
+					--dimensions: #{$space-md + $space-sm};
+				}
+			}
+		}
+	}
+
+	.borderRadius {
+		&_none {
+			border-radius: 0;
+		}
+
+		&_sm {
+			border-radius: $border-sm;
+		}
+
+		&_md {
+			border-radius: $border-md;
 		}
 	}
 
 	.fullSize {
 		width: 100%;
+	}
+
+	.disabled {
+		--color: var(--accent-neutral-300);
+		--background: var(--accent-neutral-100);
+		--background-hover: var(--accent-neutral-100);
+		--background-active: var(--accent-neutral-100);
+
+		cursor: not-allowed;
 	}
 </style>

@@ -8,6 +8,7 @@
 	import "$sass/global.scss";
 	import EnvironmentBanner from "$src/components/EnvironmentBanner.svelte";
 	import { session } from "$src/lib/stores/session";
+	// import Swatch from "$src/components/Swatch.svelte";
 
 	export let data;
 
@@ -17,6 +18,7 @@
 <svelte:head>
 	<title>{getPageTitle($page.route.id)}</title>
 </svelte:head>
+<!-- <Swatch /> -->
 
 {#if import.meta.env.MODE === "development" || import.meta.env.MODE === "staging"}
 	<EnvironmentBanner type={import.meta.env.MODE === "development" ? "positive" : "info"}>

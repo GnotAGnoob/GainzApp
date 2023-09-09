@@ -12,5 +12,10 @@ export const dictionary = {
 	SIGN_IN_WITH: "Sign in with",
 	SIGN_OUT: "Sign out",
 	OR: "or",
-	PASSWORD: "password",
+	PASSWORD: "Password",
+	SUBMIT: "Submit",
+	ADD_NEW_EXERCISES: "Add new exercises",
+	EXERCISE_NAME: "Exercise name",
+	CATEGORY: "Category",
+	UNIT: "Unit",
 };

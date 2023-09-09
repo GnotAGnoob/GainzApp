@@ -110,7 +110,7 @@
 		transition: right var(--_transition), left var(--_transition);
 
 		@media (min-width: $bp-header) {
-			min-width: -$space-xs;
+			bottom: -$space-xs;
 		}
 	}
 </style>

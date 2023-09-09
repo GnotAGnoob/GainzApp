@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Icon from "@iconify/svelte";
-	import Button from "../Button.svelte";
+	import Button from "../Atoms/Button.svelte";
 	import { Menu } from "@svelteuidev/core";
 	import { signOut } from "@auth/sveltekit/client";
 	import { dictionary } from "$src/lib/language/dictionary";
@@ -16,7 +16,7 @@
 			{#if $session?.user?.image}
 				<img class="profileButton image" src={$session.user.image} alt="profile" />
 			{:else}
-				<Button class="profileButton" isRounded isPaddingSame padding="xs" type="neutral">
+				<Button class="profileButton" isRounded isPaddingSame padding="sm" type="neutral">
 					<Icon class="profileIcon" icon="solar:user-bold" />
 				</Button>
 			{/if}
@@ -40,7 +40,7 @@
 		background-color: var(--background-color-toast);
 		color: var(--text-primary);
 
-		box-shadow: 0 0 $space-sm var(--accent-neutral-300);
+		box-shadow: $box-shadow;
 	}
 
 	:global(.svelteui-MenuItem-root) {

@@ -47,10 +47,6 @@
 		}
 	}
 
-	:global(.toaster) {
-		top: $header-height + $space-md !important;
-	}
-
 	.header {
 		display: flex;
 		position: sticky;

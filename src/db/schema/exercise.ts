@@ -4,12 +4,14 @@ import { relations } from "drizzle-orm";
 import { set } from "./set";
 import { unit } from "./unit";
 import type { InferSelectModel, InferInsertModel } from "drizzle-orm";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { MAX_TEXT_LENGTH } from "../../lib/constants";
 
 export const exercise = pgTable(
 	"exercise",
 	{
 		id: serial("id").primaryKey(),
-		name: varchar("name", { length: 32 }).notNull(),
+		name: varchar("name", { length: MAX_TEXT_LENGTH }).notNull(),
 
 		createdAt: timestamp("created_at").notNull().defaultNow(),
 		updatedAt: timestamp("updated_at").notNull().defaultNow(),
@@ -41,3 +43,6 @@ export const exerciseRelations = relations(exercise, ({ one, many }) => ({
 
 export type Exercise = InferSelectModel<typeof exercise>;
 export type InsertExercise = InferInsertModel<typeof exercise>;
+
+export const exerciseInsertValidator = createInsertSchema(exercise);
+export const exerciseSelectValidator = createSelectSchema(exercise);

@@ -3,6 +3,7 @@ import { exercise } from "./exercise";
 import { superset } from "./superset";
 import { relations } from "drizzle-orm";
 import type { InferSelectModel, InferInsertModel } from "drizzle-orm";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 export const set = pgTable("set", {
 	id: serial("id").primaryKey(),
@@ -33,3 +34,6 @@ export const exerciseRelations = relations(set, ({ one }) => ({
 
 export type Set = InferSelectModel<typeof set>;
 export type InsertSet = InferInsertModel<typeof set>;
+
+export const setInsertValidator = createInsertSchema(set);
+export const setSelectValidator = createSelectSchema(set);

@@ -1,20 +1,26 @@
 <script lang="ts">
-	import Button from "$src/components/Button.svelte";
+	import Button from "$src/components/Atoms/Button.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import { signIn } from "@auth/sveltekit/client";
 	import Icon from "@iconify/svelte";
-	import { TextInput } from "@svelteuidev/core";
+	import Input from "$src/components/Atoms/Input.svelte";
+	import axios from "axios";
+
+	let email = "";
+	let password = "";
+
+	const onSubmit = async () => {};
 </script>
 
 <div class="wrapper">
 	<div class="form">
-		<TextInput label="email" class="input">
-			<Icon icon="solar:user-id-bold" slot="icon" />
-		</TextInput>
-		<TextInput label={dictionary.PASSWORD} class="input">
-			<Icon icon="solar:lock-unlocked-bold" slot="icon" />
-		</TextInput>
-		<Button type="infoInverse" class="submit" on:click={() => signIn("google")}>
+		<Input bind:value={email} label="email">
+			<Icon icon="solar:user-id-bold" />
+		</Input>
+		<Input bind:value={password} label={dictionary.PASSWORD}>
+			<Icon icon="solar:lock-unlocked-bold" />
+		</Input>
+		<Button type="infoInverse" class="submit" on:click={onSubmit}>
 			{dictionary.SIGN_IN}
 		</Button>
 	</div>
@@ -45,20 +51,6 @@
 		gap: $space-md;
 
 		flex-direction: column;
-
-		:global(.input) {
-			color: var(--text-secondary);
-
-			:global(input) {
-				background-color: var(--background-color);
-				border-color: var(--accent-neutral-200);
-			}
-
-			:global(label) {
-				color: var(--text-secondary);
-				font-size: $text-subheading;
-			}
-		}
 
 		:global(.submit) {
 			margin-top: $space-sm;

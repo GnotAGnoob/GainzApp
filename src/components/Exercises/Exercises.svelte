@@ -4,17 +4,21 @@
 
 	// TODO: vylepsit typ
 	export let categories: Awaited<ReturnType<typeof load>>["categories"];
+
+	// todo: vylepsit prazdny kategorie (mozna pridat tlacitko pro pridani nove kategorie)
 </script>
 
 <div class="categories">
-	{#each categories as category (category.category)}
+	{#each categories as category (category.name)}
 		<section>
-			<h3 class="categoryTitle">{category.category}</h3>
-			<ul class="category">
-				{#each category.exercises as exercise (exercise.name)}
-					<Exercise {exercise} />
-				{/each}
-			</ul>
+			<h3 class="categoryTitle">{category.name}</h3>
+			{#if category.exercises}
+				<ul class="category">
+					{#each category.exercises as exercise (exercise.name)}
+						<Exercise {exercise} />
+					{/each}
+				</ul>
+			{/if}
 		</section>
 	{/each}
 </div>

@@ -1,14 +1,13 @@
 <script lang="ts">
 	import Icon from "@iconify/svelte";
 	import { page } from "$app/stores";
-	import { Modal } from "@svelteuidev/core";
 	import { onMount } from "svelte";
 	import ExerciseForm from "./Exercises/ExerciseForm.svelte";
 
 	const BOUNDARY = 200;
 
 	let isVisible = false;
-	let isAddExerciseOpen = false;
+	let exerciseFormElement: ExerciseForm;
 
 	const goToTop = () => {
 		window.scrollTo({
@@ -21,10 +20,6 @@
 		isVisible = window.scrollY > BOUNDARY ? true : false;
 	};
 
-	const switchAddExerciseModal = () => {
-		isAddExerciseOpen = !isAddExerciseOpen;
-	};
-
 	onMount(() => {
 		setVisibility();
 	});
@@ -34,13 +29,11 @@
 
 <div class="floatingCorner">
 	{#if $page.data.floatedCorner?.includes("addExercise")}
-		<button class="icon" on:click={switchAddExerciseModal}>
+		<button class="icon" on:click={exerciseFormElement.toggleModal}>
 			<!-- Solar nema normalni plus... -->
 			<Icon icon="iconoir:plus" />
 		</button>
-		<Modal target="body" opened={isAddExerciseOpen} on:close={switchAddExerciseModal} size="lg">
-			<ExerciseForm />
-		</Modal>
+		<ExerciseForm bind:this={exerciseFormElement} />
 	{/if}
 	<div class="animated" class:animated_invisible={!isVisible}>
 		<button class="icon" on:click={goToTop}>
@@ -62,11 +55,14 @@
 	}
 
 	.icon {
+		$dimension: $space-lg + $space-sm;
 		border-radius: $border-md;
 		box-shadow: $box-shadow;
 
-		width: $space-lg + $space-sm;
-		height: $space-lg + $space-sm;
+		width: $dimension;
+		height: $dimension;
+		min-width: $dimension;
+		min-height: $dimension;
 
 		background-color: var(--background-color);
 

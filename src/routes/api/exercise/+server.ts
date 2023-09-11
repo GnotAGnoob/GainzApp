@@ -1,7 +1,6 @@
 import { category } from "$src/db/schema/category.js";
 import { MAX_TEXT_LENGTH } from "$src/lib/constants";
 import db from "$src/lib/server/db";
-import { json } from "@sveltejs/kit";
 import { z } from "zod";
 import { user } from "$src/db/schema/user";
 import { eq } from "drizzle-orm";

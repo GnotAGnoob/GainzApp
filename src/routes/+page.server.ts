@@ -28,7 +28,7 @@ export async function load() {
 		workoutsHistory: [],
 		categories: [
 			{
-				category: "Biceps",
+				name: "Biceps",
 				exercises: [
 					{
 						name: "Curl",
@@ -210,7 +210,7 @@ export async function load() {
 				],
 			},
 			{
-				category: "Triceps",
+				name: "Triceps",
 				exercises: [
 					{
 						name: "Curl",
@@ -357,6 +357,9 @@ export async function load() {
 						],
 					},
 				],
+			},
+			{
+				name: "xx",
 			},
 		],
 	};

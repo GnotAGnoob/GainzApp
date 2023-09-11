@@ -17,5 +17,10 @@ export const dictionary = {
 	ADD_NEW_EXERCISES: "Add new exercises",
 	EXERCISE_NAME: "Exercise name",
 	CATEGORY: "Category",
+	CREATING: "Creating",
+	CREATING_CATEGORY_FAILED: "Creating Category Failed",
+	SUCCESSFULLY_CREATED: "Successfully created",
 	UNIT: "Unit",
+	ALREADY_EXIST: "Already exist",
+	UNKNOWN_ERROR: "Unknown error",
 };

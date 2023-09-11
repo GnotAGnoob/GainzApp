@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { MAX_TEXT_LENGTH } from "$src/lib/constants";
+
 	export let label: string;
 	export let value: string;
 </script>
@@ -20,6 +22,7 @@
 			on:mousedown
 			on:focus
 			on:blur
+			maxlength={MAX_TEXT_LENGTH}
 			autocomplete="off"
 		/>
 		<div class="icon icon_right">
@@ -33,7 +36,7 @@
 		width: 100%;
 		height: 100%;
 
-		padding: $space-sm $space-sm;
+		padding: $space-xs $space-sm;
 		border: none;
 
 		color: var(--text-primary);
@@ -56,7 +59,7 @@
 			position: relative;
 
 			border-bottom: $space-px solid var(--accent-neutral-200);
-			margin-top: $space-xxs;
+			margin-top: $space-xs;
 
 			align-items: flex-end;
 			gap: $space-sm;

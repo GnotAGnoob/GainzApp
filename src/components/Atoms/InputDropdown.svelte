@@ -11,6 +11,7 @@
 	export let label: string;
 	export let value: string;
 	export let onCreateNew: ((value: string) => Promise<void>) | undefined = undefined;
+	export let onSelect: ((value: string) => void) | undefined = undefined;
 	export let isSelect = false;
 	const readOnly = isSelect && { readonly: true };
 	value = isSelect && !value.length ? dropDownOptions?.[0] ?? "" : value;
@@ -26,6 +27,7 @@
 	const onClick = (index: number) => {
 		if (!dropDownOptions) return;
 
+		onSelect?.(dropDownOptions[index]);
 		value = dropDownOptions[index];
 	};
 
@@ -35,11 +37,10 @@
 		try {
 			isLoading = true;
 			await onCreateNew(value);
-			isLoading = false;
 		} catch (error) {
-			input?.querySelector("input")?.focus();
+			// input?.querySelector("input")?.focus();
+		} finally {
 			isLoading = false;
-			return;
 		}
 	};
 
@@ -103,10 +104,7 @@
 				{/each}
 			</div>
 			{#if onCreateNew && value.length && !reduceOptions.includes(value)}
-				<Button isFullSize type="neutral" borderRadius="none" on:click={handleCreateNew}>
-					{#if isLoading}
-						<Icon icon="eos-icons:loading" />
-					{/if}
+				<Button isFullSize type="neutral" borderRadius="none" on:click={handleCreateNew} {isLoading}>
 					<span>{dictionary.CREATE} "{value}"</span>
 				</Button>
 			{/if}
@@ -117,8 +115,6 @@
 <style lang="scss">
 	.wrapper {
 		position: relative;
-
-		z-index: 1;
 
 		&:focus-within {
 			.optionsWrapper {
@@ -156,10 +152,10 @@
 
 			overflow-y: hidden;
 
-			z-index: -1;
+			z-index: 10;
 
 			&_loading {
-				display: block;
+				// display: block;
 			}
 		}
 	}
@@ -172,6 +168,8 @@
 
 	.input {
 		&_select :global(input) {
+			color: var(--text-secondary);
+
 			text-align: center;
 			cursor: pointer;
 		}

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Icon from "@iconify/svelte";
+
 	export let isLoading = false;
 	export let type: "info" | "positive" | "infoInverse" | "neutral" | "background" | "negative" = "info";
 	export let isFullSize = false;
@@ -17,13 +19,17 @@
 	class:rounded={isRounded}
 	class:fullSize={isFullSize}
 	class:paddingSame={isPaddingSame}
-	class:disabled={isDisabled}
+	class:disabled={isDisabled || isLoading}
 	on:click
-	disabled={isDisabled}
+	disabled={isDisabled || isLoading}
 >
-	{#if $$slots.leftIcon}
+	{#if $$slots.leftIcon && !isLoading}
 		<span class="icon">
 			<slot name="leftIcon" />
+		</span>
+	{:else if isLoading}
+		<span class="icon">
+			<Icon icon="eos-icons:loading" />
 		</span>
 	{/if}
 	<slot />
@@ -46,7 +52,7 @@
 		border-radius: $border-sm;
 
 		gap: $space-sm;
-		align-items: flex-end;
+		align-items: center;
 		justify-content: center;
 
 		font-size: $text;

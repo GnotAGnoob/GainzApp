@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Icon from "@iconify/svelte";
 	import Navigation from "./Navigation.svelte";
-	import NavMobile from "./NavMobile.svelte";
 	import { session } from "$src/lib/stores/session";
 	import Profile from "./Profile.svelte";
 	import Scroller from "../Scroller.svelte";

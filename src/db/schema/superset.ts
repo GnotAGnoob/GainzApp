@@ -16,7 +16,7 @@ export const superset = pgTable("superset", {
 		.notNull(),
 });
 
-export const exerciseRelations = relations(superset, ({ one, many }) => ({
+export const supersetRelations = relations(superset, ({ one, many }) => ({
 	workout: one(workout, {
 		fields: [superset.workoutId],
 		references: [workout.id],

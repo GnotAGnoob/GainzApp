@@ -58,6 +58,14 @@ something about what happened
 pnpm db:introspect
 ```
 
+### Studio
+
+database browser viewer and editor
+
+```bash
+pnpm db:studio
+```
+
 ## Run Test
 
 ```bash

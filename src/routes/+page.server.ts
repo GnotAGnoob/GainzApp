@@ -1,7 +1,44 @@
-// import db from "$src/lib/server/db";
+import { unit } from "$src/db/schema/unit";
+import { user } from "$src/db/schema/user";
+import db from "$src/lib/server/db";
+import { getUserId } from "$src/lib/server/dbHelpers";
+import { handleError } from "$src/lib/server/error";
 
-export async function load() {
-	// const result = await db.select().from("user");
+export async function load({ locals }) {
+	try {
+		const userId = await getUserId(locals);
+
+		if (userId instanceof Response) {
+			return userId;
+		}
+
+		// const unitsPromise = db.select({ id: unit.id, name: unit.name }).from(unit);
+		// const categoriesPromise = db.query.category.findMany({
+		// 	with: {
+		// 		user: true,
+		// 	},
+		// });
+
+		const posts = await db.query.category.findMany({
+			with: {
+				x: true,
+			},
+		});
+
+		console.log(posts);
+
+		// const [units, categories] = await Promise.allSettled([unitsPromise, categoriesPromise]);
+		// console.log(units, categories);
+
+		// return {
+		// 	floatedCorner: ["addExercise"],
+		// 	units,
+		// };
+	} catch (error) {
+		console.log(error);
+		// return handleError(error);
+	}
+
 	const bestWorkout = {
 		date: new Date(),
 		sets: [
@@ -21,7 +58,6 @@ export async function load() {
 	};
 
 	return {
-		floatedCorner: ["addExercise"],
 		nextWorkouts: [
 			//todo
 		],

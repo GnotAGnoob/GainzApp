@@ -17,7 +17,8 @@
 		"format": "prettier --plugin-search-dir . --write .",
 		"db:introspect": "drizzle-kit introspect:pg",
 		"db:generate": "drizzle-kit generate:pg",
-		"db:migrate": "tsx -r dotenv/config ./src/db/migrate.ts"
+		"db:migrate": "tsx -r dotenv/config ./src/db/migrate.ts",
+		"db:studio": "npx drizzle-kit studio"
 	},
 	"devDependencies": {
 		"@iconify/svelte": "^3.1.4",
@@ -52,7 +53,7 @@
 		"@svelteuidev/core": "^0.15.0",
 		"axios": "^1.5.0",
 		"dotenv": "^16.3.1",
-		"drizzle-orm": "^0.28.5",
+		"drizzle-orm": "^0.28.6",
 		"drizzle-zod": "^0.5.1",
 		"normalize.css": "^8.0.1",
 		"postgres": "^3.3.5",

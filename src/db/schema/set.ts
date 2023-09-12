@@ -21,7 +21,7 @@ export const set = pgTable("set", {
 		.notNull(),
 });
 
-export const exerciseRelations = relations(set, ({ one }) => ({
+export const setRelations = relations(set, ({ one }) => ({
 	exercise: one(exercise, {
 		fields: [set.exerciseID],
 		references: [exercise.id],

@@ -29,7 +29,7 @@ export const workout = pgTable(
 	}),
 );
 
-export const exerciseRelations = relations(workout, ({ many, one }) => ({
+export const workoutRelations = relations(workout, ({ many, one }) => ({
 	user: one(user, {
 		fields: [workout.userId],
 		references: [user.id],

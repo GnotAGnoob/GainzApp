@@ -3,6 +3,7 @@ import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { category } from "./category";
 import type { InferSelectModel, InferInsertModel } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { workout } from "./workout";
 
 export const user = pgTable("user", {
 	id: text("id").notNull().primaryKey(),
@@ -17,6 +18,7 @@ export const user = pgTable("user", {
 
 export const userRelations = relations(user, ({ many }) => ({
 	categories: many(category),
+	workouts: many(workout),
 }));
 
 export type User = InferSelectModel<typeof user>;

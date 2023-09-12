@@ -19,9 +19,9 @@ export async function load({ locals }) {
 		// 	},
 		// });
 
-		const posts = await db.query.category.findMany({
+		const posts = await db.query.user.findMany({
 			with: {
-				x: true,
+				categories: true,
 			},
 		});
 

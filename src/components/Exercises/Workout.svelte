@@ -1,23 +1,27 @@
 <script lang="ts">
 	import { dateFormat } from "$src/lib/date";
-	import type { load } from "$src/routes/+page.server";
+	import type { PageWorkout } from "$src/routes/list/types";
 	import type { workoutType } from "./Exercises";
 	import Scroller from "./Scroller.svelte";
 	import Sets from "./Sets.svelte";
 
-	export let workout: Awaited<ReturnType<typeof load>>["categories"][0]["exercises"][0]["history"][0];
+	export let workout: PageWorkout | undefined = undefined;
 	export let title: string;
 	export let type: workoutType = "default";
 </script>
 
 <div class="workout workout_{type}">
-	<p class="title">
+	<h5 class="title">
 		<span>{title}</span>
-		<date class="date">{dateFormat(workout.date)}</date>
-	</p>
-	<Scroller {type}>
-		<Sets {type} sets={workout.sets} />
-	</Scroller>
+		{#if workout}
+			<date class="date">{dateFormat(workout.date)}</date>
+		{/if}
+	</h5>
+	{#if workout}
+		<Scroller {type}>
+			<Sets {type} sets={workout.sets} />
+		</Scroller>
+	{/if}
 </div>
 
 <style lang="scss">

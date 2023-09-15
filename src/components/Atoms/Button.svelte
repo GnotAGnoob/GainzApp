@@ -7,14 +7,21 @@
 	export let isRounded = false;
 	export let isPaddingSame = false;
 	export let isDisabled = false;
-	export let padding: "xs" | "sm" | "md" = "md";
+	export let padding: "xs" | "sm" | "md" | "lg" = "md";
+	export let paddingSide: "xs" | "sm" | "md" | "lg" | "xl" | undefined = undefined;
+	export let fontSize: "xs" | "sm" | "md" = "md";
 	export let borderRadius: "none" | "sm" | "md" = "sm";
 	export let className = "";
+	export let title: string | undefined = undefined;
 	export { className as class };
 </script>
 
 <button
-	class="button button_{type} padding padding_{padding} {className} borderRadius_{borderRadius}"
+	class="
+		button button_{type}
+		padding padding_{padding} {paddingSide && `paddingSide_${paddingSide}`}
+		{className} borderRadius_{borderRadius} fontSize_{fontSize}
+	"
 	class:loading={isLoading}
 	class:rounded={isRounded}
 	class:fullSize={isFullSize}
@@ -22,6 +29,7 @@
 	class:disabled={isDisabled || isLoading}
 	on:click
 	disabled={isDisabled || isLoading}
+	{title}
 >
 	{#if $$slots.leftIcon && !isLoading}
 		<span class="icon">
@@ -41,6 +49,8 @@
 </button>
 
 <style lang="scss">
+	@use "$variables/base/typography" as font;
+
 	.button {
 		--color: var(--accent-info-800);
 		--background: var(--accent-info-100);
@@ -123,6 +133,27 @@
 			--padding-inline: #{$space-sm};
 		}
 
+		&_lg {
+			--padding-block: #{$space-md + $space-sm};
+			--padding-inline: #{$space-lg};
+		}
+
+		&Side_sm {
+			--padding-inline: #{$space-sm};
+		}
+
+		&Side_md {
+			--padding-inline: #{$space-md};
+		}
+
+		&Side_lg {
+			--padding-inline: #{$space-lg};
+		}
+
+		&Side_xl {
+			--padding-inline: #{$space-xl};
+		}
+
 		&Same {
 			--dimensions: #{$space-lg};
 
@@ -136,6 +167,10 @@
 			&.padding {
 				&_sm {
 					--dimensions: #{$space-md + $space-sm};
+				}
+
+				&_lg {
+					--dimensions: #{$space-lg + $space-sm};
 				}
 			}
 		}
@@ -166,5 +201,19 @@
 		--background-active: var(--accent-neutral-100);
 
 		cursor: not-allowed;
+	}
+
+	.fontSize {
+		&_xs {
+			font-size: font.$font-xxs;
+		}
+
+		&_sm {
+			font-size: font.$font-xs;
+		}
+
+		&_md {
+			font-size: font.$font-sm;
+		}
 	}
 </style>

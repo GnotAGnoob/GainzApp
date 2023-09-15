@@ -18,3 +18,12 @@ export const getUserId = async (locals: App.Locals) => {
 
 	return userId;
 };
+
+export const dbQueryOmit = {
+	userId: false,
+	createdAt: false,
+	updatedAt: false,
+	categoryId: false,
+	unitId: false,
+	statusId: false,
+} as const;

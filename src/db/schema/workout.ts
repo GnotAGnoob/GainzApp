@@ -5,6 +5,7 @@ import { relations } from "drizzle-orm";
 import { superset } from "./superset";
 import type { InferSelectModel, InferInsertModel } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import type { dbQueryOmit } from "$src/lib/server/dbHelpers";
 
 export const workout = pgTable(
 	"workout",
@@ -42,7 +43,7 @@ export const workoutRelations = relations(workout, ({ many, one }) => ({
 	supersets: many(superset),
 }));
 
-export type Workout = InferSelectModel<typeof workout>;
+export type Workout = Omit<InferSelectModel<typeof workout>, keyof typeof dbQueryOmit>;
 export type InsertWorkout = InferInsertModel<typeof workout>;
 
 export const workoutInsertValidator = createInsertSchema(workout);

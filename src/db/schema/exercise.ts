@@ -6,6 +6,7 @@ import { unit } from "./unit";
 import type { InferSelectModel, InferInsertModel } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { MAX_TEXT_LENGTH } from "../../lib/constants";
+import type { dbQueryOmit } from "$src/lib/server/dbHelpers";
 
 export const exercise = pgTable(
 	"exercise",
@@ -41,7 +42,7 @@ export const exerciseRelations = relations(exercise, ({ one, many }) => ({
 	sets: many(set),
 }));
 
-export type Exercise = InferSelectModel<typeof exercise>;
+export type Exercise = Omit<InferSelectModel<typeof exercise>, keyof typeof dbQueryOmit>;
 export type InsertExercise = InferInsertModel<typeof exercise>;
 
 export const exerciseInsertValidator = createInsertSchema(exercise);

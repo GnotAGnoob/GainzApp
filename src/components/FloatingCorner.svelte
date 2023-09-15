@@ -1,8 +1,8 @@
 <script lang="ts">
 	import Icon from "@iconify/svelte";
-	import { page } from "$app/stores";
 	import { onMount } from "svelte";
 	import ExerciseForm from "./Exercises/ExerciseForm.svelte";
+	import { floatedCorner } from "$src/lib/stores/floatedCorner";
 
 	const BOUNDARY = 200;
 
@@ -28,7 +28,7 @@
 <svelte:window on:scroll={setVisibility} />
 
 <div class="floatingCorner">
-	{#if $page.data.floatedCorner?.includes("addExercise")}
+	{#if $floatedCorner.includes("addExercise")}
 		<button class="icon" on:click={exerciseFormElement.toggleModal}>
 			<!-- Solar nema normalni plus... -->
 			<Icon icon="iconoir:plus" />
@@ -70,7 +70,7 @@
 		line-height: 0;
 
 		&:hover {
-			border-color: var(--text-primary--hover);
+			box-shadow: $box-shadow-hover;
 		}
 	}
 

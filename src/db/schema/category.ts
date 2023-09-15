@@ -5,6 +5,7 @@ import { exercise } from "./exercise";
 import type { InferSelectModel, InferInsertModel } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { MAX_TEXT_LENGTH } from "../../lib/constants";
+import type { dbQueryOmit } from "$src/lib/server/dbHelpers";
 
 export const category = pgTable(
 	"category",
@@ -34,7 +35,7 @@ export const categoryRelations = relations(category, ({ one, many }) => ({
 	exercises: many(exercise),
 }));
 
-export type Category = InferSelectModel<typeof category>;
+export type Category = Omit<InferSelectModel<typeof category>, keyof typeof dbQueryOmit>;
 export type InsertCategory = InferInsertModel<typeof category>;
 
 export const categoryInsertValidator = createInsertSchema(category);

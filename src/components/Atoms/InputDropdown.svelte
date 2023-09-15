@@ -11,7 +11,7 @@
 	export let label: string;
 	export let value: string;
 	export let onCreateNew: ((value: string) => Promise<void>) | undefined = undefined;
-	export let onSelect: ((value: string) => void) | undefined = undefined;
+	export let onSelect: ((index: number) => void) | undefined = undefined;
 	export let isSelect = false;
 	const readOnly = isSelect && { readonly: true };
 	value = isSelect && !value.length ? dropDownOptions?.[0] ?? "" : value;
@@ -27,7 +27,7 @@
 	const onClick = (index: number) => {
 		if (!dropDownOptions) return;
 
-		onSelect?.(dropDownOptions[index]);
+		onSelect?.(index);
 		value = dropDownOptions[index];
 	};
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from "$app/stores";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import Icon from "@iconify/svelte";
 	import Button from "../Atoms/Button.svelte";
@@ -7,18 +8,22 @@
 	import InputDropdown from "../Atoms/InputDropdown.svelte";
 	import toast from "$src/lib/toast";
 	import { Modal } from "@svelteuidev/core";
-	import { categories } from "$src/lib/stores/categories";
+	import { categories, sortedCategories } from "$src/lib/stores/categories";
+	import type { Category } from "$src/db/schema/category";
+	import type { PageCategory } from "$src/routes/list/types";
 
 	const MAX_EXERCISES = 10;
 
+	export let category = "";
+
 	const emptyExercise = {
-		category: "",
+		category: category,
 		name: "",
 		unit: "",
 		errorMessage: "",
 	};
 	const lastSelectedValues = {
-		category: "",
+		category: category,
 		unit: "",
 	};
 
@@ -37,13 +42,13 @@
 		}
 	};
 
-	const onSelectUnit = (value: string) => {
-		lastSelectedValues.unit = value;
+	const onSelectUnit = (index: number) => {
+		lastSelectedValues.unit = exercises[index].unit;
 	};
 
-	const onSelectCategory = (value: string, index: number) => {
-		exercises[index].errorMessage = "";
-		lastSelectedValues.category = value;
+	const onSelectCategory = (valueIndex: number, inputsIndex: number) => {
+		exercises[inputsIndex].errorMessage = "";
+		lastSelectedValues.category = $sortedCategories[valueIndex].name;
 	};
 
 	const onAddExercise = () => {
@@ -59,8 +64,24 @@
 	};
 
 	const onSubmit = async () => {
-		exercises = exercises.map((exercise) => ({ ...exercise, errorMessage: "" }));
-		// const response = await axios.post("/api/exercise", exercises);
+		try {
+			exercises = exercises.map((exercise) => ({ ...exercise, errorMessage: "" }));
+			const { data: newCategories } = await toast.promise(
+				axios.post<PageCategory[]>("/api/exercise", exercises),
+				{
+					loading: `${dictionary.CREATING} ${dictionary.EXERCISES}`,
+					success: `${dictionary.EXERCISES} ${dictionary.SUCCESSFULLY_CREATED}`,
+					error: dictionary.CREATING_EXERCISES_FAILED,
+				},
+			);
+
+			$categories = newCategories;
+		} catch (error) {
+			// todo error to specific input group with right error message => might need to change error in oncreatenewcategory for consistency
+			// if (axios.isAxiosError(error)) {
+			// 	exercises[index].errorMessage = `Category: ${error.response?.data}`;
+			// }
+		}
 		// const total = await response.json();
 		// console.log($page.data.);
 	};
@@ -72,9 +93,9 @@
 					exercises[index].errorMessage = "";
 
 					// todo send just id
-					const response = await toast.promise(axios.post("/api/category", value), {
+					const response = await toast.promise(axios.post<Category>("/api/category", value), {
 						loading: `${dictionary.CREATING} ${dictionary.CATEGORY}`,
-						success: `${dictionary.CATEGORY} ${dictionary.SUCCESSFULLY_CREATED}`,
+						success: `${dictionary.CATEGORY} '${value}' ${dictionary.SUCCESSFULLY_CREATED}`,
 						error: dictionary.CREATING_CATEGORY_FAILED,
 					});
 
@@ -96,7 +117,7 @@
 <Modal target="body" opened={isAddExerciseOpen} on:close={toggleModal} size="lg">
 	<form class="form">
 		<h2 class="title">{dictionary.ADD_NEW_EXERCISES}</h2>
-		{#each exercises as exercise, index (exercise)}
+		{#each exercises as exercise, index}
 			<div class="inputsWrapper">
 				<div class="inputs">
 					<div class="input">
@@ -104,8 +125,8 @@
 							label={dictionary.CATEGORY}
 							bind:value={exercise.category}
 							onCreateNew={(value) => onCreateNewCategory(value, index)}
-							onSelect={(value) => onSelectCategory(value, index)}
-							dropDownOptions={$categories?.map((category) => category.name)}
+							onSelect={(valueIndex) => onSelectCategory(valueIndex, index)}
+							dropDownOptions={$sortedCategories?.map((category) => category.name)}
 						/>
 					</div>
 					<div class="input input_unit">
@@ -113,18 +134,7 @@
 							label={dictionary.UNIT}
 							bind:value={exercise.unit}
 							onSelect={onSelectUnit}
-							dropDownOptions={[
-								"test",
-								"test2",
-								"test3",
-								"test4",
-								"test5",
-								"test6",
-								"test7",
-								"test8",
-								"test9",
-								"test10",
-							]}
+							dropDownOptions={$page.data?.units?.map((unit) => unit.name)}
 							isSelect
 						/>
 					</div>

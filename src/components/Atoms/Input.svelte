@@ -73,6 +73,8 @@
 	}
 
 	.label {
+		margin-left: $space-xs;
+
 		color: var(--text-secondary);
 		font-size: $text-subheading;
 		text-transform: capitalize;

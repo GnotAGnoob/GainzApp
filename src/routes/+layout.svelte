@@ -19,31 +19,42 @@
 </svelte:head>
 <!-- <Swatch /> -->
 
-{#if import.meta.env.MODE === "development" || import.meta.env.MODE === "staging"}
-	<EnvironmentBanner type={import.meta.env.MODE === "development" ? "positive" : "info"}>
-		This is a <span class="bannerText">{import.meta.env.MODE}</span> environment!
-	</EnvironmentBanner>
-{/if}
-<Header />
-<FloatingCorner />
-<Toaster />
-<div class="container">
-	<div class="wrapper">
-		<main class="main">
-			<slot />
-		</main>
-		<footer class="footer">© 2023 Daniel Svátek</footer>
+<div class="content">
+	{#if import.meta.env.MODE === "development" || import.meta.env.MODE === "staging"}
+		<EnvironmentBanner type={import.meta.env.MODE === "development" ? "positive" : "info"}>
+			This is a <span class="bannerText">{import.meta.env.MODE}</span> environment!
+		</EnvironmentBanner>
+	{/if}
+	<Header />
+	<FloatingCorner />
+	<Toaster />
+	<div class="container">
+		<div class="wrapper">
+			<main class="main">
+				<slot />
+			</main>
+			<footer class="footer">© 2023 Daniel Svátek</footer>
+		</div>
 	</div>
 </div>
 
 <style lang="scss">
+	.content {
+		display: flex;
+
+		flex-direction: column;
+		flex-grow: 1;
+	}
 	.wrapper {
 		display: flex;
 
+		width: 100%;
 		max-width: $max-width;
-		padding-inline: var(--site-padding);
 		height: 100%;
+		padding-inline: var(--site-padding);
+		margin-inline: auto;
 
+		flex-grow: 1;
 		flex-direction: column;
 		justify-content: space-between;
 	}
@@ -61,9 +72,14 @@
 	}
 
 	.container {
-		height: 100%;
+		display: flex;
+
+		width: 100%;
 		max-width: 100%;
-		margin-inline: auto;
+
+		flex-direction: column;
+		flex-shrink: 0;
+		flex-grow: 1;
 	}
 
 	.bannerText {

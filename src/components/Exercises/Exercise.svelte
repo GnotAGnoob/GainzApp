@@ -1,48 +1,48 @@
 <script lang="ts">
-	import type { load } from "$src/routes/+page.server";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import { Collapse } from "@svelteuidev/core";
 	import Workout from "./Workout.svelte";
 	import History from "./History.svelte";
+	import type { PageExercise } from "$src/routes/list/types";
 
 	// TODO: vylepsit typ
-	export let exercise: Awaited<ReturnType<typeof load>>["categories"][0]["exercises"][0];
+	export let exercise: PageExercise;
 
 	let open = false;
-
-	const checkLastWorkoutBest = () => {
-		const lastWorkout = exercise.history[exercise.history.length - 1];
-		const bestWorkout = exercise.bestWorkout;
-
-		return lastWorkout.sets.every(
-			(set, index) =>
-				set.weight === bestWorkout.sets[index].weight && set.reps === bestWorkout.sets[index].reps,
-		);
-	};
-
-	const isLastWorkoutBest = checkLastWorkoutBest();
+	const lastWorkout = exercise.workoutHistory?.[exercise.workoutHistory.length - 1];
+	const bestWorkout = exercise.bestWorkout;
+	const areWorkouts = lastWorkout && bestWorkout;
 </script>
 
-<button class="button" on:click={() => (open = !open)}>
+{#if !areWorkouts}
 	<li class="exercise">
 		<h4 class="name">{exercise.name}</h4>
-		<div class="workoutsWrapper" class:workoutsWrapper_open={open}>
-			{#if isLastWorkoutBest}
-				<div>
-					<Workout title={dictionary.BEST_AND_LAST} workout={exercise.bestWorkout} type="best" />
-				</div>
-			{:else}
-				<div class="workouts">
-					<Workout title={dictionary.BEST} workout={exercise.bestWorkout} type="best" />
-					<Workout title={dictionary.LAST} workout={exercise.history[exercise.history.length - 1]} />
-				</div>
-			{/if}
-		</div>
-		<Collapse {open} transitionDuration={255}>
-			<History workouts={exercise.history} />
-		</Collapse>
+		<h5 class="noWorkout">
+			{dictionary.NO_WORKOUTS}
+		</h5>
 	</li>
-</button>
+{:else}
+	<button class="button" on:click={() => (open = !open)}>
+		<li class="exercise">
+			<h4 class="name">{exercise.name}</h4>
+			<div class="workoutsWrapper" class:workoutsWrapper_open={open}>
+				{#if lastWorkout.id === bestWorkout.id}
+					<div>
+						<Workout title={dictionary.BEST_AND_LAST} workout={bestWorkout} type="best" />
+					</div>
+				{:else}
+					<div class="workouts">
+						<Workout title={dictionary.BEST} workout={bestWorkout} type="best" />
+						<Workout title={dictionary.LAST} workout={lastWorkout} />
+					</div>
+				{/if}
+			</div>
+			<Collapse {open} transitionDuration={255}>
+				<History workouts={exercise.workoutHistory} />
+			</Collapse>
+		</li>
+	</button>
+{/if}
 
 <style lang="scss">
 	@import "./Exercises.scss";
@@ -52,6 +52,11 @@
 	}
 
 	.exercise {
+		display: flex;
+
+		flex-direction: column;
+		height: 100%;
+
 		color: var(--text-secondary);
 	}
 
@@ -90,5 +95,23 @@
 				opacity: 1;
 			}
 		}
+	}
+
+	.noWorkout {
+		// todo nastylovat podle pak dat
+		display: flex;
+
+		height: 100%;
+		margin-top: $space-xs;
+		border-radius: $border-radius;
+
+		flex-grow: 1;
+		align-items: center;
+		justify-content: center;
+
+		color: #{$text-color-history};
+		background-color: #{$background-color-history};
+
+		font-weight: 700;
 	}
 </style>

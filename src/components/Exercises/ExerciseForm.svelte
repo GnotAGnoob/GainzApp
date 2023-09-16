@@ -28,7 +28,7 @@
 	};
 
 	let exercises = [{ ...emptyExercise }];
-	$: areExercisesFilled = !exercises.every(
+	$: areExercisesFilled = exercises.every(
 		(exercise) => exercise.category.length && exercise.name.length && exercise.unit.length,
 	);
 
@@ -77,13 +77,13 @@
 
 			$categories = newCategories;
 		} catch (error) {
-			// todo error to specific input group with right error message => might need to change error in oncreatenewcategory for consistency
-			// if (axios.isAxiosError(error)) {
-			// 	exercises[index].errorMessage = `Category: ${error.response?.data}`;
-			// }
+			if (axios.isAxiosError(error)) {
+				exercises[
+					exercises.length - 1
+				].errorMessage = `${error.response?.data}. idk which element/what happened. too lazy to detect errors`;
+				console.log(error.response?.data);
+			}
 		}
-		// const total = await response.json();
-		// console.log($page.data.);
 	};
 
 	const onCreateNewCategory = (value: string, index: number) => {
@@ -169,7 +169,10 @@
 			<Icon icon="iconoir:plus" />
 		</Button>
 
-		<Button on:click={onSubmit} isDisabled={areExercisesFilled}
+		<Button
+			on:click={onSubmit}
+			isDisabled={!areExercisesFilled}
+			title={!areExercisesFilled ? dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS : undefined}
 			><span class="submit">{dictionary.SUBMIT}</span></Button
 		>
 	</form>

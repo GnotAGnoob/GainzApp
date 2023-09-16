@@ -102,6 +102,6 @@ export async function POST({ request, locals }) {
 
 		return json(returnCategories);
 	} catch (error) {
-		handleError(error);
+		return handleError(error);
 	}
 }

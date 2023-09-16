@@ -11,8 +11,10 @@ export const handleError = (error: unknown, errorHandling?: () => Response | und
 	}
 
 	if (error instanceof PostgresError) {
+		console.log(error.code);
 		// duplicate key
 		if (error.code === "23505") {
+			console.log("XXXXXXXXXX ", error);
 			return new Response(dictionary.ALREADY_EXIST, { status: 409 });
 		}
 	}
@@ -20,6 +22,7 @@ export const handleError = (error: unknown, errorHandling?: () => Response | und
 	const response = errorHandling?.();
 
 	if (response) {
+		console.log("response", response);
 		return response;
 	}
 

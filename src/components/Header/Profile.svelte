@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Icon from "@iconify/svelte";
-	import Button from "../Atoms/Button.svelte";
+	import Button from "../Atoms/Button/Button.svelte";
 	import { Menu } from "@svelteuidev/core";
 	import { signOut } from "@auth/sveltekit/client";
 	import { dictionary } from "$src/lib/language/dictionary";
@@ -31,7 +31,7 @@
 </div>
 
 <style lang="scss">
-	$icon-size: $space-lg;
+	$icon-md-size: $space-lg;
 
 	:global(.svelteui-Menu-body) {
 		padding: 0;
@@ -59,8 +59,8 @@
 		min-height: 0;
 
 		:global(.profileButton) {
-			width: $icon-size;
-			height: $icon-size;
+			width: $icon-md-size;
+			height: $icon-md-size;
 
 			place-items: center;
 			place-content: center;

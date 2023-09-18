@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Icon from "@iconify/svelte";
-	import Button from "./Button.svelte";
+	import Button from "./Button/Button.svelte";
 	import Input from "./Input.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import { onMount } from "svelte";
@@ -97,7 +97,7 @@
 			<div class="options" bind:this={optionsElement}>
 				{#each reduceOptions as option, index}
 					<div class="button">
-						<Button isFullSize type="background" borderRadius="none" on:click={() => onClick(index)}
+						<Button isFullSize type="noBackground" borderRadius="none" on:click={() => onClick(index)}
 							>{option}</Button
 						>
 					</div>

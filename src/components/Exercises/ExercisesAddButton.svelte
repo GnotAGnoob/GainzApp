@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Icon from "@iconify/svelte";
-	import Button from "../Atoms/Button.svelte";
+	import Button from "../Atoms/Button/Button.svelte";
 	import ExerciseForm from "./ExerciseForm.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import type { ComponentProps } from "svelte";
@@ -17,8 +17,8 @@
 <Button
 	type="neutral"
 	on:click={exerciseFormElement.toggleModal}
-	padding="sm"
-	fontSize="sm"
+	padding="xs"
+	fontSize="md"
 	title={dictionary.ADD_NEW_EXERCISES}
 	{...$$restProps}
 >

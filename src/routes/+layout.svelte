@@ -33,7 +33,10 @@
 			<main class="main">
 				<slot />
 			</main>
-			<footer class="footer">© 2023 Daniel Svátek</footer>
+			<footer class="footer">
+				<div>© 2023 Daniel Svátek</div>
+				<div>v{data.version}</div>
+			</footer>
 		</div>
 	</div>
 </div>
@@ -60,12 +63,19 @@
 	}
 
 	.main {
-		height: 100%;
+		display: flex;
+		flex-direction: column;
+
+		flex-grow: 1;
 	}
 
 	.footer {
+		display: flex;
+
 		margin-top: $space-md;
 		padding-block: $space-sm $space-xs;
+
+		justify-content: space-between;
 
 		font-size: $text-copyright;
 		color: var(--text-secondary);

@@ -9,6 +9,7 @@ export const set = pgTable("set", {
 	id: serial("id").primaryKey(),
 	repetition: integer("repetition"),
 	weight: integer("weight"),
+	order: integer("order").notNull(),
 
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 	updatedAt: timestamp("updated_at").notNull().defaultNow(),

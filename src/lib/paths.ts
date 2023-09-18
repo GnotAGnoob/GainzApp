@@ -5,3 +5,8 @@ export default {
 	"/exercises": dictionary.EXERCISES,
 	"/workouts": dictionary.WORKOUTS,
 } as const;
+
+export const apiRoutes = {
+	exercise: "/api/exercise/",
+	category: "/api/category/",
+};

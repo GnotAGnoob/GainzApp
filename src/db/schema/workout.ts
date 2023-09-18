@@ -1,4 +1,4 @@
-import { integer, pgTable, serial, text, timestamp, unique } from "drizzle-orm/pg-core";
+import { integer, pgTable, serial, text, timestamp, unique, varchar } from "drizzle-orm/pg-core";
 import { user } from "./user";
 import { status } from "./status";
 import { relations } from "drizzle-orm";
@@ -13,6 +13,7 @@ export const workout = pgTable(
 		id: serial("id").primaryKey(),
 		date: timestamp("date").notNull().defaultNow(),
 		order: integer("order"),
+		note: varchar("name", { length: 255 }),
 
 		createdAt: timestamp("created_at").notNull().defaultNow(),
 		updatedAt: timestamp("updated_at").notNull().defaultNow(),

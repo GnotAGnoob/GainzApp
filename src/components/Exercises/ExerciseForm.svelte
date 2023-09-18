@@ -2,7 +2,7 @@
 	import { page } from "$app/stores";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import Icon from "@iconify/svelte";
-	import Button from "../Atoms/Button.svelte";
+	import Button from "../Atoms/Button/Button.svelte";
 	import Input from "../Atoms/Input.svelte";
 	import axios from "axios";
 	import InputDropdown from "../Atoms/InputDropdown.svelte";
@@ -10,7 +10,7 @@
 	import { Modal } from "@svelteuidev/core";
 	import { categories, sortedCategories } from "$src/lib/stores/categories";
 	import type { Category } from "$src/db/schema/category";
-	import type { PageCategory } from "$src/routes/list/types";
+	import type { PageCategory } from "$src/routes/exercises/types";
 
 	const MAX_EXERCISES = 10;
 
@@ -81,7 +81,6 @@
 				exercises[
 					exercises.length - 1
 				].errorMessage = `${error.response?.data}. idk which element/what happened. too lazy to detect errors`;
-				console.log(error.response?.data);
 			}
 		}
 	};

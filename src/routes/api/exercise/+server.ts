@@ -5,8 +5,7 @@ import { z } from "zod";
 import { exercise } from "$src/db/schema/exercise.js";
 import { handleError } from "$src/lib/server/error";
 import { dbQueryOmit, getUserId } from "$src/lib/server/dbHelpers";
-import { unit } from "$src/db/schema/unit.js";
-import { eq, inArray, sql } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import type { PageCategory } from "$src/routes/exercises/types.js";
 import { json } from "@sveltejs/kit";
 

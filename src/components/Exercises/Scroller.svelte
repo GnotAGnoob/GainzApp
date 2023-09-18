@@ -154,7 +154,7 @@
 		align-items: center;
 
 		color: var(--_text-secondary-color);
-		font-size: $icon;
+		font-size: $icon-md;
 		background-color: var(--_background-color);
 
 		z-index: 10;

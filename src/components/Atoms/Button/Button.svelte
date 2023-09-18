@@ -1,8 +1,9 @@
 <script lang="ts">
+	import type { ButtonType } from "./types.ts";
 	import Icon from "@iconify/svelte";
 
 	export let isLoading = false;
-	export let type: "info" | "positive" | "infoInverse" | "neutral" | "background" | "negative" = "info";
+	export let type: ButtonType = "info";
 	export let isFullSize = false;
 	export let isRounded = false;
 	export let isPaddingSame = false;
@@ -84,6 +85,13 @@
 			--background: var(--accent-positive-100);
 			--background-hover: var(--accent-positive-200);
 			--background-active: var(--accent-positive-300);
+
+			&NoBackground {
+				--color: var(--accent-positive-600);
+				--background: transparent;
+				--background-hover: var(--accent-positive-50);
+				--background-active: var(--accent-positive-100);
+			}
 		}
 
 		&_negative {
@@ -91,6 +99,13 @@
 			--background: var(--accent-negative-50);
 			--background-hover: var(--accent-negative-100);
 			--background-active: var(--accent-negative-200);
+
+			&NoBackground {
+				--color: var(--accent-negative-600);
+				--background: transparent;
+				--background-hover: var(--accent-negative-50);
+				--background-active: var(--accent-negative-100);
+			}
 		}
 
 		&_neutral {
@@ -100,11 +115,18 @@
 			--background-active: var(--accent-neutral-400);
 		}
 
-		&_background {
+		&_noBackground {
 			--color: var(--accent-neutral-700);
-			--background: var(--background-color);
+			--background: transparent;
 			--background-hover: var(--accent-neutral-100);
 			--background-active: var(--accent-neutral-200);
+
+			&_2 {
+				--color: var(--accent-neutral-700);
+				--background: transparent;
+				--background-hover: var(--accent-neutral-200);
+				--background-active: var(--accent-neutral-300);
+			}
 		}
 
 		&_infoInverse {
@@ -127,6 +149,11 @@
 		--padding-block: #{$space-sm + $space-xs};
 		--padding-inline: #{$space-md};
 		padding: var(--padding-block) var(--padding-inline);
+
+		&_xs {
+			--padding-block: #{$space-xxs};
+			--padding-inline: #{$space-xs};
+		}
 
 		&_sm {
 			--padding-block: #{$space-xs};
@@ -165,6 +192,10 @@
 			align-items: center;
 
 			&.padding {
+				&_xs {
+					--dimensions: #{$space-md + $space-xs};
+				}
+
 				&_sm {
 					--dimensions: #{$space-md + $space-sm};
 				}

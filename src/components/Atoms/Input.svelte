@@ -1,12 +1,16 @@
 <script lang="ts">
 	import { MAX_TEXT_LENGTH } from "$src/lib/constants";
 
-	export let label: string;
+	export let label: string | undefined = undefined;
 	export let value: string;
+	export let isAlignCenter = false;
+	export let size: "sm" | "md" | "lg" = "md";
 </script>
 
-<span class="wrapper">
-	<label for="text" class="label">{label}</label>
+<span class="wrapper wrapper_{size}" class:wrapper_center={isAlignCenter}>
+	{#if label}
+		<label for="text" class="label">{label}</label>
+	{/if}
 	<div class="inputWrapper">
 		<div class="icon icon_left">
 			<slot />
@@ -36,7 +40,7 @@
 		width: 100%;
 		height: 100%;
 
-		padding: $space-xs $space-sm;
+		padding: 0 $space-sm $space-xs;
 		border: none;
 
 		color: var(--text-primary);
@@ -54,12 +58,16 @@
 			outline: none;
 		}
 
+		.wrapper_sm & {
+			font-size: $text-tag;
+			padding: 0 $space-xs $space-xxs;
+		}
+
 		&Wrapper {
 			display: flex;
 			position: relative;
 
 			border-bottom: $space-px solid var(--accent-neutral-200);
-			margin-top: $space-xs;
 
 			align-items: flex-end;
 			gap: $space-sm;
@@ -70,10 +78,17 @@
 				border-color: var(--text-secondary);
 			}
 		}
+
+		.wrapper_center & {
+			text-align: center;
+		}
 	}
 
 	.label {
+		display: block;
+
 		margin-left: $space-xs;
+		margin-bottom: $space-xs;
 
 		color: var(--text-secondary);
 		font-size: $text-subheading;

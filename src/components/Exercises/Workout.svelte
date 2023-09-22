@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { dateFormat } from "$src/lib/date";
-	import type { PageWorkout } from "$src/routes/list/types";
-	import type { workoutType } from "./Exercises";
-	import Scroller from "./Scroller.svelte";
+	import type { StylesType } from "$src/lib/types";
+	import type { PageWorkout } from "$src/routes/exercises/types";
+	import Scroller from "$components/Scroller/Scroller.svelte";
 	import Sets from "./Sets.svelte";
 
 	export let workout: PageWorkout | undefined = undefined;
 	export let title: string;
-	export let type: workoutType = "default";
+	export let type: StylesType = "info";
 </script>
 
 <div class="workout workout_{type}">
@@ -18,7 +18,7 @@
 		{/if}
 	</h5>
 	{#if workout}
-		<Scroller {type}>
+		<Scroller {type} arrowsPosition="top">
 			<Sets {type} sets={workout.sets} />
 		</Scroller>
 	{/if}
@@ -55,12 +55,12 @@
 			border-bottom-right-radius: $border-radius;
 		}
 
-		&_best {
+		&_positive {
 			--_text-color: #{$text-color-best};
 			--_background-color: #{$background-color-best};
 		}
 
-		&_history {
+		&_neutral {
 			--_text-color: #{$text-color-history};
 			--_background-color: #{$background-color-history};
 		}

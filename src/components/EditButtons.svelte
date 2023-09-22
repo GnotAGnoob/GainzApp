@@ -11,8 +11,11 @@
 	export let onConfirm: () => void;
 	export let onCancel: () => void;
 	export let buttonType: ButtonType = "noBackground";
+	export let isAbsolute = true;
+	export let padding: "xs" | "sm" | "md" | "lg" = "xs";
+	export let isConfirmButton = true;
 
-	let isInEditMode = false;
+	export let isInEditMode = false;
 
 	const handleEditMode = () => {
 		isInEditMode = true;
@@ -35,11 +38,11 @@
 
 <div class="wrapper">
 	<slot />
-	<div class="editButtons">
+	<div class="editButtons" class:editButtons_absolute={isAbsolute}>
 		{#if !isInEditMode}
 			<Button
 				type={buttonType}
-				padding="xs"
+				{padding}
 				fontSize="xs"
 				title={dictionary.ADD_NEW_EXERCISES}
 				isPaddingSame
@@ -53,21 +56,23 @@
 				<ExercisesAddButton {category} isPaddingSame type={buttonType} />
 			{/if}
 		{:else}
-			<Button
-				type="positiveNoBackground"
-				padding="xs"
-				fontSize="sm"
-				title={dictionary.ADD_NEW_EXERCISES}
-				isPaddingSame
-				on:click={handleConfirm}
-			>
-				<span class="icon icon_larger">
-					<Icon icon="iconoir:check" />
-				</span>
-			</Button>
+			{#if isConfirmButton}
+				<Button
+					type="positiveNoBackground"
+					{padding}
+					fontSize="sm"
+					title={dictionary.ADD_NEW_EXERCISES}
+					isPaddingSame
+					on:click={handleConfirm}
+				>
+					<span class="icon icon_larger">
+						<Icon icon="iconoir:check" />
+					</span>
+				</Button>
+			{/if}
 			<Button
 				type="negativeNoBackground"
-				padding="xs"
+				{padding}
 				fontSize="sm"
 				title={dictionary.ADD_NEW_EXERCISES}
 				isPaddingSame
@@ -97,14 +102,16 @@
 	.editButtons {
 		display: flex;
 
-		position: absolute;
-		left: 100%;
-
 		gap: $space-xxs;
 
 		align-items: center;
 
 		z-index: 10;
+
+		&_absolute {
+			position: absolute;
+			left: 100%;
+		}
 	}
 
 	.icon {

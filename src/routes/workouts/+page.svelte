@@ -1,9 +1,61 @@
 <script>
-    import { Button } from '@svelteuidev/core';
+	import Button from "$src/components/Atoms/Button/Button.svelte";
+	import Tabs from "$src/components/Tabs.svelte";
+	import PlannedWorkouts from "$src/components/Workouts/PlannedWorkouts.svelte";
+	import { dictionary } from "$src/lib/language/dictionary";
+
+	let activeElement = 0;
 </script>
 
+<div class="wrapper">
+	<div class="tabs">
+		<Tabs let:prop={onClick} bind:activeElement>
+			<Button on:click={() => onClick(0)} type="link" fontSize="md" padding="none"
+				>{dictionary.PLANNED_WORKOUTS}</Button
+			>
+			<Button on:click={() => onClick(1)} type="link" fontSize="md" padding="none"
+				>{dictionary.TEMPLATES}</Button
+			>
+		</Tabs>
+	</div>
+	<div class="content">
+		{#if activeElement === 0}
+			<div class="planned">
+				<PlannedWorkouts />
+			</div>
+		{:else if activeElement === 1}
+			<!-- else if content here -->
+			<section>
+				switch tab between templates and planned workouts when making workout -> button make workout from
+				templates option for creating workout somehow when creating create 3 scenarios -> template, planned,
+				and just create workout mozna u templatu pocitat s moznosti, ze budes vyjmenovavat jen kategorie mozna
+				jinak nez dropdown? mozna dropdown, kdyz selected tak do nejake pilule ale aby to bylo writable
+			</section>
+		{:else}
+			tab error
+		{/if}
+		<section>
+			<h2>{dictionary.HISTORY}</h2>
+		</section>
+	</div>
+</div>
 
-<h1>Welcome to kok  
-</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
-<Button>ahoj</Button>
+<style lang="scss">
+	.wrapper {
+		margin-top: $space-md;
+	}
+
+	.tabs {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.content {
+		margin-top: $space-sm + $space-xs;
+	}
+
+	.planned {
+		margin-inline: calc(-1 * var(--site-padding));
+	}
+</style>

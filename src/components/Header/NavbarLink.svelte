@@ -3,7 +3,6 @@
 
 	export let href: string;
 	export let text: string;
-	export let clientWidth: number | undefined = undefined;
 	export let onClick: undefined | ((index: number) => void) = undefined;
 	export let index: number | undefined = undefined;
 
@@ -16,7 +15,7 @@
 	};
 </script>
 
-<li bind:clientWidth>
+<li>
 	<a class="linkWrapper" {href} on:click={handleClick} {...$$restProps}>
 		<span class="link" class:link_active={isActive}>{text}</span>
 	</a>
@@ -51,7 +50,6 @@
 
 			&Wrapper {
 				text-align: center;
-				padding-block: $space-xxs;
 
 				// &:hover {
 				// 	background-color: var(--background-color);

@@ -3,4 +3,3 @@
 </script>
 
 home
-{import.meta.env}

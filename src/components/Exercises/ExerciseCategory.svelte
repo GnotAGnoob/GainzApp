@@ -57,6 +57,8 @@
 </section>
 
 <style lang="scss">
+	@import "./Exercises.scss";
+
 	.header {
 		display: flex;
 
@@ -66,8 +68,8 @@
 	.category {
 		display: flex;
 
-		min-width: $space-xxl + $space-xl;
-		min-height: $space-xl;
+		min-width: $space-xxxl;
+		min-height: $space-xl + $space-sm;
 		padding: $space-sm $space-sm;
 		border-radius: $border-md;
 
@@ -90,6 +92,7 @@
 		}
 
 		@media (min-width: $bp-512) {
+			--columns: 3;
 			--max-columns: 2;
 			display: grid;
 			align-items: flex-start;

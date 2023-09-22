@@ -1,11 +1,11 @@
 <script>
-    import { page } from "$app/stores";
+	import { page } from "$app/stores";
 	import { getPageTitle } from "$lib/getPageTitle";
 </script>
 
 <svelte:head>
-    <title>{getPageTitle("404")}</title>
+	<title>{getPageTitle("404")}</title>
 </svelte:head>
 
 <!-- TODO HANDLE DIFFERENT ERRORS -->
-<h1>{$page.status}: {$page.error?.message}</h1>
+<h2>{$page.status}: {$page.error?.message}</h2>

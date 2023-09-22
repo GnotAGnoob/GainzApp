@@ -32,4 +32,7 @@ export const dictionary = {
 	NO_WORKOUTS: "No workouts",
 	NO_EXERCISES_CREATED: "No exercises created",
 	YOU_HAVE_TO_FILL_ALL_FIELDS: "You have to fill all fields",
+	PLANNED_WORKOUTS: "Planned Workouts",
+	PLAN_NEW_WORKOUTS: "Plan New Workout",
+	TEMPLATES: "Templates",
 };

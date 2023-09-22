@@ -8,7 +8,7 @@
 	export let isRounded = false;
 	export let isPaddingSame = false;
 	export let isDisabled = false;
-	export let padding: "xs" | "sm" | "md" | "lg" = "md";
+	export let padding: "xs" | "sm" | "md" | "lg" | "none" = "md";
 	export let paddingSide: "xs" | "sm" | "md" | "lg" | "xl" | undefined = undefined;
 	export let fontSize: "xs" | "sm" | "md" = "md";
 	export let borderRadius: "none" | "sm" | "md" = "sm";
@@ -53,11 +53,6 @@
 	@use "$variables/base/typography" as font;
 
 	.button {
-		--color: var(--accent-info-800);
-		--background: var(--accent-info-100);
-		--background-hover: var(--accent-info-200);
-		--background-active: var(--accent-info-300);
-
 		display: flex;
 
 		border-radius: $border-sm;
@@ -78,6 +73,15 @@
 
 		&:active {
 			background-color: var(--background-active);
+		}
+
+		&_link {
+			color: var(--text-primary);
+
+			&:hover,
+			&:active {
+				color: var(--text-primary--hover);
+			}
 		}
 
 		&_positive {
@@ -129,11 +133,18 @@
 			}
 		}
 
-		&_infoInverse {
-			--color: var(--background-color);
-			--background: var(--accent-info-500);
-			--background-hover: var(--accent-info-600);
-			--background-active: var(--accent-info-700);
+		&_info {
+			--color: var(--accent-info-800);
+			--background: var(--accent-info-100);
+			--background-hover: var(--accent-info-200);
+			--background-active: var(--accent-info-300);
+
+			&Inverse {
+				--color: var(--background-color);
+				--background: var(--accent-info-500);
+				--background-hover: var(--accent-info-600);
+				--background-active: var(--accent-info-700);
+			}
 		}
 	}
 
@@ -163,6 +174,10 @@
 		&_lg {
 			--padding-block: #{$space-md + $space-sm};
 			--padding-inline: #{$space-lg};
+		}
+
+		&_none {
+			padding: 0;
 		}
 
 		&Side_sm {

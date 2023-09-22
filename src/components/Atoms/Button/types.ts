@@ -1,5 +1,6 @@
 export type ButtonType =
 	| "info"
+	| "link"
 	| "positive"
 	| "positiveNoBackground"
 	| "infoInverse"

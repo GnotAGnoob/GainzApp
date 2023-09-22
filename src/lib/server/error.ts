@@ -1,4 +1,4 @@
-import { PostgresError } from "postgres";
+import postgres from "postgres";
 import { z } from "zod";
 import { dictionary } from "../language/dictionary";
 
@@ -10,7 +10,7 @@ export const handleError = (error: unknown, errorHandling?: () => Response | und
 		return new Response(error.errors[0].message, { status: 422 });
 	}
 
-	if (error instanceof PostgresError) {
+	if (error instanceof postgres.PostgresError) {
 		// duplicate key
 		if (error.code === "23505") {
 			return new Response(dictionary.ALREADY_EXIST, { status: 409 });

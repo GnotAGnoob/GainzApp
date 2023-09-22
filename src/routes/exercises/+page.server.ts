@@ -34,6 +34,96 @@ export async function load({ locals }): Promise<HomePageData | Response> {
 
 		const [units, categories] = await Promise.all([unitsPromise, categoriesPromise]);
 
+		categories[0].exercises[0].workoutHistory = [
+			{
+				date: new Date(),
+				sets: [
+					{
+						reps: 11,
+						weight: 10,
+					},
+					{
+						reps: 10,
+						weight: 10,
+					},
+					{
+						reps: 9,
+						weight: 10,
+					},
+					{
+						reps: 10,
+						weight: 10,
+					},
+					{
+						reps: 9,
+						weight: 10,
+					},
+				],
+			},
+			{
+				date: new Date(),
+				sets: [
+					{
+						reps: 6,
+						weight: 12,
+					},
+				],
+			},
+			{
+				date: new Date(),
+				sets: [
+					{
+						reps: 11,
+						weight: 10,
+					},
+					{
+						reps: 10,
+						weight: 10,
+					},
+					{
+						reps: 9,
+						weight: 10,
+					},
+				],
+			},
+		];
+
+		categories[0].exercises[0].bestWorkout = {
+			date: new Date(),
+			sets: [
+				{
+					reps: 11,
+					weight: 10,
+				},
+				{
+					reps: 10,
+					weight: 10,
+				},
+				{
+					reps: 9,
+					weight: 10,
+				},
+				{
+					reps: 10,
+					weight: 10,
+				},
+				{
+					reps: 9,
+					weight: 10,
+				},
+				{
+					reps: 10,
+					weight: 10,
+				},
+				{
+					reps: 9,
+					weight: 10,
+				},
+			],
+		};
+
+		console.log(categories[0].exercises);
+
 		return {
 			units,
 			categories,

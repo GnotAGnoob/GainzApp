@@ -4,13 +4,11 @@
 	import Workout from "./Workout.svelte";
 	import History from "./History.svelte";
 	import type { PageExercise } from "$src/routes/exercises/types";
-	import { categories } from "$src/lib/stores/categories";
 	import toast from "$src/lib/toast";
 	import axios from "axios";
 	import type { Exercise } from "$src/db/schema/exercise";
 	import EditText from "$components/EditText.svelte";
 
-	// TODO: vylepsit typ
 	export let exercise: PageExercise;
 
 	let open = false;
@@ -49,14 +47,16 @@
 </script>
 
 {#if !areWorkouts}
-	<li class="exercise">
-		<EditText text={exercise.name} {onConfirm} {errorMessage} buttonType="noBackground_2" inputSize="sm">
-			<h4 class="name">{exercise.name}</h4>
-		</EditText>
-		<h5 class="noWorkout">
-			{dictionary.NO_WORKOUTS}
-		</h5>
-	</li>
+	<span>
+		<li class="exercise">
+			<EditText text={exercise.name} {onConfirm} {errorMessage} buttonType="noBackground_2" inputSize="sm">
+				<h4 class="name">{exercise.name}</h4>
+			</EditText>
+			<h5 class="noWorkout">
+				{dictionary.NO_WORKOUTS}
+			</h5>
+		</li>
+	</span>
 {:else}
 	<button class="button" on:click={() => (open = !open)}>
 		<li class="exercise">
@@ -64,13 +64,13 @@
 				<h4 class="name">{exercise.name}</h4>
 			</EditText>
 			<div class="workoutsWrapper" class:workoutsWrapper_open={open}>
-				{#if lastWorkout.id === bestWorkout.id}
+				{#if lastWorkout.id !== bestWorkout.id}
 					<div>
-						<Workout title={dictionary.BEST_AND_LAST} workout={bestWorkout} type="best" />
+						<Workout title={dictionary.BEST_AND_LAST} workout={bestWorkout} type="positive" />
 					</div>
 				{:else}
 					<div class="workouts">
-						<Workout title={dictionary.BEST} workout={bestWorkout} type="best" />
+						<Workout title={dictionary.BEST} workout={bestWorkout} type="positive" />
 						<Workout title={dictionary.LAST} workout={lastWorkout} />
 					</div>
 				{/if}
@@ -93,7 +93,7 @@
 		display: flex;
 
 		flex-direction: column;
-		min-width: $space-xxl + $space-xl;
+		min-width: $min-exercise-width;
 		height: 100%;
 
 		color: var(--text-secondary);
@@ -141,6 +141,7 @@
 		display: flex;
 
 		height: 100%;
+		min-height: $space-lg;
 		margin-top: $space-sm;
 		padding: $space-md;
 		border-radius: $border-radius;

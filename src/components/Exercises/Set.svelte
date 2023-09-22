@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { workoutType } from "./Exercises";
+	import type { StylesType } from "$src/lib/types";
 
 	export let setNumber: number;
 	export let weight: number;
 	export let reps: number;
-	export let type: workoutType = "default";
+	export let type: StylesType = "info";
 </script>
 
 <li class="set set_{type}">
@@ -35,17 +35,17 @@
 		flex-direction: column;
 		align-items: flex-end;
 
-		&_best {
+		&_positive {
 			--_border-color: #{$border-color-best};
 			--_text-secondary-color: #{$text-secondary-color-best};
 		}
 
-		&_history {
+		&_neutral {
 			--_border-color: #{$border-color-history};
 			--_text-secondary-color: #{$text-secondary-color-history};
 		}
 
-		&_history2 {
+		&_neutral_2 {
 			--_border-color: #{$border-color-history-2};
 			--_text-secondary-color: #{$text-secondary-color-history-2};
 		}

@@ -3,7 +3,7 @@
 	import { dictionary } from "$src/lib/language/dictionary";
 	import { dateFormat } from "$src/lib/date";
 	import Sets from "./Sets.svelte";
-	import Scroller from "./Scroller.svelte";
+	import Scroller from "$components/Scroller/Scroller.svelte";
 
 	// TODO typ
 	export let workouts: Awaited<ReturnType<typeof load>>["categories"][0]["exercises"][0]["history"];
@@ -11,15 +11,15 @@
 
 <div class="history">
 	<span class="title">{dictionary.HISTORY}</span>
-	<Scroller type="history" sideFade="medium" isScrollReverse>
-		<div class="workouts">
+	<Scroller type="neutral" sideFade="medium" isScrollReverse arrowsPosition="top">
+		<ul class="workouts">
 			{#each workouts as workout, index}
-				<div class="workout">
+				<li class="workout">
 					<date class="date">{dateFormat(workout.date)}</date>
-					<Sets type={index % 2 === 0 ? "history" : "history2"} sets={workout.sets} />
-				</div>
+					<Sets type={index % 2 === 0 ? "neutral" : "neutral_2"} sets={workout.sets} />
+				</li>
 			{/each}
-		</div>
+		</ul>
 	</Scroller>
 </div>
 

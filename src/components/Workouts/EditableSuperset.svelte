@@ -1,0 +1,71 @@
+<script lang="ts">
+	import Button from "$components/Atoms/Button/Button.svelte";
+	import { MAX_SUPERSET_EXERCISES } from "$src/lib/constants";
+	import Icon from "@iconify/svelte";
+	import EditableExercise from "./EditableExercise.svelte";
+	import { dictionary } from "$src/lib/language/dictionary";
+
+	export let exercises: any[] = [];
+	export let order: number;
+
+	$: areExercisesFilled = exercises.every((exercise) => exercise.category?.length && exercise.name?.length);
+	$: disabledText =
+		(exercises.length >= MAX_SUPERSET_EXERCISES && dictionary.YOU_CANNOT_CREATE_MORE_ITEMS) ||
+		(!areExercisesFilled && dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS);
+
+	const onAddExercise = () => {
+		exercises = [...exercises, {}];
+	};
+</script>
+
+<div class="superset">
+	<h5 class="title">{order}. {exercises.length > 1 ? "superset" : "exercise"}</h5>
+	<div class="exercises">
+		{#each exercises as exercise}
+			<EditableExercise bind:exercise />
+		{/each}
+	</div>
+	<div class="button">
+		<Button
+			type="neutral"
+			isPaddingSame
+			padding="sm"
+			on:click={onAddExercise}
+			disabledTitle={disabledText}
+			title={dictionary.ADD_NEW_EXERCISES}
+			isFullSize
+		>
+			<!-- Solar nema normalni plus... -->
+			<Icon icon="iconoir:plus" />
+		</Button>
+	</div>
+</div>
+
+<style lang="scss">
+	.exercises {
+		display: flex;
+
+		flex-direction: column;
+
+		line-height: 1;
+	}
+
+	.title {
+		font-size: $text-tag;
+		font-weight: 700;
+		color: var(--text-secondary);
+	}
+
+	.superset {
+		display: flex;
+
+		flex-direction: column;
+
+		color: var(--accent-neutral-700);
+	}
+
+	.button {
+		// margin-inline: auto;
+		margin-top: $space-sm;
+	}
+</style>

@@ -1,10 +1,20 @@
 <script lang="ts">
 	import { MAX_TEXT_LENGTH } from "$src/lib/constants";
+	import { onMount } from "svelte";
 
 	export let label: string | undefined = undefined;
 	export let value: string;
 	export let isAlignCenter = false;
 	export let size: "sm" | "md" | "lg" = "md";
+	export let isOnMountFocus = false;
+
+	let input: HTMLInputElement | null = null;
+
+	onMount(() => {
+		if (isOnMountFocus) {
+			input?.focus();
+		}
+	});
 </script>
 
 <span class="wrapper wrapper_{size}" class:wrapper_center={isAlignCenter}>
@@ -21,11 +31,13 @@
 			class="input"
 			class:input_left={$$slots.default}
 			class:input_right={$$slots.rightIcon}
+			bind:this={input}
 			bind:value
 			on:click
 			on:mousedown
 			on:focus
 			on:blur
+			on:keyup
 			maxlength={MAX_TEXT_LENGTH}
 			autocomplete="off"
 		/>

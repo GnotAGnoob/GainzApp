@@ -7,7 +7,7 @@
 	export let isFullSize = false;
 	export let isRounded = false;
 	export let isPaddingSame = false;
-	export let isDisabled = false;
+	export let disabledTitle: string | false | undefined = undefined;
 	export let padding: "xs" | "sm" | "md" | "lg" | "none" = "md";
 	export let paddingSide: "xs" | "sm" | "md" | "lg" | "xl" | undefined = undefined;
 	export let fontSize: "xs" | "sm" | "md" = "md";
@@ -27,10 +27,10 @@
 	class:rounded={isRounded}
 	class:fullSize={isFullSize}
 	class:paddingSame={isPaddingSame}
-	class:disabled={isDisabled || isLoading}
+	class:disabled={disabledTitle || isLoading}
 	on:click
-	disabled={isDisabled || isLoading}
-	{title}
+	disabled={!!disabledTitle || isLoading}
+	title={disabledTitle || title}
 >
 	{#if $$slots.leftIcon && !isLoading}
 		<span class="icon">

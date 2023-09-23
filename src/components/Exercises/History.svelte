@@ -41,7 +41,7 @@
 		display: flex;
 
 		padding: $space-xs $space-sm $space-sm;
-		margin-bottom: -$scroller-padding;
+		margin-bottom: calc(-1 * var(--scroller-padding));
 
 		flex-direction: column;
 		flex-grow: 1;

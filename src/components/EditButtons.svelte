@@ -7,12 +7,14 @@
 
 	export let category = "";
 	export let isAddButton = false;
-	export let onEditMode: () => void;
-	export let onConfirm: () => void;
-	export let onCancel: () => void;
+	export let onEditMode: (() => void) | undefined = undefined;
+	export let onConfirm: (() => void) | undefined = undefined;
+	export let onDelete: (() => void) | undefined = undefined;
+	export let onCancel: (() => void) | undefined = undefined;
 	export let buttonType: ButtonType = "noBackground";
 	export let isAbsolute = true;
-	export let padding: "xs" | "sm" | "md" | "lg" = "xs";
+	export let buttonPadding: "xs" | "sm" | "md" | "lg" = "xs";
+	export let isPadding = true;
 	export let isConfirmButton = true;
 
 	export let isInEditMode = false;
@@ -20,29 +22,35 @@
 	const handleEditMode = () => {
 		isInEditMode = true;
 
-		onEditMode();
+		onEditMode?.();
 	};
 
 	const handleConfirm = () => {
 		isInEditMode = false;
 
-		onConfirm();
+		onConfirm?.();
+	};
+
+	const handleDelete = () => {
+		isInEditMode = false;
+
+		onDelete?.();
 	};
 
 	const handleCancel = () => {
 		isInEditMode = false;
 
-		onCancel();
+		onCancel?.();
 	};
 </script>
 
-<div class="wrapper">
+<div class="wrapper" class:wrapper_padding={isPadding}>
 	<slot />
 	<div class="editButtons" class:editButtons_absolute={isAbsolute}>
 		{#if !isInEditMode}
 			<Button
 				type={buttonType}
-				{padding}
+				padding={buttonPadding}
 				fontSize="xs"
 				title={dictionary.ADD_NEW_EXERCISES}
 				isPaddingSame
@@ -55,11 +63,26 @@
 			{#if isAddButton}
 				<ExercisesAddButton {category} isPaddingSame type={buttonType} />
 			{/if}
+			{#if onDelete}
+				<!--todo title at je urcen propem-->
+				<Button
+					type="negativeNoBackground"
+					padding={buttonPadding}
+					fontSize="md"
+					title={dictionary.DELETE_WORKOUT}
+					isPaddingSame
+					on:click={handleDelete}
+				>
+					<span class="icon icon_medium">
+						<Icon icon="solar:trash-bin-trash-linear" />
+					</span>
+				</Button>
+			{/if}
 		{:else}
 			{#if isConfirmButton}
 				<Button
 					type="positiveNoBackground"
-					{padding}
+					padding={buttonPadding}
 					fontSize="sm"
 					title={dictionary.ADD_NEW_EXERCISES}
 					isPaddingSame
@@ -72,7 +95,7 @@
 			{/if}
 			<Button
 				type="negativeNoBackground"
-				{padding}
+				padding={buttonPadding}
 				fontSize="sm"
 				title={dictionary.ADD_NEW_EXERCISES}
 				isPaddingSame
@@ -96,7 +119,9 @@
 
 		align-items: center;
 
-		padding-inline: $space-sm;
+		&_padding {
+			padding-inline: $space-sm;
+		}
 	}
 
 	.editButtons {
@@ -120,6 +145,10 @@
 
 		&_plus {
 			transform: rotate(45deg);
+		}
+
+		&_medium {
+			font-size: $icon-md;
 		}
 
 		&_larger {

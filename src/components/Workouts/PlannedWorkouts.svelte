@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Scroller from "$src/components/Scroller/Scroller.svelte";
 	import Button from "$components/Atoms/Button/Button.svelte";
-	import { dictionary } from "$lib/language/dictionary";
 	import WorkoutCard from "./WorkoutCard.svelte";
 
 	const preparedWorkouts: any[] = [];
@@ -59,7 +58,7 @@
 			exercises: [
 				{
 					category: "biceps",
-					name: "skull crusher",
+					name: "skull crusher crushe skull skursher skull crusher crushe skull skursher",
 				},
 			],
 		},
@@ -73,13 +72,13 @@
 			<span>{dictionary.PLAN_NEW_WORKOUTS}</span>
 		</Button>
 	</div> -->
-	<Scroller wrapperTag="ol" sideFade="large" type="background" arrowsPosition="full">
+	<Scroller wrapperTag="ol" sideFade="large" type="background" arrowsPosition="full" bottomPadding="medium">
 		<!-- {#each preparedWorkouts as workout, index} -->
-		<WorkoutCard index={1} supersets={test} />
-		<WorkoutCard index={1} supersets={test} />
-		<WorkoutCard index={1} supersets={test} />
-		<WorkoutCard index={1} supersets={test} />
-		<WorkoutCard index={1} supersets={test} />
+		<WorkoutCard title={1} supersets={test} />
+		<WorkoutCard title={1} supersets={test} />
+		<WorkoutCard title={1} supersets={test} />
+		<WorkoutCard title={1} supersets={test} />
+		<WorkoutCard title={1} supersets={test} />
 		<!-- {/each} -->
 	</Scroller>
 	<div class="button">

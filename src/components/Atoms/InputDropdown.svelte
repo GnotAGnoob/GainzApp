@@ -8,7 +8,7 @@
 	const MAX_OPTIONS = 20;
 
 	export let dropDownOptions: string[] | undefined = undefined;
-	export let label: string;
+	export let label: string | undefined = undefined;
 	export let value: string;
 	export let onCreateNew: ((value: string) => Promise<void>) | undefined = undefined;
 	export let onSelect: ((index: number) => void) | undefined = undefined;
@@ -82,6 +82,7 @@
 			on:click={onInputClick}
 			on:mousedown={onInputMouseDown}
 			on:focus={onInputFocus}
+			on:keyup
 		>
 			<svelte:fragment slot="rightIcon">
 				{#if isSelect}

@@ -146,7 +146,7 @@
 							isPaddingSame
 							padding="md"
 							on:click={() => onRemoveExercise(index)}
-							isDisabled={exercises.length === 1}
+							disabledTitle={exercises.length === 1}
 						>
 							<Icon icon="solar:trash-bin-trash-linear" />
 						</Button>
@@ -162,7 +162,7 @@
 			isPaddingSame
 			padding="md"
 			on:click={onAddExercise}
-			isDisabled={exercises.length === MAX_EXERCISES}
+			disabledTitle={exercises.length === MAX_EXERCISES}
 		>
 			<!-- Solar nema normalni plus... -->
 			<Icon icon="iconoir:plus" />
@@ -170,7 +170,7 @@
 
 		<Button
 			on:click={onSubmit}
-			isDisabled={!areExercisesFilled}
+			disabledTitle={!areExercisesFilled}
 			title={!areExercisesFilled ? dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS : undefined}
 			><span class="submit">{dictionary.SUBMIT}</span></Button
 		>

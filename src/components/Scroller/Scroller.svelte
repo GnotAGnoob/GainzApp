@@ -9,6 +9,7 @@
 	export let isScrollReverse = false;
 	export let wrapperTag: "div" | "ul" | "ol" = "div";
 	export let arrowsPosition: "top" | "full" | undefined = undefined;
+	export let bottomPadding: "small" | "medium" | "large" = "small";
 
 	let scrollElement: HTMLElement;
 	let isOverflowingLeft = false;
@@ -68,15 +69,13 @@
 		on:scroll={setOverflowing}
 		class:contentWrapper_reverse={isScrollReverse}
 	>
-		<svelte:element this={wrapperTag} class="contentContainer">
+		<svelte:element this={wrapperTag} class="contentContainer contentContainer_{bottomPadding}">
 			<slot />
 		</svelte:element>
 	</div>
 </div>
 
 <style lang="scss">
-	@import "./Scroller.scss";
-
 	.arrowsWrapper {
 		--_background-color: var(--accent-neutral-200);
 		--_button-background-hover: var(--accent-neutral-300);
@@ -139,6 +138,8 @@
 
 	.content {
 		&Container {
+			--scroller-padding: #{$space-sm};
+
 			display: grid;
 
 			width: max-content;
@@ -150,7 +151,11 @@
 			grid-auto-flow: column;
 			align-items: flex-start;
 
-			padding-bottom: $scroller-padding;
+			padding-bottom: var(--scroller-padding);
+
+			&_medium {
+				--scroller-padding: #{$space-md};
+			}
 		}
 
 		&Wrapper {

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Exercise from "./Exercise.svelte";
 
-	export let exercises: any[];
+	export let exercises: any[] = [];
 	export let order: number;
 </script>
 
@@ -35,6 +35,8 @@
 		gap: $space-xxs;
 
 		flex-direction: column;
+
+		padding-right: ($space-md + $space-xs);
 
 		color: var(--accent-neutral-700);
 	}

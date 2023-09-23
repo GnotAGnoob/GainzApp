@@ -2,7 +2,8 @@
 	"useTabs": true,
 	"singleQuote": false,
 	"trailingComma": "all",
-	"printWidth": 110,
+	"printWidth": 120,
+	"tabWidth": 4,
 	"plugins": ["prettier-plugin-svelte"],
 	"pluginSearchDirs": ["."],
 	"overrides": [

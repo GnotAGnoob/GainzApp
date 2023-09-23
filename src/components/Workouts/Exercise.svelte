@@ -6,9 +6,11 @@
 </script>
 
 <div class="exercise">
-	<span class="category">{exercise.category}</span>
-	<span>-</span>
-	<span>{exercise.name}</span>
+	<span class="category">{exercise.category || ""}</span>
+	{#if exercise.name}
+		<span>-</span>
+		<span>{exercise.name}</span>
+	{/if}
 </div>
 
 <style lang="scss">

@@ -4,27 +4,58 @@
 	import Icon from "@iconify/svelte";
 	import EditableExercise from "./EditableExercise.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
+	import type { PageFullExercise } from "$src/routes/workouts/types";
+	import { index } from "drizzle-orm/mysql-core";
 
-	export let exercises: any[] = [];
+	const emptyExercise: PageFullExercise = {};
+
+	let exercises: PageFullExercise[] = [
+		{
+			category: { name: "category", id: 1 },
+			exercise: { name: "name", id: 2 },
+		},
+		{
+			category: { name: "category", id: 1 },
+			exercise: { name: "name", id: 2 },
+		},
+		{
+			category: { name: "category", id: 1 },
+			exercise: { name: "name", id: 2 },
+		},
+	];
 	export let order: number;
 
+	// let newExercise
+
 	$: areExercisesFilled = exercises.every(
-		(exercise) => exercise?.category?.name?.length && exercise?.exercise?.name?.length,
+		(exercise) => exercise.category.name.length && exercise.exercise.name.length,
 	);
 	$: disabledText =
 		(exercises.length >= MAX_SUPERSET_EXERCISES && dictionary.YOU_CANNOT_CREATE_MORE_ITEMS) ||
 		(!areExercisesFilled && dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS);
 
 	const onAddExercise = () => {
-		exercises = [...exercises, {}];
+		exercises = [
+			...exercises,
+			{
+				category: { name: "category", id: 1 },
+				exercise: { name: "name", id: 2 },
+			},
+		];
 	};
+
+	const onDelete = (index: number) => {
+		exercises = exercises.filter((_, i) => i !== index);
+	};
+
+	// todo smazat cely superset
 </script>
 
 <div class="superset">
 	<h5 class="title">{order}. {exercises.length > 1 ? "superset" : "exercise"}</h5>
 	<div class="exercises">
-		{#each exercises as exercise}
-			<EditableExercise bind:exercise />
+		{#each exercises as exercise, index}
+			<EditableExercise bind:exercise onDelete={() => onDelete(index)} />
 		{/each}
 	</div>
 	<div class="button">

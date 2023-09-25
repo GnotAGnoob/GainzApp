@@ -1,8 +1,6 @@
 <script lang="ts">
 	import axios from "axios";
 	import InputDropdown from "../Atoms/InputDropdown.svelte";
-	import EditButtons from "../EditButtons.svelte";
-	import Exercise from "./Exercise.svelte";
 	import { debounce } from "debounce";
 	import { apiRoutes } from "$src/lib/paths";
 	import { DEBOUNCE_TIME, MAX_DROPDOWN_ITEMS } from "$src/lib/constants";
@@ -19,15 +17,11 @@
 	};
 
 	export let exercise: PageFullExercise;
-	export let onDelete: () => void;
+	export let onCancel: () => void;
+	export let onConfirm: () => void;
 
 	let value = formatExercise(exercise);
-	let isInEditMode = !exercise.category?.name.length;
 	let dropdownItems: PageFullExercise[] = [];
-
-	const onClick = () => {
-		isInEditMode = true;
-	};
 
 	const fetchDropdownData = async () => {
 		try {
@@ -43,100 +37,50 @@
 
 	const debounceFetch = debounce(fetchDropdownData, DEBOUNCE_TIME);
 
-	const cancel = () => {
-		isInEditMode = false;
-		value = formatExercise(exercise);
-	};
-
-	const onConfirm = (index: number) => {
+	const onSelect = (index: number) => {
 		if (dropdownItems.length <= index) return;
 		// todo propojit z fetchnutyma itemama
 		exercise = dropdownItems[index];
 		value = formatExercise(exercise);
-		isInEditMode = false;
+
+		onConfirm();
 	};
 
 	const onEnterPress = (event: KeyboardEvent) => {
 		if (event.key === "Enter") {
 			if (!value.length) {
-				cancel();
+				onCancel();
 				return;
 			}
 
 			if (!dropdownItems.length) return;
 
-			onConfirm(0);
+			onSelect(0);
 			return;
 		}
 
 		debounceFetch();
 	};
 
-	const onBlur = () => {
-		cancel();
-	};
-
 	const onFocus = () => {
 		fetchDropdownData();
 	};
-
-	//todo import exercise dropdown
 </script>
 
-{#if isInEditMode}
-	<div class="input">
-		<InputDropdown
-			dropDownOptions={dropdownItems.map(formatExercise)}
-			isOnMountFocus
-			bind:value
-			on:keyup={onEnterPress}
-			on:blur={onBlur}
-			{onFocus}
-			onSelect={onConfirm}
-		/>
-	</div>
-{:else}
-	<button class="button" on:click={onClick}>
-		<div class="exercise">
-			<Exercise {exercise} />
-		</div>
-		<div class="edit">
-			<EditButtons
-				bind:isInEditMode
-				isConfirmButton={false}
-				{onDelete}
-				isAbsolute={false}
-				isPadding={false}
-				buttonType="noBackground_2"
-			/>
-		</div>
-	</button>
-{/if}
+<div class="input">
+	<InputDropdown
+		dropDownOptions={dropdownItems.map(formatExercise)}
+		isOnMountFocus
+		bind:value
+		on:keyup={onEnterPress}
+		on:blur={onCancel}
+		{onFocus}
+		{onSelect}
+	/>
+</div>
 
 <style lang="scss">
-	@import "./workouts.scss";
-
-	.button {
-		display: flex;
-
-		justify-content: space-between;
-		align-items: center;
-		gap: $space-sm;
-
-		margin-right: -$card-side-padding + $space-sm;
-	}
-
-	.exercise {
-		flex: 1;
-	}
-
 	.input {
 		background-color: var(--accent-neutral-50);
-
-		margin-top: $space-xs;
-	}
-
-	.edit {
-		align-self: flex-start;
 	}
 </style>

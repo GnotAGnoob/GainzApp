@@ -1,43 +1,12 @@
-CREATE TABLE exercise_search (
-    id SERIAL PRIMARY KEY,
-    category_id INT,
-    exercise_id INT,
-    combined_text tsvector,
-    FOREIGN KEY (category_id) REFERENCES category (id),
-    FOREIGN KEY (exercise_id) REFERENCES exercise (id)
-);
-
-CREATE OR REPLACE FUNCTION populate_exercise_search()
-RETURNS VOID AS $$
-BEGIN
-    DELETE FROM exercise_search;
-
-    
-END;
-$$ LANGUAGE plpgsql;
-
-SELECT populate_exercise_search();
-
+-- should be in drizzle schema and maybe own table -> more complicated triggers --
 CREATE MATERIALIZED VIEW category_exercise_search
 as
 select
-category.name as category, exercise.name as name, category.id as categoryId,
-exercise.id as exerciseId, "userId",
+category.name as category, exercise.name as name, category.id as category_id,
+exercise.id as exercise_id, "userId",
 setweight(to_tsvector('simple', category.name), 'A') || setweight(to_tsvector('simple', coalesce(exercise.name, '')), 'B') as search_vector
 from category full join exercise on category.id = exercise.category_id;
-
--- select * from category_exercise_search where to_tsvector(name) @@ to_tsquery('cur:*');
-
--- select * from category_exercise_search where to_tsvector(category || ' - ' || name) @@ to_tsquery('bic:*');
-
--- select * from category_exercise_search where to_tsvector(category || ' - ' || name) @@ to_tsquery('bic:*');
-
--- explain analyze select * from category_exercise_search where to_tsvector(category || ' - ' || name) @@ to_tsquery('bic:*');
-
 CREATE INDEX category_exercise_search_index on category_exercise_search USING GIN (search_vector);
-
-select * from category_exercise_search where search_vector @@ to_tsquery('simple', 'biceps:* | h:*')
-order by ts_rank(search_vector, to_tsquery('simple', 'c:* & h:*')) desc;
 
 CREATE OR REPLACE FUNCTION refresh_category_exercise_search()
 RETURNS TRIGGER AS
@@ -61,12 +30,12 @@ AFTER INSERT OR UPDATE ON category
 FOR EACH STATEMENT
 EXECUTE FUNCTION refresh_category_exercise_search();
 
-CREATE OR REPLACE FUNCTION execute_exercise_search(query_text TEXT, user_id TEXT, search_limit INT DEFAULT NULL)
+CREATE OR REPLACE FUNCTION execute_exercise_search(query_text TEXT, user_id TEXT, search_limit INT DEFAULT NULL, show_null_exercise BOOLEAN DEFAULT FALSE)
 RETURNS TABLE (
     category varchar(32),
     name varchar(32),
-    categoryId INT,
-    exerciseId INT,
+    category_id INT,
+    exercise_id INT,
     userId TEXT
 )
 LANGUAGE plpgsql
@@ -88,14 +57,15 @@ BEGIN
     SELECT 
         ce.category, 
         ce.name, 
-        ce.categoryId, 
-        ce.exerciseId, 
+        ce.category_id, 
+        ce.exercise_id, 
         ce."userId"
     FROM 
         category_exercise_search ce
     WHERE 
         ce.search_vector @@ to_tsquery('simple', modified_query)
         AND (ce."userId" = user_id)
+        AND (show_null_exercise OR ce.exercise_id IS NOT NULL)
     ORDER BY 
         ts_rank(ce.search_vector, to_tsquery('simple', modified_query)) DESC
     LIMIT 

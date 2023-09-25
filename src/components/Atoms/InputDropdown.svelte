@@ -11,6 +11,7 @@
 	export let value: string;
 	export let onCreateNew: ((value: string) => Promise<void>) | undefined = undefined;
 	export let onSelect: ((index: number) => void) | undefined = undefined;
+	export let onFocus: (() => void) | undefined = undefined;
 	export let isSelect = false;
 	const readOnly = isSelect && { readonly: true };
 	value = isSelect && !value.length ? dropDownOptions?.[0] ?? "" : value;
@@ -61,6 +62,8 @@
 	};
 
 	const onInputFocus = () => {
+		onFocus?.();
+
 		if (!optionsElement) return;
 
 		optionsElement.scrollTop = 0;
@@ -82,6 +85,7 @@
 			on:mousedown={onInputMouseDown}
 			on:focus={onInputFocus}
 			on:keyup
+			on:blur
 		>
 			<svelte:fragment slot="rightIcon">
 				{#if isSelect}
@@ -152,7 +156,9 @@
 
 			overflow-y: hidden;
 
-			z-index: 10;
+			background-color: var(--background-color);
+
+			z-index: 50;
 
 			&_loading {
 				// display: block;

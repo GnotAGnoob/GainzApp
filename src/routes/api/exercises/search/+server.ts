@@ -5,8 +5,8 @@ import { handleError } from "$src/lib/server/error";
 import { getUserId } from "$src/lib/server/dbHelpers";
 import { json } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
+import type { PageFullExercise } from "$src/routes/workouts/types";
 import type { Exercise } from "$src/db/schema/exercise.js";
-import type { Category } from "$src/db/schema/category.js";
 
 export async function GET({ url, locals }) {
 	try {
@@ -21,27 +21,38 @@ export async function GET({ url, locals }) {
 			limit: z.number().int().positive().max(100).nullable(),
 		});
 
-		const exercise = schema.parse({
+		const search = schema.parse({
 			text: url.searchParams.get("text"),
 			limit: parseInt(url.searchParams.get("limit") || "100"),
 		});
 
-		const returnedExercises = (await db.execute(
+		const returnedFullExercises = (await db.execute(
 			sql`SELECT
 			category, name, exercise_id as "exerciseId", category_id as "categoryId"
-			FROM execute_exercise_search(${exercise.text}, ${userId}, ${exercise.limit})`,
-		)) as Array<{ categoryId: number; category: string; name?: string; exerciseId?: number }>;
+			FROM execute_exercise_search(${search.text}, ${userId}, ${search.limit}, false)`,
+		)) as Array<{ categoryId: number; category: string; name: string; exerciseId: number }>;
 
-		const transformedExercises = returnedExercises.map((exercise) => ({
-			category: {
-				id: exercise.categoryId,
-				name: exercise.category,
-			},
-			exercise: {
-				id: exercise.exerciseId,
-				name: exercise.name,
-			},
-		}));
+		const transformedExercises: PageFullExercise[] = returnedFullExercises.map((fullExercise) => {
+			// let exercise: Exercise | undefined;
+
+			// if (fullExercise.exerciseId && fullExercise.name) {
+			// 	exercise = {
+			// 		id: fullExercise.exerciseId,
+			// 		name: fullExercise.name,
+			// 	};
+			// }
+
+			return {
+				category: {
+					id: fullExercise.categoryId,
+					name: fullExercise.category,
+				},
+				exercise: {
+					id: fullExercise.exerciseId,
+					name: fullExercise.name,
+				},
+			};
+		});
 
 		return json(transformedExercises);
 	} catch (error) {

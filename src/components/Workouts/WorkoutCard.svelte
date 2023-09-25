@@ -104,6 +104,7 @@
 	.wrapper {
 		display: flex;
 
+		// TODO constatni sirka
 		min-width: $space-xxxl;
 		width: max-content;
 		max-width: $space-xxxl + $space-xxl;

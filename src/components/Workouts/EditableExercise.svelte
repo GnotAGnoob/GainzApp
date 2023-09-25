@@ -1,27 +1,56 @@
 <script lang="ts">
+	import axios from "axios";
 	import InputDropdown from "../Atoms/InputDropdown.svelte";
 	import EditButtons from "../EditButtons.svelte";
 	import Exercise from "./Exercise.svelte";
 	import { debounce } from "debounce";
+	import { apiRoutes } from "$src/lib/paths";
+	import { DEBOUNCE_TIME, MAX_DROPDOWN_ITEMS } from "$src/lib/constants";
+	import toast from "$src/lib/toast";
+	import { dictionary } from "$src/lib/language/dictionary";
+	import type { Category } from "$src/db/schema/category";
+	import type { Exercise as ExerciseType } from "$src/db/schema/exercise";
 
-	const random = {
-		category: "triceps",
-		name: "pulldown",
+	// todo put into types use on be and check right usage of optional thne in other components too
+	type DropdownItem = {
+		category: Category;
+		exercise: ExerciseType;
 	};
 
-	export let exercise = { ...random };
+	const random = {
+		category: { name: "category", id: 1 },
+		exercise: { name: "name", id: 2 },
+	};
 
-	let value = exercise.category ? `${exercise.category}${exercise.name ? ` - ${exercise.name}` : ""}` : "";
-	let isInEditMode = !exercise.category?.length;
+	const formatExercise = (exercise: DropdownItem) => {
+		const categoryName = exercise.category.name;
+		const exerciseName = exercise.exercise.name;
+		return categoryName ? `${categoryName}${exerciseName ? ` - ${exerciseName}` : ""}` : "";
+	};
+
+	let exercise = { ...random };
+
+	let value = formatExercise(exercise);
+	let isInEditMode = !exercise.category?.name.length;
+	let dropdownItems: DropdownItem[] = [];
 
 	const onClick = () => {
 		isInEditMode = true;
 	};
 
-	const deb = debounce(() => {
-		// todo api call
-		console.log("debounce");
-	}, 500);
+	const fetchDropdownData = async () => {
+		console.log("fetching");
+		try {
+			const { data } = await axios.get<DropdownItem[]>(apiRoutes.exercisesSearch, {
+				params: { text: value, limit: MAX_DROPDOWN_ITEMS },
+			});
+			dropdownItems = data;
+		} catch (error) {
+			toast.error(dictionary.UNKNOWN_ERROR);
+		}
+	};
+
+	const debounceFetch = debounce(fetchDropdownData, DEBOUNCE_TIME);
 
 	const onConfirm = (index: number) => {
 		// todo propojit z fetchnutyma itemama
@@ -37,7 +66,7 @@
 			return;
 		}
 
-		deb();
+		debounceFetch();
 	};
 
 	const onDelete = () => {};
@@ -45,11 +74,22 @@
 	const onBlur = () => {
 		// todo check if value is valid
 	};
+
+	const onFocus = () => {
+		// todo check fetch drodpown
+	};
 </script>
 
 {#if isInEditMode}
 	<div class="input">
-		<InputDropdown isOnMountFocus bind:value on:keyup={onEnterPress} on:blur={onBlur} onSelect={onConfirm} />
+		<InputDropdown
+			dropDownOptions={dropdownItems.map(formatExercise)}
+			isOnMountFocus
+			bind:value
+			on:keyup={onEnterPress}
+			on:blur={onBlur}
+			onSelect={onConfirm}
+		/>
 	</div>
 {:else}
 	<button class="button" on:click={onClick}>

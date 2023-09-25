@@ -8,6 +8,7 @@
 	import axios from "axios";
 	import type { Exercise } from "$src/db/schema/exercise";
 	import EditText from "$components/EditText.svelte";
+	import { apiRoutes } from "$src/lib/paths";
 
 	export let exercise: PageExercise;
 
@@ -28,7 +29,7 @@
 		try {
 			exercise.name = newValue;
 
-			await axios.patch<Exercise & { categoryId: number }>(`/api/exercise/${exercise.id}`, {
+			await axios.patch<Exercise & { categoryId: number }>(`${apiRoutes.exercise}${exercise.id}`, {
 				name: newValue,
 			});
 		} catch (error) {

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { exercise } from "$src/db/schema/exercise.js";
 	import { page } from "$app/stores";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import Icon from "@iconify/svelte";
@@ -11,6 +12,7 @@
 	import { categories, sortedCategories } from "$src/lib/stores/categories";
 	import type { Category } from "$src/db/schema/category";
 	import type { PageCategory } from "$src/routes/exercises/types";
+	import { apiRoutes } from "$src/lib/paths";
 
 	const MAX_EXERCISES = 10;
 
@@ -67,7 +69,7 @@
 		try {
 			exercises = exercises.map((exercise) => ({ ...exercise, errorMessage: "" }));
 			const { data: newCategories } = await toast.promise(
-				axios.post<PageCategory[]>("/api/exercise", exercises),
+				axios.post<PageCategory[]>(apiRoutes.exercises, exercises),
 				{
 					loading: `${dictionary.CREATING} ${dictionary.EXERCISES}`,
 					success: `${dictionary.EXERCISES} ${dictionary.SUCCESSFULLY_CREATED}`,
@@ -92,7 +94,7 @@
 					exercises[index].errorMessage = "";
 
 					// todo send just id
-					const response = await toast.promise(axios.post<Category>("/api/category", value), {
+					const response = await toast.promise(axios.post<Category>(apiRoutes.category, value), {
 						loading: `${dictionary.CREATING} ${dictionary.CATEGORY}`,
 						success: `${dictionary.CATEGORY} '${value}' ${dictionary.SUCCESSFULLY_CREATED}`,
 						error: dictionary.CREATING_CATEGORY_FAILED,

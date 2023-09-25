@@ -8,5 +8,7 @@ export default {
 
 export const apiRoutes = {
 	exercise: "/api/exercise/",
+	exercises: "/api/exercises/",
 	category: "/api/category/",
+	exercisesSearch: "/api/exercises/search/",
 };

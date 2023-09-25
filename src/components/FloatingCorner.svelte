@@ -35,6 +35,12 @@
 		</button>
 		<ExerciseForm bind:this={exerciseFormElement} />
 	{/if}
+	{#if $floatedCorner.includes("addWorkout")}
+		<button class="icon">
+			<!-- Solar nema normalni plus... -->
+			<Icon icon="iconoir:plus" />
+		</button>
+	{/if}
 	<div class="animated" class:animated_invisible={!isVisible}>
 		<button class="icon" on:click={goToTop}>
 			<Icon icon="solar:alt-arrow-up-linear" />

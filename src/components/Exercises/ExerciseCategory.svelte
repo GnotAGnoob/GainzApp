@@ -6,6 +6,7 @@
 	import Exercise from "./Exercise.svelte";
 	import type { PageCategory } from "$src/routes/exercises/types";
 	import toast from "$src/lib/toast";
+	import { apiRoutes } from "$src/lib/paths";
 
 	export let category: PageCategory;
 
@@ -21,7 +22,7 @@
 		try {
 			category.name = newValue;
 
-			await axios.patch<Category>(`/api/category/${category.id}`, { name: newValue });
+			await axios.patch<Category>(`${apiRoutes.category}${category.id}`, { name: newValue });
 		} catch (error) {
 			toast.error(dictionary.RENAMING_CATEGORY_FAILED);
 

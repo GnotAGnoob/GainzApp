@@ -3,7 +3,7 @@ import { unit } from "$src/db/schema/unit";
 import db from "$src/lib/server/db";
 import { dbQueryOmit, getUserId } from "$src/lib/server/dbHelpers";
 import { handleError } from "$src/lib/server/error";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import type { HomePageData } from "./types.js";
 
 export async function load({ locals }): Promise<HomePageData | Response> {
@@ -122,7 +122,7 @@ export async function load({ locals }): Promise<HomePageData | Response> {
 			],
 		};
 
-		console.log(categories[0].exercises);
+		// console.log(categories[0].exercises);
 
 		return {
 			units,

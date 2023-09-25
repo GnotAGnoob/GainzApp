@@ -8,7 +8,9 @@
 	export let exercises: any[] = [];
 	export let order: number;
 
-	$: areExercisesFilled = exercises.every((exercise) => exercise.category?.length && exercise.name?.length);
+	$: areExercisesFilled = exercises.every(
+		(exercise) => exercise?.category?.name?.length && exercise?.exercise?.name?.length,
+	);
 	$: disabledText =
 		(exercises.length >= MAX_SUPERSET_EXERCISES && dictionary.YOU_CANNOT_CREATE_MORE_ITEMS) ||
 		(!areExercisesFilled && dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS);

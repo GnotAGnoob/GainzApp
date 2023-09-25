@@ -4,8 +4,7 @@
 	import Input from "./Input.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import { onMount } from "svelte";
-
-	const MAX_OPTIONS = 20;
+	import { MAX_DROPDOWN_ITEMS } from "$src/lib/constants";
 
 	export let dropDownOptions: string[] | undefined = undefined;
 	export let label: string | undefined = undefined;
@@ -22,7 +21,7 @@
 	let optionsElement: HTMLDivElement | null = null;
 
 	let isLoading = false;
-	$: reduceOptions = dropDownOptions?.slice(0, MAX_OPTIONS);
+	$: reduceOptions = dropDownOptions?.slice(0, MAX_DROPDOWN_ITEMS);
 
 	const onClick = (index: number) => {
 		if (!dropDownOptions) return;

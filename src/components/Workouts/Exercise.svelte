@@ -1,15 +1,15 @@
 <script lang="ts">
 	export let exercise = {
-		category: "triceps",
-		name: "pulldown",
+		category: { name: "category", id: 1 },
+		exercise: { name: "category", id: 2 },
 	};
 </script>
 
 <div class="exercise">
-	<span class="category">{exercise.category || ""}</span>
-	{#if exercise.name}
+	<span class="category">{exercise.category.name || ""}</span>
+	{#if exercise.exercise?.name}
 		<span>-</span>
-		<span>{exercise.name}</span>
+		<span>{exercise.exercise.name}</span>
 	{/if}
 </div>
 

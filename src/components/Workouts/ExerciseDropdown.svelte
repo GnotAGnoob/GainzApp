@@ -10,13 +10,13 @@
 
 	// todo put into types use on be and check right usage of optional thne in other components too
 
-	const formatExercise = (exercise: PageFullExercise) => {
-		const categoryName = exercise.category.name;
+	const formatExercise = (exercise: Partial<PageFullExercise>) => {
+		const categoryName = exercise.category?.name;
 		const exerciseName = exercise.exercise?.name;
 		return categoryName ? `${categoryName}${exerciseName ? ` - ${exerciseName}` : ""}` : "";
 	};
 
-	export let exercise: PageFullExercise;
+	export let exercise: Partial<PageFullExercise>;
 	export let onCancel: () => void;
 	export let onConfirm: () => void;
 
@@ -35,11 +35,16 @@
 		}
 	};
 
+	const handleCancel = () => {
+		value = formatExercise(exercise);
+		onCancel();
+	};
+
 	const debounceFetch = debounce(fetchDropdownData, DEBOUNCE_TIME);
 
 	const onSelect = (index: number) => {
 		if (dropdownItems.length <= index) return;
-		// todo propojit z fetchnutyma itemama
+
 		exercise = dropdownItems[index];
 		value = formatExercise(exercise);
 
@@ -49,7 +54,7 @@
 	const onEnterPress = (event: KeyboardEvent) => {
 		if (event.key === "Enter") {
 			if (!value.length) {
-				onCancel();
+				handleCancel();
 				return;
 			}
 
@@ -73,7 +78,7 @@
 		isOnMountFocus
 		bind:value
 		on:keyup={onEnterPress}
-		on:blur={onCancel}
+		onBlur={handleCancel}
 		{onFocus}
 		{onSelect}
 	/>

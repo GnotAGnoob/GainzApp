@@ -29,7 +29,7 @@ export async function GET({ url, locals }) {
 		const returnedFullExercises = (await db.execute(
 			sql`SELECT
 			category, name, exercise_id as "exerciseId", category_id as "categoryId"
-			FROM execute_exercise_search(${search.text}, ${userId}, ${search.limit}, false)`,
+			FROM execute_exercise_search(${search.text.trimEnd()}, ${userId}, ${search.limit}, false)`,
 		)) as Array<{ categoryId: number; category: string; name: string; exerciseId: number }>;
 
 		const transformedExercises: PageFullExercise[] = returnedFullExercises.map((fullExercise) => {

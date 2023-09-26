@@ -5,9 +5,7 @@
 	import EditableExercise from "./EditableExercise.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import type { PageFullExercise } from "$src/routes/workouts/types";
-	import { index } from "drizzle-orm/mysql-core";
-
-	const emptyExercise: PageFullExercise = {};
+	import ExerciseDropdown from "./ExerciseDropdown.svelte";
 
 	let exercises: PageFullExercise[] = [
 		{
@@ -25,7 +23,7 @@
 	];
 	export let order: number;
 
-	// let newExercise
+	let newExercise: Partial<PageFullExercise> | null = null;
 
 	$: areExercisesFilled = exercises.every(
 		(exercise) => exercise.category.name.length && exercise.exercise.name.length,
@@ -34,21 +32,32 @@
 		(exercises.length >= MAX_SUPERSET_EXERCISES && dictionary.YOU_CANNOT_CREATE_MORE_ITEMS) ||
 		(!areExercisesFilled && dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS);
 
-	const onAddExercise = () => {
-		exercises = [
-			...exercises,
-			{
-				category: { name: "category", id: 1 },
-				exercise: { name: "name", id: 2 },
-			},
-		];
+	const onAddNewExercise = () => {
+		newExercise = {};
+	};
+
+	const onConfirmNewExercise = () => {
+		if (newExercise?.category && newExercise?.exercise) {
+			exercises = [
+				...exercises,
+				{
+					category: newExercise.category,
+					exercise: newExercise.exercise,
+				},
+			];
+			newExercise = null;
+		}
+	};
+
+	const onCancelNewExercise = () => {
+		newExercise = null;
 	};
 
 	const onDelete = (index: number) => {
 		exercises = exercises.filter((_, i) => i !== index);
 	};
 
-	// todo smazat cely superset
+	// todo smazat cely superset btn
 </script>
 
 <div class="superset">
@@ -57,13 +66,22 @@
 		{#each exercises as exercise, index}
 			<EditableExercise bind:exercise onDelete={() => onDelete(index)} />
 		{/each}
+		{#if newExercise}
+			<div class="input">
+				<ExerciseDropdown
+					bind:exercise={newExercise}
+					onCancel={onCancelNewExercise}
+					onConfirm={onConfirmNewExercise}
+				/>
+			</div>
+		{/if}
 	</div>
 	<div class="button">
 		<Button
 			type="neutral"
 			isPaddingSame
 			padding="sm"
-			on:click={onAddExercise}
+			on:click={onAddNewExercise}
 			disabledTitle={disabledText}
 			title={dictionary.ADD_NEW_EXERCISES}
 			isFullSize
@@ -95,6 +113,10 @@
 		flex-direction: column;
 
 		color: var(--accent-neutral-700);
+	}
+
+	.input {
+		padding-top: $space-xs;
 	}
 
 	.button {

@@ -1,7 +1,7 @@
 import { integer, pgTable, serial, timestamp } from "drizzle-orm/pg-core";
 import { workout } from "./workout";
 import { relations } from "drizzle-orm";
-import { set } from "./set";
+import { supersetExercise } from "./supersetExercise";
 import type { InferSelectModel, InferInsertModel } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
@@ -23,7 +23,7 @@ export const supersetRelations = relations(superset, ({ one, many }) => ({
 		references: [workout.id],
 	}),
 
-	sets: many(set),
+	supersetExercise: many(supersetExercise),
 }));
 
 export type Superset = InferSelectModel<typeof superset>;

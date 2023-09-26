@@ -4,11 +4,10 @@ import { superset } from "./superset";
 import { relations } from "drizzle-orm";
 import type { InferSelectModel, InferInsertModel } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { setWeight } from "./setWeight";
 
-export const set = pgTable("set", {
+export const supersetExercise = pgTable("supersetExercise", {
 	id: serial("id").primaryKey(),
-	repetition: integer("repetition"),
-	weight: integer("weight"),
 	order: integer("order").notNull(),
 
 	createdAt: timestamp("created_at").notNull().defaultNow(),
@@ -22,19 +21,21 @@ export const set = pgTable("set", {
 		.notNull(),
 });
 
-export const setRelations = relations(set, ({ one }) => ({
+export const setRelations = relations(supersetExercise, ({ one, many }) => ({
 	exercise: one(exercise, {
-		fields: [set.exerciseID],
+		fields: [supersetExercise.exerciseID],
 		references: [exercise.id],
 	}),
 	superset: one(superset, {
-		fields: [set.supersetID],
+		fields: [supersetExercise.supersetID],
 		references: [superset.id],
 	}),
+
+	sets: many(setWeight),
 }));
 
-export type Set = InferSelectModel<typeof set>;
-export type InsertSet = InferInsertModel<typeof set>;
+export type SupersetExercise = InferSelectModel<typeof supersetExercise>;
+export type InsertSupersetExercise = InferInsertModel<typeof supersetExercise>;
 
-export const setInsertValidator = createInsertSchema(set);
-export const setSelectValidator = createSelectSchema(set);
+export const supersetExerciseInsertValidator = createInsertSchema(supersetExercise);
+export const supersetExerciseSelectValidator = createSelectSchema(supersetExercise);

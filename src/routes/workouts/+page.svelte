@@ -46,7 +46,7 @@
 			tab error
 		{/if}
 		<section>
-			<h2>{dictionary.HISTORY}</h2>
+			<!-- <h2>{dictionary.HISTORY}</h2> -->
 		</section>
 	</div>
 </div>

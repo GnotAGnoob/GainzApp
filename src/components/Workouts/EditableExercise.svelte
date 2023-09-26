@@ -1,105 +1,33 @@
 <script lang="ts">
-	import axios from "axios";
-	import InputDropdown from "../Atoms/InputDropdown.svelte";
 	import EditButtons from "../EditButtons.svelte";
 	import Exercise from "./Exercise.svelte";
-	import { debounce } from "debounce";
-	import { apiRoutes } from "$src/lib/paths";
-	import { DEBOUNCE_TIME, MAX_DROPDOWN_ITEMS } from "$src/lib/constants";
-	import toast from "$src/lib/toast";
-	import { dictionary } from "$src/lib/language/dictionary";
 	import type { PageFullExercise } from "$src/routes/workouts/types";
-
-	// todo put into types use on be and check right usage of optional thne in other components too
-
-	const formatExercise = (exercise: PageFullExercise) => {
-		const categoryName = exercise.category.name;
-		const exerciseName = exercise.exercise?.name;
-		return categoryName ? `${categoryName}${exerciseName ? ` - ${exerciseName}` : ""}` : "";
-	};
+	import ExerciseDropdown from "./ExerciseDropdown.svelte";
 
 	export let exercise: PageFullExercise;
 	export let onDelete: () => void;
-
-	let value = formatExercise(exercise);
 	let isInEditMode = !exercise.category?.name.length;
-	let dropdownItems: PageFullExercise[] = [];
+	console.log(isInEditMode);
 
 	const onClick = () => {
+		console.log("click");
 		isInEditMode = true;
 	};
 
-	const fetchDropdownData = async () => {
-		try {
-			// todo, aby na prazdny string hazel nejake vysledky
-			const { data } = await axios.get<PageFullExercise[]>(apiRoutes.exercisesSearch, {
-				params: { text: value, limit: MAX_DROPDOWN_ITEMS },
-			});
-			dropdownItems = data;
-		} catch (error) {
-			toast.error(dictionary.UNKNOWN_ERROR);
-		}
-	};
-
-	const debounceFetch = debounce(fetchDropdownData, DEBOUNCE_TIME);
-
-	const cancel = () => {
-		isInEditMode = false;
-		value = formatExercise(exercise);
-	};
-
-	const onConfirm = (index: number) => {
-		if (dropdownItems.length <= index) return;
-		// todo propojit z fetchnutyma itemama
-		exercise = dropdownItems[index];
-		value = formatExercise(exercise);
+	const turnEditModeOff = () => {
 		isInEditMode = false;
 	};
-
-	const onEnterPress = (event: KeyboardEvent) => {
-		if (event.key === "Enter") {
-			if (!value.length) {
-				cancel();
-				return;
-			}
-
-			if (!dropdownItems.length) return;
-
-			onConfirm(0);
-			return;
-		}
-
-		debounceFetch();
-	};
-
-	const onBlur = () => {
-		cancel();
-	};
-
-	const onFocus = () => {
-		fetchDropdownData();
-	};
-
-	//todo import exercise dropdown
 </script>
 
 {#if isInEditMode}
 	<div class="input">
-		<InputDropdown
-			dropDownOptions={dropdownItems.map(formatExercise)}
-			isOnMountFocus
-			bind:value
-			on:keyup={onEnterPress}
-			on:blur={onBlur}
-			{onFocus}
-			onSelect={onConfirm}
-		/>
+		<ExerciseDropdown bind:exercise onCancel={turnEditModeOff} onConfirm={turnEditModeOff} />
 	</div>
 {:else}
-	<button class="button" on:click={onClick}>
-		<div class="exercise">
+	<div class="exercise">
+		<button class="button" on:click={onClick}>
 			<Exercise {exercise} />
-		</div>
+		</button>
 		<div class="edit">
 			<EditButtons
 				bind:isInEditMode
@@ -110,13 +38,13 @@
 				buttonType="noBackground_2"
 			/>
 		</div>
-	</button>
+	</div>
 {/if}
 
 <style lang="scss">
 	@import "./workouts.scss";
 
-	.button {
+	.exercise {
 		display: flex;
 
 		justify-content: space-between;
@@ -126,14 +54,12 @@
 		margin-right: -$card-side-padding + $space-sm;
 	}
 
-	.exercise {
+	.button {
 		flex: 1;
 	}
 
 	.input {
-		background-color: var(--accent-neutral-50);
-
-		margin-top: $space-xs;
+		padding-block: $space-xs $space-xxs;
 	}
 
 	.edit {

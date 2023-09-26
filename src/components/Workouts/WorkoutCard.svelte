@@ -104,15 +104,20 @@
 	.wrapper {
 		display: flex;
 
-		// TODO constatni sirka
-		min-width: $space-xxxl;
-		width: max-content;
-		max-width: $space-xxxl + $space-xxl;
+		width: $space-xxxl;
 
 		justify-content: center;
 		flex-direction: column;
 
 		gap: $space-xs;
+
+		@media (min-width: $bp-396) {
+			width: $space-xxxl + $space-xl;
+		}
+
+		@media (min-width: $bp-760) {
+			width: $space-xxxl + $space-xxl;
+		}
 	}
 
 	.workout {

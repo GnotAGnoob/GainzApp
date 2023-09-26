@@ -2,6 +2,8 @@
 	import Scroller from "$src/components/Scroller/Scroller.svelte";
 	import Button from "$components/Atoms/Button/Button.svelte";
 	import WorkoutCard from "./WorkoutCard.svelte";
+	import { dictionary } from "$src/lib/language/dictionary";
+	import Icon from "@iconify/svelte";
 
 	const preparedWorkouts: any[] = [];
 
@@ -67,7 +69,7 @@
 
 <section class="wrapper">
 	<!-- <div class="button">
-		<Button fontSize="sm">
+		<Button fontSize="md" type="info" paddingSide="xl">
 			<Icon icon="iconoir:plus" slot="leftIcon" />
 			<span>{dictionary.PLAN_NEW_WORKOUTS}</span>
 		</Button>
@@ -82,7 +84,10 @@
 		<!-- {/each} -->
 	</Scroller>
 	<div class="button">
-		<Button type="neutral">start workout</Button>
+		<Button fontSize="md" type="info" paddingSide="xl">
+			<Icon icon="iconoir:plus" slot="leftIcon" />
+			<span>{dictionary.PLAN_NEW_WORKOUTS}</span>
+		</Button>
 	</div>
 </section>
 
@@ -95,6 +100,7 @@
 		justify-content: center;
 
 		gap: $space-md;
+		margin-top: $space-md + $space-sm;
 	}
 
 	.button {

@@ -1,12 +1,12 @@
 import { integer, pgTable, serial, timestamp, unique, varchar } from "drizzle-orm/pg-core";
 import { category } from "./category";
 import { relations } from "drizzle-orm";
-import { set } from "./set";
 import { unit } from "./unit";
 import type { InferSelectModel, InferInsertModel } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { MAX_TEXT_LENGTH } from "../../lib/constants";
 import type { dbQueryOmit } from "$src/lib/server/dbHelpers";
+import { supersetExercise } from "./supersetExercise";
 
 export const exercise = pgTable(
 	"exercise",
@@ -39,7 +39,7 @@ export const exerciseRelations = relations(exercise, ({ one, many }) => ({
 		fields: [exercise.unitId],
 		references: [unit.id],
 	}),
-	sets: many(set),
+	supersetExercise: many(supersetExercise),
 }));
 
 export type Exercise = Omit<InferSelectModel<typeof exercise>, keyof typeof dbQueryOmit>;

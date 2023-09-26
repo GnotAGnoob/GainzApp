@@ -12,6 +12,7 @@
 	export let onCreateNew: ((value: string) => Promise<void>) | undefined = undefined;
 	export let onSelect: ((index: number) => void) | undefined = undefined;
 	export let onFocus: (() => void) | undefined = undefined;
+	export let onBlur: (() => void) | undefined = undefined;
 	export let isSelect = false;
 	const readOnly = isSelect && { readonly: true };
 	value = isSelect && !value.length ? dropDownOptions?.[0] ?? "" : value;
@@ -27,6 +28,7 @@
 	const onClick = (index: number) => {
 		if (!dropDownOptions) return;
 
+		console.log(index);
 		onSelect?.(index);
 		value = dropDownOptions[index];
 	};
@@ -72,6 +74,16 @@
 	onMount(() => {
 		inputElement = input?.querySelector("input") || null;
 	});
+
+	const handleBlur = (event: FocusEvent) => {
+		if (
+			!Array.from(optionsElement?.querySelectorAll("button") ?? []).includes(
+				event.relatedTarget as HTMLButtonElement,
+			)
+		) {
+			onBlur?.();
+		}
+	};
 </script>
 
 <div class="wrapper">
@@ -85,7 +97,7 @@
 			on:mousedown={onInputMouseDown}
 			on:focus={onInputFocus}
 			on:keyup
-			on:blur
+			on:blur={handleBlur}
 		>
 			<svelte:fragment slot="rightIcon">
 				{#if isSelect}

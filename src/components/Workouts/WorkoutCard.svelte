@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { plannedWorkouts } from "$lib/stores/plannedWorkouts";
 	import Button from "$components/Atoms/Button/Button.svelte";
 	import EditButtons from "$components/EditButtons.svelte";
 	import { MAX_SUPERSETS } from "$src/lib/constants";
@@ -6,38 +7,75 @@
 	import Icon from "@iconify/svelte";
 	import EditableSuperset from "./EditableSuperset.svelte";
 	import Superset from "./Superset.svelte";
+	import type { PageCreateSuperset, PageCreateWorkout, PagePlannedWorkout } from "$src/routes/workouts/types";
+	import axios from "axios";
+	import ErrorText from "../Atoms/ErrorText.svelte";
+	import toast from "$src/lib/toast";
+	import { apiRoutes } from "$src/lib/paths";
 
-	export let supersets: any[] = [];
+	const emptySuperset: PageCreateSuperset = { exercises: [] };
+
+	let workout: PageCreateWorkout = { supersets: [{ ...emptySuperset }] };
 	export let title: number | string;
+	export let isInEditMode = false;
 
-	let isInEditMode: boolean;
-	let copiedSupersets = Object.assign([] as any[], supersets);
-	$: areAllSupersetsFilled = copiedSupersets.every((superset) =>
-		superset.exercises.every((exercise) => exercise.category?.length && exercise.name?.length),
-	);
-	$: disabledText =
-		(copiedSupersets.length >= MAX_SUPERSETS && dictionary.YOU_CANNOT_CREATE_MORE_ITEMS) ||
+	let errorMessage: string | null = null;
+
+	$: areAllSupersetsFilled = workout.supersets.every((superset) => {
+		if (!superset.exercises.length) return false;
+
+		return superset.exercises.every((activity) => activity.category.name.length && activity.exercise.name.length);
+	});
+	$: disabledSupersetText =
+		(workout.supersets.length >= MAX_SUPERSETS && dictionary.YOU_CANNOT_CREATE_MORE_ITEMS) ||
+		(!areAllSupersetsFilled && dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS);
+
+	$: disableConfirmButton =
+		(!workout.supersets[0].exercises.length && dictionary.YOU_HAVE_TO_ADD_ATLEAST_ONE_EXRCISE) ||
 		(!areAllSupersetsFilled && dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS);
 
 	const onAddSuperset = () => {
-		copiedSupersets = [...copiedSupersets, { exercises: [{}] }];
+		workout = { supersets: [...workout.supersets, emptySuperset] };
 	};
 
 	const onCancel = () => {
-		copiedSupersets = Object.assign([], supersets);
+		workout = Object.assign([], workout);
 		isInEditMode = false;
 	};
 
-	const onConfirm = () => {
+	const onConfirm = async () => {
+		if (!areAllSupersetsFilled) {
+			toast.error(dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS);
+		}
+
 		isInEditMode = false;
+
+		try {
+			const { data: newPlannedWorkout } = await toast.promise(
+				axios.post<PagePlannedWorkout>(apiRoutes.workout, workout),
+				{
+					loading: `${dictionary.CREATING_WORKOUT}`,
+					success: `${dictionary.WORKOUT_SUCCESSFULLY_CREATED}`,
+					error: dictionary.CREATING_WORKOUT_FAILED,
+				},
+			);
+
+			// $plannedWorkouts = [...$plannedWorkouts, newPlannedWorkout];
+		} catch (error) {
+			if (axios.isAxiosError(error)) {
+				errorMessage = `${error.response?.data}. idk which element/what happened. too lazy to detect errors`;
+				return;
+			}
+
+			errorMessage = "super unknown error";
+		}
 	};
 
 	const onDelete = () => {
 		isInEditMode = false;
 	};
 
-	// todo confirm disabel
-	const todo = false;
+	// todo scroll and max height, maybe fixed height
 </script>
 
 <li class="wrapper">
@@ -58,11 +96,11 @@
 			<!-- todo superset jen kdyt 2+ exercisu -->
 			<div class="supersets">
 				{#if isInEditMode}
-					{#each copiedSupersets as superset, index}
-						<EditableSuperset exercises={superset.exercises} order={index + 1} />
+					{#each workout.supersets as superset, index}
+						<EditableSuperset bind:exercises={superset.exercises} order={index + 1} />
 					{/each}
 				{:else}
-					{#each supersets as superset, index}
+					{#each workout.supersets as superset, index}
 						<Superset exercises={superset.exercises} order={index + 1} />
 					{:else}
 						<!-- todo better -->
@@ -70,13 +108,16 @@
 					{/each}
 				{/if}
 
-				{#if isInEditMode && copiedSupersets.length}
+				{#if isInEditMode}
+					{#if errorMessage}
+						<ErrorText text={errorMessage} />
+					{/if}
 					<div class="button">
 						<Button
 							type="info"
 							padding="md"
 							on:click={onAddSuperset}
-							disabledTitle={disabledText}
+							disabledTitle={disabledSupersetText}
 							isFullSize
 						>
 							<!-- Solar nema normalni plus... -->
@@ -88,7 +129,13 @@
 						<Button type="negative" padding="md" on:click={onCancel} isFullSize>
 							<span>{dictionary.CANCEL}</span>
 						</Button>
-						<Button type="positive" padding="md" on:click={onConfirm} disabledTitle={todo} isFullSize>
+						<Button
+							type="positive"
+							padding="md"
+							on:click={onConfirm}
+							disabledTitle={disableConfirmButton}
+							isFullSize
+						>
 							<span>{dictionary.CONFIRM}</span>
 						</Button>
 					</div>

@@ -57,6 +57,7 @@
 
 		color: var(--text-primary);
 		background-color: transparent;
+		text-transform: none;
 
 		&_left {
 			padding-left: $space-md + $space-sm;

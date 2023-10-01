@@ -13,6 +13,7 @@
 	import type { Category } from "$src/db/schema/category";
 	import type { PageCategory } from "$src/routes/exercises/types";
 	import { apiRoutes } from "$src/lib/paths";
+	import ErrorText from "../Atoms/ErrorText.svelte";
 
 	const MAX_EXERCISES = 10;
 
@@ -113,6 +114,8 @@
 			fetchData();
 		});
 	};
+
+	// todo disabled title
 </script>
 
 <Modal target="body" opened={isAddExerciseOpen} on:close={toggleModal} size="lg">
@@ -155,7 +158,7 @@
 					</div>
 				</div>
 				{#if exercise.errorMessage.length > 0}
-					<p class="error">* {exercise.errorMessage}</p>
+					<ErrorText text={exercise.errorMessage} />
 				{/if}
 			</div>
 		{/each}
@@ -226,13 +229,5 @@
 
 	.submit {
 		padding-inline: $space-xl;
-	}
-
-	.error {
-		margin-top: $space-xs;
-
-		color: var(--accent-negative-500);
-		font-size: $text-subheading;
-		font-weight: 700;
 	}
 </style>

@@ -66,6 +66,7 @@
 
 		color: var(--color);
 		background-color: var(--background);
+		text-transform: capitalize;
 
 		&:hover {
 			background-color: var(--background-hover);

@@ -22,6 +22,34 @@
       "when": 1695763077560,
       "tag": "0002_absent_reptil",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1696194393745,
+      "tag": "0003_absurd_umar",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1696197298559,
+      "tag": "0004_rainy_valeria_richards",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1696200415477,
+      "tag": "0005_thankful_hawkeye",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1696201695405,
+      "tag": "0006_mixed_dark_phoenix",
+      "breakpoints": true
     }
   ]
 }

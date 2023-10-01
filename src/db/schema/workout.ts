@@ -7,29 +7,22 @@ import type { InferSelectModel, InferInsertModel } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import type { dbQueryOmit } from "$src/lib/server/dbHelpers";
 
-export const workout = pgTable(
-	"workout",
-	{
-		id: serial("id").primaryKey(),
-		date: timestamp("date").notNull().defaultNow(),
-		order: integer("order"),
-		note: varchar("name", { length: 255 }),
+export const workout = pgTable("workout", {
+	id: serial("id").primaryKey(),
+	date: timestamp("date").notNull().defaultNow(),
+	order: integer("order"),
+	note: varchar("note", { length: 255 }),
 
-		createdAt: timestamp("created_at").notNull().defaultNow(),
-		updatedAt: timestamp("updated_at").notNull().defaultNow(),
+	createdAt: timestamp("created_at").notNull().defaultNow(),
+	updatedAt: timestamp("updated_at").notNull().defaultNow(),
 
-		userId: text("userId")
-			.references(() => user.id, { onDelete: "cascade" })
-			.notNull(),
-		statusId: integer("status_id")
-			.references(() => status.id)
-			.notNull(),
-		// todo: add check for order
-	},
-	(table) => ({
-		unique: unique().on(table.order, table.userId),
-	}),
-);
+	userId: text("userId")
+		.references(() => user.id, { onDelete: "cascade" })
+		.notNull(),
+	statusId: integer("status_id")
+		.references(() => status.id)
+		.notNull(),
+});
 
 export const workoutRelations = relations(workout, ({ many, one }) => ({
 	user: one(user, {

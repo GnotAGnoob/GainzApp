@@ -6,7 +6,6 @@ import { getUserId } from "$src/lib/server/dbHelpers";
 import { json } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
 import type { PageFullExercise } from "$src/routes/workouts/types";
-import type { Exercise } from "$src/db/schema/exercise.js";
 
 export async function GET({ url, locals }) {
 	try {
@@ -32,27 +31,16 @@ export async function GET({ url, locals }) {
 			FROM execute_exercise_search(${search.text.trimEnd()}, ${userId}, ${search.limit}, false)`,
 		)) as Array<{ categoryId: number; category: string; name: string; exerciseId: number }>;
 
-		const transformedExercises: PageFullExercise[] = returnedFullExercises.map((fullExercise) => {
-			// let exercise: Exercise | undefined;
-
-			// if (fullExercise.exerciseId && fullExercise.name) {
-			// 	exercise = {
-			// 		id: fullExercise.exerciseId,
-			// 		name: fullExercise.name,
-			// 	};
-			// }
-
-			return {
-				category: {
-					id: fullExercise.categoryId,
-					name: fullExercise.category,
-				},
-				exercise: {
-					id: fullExercise.exerciseId,
-					name: fullExercise.name,
-				},
-			};
-		});
+		const transformedExercises: PageFullExercise[] = returnedFullExercises.map((fullExercise) => ({
+			category: {
+				id: fullExercise.categoryId,
+				name: fullExercise.category,
+			},
+			exercise: {
+				id: fullExercise.exerciseId,
+				name: fullExercise.name,
+			},
+		}));
 
 		return json(transformedExercises);
 	} catch (error) {

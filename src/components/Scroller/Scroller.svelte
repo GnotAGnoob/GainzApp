@@ -4,18 +4,22 @@
 	import type { StylesType } from "$src/lib/types";
 
 	const SCROLL_REDUCTION = 0.8;
+
 	export let type: StylesType = "neutral";
 	export let sideFade: "small" | "medium" | "large" = "small";
 	export let isScrollReverse = false;
 	export let wrapperTag: "div" | "ul" | "ol" = "div";
 	export let arrowsPosition: "top" | "full" | undefined = undefined;
 	export let bottomPadding: "small" | "medium" | "large" = "small";
+	export let isScrollToEnd = false;
 
-	let scrollElement: HTMLElement;
+	let scrollElement: HTMLElement | null = null;
 	let isOverflowingLeft = false;
 	let isOverflowingRight = false;
 
 	const setOverflowing = () => {
+		if (!scrollElement) return;
+
 		const normalizedScrollLeft = Math.abs(scrollElement.scrollLeft);
 		const isOverflowLeft = normalizedScrollLeft > 0;
 		const isOverflowRight = normalizedScrollLeft + scrollElement.clientWidth < scrollElement.scrollWidth;
@@ -36,6 +40,9 @@
 
 	const scroll = (event: MouseEvent, direction: "left" | "right") => {
 		event.stopPropagation();
+
+		if (!scrollElement) return;
+
 		const scrollDirection = direction === "left" ? -1 : 1;
 
 		scrollElement.scrollBy({
@@ -43,6 +50,24 @@
 			behavior: "smooth",
 		});
 	};
+
+	$: if (isScrollToEnd && scrollElement) {
+		// timeout is needed because of possible added elements
+		setTimeout(() => {
+			if (!scrollElement) return;
+
+			let scrollDirection = 1;
+
+			if (isScrollReverse) {
+				scrollDirection = -1;
+			}
+
+			scrollElement.scrollBy({
+				left: scrollElement.scrollWidth * scrollDirection,
+				behavior: "smooth",
+			});
+		}, 0);
+	}
 </script>
 
 <svelte:window on:resize={setOverflowing} />
@@ -55,10 +80,7 @@
 			</button>
 		{/if}
 		{#if isOverflowingRight}
-			<button
-				class="button button_right button_{arrowsPosition}"
-				on:click={(event) => scroll(event, "right")}
-			>
+			<button class="button button_right button_{arrowsPosition}" on:click={(event) => scroll(event, "right")}>
 				<Icon icon="solar:alt-arrow-right-bold" />
 			</button>
 		{/if}

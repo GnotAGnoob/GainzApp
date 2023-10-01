@@ -7,20 +7,7 @@
 	import type { PageFullExercise } from "$src/routes/workouts/types";
 	import ExerciseDropdown from "./ExerciseDropdown.svelte";
 
-	let exercises: PageFullExercise[] = [
-		{
-			category: { name: "category", id: 1 },
-			exercise: { name: "name", id: 2 },
-		},
-		{
-			category: { name: "category", id: 1 },
-			exercise: { name: "name", id: 2 },
-		},
-		{
-			category: { name: "category", id: 1 },
-			exercise: { name: "name", id: 2 },
-		},
-	];
+	export let exercises: PageFullExercise[] = [];
 	export let order: number;
 
 	let newExercise: Partial<PageFullExercise> | null = null;

@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "4565cc03-d686-48e6-80ee-5eb5aa3b2462",
+  "id": "000ba20a-ec58-477c-898d-4f5f7dfb126e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "account": {
@@ -293,8 +293,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "set": {
-      "name": "set",
+    "setWeight": {
+      "name": "setWeight",
       "schema": "",
       "columns": {
         "id": {
@@ -315,12 +315,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "order": {
-          "name": "order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -335,14 +329,8 @@
           "notNull": true,
           "default": "now()"
         },
-        "exercise_id": {
-          "name": "exercise_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "superset_id": {
-          "name": "superset_id",
+        "superset_exercise_id": {
+          "name": "superset_exercise_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
@@ -350,25 +338,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "set_exercise_id_exercise_id_fk": {
-          "name": "set_exercise_id_exercise_id_fk",
-          "tableFrom": "set",
-          "tableTo": "exercise",
+        "setWeight_superset_exercise_id_supersetExercise_id_fk": {
+          "name": "setWeight_superset_exercise_id_supersetExercise_id_fk",
+          "tableFrom": "setWeight",
+          "tableTo": "supersetExercise",
           "columnsFrom": [
-            "exercise_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "set_superset_id_superset_id_fk": {
-          "name": "set_superset_id_superset_id_fk",
-          "tableFrom": "set",
-          "tableTo": "superset",
-          "columnsFrom": [
-            "superset_id"
+            "superset_exercise_id"
           ],
           "columnsTo": [
             "id"
@@ -438,7 +413,7 @@
           "name": "order",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -479,6 +454,90 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
+    },
+    "supersetExercise": {
+      "name": "supersetExercise",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "exercise_id": {
+          "name": "exercise_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "superset_id": {
+          "name": "superset_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "supersetExercise_exercise_id_exercise_id_fk": {
+          "name": "supersetExercise_exercise_id_exercise_id_fk",
+          "tableFrom": "supersetExercise",
+          "tableTo": "exercise",
+          "columnsFrom": [
+            "exercise_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "supersetExercise_superset_id_superset_id_fk": {
+          "name": "supersetExercise_superset_id_superset_id_fk",
+          "tableFrom": "supersetExercise",
+          "tableTo": "superset",
+          "columnsFrom": [
+            "superset_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "supersetExercise_order_superset_id_unique": {
+          "name": "supersetExercise_order_superset_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "order",
+            "superset_id"
+          ]
+        }
+      }
     },
     "unit": {
       "name": "unit",
@@ -645,8 +704,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "name": {
-          "name": "name",
+        "note": {
+          "name": "note",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
@@ -708,16 +767,7 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "workout_order_userId_unique": {
-          "name": "workout_order_userId_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "order",
-            "userId"
-          ]
-        }
-      }
+      "uniqueConstraints": {}
     }
   },
   "enums": {},

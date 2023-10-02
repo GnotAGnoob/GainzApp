@@ -9,6 +9,8 @@ import { eq, inArray } from "drizzle-orm";
 import type { PageCategory } from "$src/routes/exercises/types.js";
 import { json } from "@sveltejs/kit";
 import { workout } from "$src/db/schema/workout";
+import { superset } from "$src/db/schema/superset";
+import { supersetExercise } from "$src/db/schema/supersetExercise.js";
 
 export async function POST({ request, locals }) {
 	try {
@@ -70,51 +72,67 @@ export async function POST({ request, locals }) {
 				// @ts-ignore
 				.returning();
 
-			console.log(workoutId);
+			const supersetsIds = await transaction
+				.insert(superset)
+				.values(
+					parsedWorkout.supersets.map(() => ({
+						workoutId: workoutId[0].id,
+					})),
+				)
+				.returning();
 
-			// const unitsPromise = transaction.query.unit.findMany({
-			// 	columns: dbQueryOmit,
-			// 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			// 	where: (table, _) => inArray(table.name, [...unitSet]),
-			// });
-			// const categoriesPromise = transaction.query.category.findMany({
-			// 	columns: dbQueryOmit,
-			// 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			// 	where: (table, { and }) => and(inArray(table.name, [...categoriesSet]), eq(table.userId, userId)),
-			// });
+			const supersetExercises = parsedWorkout.supersets.map((superset, supersetIndex) => {
+				return superset.exercises.map((activity) => ({
+					exerciseId: activity.exercise.id,
+					supersetId: supersetsIds[supersetIndex].id,
+				}));
+			});
 
-			// const [unitsReturned, categoriesReturned] = await Promise.all([unitsPromise, categoriesPromise]);
-
-			// const insertExercises = exercises.map((exercise) => ({
-			// 	name: exercise.name,
-			// 	unitId: unitsReturned.find((unit) => unit.name === exercise.unit)?.id as number,
-			// 	categoryId: categoriesReturned.find((category) => category.name === exercise.category)?.id as number,
-			// }));
-
-			// await transaction.insert(exercise).values(insertExercises);
-
-			// // maybe this is better
-			// // const returnedExercises = await transaction.execute(sql`
-			// // INSERT INTO exercise (name, unit_id, category_id)
-			// // SELECT
-			// // 	e.name AS name, unit.id AS unit_id, category.id AS category_id
-			// // FROM
-			// // 	(VALUES
-			// // 		('test', 'kg', 'biceps')
-			// // 	) AS e(name, unit_name, category_name)
-			// // JOIN
-			// // 	unit ON e.unit_name = unit.name
-			// // JOIN
-			// // 	category ON e.category_name = category.name
-			// // WHERE
-			// // 	"userId" = ${userId}
-			// // RETURNING name, unit_id, category_id`);
+			await transaction.insert(supersetExercise).values(supersetExercises.flat());
 		});
 
+		// const unitsPromise = transaction.query.unit.findMany({
+		// 	columns: dbQueryOmit,
+		// 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		// 	where: (table, _) => inArray(table.name, [...unitSet]),
+		// });
+		// const categoriesPromise = transaction.query.category.findMany({
+		// 	columns: dbQueryOmit,
+		// 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		// 	where: (table, { and }) => and(inArray(table.name, [...categoriesSet]), eq(table.userId, userId)),
+		// });
+
+		// const [unitsReturned, categoriesReturned] = await Promise.all([unitsPromise, categoriesPromise]);
+
+		// const insertExercises = exercises.map((exercise) => ({
+		// 	name: exercise.name,
+		// 	unitId: unitsReturned.find((unit) => unit.name === exercise.unit)?.id as number,
+		// 	categoryId: categoriesReturned.find((category) => category.name === exercise.category)?.id as number,
+		// }));
+
+		// await transaction.insert(exercise).values(insertExercises);
+
+		// // maybe this is better
+		// // const returnedExercises = await transaction.execute(sql`
+		// // INSERT INTO exercise (name, unit_id, category_id)
+		// // SELECT
+		// // 	e.name AS name, unit.id AS unit_id, category.id AS category_id
+		// // FROM
+		// // 	(VALUES
+		// // 		('test', 'kg', 'biceps')
+		// // 	) AS e(name, unit_name, category_name)
+		// // JOIN
+		// // 	unit ON e.unit_name = unit.name
+		// // JOIN
+		// // 	category ON e.category_name = category.name
+		// // WHERE
+		// // 	"userId" = ${userId}
+		// // RETURNING name, unit_id, category_id`);
+		// });
+
 		// return json(returnCategories);
-	} catch (error) {
-		return handleError(error);
-	}
+		return new Response("ok");
+	} catch (error) {}
 }
 
 // on update update workout set "order" = 1 where id = 9;

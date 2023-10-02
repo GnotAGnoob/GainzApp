@@ -7,7 +7,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 export const superset = pgTable("superset", {
 	id: serial("id").primaryKey(),
-	order: integer("order").notNull(),
+	order: integer("order"),
 
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 	updatedAt: timestamp("updated_at").notNull().defaultNow(),

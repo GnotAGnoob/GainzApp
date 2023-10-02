@@ -1,1 +1,0 @@
-ALTER TABLE "workout" DROP CONSTRAINT "workout_order_userId_status_id_unique";

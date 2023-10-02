@@ -38,15 +38,13 @@ CREATE TABLE IF NOT EXISTS "session" (
 	"expires" timestamp NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "set" (
+CREATE TABLE IF NOT EXISTS "setWeight" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"repetition" integer,
 	"weight" integer,
-	"order" integer NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
-	"exercise_id" integer NOT NULL,
-	"superset_id" integer NOT NULL
+	"superset_exercise_id" integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "status" (
@@ -59,10 +57,20 @@ CREATE TABLE IF NOT EXISTS "status" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "superset" (
 	"id" serial PRIMARY KEY NOT NULL,
-	"order" integer NOT NULL,
+	"order" integer,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"workout_id" integer NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "supersetExercise" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"order" integer,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	"exercise_id" integer NOT NULL,
+	"superset_id" integer NOT NULL,
+	CONSTRAINT "supersetExercise_order_superset_id_unique" UNIQUE("order","superset_id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "unit" (
@@ -95,12 +103,11 @@ CREATE TABLE IF NOT EXISTS "workout" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"date" timestamp DEFAULT now() NOT NULL,
 	"order" integer,
-	"name" varchar(255),
+	"note" varchar(255),
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"userId" text NOT NULL,
-	"status_id" integer NOT NULL,
-	CONSTRAINT "workout_order_userId_unique" UNIQUE("order","userId")
+	"status_id" integer NOT NULL
 );
 --> statement-breakpoint
 DO $$ BEGIN
@@ -134,19 +141,25 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "set" ADD CONSTRAINT "set_exercise_id_exercise_id_fk" FOREIGN KEY ("exercise_id") REFERENCES "exercise"("id") ON DELETE cascade ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "set" ADD CONSTRAINT "set_superset_id_superset_id_fk" FOREIGN KEY ("superset_id") REFERENCES "superset"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "setWeight" ADD CONSTRAINT "setWeight_superset_exercise_id_supersetExercise_id_fk" FOREIGN KEY ("superset_exercise_id") REFERENCES "supersetExercise"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "superset" ADD CONSTRAINT "superset_workout_id_workout_id_fk" FOREIGN KEY ("workout_id") REFERENCES "workout"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "supersetExercise" ADD CONSTRAINT "supersetExercise_exercise_id_exercise_id_fk" FOREIGN KEY ("exercise_id") REFERENCES "exercise"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "supersetExercise" ADD CONSTRAINT "supersetExercise_superset_id_superset_id_fk" FOREIGN KEY ("superset_id") REFERENCES "superset"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

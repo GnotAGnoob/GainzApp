@@ -52,7 +52,7 @@
 		width: 100%;
 		height: 100%;
 
-		padding: 0 $space-sm $space-xs;
+		padding: $space-xs $space-sm $space-xs;
 		border: none;
 
 		color: var(--text-primary);

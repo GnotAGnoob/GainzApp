@@ -1,8 +1,8 @@
-import { category } from "$src/db/schema/category.js";
+import { category } from "$src/db/schema/category";
 import { MAX_TEXT_LENGTH } from "$src/lib/constants";
 import db from "$src/lib/server/db";
 import { z } from "zod";
-import { exercise } from "$src/db/schema/exercise.js";
+import { exercise } from "$src/db/schema/exercise";
 import { handleError } from "$src/lib/server/error";
 import { getUserId } from "$src/lib/server/dbHelpers";
 import { and, eq } from "drizzle-orm";
@@ -11,10 +11,6 @@ import { json } from "@sveltejs/kit";
 export async function PATCH({ request, locals, params }) {
 	try {
 		const userId = await getUserId(locals);
-
-		if (userId instanceof Response) {
-			return userId;
-		}
 
 		const schema = z.object({
 			id: z.number().int().positive().min(1),
@@ -34,7 +30,10 @@ export async function PATCH({ request, locals, params }) {
 					eq(exercise.id, updatedExercise.id),
 					eq(
 						// eslint-disable-next-line max-len
-						db.select({ userId: category.userId }).from(category).where(eq(category.id, exercise.categoryId)),
+						db
+							.select({ userId: category.userId })
+							.from(category)
+							.where(eq(category.id, exercise.categoryId)),
 						userId,
 					),
 				),
@@ -51,6 +50,7 @@ export async function PATCH({ request, locals, params }) {
 			categoryId: returnedCategory[0].categoryId,
 		});
 	} catch (error) {
-		return handleError(error);
+		const errorResponse = handleError(error);
+		return new Response(errorResponse.body.message, { status: errorResponse.status });
 	}
 }

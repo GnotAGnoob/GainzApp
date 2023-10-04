@@ -1,19 +1,20 @@
 import postgres from "postgres";
 import { z } from "zod";
 import { dictionary } from "../language/dictionary";
+import { HttpError, error } from "@sveltejs/kit";
 
-export const handleError = (error: unknown, errorHandling?: () => Response | undefined) => {
+export const handleError = (err: unknown, errorHandling?: () => HttpError | undefined) => {
 	// eslint-disable-next-line no-console
-	console.log(error);
+	console.log(err);
 
-	if (error instanceof z.ZodError) {
-		return new Response(error.errors[0].message, { status: 422 });
+	if (err instanceof z.ZodError) {
+		return error(422, err.errors[0].message);
 	}
 
-	if (error instanceof postgres.PostgresError) {
+	if (err instanceof postgres.PostgresError) {
 		// duplicate key
-		if (error.code === "23505") {
-			return new Response(dictionary.ALREADY_EXIST, { status: 409 });
+		if (err.code === "23505") {
+			return error(409, dictionary.ALREADY_EXIST);
 		}
 	}
 
@@ -25,21 +26,21 @@ export const handleError = (error: unknown, errorHandling?: () => Response | und
 
 	let errorMessage = dictionary.UNKNOWN_ERROR;
 
-	if (error instanceof Error) {
-		errorMessage = error.message;
-	} else if (typeof error === "string") {
-		errorMessage = error;
-	} else if (error instanceof Response) {
-		return error;
-	} else if (error instanceof Object) {
+	if (err instanceof Error) {
+		errorMessage = err.message;
+	} else if (typeof err === "string") {
+		errorMessage = err;
+	} else if (err instanceof Response) {
+		return error(err.status, err.statusText);
+	} else if (err instanceof Object) {
 		// @ts-ignore
-		if (error.message) {
+		if (err.message) {
 			// @ts-ignore
-			errorMessage = error.message;
+			errorMessage = err.message;
 		} else {
-			errorMessage = JSON.stringify(error);
+			errorMessage = JSON.stringify(err);
 		}
 	}
 
-	return new Response(errorMessage, { status: 500 });
+	return error(500, errorMessage);
 };

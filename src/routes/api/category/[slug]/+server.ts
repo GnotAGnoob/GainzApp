@@ -1,4 +1,4 @@
-import { category } from "$src/db/schema/category.js";
+import { category } from "$src/db/schema/category";
 import { MAX_TEXT_LENGTH } from "$src/lib/constants";
 import db from "$src/lib/server/db";
 import { z } from "zod";
@@ -10,10 +10,6 @@ import { json } from "@sveltejs/kit";
 export async function PATCH({ request, locals, params }) {
 	try {
 		const userId = await getUserId(locals);
-
-		if (userId instanceof Response) {
-			return userId;
-		}
 
 		const schema = z.object({
 			id: z.number().int().positive().min(1),
@@ -40,6 +36,7 @@ export async function PATCH({ request, locals, params }) {
 			name: returnedCategory[0].name,
 		});
 	} catch (error) {
-		return handleError(error);
+		const errorResponse = handleError(error);
+		return new Response(errorResponse.body.message, { status: errorResponse.status });
 	}
 }

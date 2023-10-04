@@ -5,15 +5,11 @@ import { handleError } from "$src/lib/server/error";
 import { getUserId } from "$src/lib/server/dbHelpers";
 import { json } from "@sveltejs/kit";
 import { sql } from "drizzle-orm";
-import type { PageFullExercise } from "$src/routes/workouts/types";
+import type { PageExercise } from "$src/routes/workouts/types";
 
 export async function GET({ url, locals }) {
 	try {
 		const userId = await getUserId(locals);
-
-		if (userId instanceof Response) {
-			return userId;
-		}
 
 		const schema = z.object({
 			text: z.string().max(MAX_TEXT_LENGTH),
@@ -31,7 +27,7 @@ export async function GET({ url, locals }) {
 			FROM execute_exercise_search(${search.text.trimEnd()}, ${userId}, ${search.limit}, false)`,
 		)) as Array<{ categoryId: number; category: string; name: string; exerciseId: number }>;
 
-		const transformedExercises: PageFullExercise[] = returnedFullExercises.map((fullExercise) => ({
+		const transformedExercises: PageExercise[] = returnedFullExercises.map((fullExercise) => ({
 			category: {
 				id: fullExercise.categoryId,
 				name: fullExercise.category,
@@ -44,6 +40,7 @@ export async function GET({ url, locals }) {
 
 		return json(transformedExercises);
 	} catch (error) {
-		return handleError(error);
+		const errorResponse = handleError(error);
+		return new Response(errorResponse.body.message, { status: errorResponse.status });
 	}
 }

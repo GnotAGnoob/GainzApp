@@ -13,29 +13,33 @@
 	import toast from "$src/lib/toast";
 	import { apiRoutes } from "$src/lib/paths";
 
-	const emptySuperset: PageCreateSuperset = { exercises: [] };
+	const emptySuperset: PageCreateSuperset = { supersetExercises: [] };
 
-	let workout: PageCreateWorkout = { supersets: [{ ...emptySuperset }] };
+	export let workout: PageCreateWorkout = { supersets: [{ ...emptySuperset }] };
 	export let title: number | string;
-	export let isInEditMode = false;
+	export let isInEditMode = !$$props.workout;
 
 	let errorMessage: string | null = null;
 
-	$: areAllSupersetsFilled = workout.supersets.every((superset) => {
-		if (!superset.exercises.length) return false;
+	$: areAllSupersetsFilled =
+		!workout ||
+		workout.supersets.every((superset) => {
+			if (!superset.supersetExercises.length) return false;
 
-		return superset.exercises.every((activity) => activity.category.name.length && activity.exercise.name.length);
-	});
+			return superset.supersetExercises.every(
+				(activity) => activity.category.name.length && activity.exercise.name.length,
+			);
+		});
 	$: disabledSupersetText =
-		(workout.supersets.length >= MAX_SUPERSETS && dictionary.YOU_CANNOT_CREATE_MORE_ITEMS) ||
+		(workout && workout.supersets.length >= MAX_SUPERSETS && dictionary.YOU_CANNOT_CREATE_MORE_ITEMS) ||
 		(!areAllSupersetsFilled && dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS);
 
 	$: disableConfirmButton =
-		(!workout.supersets[0].exercises.length && dictionary.YOU_HAVE_TO_ADD_ATLEAST_ONE_EXRCISE) ||
+		(!workout?.supersets[0].supersetExercises.length && dictionary.YOU_HAVE_TO_ADD_ATLEAST_ONE_EXRCISE) ||
 		(!areAllSupersetsFilled && dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS);
 
 	const onAddSuperset = () => {
-		workout = { supersets: [...workout.supersets, emptySuperset] };
+		workout = { supersets: [...(workout?.supersets || []), { ...emptySuperset }] };
 	};
 
 	const onCancel = () => {
@@ -48,8 +52,6 @@
 			toast.error(dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS);
 		}
 
-		isInEditMode = false;
-
 		try {
 			const { data: newPlannedWorkout } = await toast.promise(
 				axios.post<PagePlannedWorkout>(apiRoutes.workout, workout),
@@ -60,7 +62,8 @@
 				},
 			);
 
-			// $plannedWorkouts = [...$plannedWorkouts, newPlannedWorkout];
+			$plannedWorkouts = [...$plannedWorkouts, newPlannedWorkout];
+			isInEditMode = false;
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
 				errorMessage = `${error.response?.data}. idk which element/what happened. too lazy to detect errors`;
@@ -96,15 +99,12 @@
 			<!-- todo superset jen kdyt 2+ exercisu -->
 			<div class="supersets">
 				{#if isInEditMode}
-					{#each workout.supersets as superset, index}
-						<EditableSuperset bind:exercises={superset.exercises} order={index + 1} />
+					{#each workout?.supersets || [] as superset, index}
+						<EditableSuperset bind:exercises={superset.supersetExercises} order={index + 1} />
 					{/each}
 				{:else}
-					{#each workout.supersets as superset, index}
-						<Superset exercises={superset.exercises} order={index + 1} />
-					{:else}
-						<!-- todo better -->
-						problem
+					{#each workout?.supersets || [] as superset, index}
+						<Superset exercises={superset.supersetExercises} order={index + 1} />
 					{/each}
 				{/if}
 

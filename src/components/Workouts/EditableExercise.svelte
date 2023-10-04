@@ -1,10 +1,10 @@
 <script lang="ts">
 	import EditButtons from "../EditButtons.svelte";
 	import Exercise from "./Exercise.svelte";
-	import type { PageFullExercise } from "$src/routes/workouts/types";
+	import type { PageSupersetExercise } from "$src/routes/workouts/types";
 	import ExerciseDropdown from "./ExerciseDropdown.svelte";
 
-	export let exercise: PageFullExercise;
+	export let exercise: PageSupersetExercise;
 	export let onDelete: () => void;
 	let isInEditMode = !exercise.category?.name.length;
 	console.log(isInEditMode);

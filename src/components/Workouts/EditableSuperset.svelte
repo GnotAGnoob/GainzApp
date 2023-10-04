@@ -4,13 +4,13 @@
 	import Icon from "@iconify/svelte";
 	import EditableExercise from "./EditableExercise.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
-	import type { PageFullExercise } from "$src/routes/workouts/types";
+	import type { PageCreateSuperset, PageExercise, PageSupersetExercise } from "$src/routes/workouts/types";
 	import ExerciseDropdown from "./ExerciseDropdown.svelte";
 
-	export let exercises: PageFullExercise[] = [];
+	export let exercises: PageSupersetExercise[] | PageExercise[] = [];
 	export let order: number;
 
-	let newExercise: Partial<PageFullExercise> | null = null;
+	let newExercise: Partial<PageCreateSuperset> | null = null;
 
 	$: areExercisesFilled = exercises.every(
 		(exercise) => exercise.category.name.length && exercise.exercise.name.length,

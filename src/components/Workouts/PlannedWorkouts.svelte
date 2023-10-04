@@ -4,7 +4,7 @@
 	import WorkoutCard from "./WorkoutCard.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import Icon from "@iconify/svelte";
-	import type { PageCreateWorkout, PagePlannedWorkout } from "$src/routes/workouts/types";
+	import type { PagePlannedWorkout } from "$src/routes/workouts/types";
 	import { plannedWorkouts as plannedWorkoutsStore } from "$src/lib/stores/plannedWorkouts";
 
 	export let plannedWorkouts: PagePlannedWorkout[] = [];
@@ -30,7 +30,7 @@
 			isScrollToEnd={isAddNewWorkout}
 		>
 			{#each $plannedWorkoutsStore as workout, index}
-				<WorkoutCard title={index} {workout} />
+				<WorkoutCard title={index + 1} {workout} />
 			{:else}
 				<!-- empty list -->
 			{/each}

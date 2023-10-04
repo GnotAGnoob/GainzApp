@@ -6,27 +6,27 @@
 	import { DEBOUNCE_TIME, MAX_DROPDOWN_ITEMS } from "$src/lib/constants";
 	import toast from "$src/lib/toast";
 	import { dictionary } from "$src/lib/language/dictionary";
-	import type { PageFullExercise } from "$src/routes/workouts/types";
+	import type { PageSupersetExercise } from "$src/routes/workouts/types";
 
 	// todo put into types use on be and check right usage of optional thne in other components too
 
-	const formatExercise = (exercise: Partial<PageFullExercise>) => {
+	const formatExercise = (exercise: Partial<PageSupersetExercise>) => {
 		const categoryName = exercise.category?.name;
 		const exerciseName = exercise.exercise?.name;
 		return categoryName ? `${categoryName}${exerciseName ? ` - ${exerciseName}` : ""}` : "";
 	};
 
-	export let exercise: Partial<PageFullExercise>;
+	export let exercise: Partial<PageSupersetExercise>;
 	export let onCancel: () => void;
 	export let onConfirm: () => void;
 
 	let value = formatExercise(exercise);
-	let dropdownItems: PageFullExercise[] = [];
+	let dropdownItems: PageSupersetExercise[] = [];
 
 	const fetchDropdownData = async () => {
 		try {
 			// todo, aby na prazdny string hazel nejake vysledky
-			const { data } = await axios.get<PageFullExercise[]>(apiRoutes.exercisesSearch, {
+			const { data } = await axios.get<PageSupersetExercise[]>(apiRoutes.exercisesSearch, {
 				params: { text: value, limit: MAX_DROPDOWN_ITEMS },
 			});
 			dropdownItems = data;

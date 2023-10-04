@@ -1,21 +1,17 @@
-import { category } from "$src/db/schema/category.js";
+import { category } from "$src/db/schema/category";
 import { MAX_TEXT_LENGTH } from "$src/lib/constants";
 import db from "$src/lib/server/db";
 import { z } from "zod";
-import { exercise } from "$src/db/schema/exercise.js";
+import { exercise } from "$src/db/schema/exercise";
 import { handleError } from "$src/lib/server/error";
 import { dbQueryOmit, getUserId } from "$src/lib/server/dbHelpers";
 import { eq, inArray } from "drizzle-orm";
-import type { PageCategory } from "$src/routes/exercises/types.js";
+import type { PageCategory } from "$src/routes/exercises/types";
 import { json } from "@sveltejs/kit";
 
 export async function POST({ request, locals }) {
 	try {
 		const userId = await getUserId(locals);
-
-		if (userId instanceof Response) {
-			return userId;
-		}
 
 		const schema = z.array(
 			z.object({
@@ -101,6 +97,7 @@ export async function POST({ request, locals }) {
 
 		return json(returnCategories);
 	} catch (error) {
-		return handleError(error);
+		const errorResponse = handleError(error);
+		return new Response(errorResponse.body.message, { status: errorResponse.status });
 	}
 }

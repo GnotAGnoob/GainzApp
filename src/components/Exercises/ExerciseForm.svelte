@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { exercise } from "$src/db/schema/exercise.js";
 	import { page } from "$app/stores";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import Icon from "@iconify/svelte";

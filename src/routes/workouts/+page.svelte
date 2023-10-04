@@ -5,7 +5,8 @@
 	import { dictionary } from "$src/lib/language/dictionary";
 	import { floatedCorner } from "$src/lib/stores/floatedCorner";
 	import Icon from "@iconify/svelte";
-	import axios from "axios";
+
+	export let data;
 
 	let activeElement = 0;
 
@@ -32,7 +33,7 @@
 	<div class="content">
 		{#if activeElement === 0}
 			<div class="planned">
-				<PlannedWorkouts />
+				<PlannedWorkouts plannedWorkouts={data.plannedWorkouts} />
 			</div>
 		{:else if activeElement === 1}
 			<!-- else if content here -->

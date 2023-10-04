@@ -1,19 +1,20 @@
 import { user } from "$src/db/schema/user";
 import { eq } from "drizzle-orm";
 import db from "./db";
+import { error } from "@sveltejs/kit";
 
 export const getUserId = async (locals: App.Locals) => {
 	const session = await locals.getSession();
 
 	if (!session?.user?.email) {
-		return new Response("Unauthorized", { status: 401 });
+		throw error(401, "Unauthorized");
 	}
 
 	const users = await db.select({ id: user.id }).from(user).where(eq(user.email, session.user.email));
 	const userId = users[0].id;
 
 	if (!userId) {
-		return new Response("Unauthorized", { status: 401 });
+		throw error(401, "Unauthorized");
 	}
 
 	return userId;
@@ -26,4 +27,8 @@ export const dbQueryOmit = {
 	categoryId: false,
 	unitId: false,
 	statusId: false,
+	workoutId: false,
+	exerciseId: false,
+	supersetId: false,
+	order: false,
 } as const;

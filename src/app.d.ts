@@ -1,5 +1,4 @@
-import type { load } from "$src/routes/+page.server";
-import type { HomePageData } from "./routes/exercises/types";
+import type { PageExercisesData } from "./routes/exercises/types";
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
@@ -11,7 +10,7 @@ declare global {
 		// eslint-disable-next-line @typescript-eslint/no-empty-interface
 
 		// eslint-disable-next-line @typescript-eslint/no-empty-interface
-		interface PageData extends Partial<HomePageData> {}
+		interface PageData extends Partial<PageExercisesData> {}
 		// interface Platform {}
 	}
 }

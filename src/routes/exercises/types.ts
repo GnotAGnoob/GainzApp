@@ -19,7 +19,7 @@ export interface PageCategory extends Category {
 }
 
 // could be optimized with maps
-export interface HomePageData {
+export interface PageExercisesData {
 	units: Unit[];
 	categories: PageCategory[];
 }

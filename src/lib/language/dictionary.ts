@@ -16,6 +16,7 @@ export const dictionary = {
 	PASSWORD: "Password",
 	SUBMIT: "Submit",
 	ADD_NEW_EXERCISES: "Add new exercises",
+	DELETE_EXERCISE: "Delete exercise",
 	DELETE_WORKOUT: "Delete workout",
 	ADD_NEW_CATEGORY: "Add new category",
 	ADD_NEW_SUPERSET: "Add new superset",
@@ -46,4 +47,7 @@ export const dictionary = {
 	TEMPLATES: "Templates",
 	CANCEL: "Cancel",
 	CONFIRM: "Confirm",
+	EDIT_TEXT: "Edit Text",
+	REACHED_MAX_EXERCISES: "Reached max exercises",
+	CANNOT_DELETE_LAST_EXERCISE: "Cannot delete last exercise",
 };

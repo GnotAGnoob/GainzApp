@@ -3,14 +3,13 @@
 	import Exercise from "./Exercise.svelte";
 	import type { PageSupersetExercise } from "$src/routes/workouts/types";
 	import ExerciseDropdown from "./ExerciseDropdown.svelte";
+	import { dictionary } from "$lib/language/dictionary";
 
 	export let exercise: PageSupersetExercise;
 	export let onDelete: () => void;
 	let isInEditMode = !exercise.category?.name.length;
-	console.log(isInEditMode);
 
 	const onClick = () => {
-		console.log("click");
 		isInEditMode = true;
 	};
 
@@ -33,6 +32,7 @@
 				bind:isInEditMode
 				isConfirmButton={false}
 				{onDelete}
+				deleteTitle={dictionary.DELETE_EXERCISE}
 				isAbsolute={false}
 				isPadding={false}
 				buttonType="noBackground_2"

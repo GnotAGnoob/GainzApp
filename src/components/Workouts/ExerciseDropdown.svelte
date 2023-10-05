@@ -8,8 +8,6 @@
 	import { dictionary } from "$src/lib/language/dictionary";
 	import type { PageSupersetExercise } from "$src/routes/workouts/types";
 
-	// todo put into types use on be and check right usage of optional thne in other components too
-
 	const formatExercise = (exercise: Partial<PageSupersetExercise>) => {
 		const categoryName = exercise.category?.name;
 		const exerciseName = exercise.exercise?.name;

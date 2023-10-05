@@ -93,7 +93,6 @@
 				try {
 					exercises[index].errorMessage = "";
 
-					// todo send just id
 					const response = await toast.promise(axios.post<Category>(apiRoutes.category, value), {
 						loading: `${dictionary.CREATING} ${dictionary.CATEGORY}`,
 						success: `${dictionary.CATEGORY} '${value}' ${dictionary.SUCCESSFULLY_CREATED}`,
@@ -114,7 +113,8 @@
 		});
 	};
 
-	// todo disabled title
+	$: disabledAddExerciseTitle = exercises.length === MAX_EXERCISES ? dictionary.REACHED_MAX_EXERCISES : undefined;
+	$: disabledRemoveExerciseTitle = exercises.length === 1 ? dictionary.CANNOT_DELETE_LAST_EXERCISE : undefined;
 </script>
 
 <Modal target="body" opened={isAddExerciseOpen} on:close={toggleModal} size="lg">
@@ -150,7 +150,7 @@
 							isPaddingSame
 							padding="md"
 							on:click={() => onRemoveExercise(index)}
-							disabledTitle={exercises.length === 1}
+							disabledTitle={disabledRemoveExerciseTitle}
 						>
 							<Icon icon="solar:trash-bin-trash-linear" />
 						</Button>
@@ -166,7 +166,7 @@
 			isPaddingSame
 			padding="md"
 			on:click={onAddExercise}
-			disabledTitle={exercises.length === MAX_EXERCISES}
+			disabledTitle={disabledAddExerciseTitle}
 		>
 			<!-- Solar nema normalni plus... -->
 			<Icon icon="iconoir:plus" />
@@ -174,8 +174,7 @@
 
 		<Button
 			on:click={onSubmit}
-			disabledTitle={!areExercisesFilled}
-			title={!areExercisesFilled ? dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS : undefined}
+			disabledTitle={!areExercisesFilled ? dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS : undefined}
 			><span class="submit">{dictionary.SUBMIT}</span></Button
 		>
 	</form>

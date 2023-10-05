@@ -92,6 +92,7 @@
 				isConfirmButton={false}
 				{onCancel}
 				{onDelete}
+				deleteTitle={dictionary.DELETE_WORKOUT}
 				bind:isInEditMode
 			/>
 		</div>
@@ -152,6 +153,7 @@
 		display: flex;
 
 		width: $space-xxxl;
+		height: 100%;
 
 		justify-content: center;
 		flex-direction: column;
@@ -168,10 +170,17 @@
 	}
 
 	.workout {
+		padding: ($space-md) $card-side-padding ($space-md + $space-sm);
+
+		min-height: $space-xxl;
+		max-height: $space-xxxl;
+		overflow-y: auto;
+		overflow-x: hidden;
+
 		&Wrapper {
 			position: relative;
 
-			padding: ($space-md) $card-side-padding ($space-md + $space-sm);
+			flex-grow: 1;
 
 			border-radius: $border-md;
 			background-color: var(--accent-neutral-100);

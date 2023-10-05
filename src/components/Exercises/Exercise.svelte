@@ -59,7 +59,7 @@
 		</li>
 	</span>
 {:else}
-	<button class="button" on:click={() => (open = !open)}>
+	<button class="button" on:click={() => (open = !open)} class:button_historyless={exercise.workoutHistory}>
 		<li class="exercise">
 			<EditText text={exercise.name} {onConfirm} {errorMessage} buttonType="noBackground_2" inputSize="sm">
 				<h4 class="name">{exercise.name}</h4>
@@ -76,9 +76,11 @@
 					</div>
 				{/if}
 			</div>
-			<Collapse {open} transitionDuration={255}>
-				<History workouts={exercise.workoutHistory} />
-			</Collapse>
+			{#if exercise.workoutHistory}
+				<Collapse {open} transitionDuration={255}>
+					<History workouts={exercise.workoutHistory} />
+				</Collapse>
+			{/if}
 		</li>
 	</button>
 {/if}
@@ -88,6 +90,10 @@
 
 	.button {
 		overflow-x: hidden;
+
+		&_historyless {
+			pointer-events: none;
+		}
 	}
 
 	.exercise {

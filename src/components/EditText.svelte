@@ -2,6 +2,7 @@
 	import Input from "./Atoms/Input.svelte";
 	import EditButtons from "./EditButtons.svelte";
 	import type { ButtonType } from "./Atoms/Button/types.ts";
+	import { dictionary } from "$lib/language/dictionary";
 
 	export let text = "";
 	export let isAddButton = false;
@@ -41,6 +42,7 @@
 		onCancel={handleCancel}
 		onConfirm={handleConfirm}
 		onEditMode={handleEditMode}
+		editTitle={dictionary.EDIT_TEXT}
 		{isAddButton}
 		category={text}
 		{buttonType}

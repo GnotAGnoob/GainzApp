@@ -44,7 +44,7 @@
 		exercises = exercises.filter((_, i) => i !== index);
 	};
 
-	// todo smazat cely superset btn
+	// todo smazat cely superset - btn
 </script>
 
 <div class="superset">

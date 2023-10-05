@@ -4,8 +4,6 @@
 	import { session } from "$src/lib/stores/session";
 	import Profile from "./Profile.svelte";
 	import Scroller from "../Scroller/Scroller.svelte";
-
-	// TODO: hiddable header
 </script>
 
 <header class="header">

@@ -1,12 +1,11 @@
 <script lang="ts">
-	import type { load } from "$src/routes/+page.server";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import { dateFormat } from "$src/lib/date";
 	import Sets from "./Sets.svelte";
 	import Scroller from "$components/Scroller/Scroller.svelte";
+	import type { PageWorkout } from "$src/routes/exercises/types";
 
-	// TODO typ
-	export let workouts: Awaited<ReturnType<typeof load>>["categories"][0]["exercises"][0]["history"];
+	export let workouts: PageWorkout[];
 </script>
 
 <div class="history">

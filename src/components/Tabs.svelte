@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { onDestroy, onMount } from "svelte";
-	// TODO ZJISTIT JAK DLOUHO TRVA NACTENI LAJNY,
 
 	const TIMEOUT = 100;
 

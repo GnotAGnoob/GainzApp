@@ -10,6 +10,8 @@
 	export let onEditMode: (() => void) | undefined = undefined;
 	export let onConfirm: (() => void) | undefined = undefined;
 	export let onDelete: (() => void) | undefined = undefined;
+	export let deleteTitle: string | undefined = undefined;
+	export let editTitle: string | undefined = undefined;
 	export let onCancel: (() => void) | undefined = undefined;
 	export let buttonType: ButtonType = "noBackground";
 	export let isAbsolute = true;
@@ -52,7 +54,7 @@
 				type={buttonType}
 				padding={buttonPadding}
 				fontSize="xs"
-				title={dictionary.ADD_NEW_EXERCISES}
+				title={editTitle}
 				isPaddingSame
 				on:click={handleEditMode}
 			>
@@ -64,12 +66,11 @@
 				<ExercisesAddButton {category} isPaddingSame type={buttonType} />
 			{/if}
 			{#if onDelete}
-				<!--todo title at je urcen propem-->
 				<Button
 					type="negativeNoBackground"
 					padding={buttonPadding}
 					fontSize="md"
-					title={dictionary.DELETE_WORKOUT}
+					title={deleteTitle}
 					isPaddingSame
 					on:click={handleDelete}
 				>
@@ -84,7 +85,7 @@
 					type="positiveNoBackground"
 					padding={buttonPadding}
 					fontSize="sm"
-					title={dictionary.ADD_NEW_EXERCISES}
+					title={dictionary.CONFIRM}
 					isPaddingSame
 					on:click={handleConfirm}
 				>
@@ -97,7 +98,7 @@
 				type="negativeNoBackground"
 				padding={buttonPadding}
 				fontSize="sm"
-				title={dictionary.ADD_NEW_EXERCISES}
+				title={dictionary.CANCEL}
 				isPaddingSame
 				on:click={handleCancel}
 			>

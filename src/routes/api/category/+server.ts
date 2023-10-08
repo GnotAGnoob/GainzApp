@@ -13,9 +13,16 @@ export async function POST({ request, locals }) {
 		const schema = z.string().max(MAX_TEXT_LENGTH);
 		const newCategory = schema.parse(await request.text());
 
-		const returnedCategory = await db.insert(category).values({ name: newCategory, userId }).returning();
+		let returnedCategory: { name: string; id: number }[] = [];
+		await db.transaction(async (transaction) => {
+			returnedCategory = await transaction
+				.insert(category)
+				.values({ name: newCategory, userId })
+				// @ts-ignore
+				.returning({ id: category.id, name: category.name });
+		});
 
-		return json({ name: returnedCategory[0].name, id: returnedCategory[0].id });
+		return json({ ...returnedCategory[0], isGlobal: false });
 	} catch (error) {
 		const errorResponse = handleError(error);
 		return new Response(errorResponse.body.message, { status: errorResponse.status });

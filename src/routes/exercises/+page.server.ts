@@ -3,9 +3,10 @@ import { unit } from "$src/db/schema/unit";
 import db from "$src/lib/server/db";
 import { dbQueryOmit, getUserId } from "$src/lib/server/dbHelpers";
 import { handleError } from "$src/lib/server/error";
-import { eq } from "drizzle-orm";
+import { eq, isNull, or, sql } from "drizzle-orm";
 import type { PageExercisesData } from "./types";
 import type { HttpError } from "@sveltejs/kit";
+import { exercise } from "$src/db/schema/exercise";
 
 export async function load({ locals }): Promise<PageExercisesData | HttpError> {
 	try {
@@ -16,16 +17,23 @@ export async function load({ locals }): Promise<PageExercisesData | HttpError> {
 		// todo dokoncit query
 		const categoriesPromise = db.query.category.findMany({
 			columns: dbQueryOmit,
-			where: eq(category.userId, userId),
+			where: or(eq(category.userId, userId), isNull(category.userId)),
 			with: {
 				exercises: {
 					columns: { ...dbQueryOmit, categoryId: false, unitId: false },
+					where: or(eq(exercise.userId, userId), isNull(exercise.userId)),
 					with: {
 						unit: {
 							columns: dbQueryOmit,
 						},
 					},
+					extras: {
+						isGlobal: sql<boolean>`(${exercise.userId} IS NULL)`.as("is_global"),
+					},
 				},
+			},
+			extras: {
+				isGlobal: sql<boolean>`(${category.userId} IS NULL)`.as("is_global"),
 			},
 		});
 

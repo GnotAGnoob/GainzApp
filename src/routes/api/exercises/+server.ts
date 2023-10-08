@@ -38,6 +38,7 @@ export async function POST({ request, locals }) {
 
 		let returnCategories: PageCategory[] = [];
 
+		// todo check the creation of categories if not on null + make make global categories uneditable
 		await db.transaction(async (transaction) => {
 			await transaction.insert(category).values(categories).onConflictDoNothing();
 

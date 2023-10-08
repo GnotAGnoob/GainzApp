@@ -61,7 +61,14 @@
 {:else}
 	<button class="button" on:click={() => (open = !open)} class:button_historyless={exercise.workoutHistory}>
 		<li class="exercise">
-			<EditText text={exercise.name} {onConfirm} {errorMessage} buttonType="noBackground_2" inputSize="sm">
+			<EditText
+				text={exercise.name}
+				{onConfirm}
+				isEditButton={exercise.isGlobal}
+				{errorMessage}
+				buttonType="noBackground_2"
+				inputSize="sm"
+			>
 				<h4 class="name">{exercise.name}</h4>
 			</EditText>
 			<div class="workoutsWrapper" class:workoutsWrapper_open={open}>

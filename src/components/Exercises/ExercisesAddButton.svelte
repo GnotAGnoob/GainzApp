@@ -4,6 +4,7 @@
 	import ExerciseForm from "./ExerciseForm.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import type { ComponentProps } from "svelte";
+	import type Modal from "../Modal.svelte";
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	interface $$Props extends ComponentProps<Button> {
@@ -11,12 +12,12 @@
 	}
 
 	export let category = "";
-	let exerciseFormElement: ExerciseForm;
+	let exerciseFormElement: Modal;
 </script>
 
 <Button
 	type="neutral"
-	on:click={exerciseFormElement.toggleModal}
+	on:click={exerciseFormElement.showModal}
 	padding="xs"
 	fontSize="md"
 	title={dictionary.ADD_NEW_EXERCISES}
@@ -26,4 +27,4 @@
 	<Icon icon="iconoir:plus" />
 	<slot />
 </Button>
-<ExerciseForm {category} bind:this={exerciseFormElement} />
+<ExerciseForm {category} bind:modalElement={exerciseFormElement} />

@@ -17,9 +17,7 @@ export const category = pgTable(
 		// TODO Trigger na update on update u vsech
 		updatedAt: timestamp("updated_at").notNull().defaultNow(),
 
-		userId: text("userId")
-			.notNull()
-			.references(() => user.id, { onDelete: "cascade" }),
+		userId: text("userId").references(() => user.id, { onDelete: "cascade" }),
 	},
 	// user cannot have two categories with the same name
 	(table) => ({
@@ -35,7 +33,12 @@ export const categoryRelations = relations(category, ({ one, many }) => ({
 	exercises: many(exercise),
 }));
 
-export type Category = Omit<InferSelectModel<typeof category>, keyof typeof dbQueryOmit>;
+export type Category = Omit<
+	InferSelectModel<typeof category> & {
+		isGlobal: boolean;
+	},
+	keyof typeof dbQueryOmit
+>;
 export type InsertCategory = InferInsertModel<typeof category>;
 
 export const categoryInsertValidator = createInsertSchema(category);

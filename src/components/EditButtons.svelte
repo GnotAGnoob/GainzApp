@@ -18,6 +18,7 @@
 	export let buttonPadding: "xs" | "sm" | "md" | "lg" = "xs";
 	export let isPadding = true;
 	export let isConfirmButton = true;
+	export let isEditButton = true;
 
 	export let isInEditMode = false;
 
@@ -49,19 +50,21 @@
 <div class="wrapper" class:wrapper_padding={isPadding}>
 	<slot />
 	<div class="editButtons" class:editButtons_absolute={isAbsolute}>
-		{#if !isInEditMode}
-			<Button
-				type={buttonType}
-				padding={buttonPadding}
-				fontSize="xs"
-				title={editTitle}
-				isPaddingSame
-				on:click={handleEditMode}
-			>
-				<span class="icon">
-					<Icon icon="solar:pen-bold" />
-				</span>
-			</Button>
+		{#if !isInEditMode || !isEditButton}
+			{#if isEditButton}
+				<Button
+					type={buttonType}
+					padding={buttonPadding}
+					fontSize="xs"
+					title={editTitle}
+					isPaddingSame
+					on:click={handleEditMode}
+				>
+					<span class="icon">
+						<Icon icon="solar:pen-bold" />
+					</span>
+				</Button>
+			{/if}
 			{#if isAddButton}
 				<ExercisesAddButton {category} isPaddingSame type={buttonType} />
 			{/if}

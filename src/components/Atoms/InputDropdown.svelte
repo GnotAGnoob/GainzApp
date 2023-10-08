@@ -15,7 +15,7 @@
 	export let onBlur: (() => void) | undefined = undefined;
 	export let isSelect = false;
 	const readOnly = isSelect && { readonly: true };
-	value = isSelect && !value.length ? dropDownOptions?.[0] ?? "" : value;
+	value = isSelect && !value.length ? dropDownOptions?.[0] || "" : value;
 
 	let input: HTMLDivElement | null = null;
 	let inputElement: HTMLInputElement | null = null;
@@ -28,7 +28,6 @@
 	const onClick = (index: number) => {
 		if (!dropDownOptions) return;
 
-		console.log(index);
 		onSelect?.(index);
 		value = dropDownOptions[index];
 	};
@@ -108,24 +107,22 @@
 			</svelte:fragment>
 		</Input>
 	</div>
-	{#if reduceOptions?.length}
-		<div class="optionsWrapper" class:optionsWrapper_loading={isLoading}>
-			<div class="options" bind:this={optionsElement}>
-				{#each reduceOptions as option, index}
-					<div class="button">
-						<Button isFullSize type="noBackground" borderRadius="none" on:click={() => onClick(index)}
-							>{option}</Button
-						>
-					</div>
-				{/each}
-			</div>
-			{#if onCreateNew && value.length && !reduceOptions.includes(value)}
-				<Button isFullSize type="neutral" borderRadius="none" on:click={handleCreateNew} {isLoading}>
-					<span>{dictionary.CREATE} "{value}"</span>
-				</Button>
-			{/if}
+	<div class="optionsWrapper" class:optionsWrapper_loading={isLoading}>
+		<div class="options" bind:this={optionsElement}>
+			{#each reduceOptions || [] as option, index}
+				<div class="button">
+					<Button isFullSize type="noBackground" borderRadius="none" on:click={() => onClick(index)}
+						>{option}</Button
+					>
+				</div>
+			{/each}
 		</div>
-	{/if}
+		{#if onCreateNew && value.length && !reduceOptions?.includes(value)}
+			<Button isFullSize type="neutral" borderRadius="none" on:click={handleCreateNew} {isLoading}>
+				<span>{dictionary.CREATE} "{value}"</span>
+			</Button>
+		{/if}
+	</div>
 </div>
 
 <style lang="scss">
@@ -171,10 +168,6 @@
 			background-color: var(--background-color);
 
 			z-index: 50;
-
-			&_loading {
-				// display: block;
-			}
 		}
 	}
 

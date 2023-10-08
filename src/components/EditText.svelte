@@ -6,6 +6,7 @@
 
 	export let text = "";
 	export let isAddButton = false;
+	export let isEditButton = false;
 	export let onConfirm: (newValue: string) => Promise<void>;
 	export let errorMessage: string | null = null;
 	export let buttonType: ButtonType | undefined = undefined;
@@ -44,6 +45,7 @@
 		onEditMode={handleEditMode}
 		editTitle={dictionary.EDIT_TEXT}
 		{isAddButton}
+		{isEditButton}
 		category={text}
 		{buttonType}
 	>

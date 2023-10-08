@@ -1,10 +1,12 @@
 import db from "$src/lib/server/db";
 import { dbQueryOmit, getUserId } from "$src/lib/server/dbHelpers";
 import { handleError } from "$src/lib/server/error";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import type { PagePlannedWorkouts } from "./types";
 import { workout } from "$src/db/schema/workout";
 import type { HttpError } from "@sveltejs/kit";
+import { category } from "$src/db/schema/category";
+import { exercise } from "$src/db/schema/exercise";
 
 export async function load({ locals }): Promise<PagePlannedWorkouts | HttpError> {
 	try {
@@ -29,7 +31,6 @@ export async function load({ locals }): Promise<PagePlannedWorkouts | HttpError>
 								...dbQueryOmit,
 							},
 							orderBy: (supersetExercise, { asc }) => [asc(supersetExercise.order)],
-
 							with: {
 								exercise: {
 									columns: {
@@ -40,7 +41,13 @@ export async function load({ locals }): Promise<PagePlannedWorkouts | HttpError>
 											columns: {
 												...dbQueryOmit,
 											},
+											extras: {
+												isGlobal: sql<boolean>`(${category.userId} IS NULL)`.as("is_global"),
+											},
 										},
+									},
+									extras: {
+										isGlobal: sql<boolean>`(${exercise.userId} IS NULL)`.as("is_global"),
 									},
 								},
 							},
@@ -50,7 +57,6 @@ export async function load({ locals }): Promise<PagePlannedWorkouts | HttpError>
 			},
 		});
 
-		// map workouts so that the category is not in exercise but in supersetExercise
 		const mappedWorkouts: PagePlannedWorkouts = {
 			plannedWorkouts: plannedWorkouts.map((workout) => ({
 				...workout,
@@ -61,6 +67,7 @@ export async function load({ locals }): Promise<PagePlannedWorkouts | HttpError>
 						exercise: {
 							id: supersetExercise.exercise.id,
 							name: supersetExercise.exercise.name,
+							isGlobal: supersetExercise.exercise.isGlobal,
 						},
 						category: supersetExercise.exercise.category,
 					})),

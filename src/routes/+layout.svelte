@@ -1,4 +1,3 @@
-<!-- TODO: handle responsivity, margins and max width, add nav -->
 <script>
 	import { page } from "$app/stores";
 	import { getPageTitle } from "$lib/getPageTitle";

@@ -23,18 +23,30 @@ export async function GET({ url, locals }) {
 
 		const returnedFullExercises = (await db.execute(
 			sql`SELECT
-			category, name, exercise_id as "exerciseId", category_id as "categoryId"
+			category, name, exercise_id as "exerciseId", category_id as "categoryId",
+			"category_userId" as "categoryUserId", "exercise_userId" as "exerciseUserId"
 			FROM execute_exercise_search(${search.text.trimEnd()}, ${userId}, ${search.limit}, false)`,
-		)) as Array<{ categoryId: number; category: string; name: string; exerciseId: number }>;
+		)) as Array<{
+			categoryId: number;
+			category: string;
+			name: string;
+			exerciseId: number;
+			categoryUserId: string;
+			exerciseUserId: string;
+		}>;
+
+		console.log(returnedFullExercises);
 
 		const transformedExercises: PageExercise[] = returnedFullExercises.map((fullExercise) => ({
 			category: {
 				id: fullExercise.categoryId,
 				name: fullExercise.category,
+				isGlobal: fullExercise.categoryUserId === null,
 			},
 			exercise: {
 				id: fullExercise.exerciseId,
 				name: fullExercise.name,
+				isGlobal: fullExercise.exerciseUserId === null,
 			},
 		}));
 

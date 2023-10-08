@@ -78,7 +78,7 @@
 		isInEditMode = false;
 	};
 
-	// todo scroll and max height, maybe fixed height
+	// todo pri vytvareni noveho workoutu ostatni nezvetsovat
 </script>
 
 <li class="wrapper">
@@ -97,7 +97,6 @@
 			/>
 		</div>
 		<div class="workout">
-			<!-- todo superset jen kdyt 2+ exercisu -->
 			<div class="supersets">
 				{#if isInEditMode}
 					{#each workout?.supersets || [] as superset, index}

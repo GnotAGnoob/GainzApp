@@ -3,7 +3,7 @@ CREATE MATERIALIZED VIEW category_exercise_search
 as
 select
 category.name as category, exercise.name as name, category.id as category_id,
-exercise.id as exercise_id, "userId",
+exercise.id as exercise_id, exercise."userId" as "exercise_userId", category."userId" as "category_userId",
 setweight(to_tsvector('simple', category.name), 'A') || setweight(to_tsvector('simple', coalesce(exercise.name, '')), 'B') as search_vector
 from category full join exercise on category.id = exercise.category_id;
 CREATE INDEX category_exercise_search_index on category_exercise_search USING GIN (search_vector);
@@ -36,7 +36,8 @@ RETURNS TABLE (
     name varchar(32),
     category_id INT,
     exercise_id INT,
-    userId TEXT
+    "category_userId" TEXT,
+    "exercise_userId" TEXT
 )
 LANGUAGE plpgsql
 AS $$
@@ -59,12 +60,14 @@ BEGIN
         ce.name, 
         ce.category_id, 
         ce.exercise_id, 
-        ce."userId"
+        ce."category_userId",
+        ce."exercise_userId"
     FROM 
         category_exercise_search ce
     WHERE 
         ce.search_vector @@ to_tsquery('simple', modified_query)
-        AND (ce."userId" = user_id)
+        AND (ce."category_userId" = user_id OR ce."category_userId" IS NULL)
+        AND (ce."exercise_userId" = user_id OR ce."exercise_userId" IS NULL)
         AND (show_null_exercise OR ce.exercise_id IS NOT NULL)
     ORDER BY 
         ts_rank(ce.search_vector, to_tsquery('simple', modified_query)) DESC
@@ -195,8 +198,67 @@ FOR EACH ROW
 WHEN (NEW."order" <> OLD."order")
 EXECUTE FUNCTION update_superset_exercise_order();
 
+CREATE OR REPLACE FUNCTION check_unique_category_global()
+RETURNS TRIGGER AS
+$$
+BEGIN
+    -- Check if the combination of name and foreign key is already present
+    IF EXISTS (
+        SELECT 1 FROM category
+        WHERE name = NEW.name AND "userId" IS NULL
+    ) THEN
+        RAISE EXCEPTION 'A record with the same name already exists globally.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER enforce_unique_category_global
+BEFORE INSERT OR UPDATE OF name, "userId"
+ON category
+FOR EACH ROW
+EXECUTE FUNCTION check_unique_category_global();
+
+CREATE OR REPLACE FUNCTION check_unique_exercise_global()
+RETURNS TRIGGER AS
+$$
+BEGIN
+    -- Check if the combination of name and foreign key is already present
+    IF EXISTS (
+        SELECT 1 FROM exercise
+        WHERE name = NEW.name AND category_id = NEW.category_id AND "userId" IS NULL
+    ) THEN
+        RAISE EXCEPTION 'A record with the same name already exists globally.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER enforce_unique_exercise_global
+BEFORE INSERT OR UPDATE OF name, category_id, "userId"
+ON exercise
+FOR EACH ROW
+EXECUTE FUNCTION check_unique_exercise_global();
+
 -- INSERTS
 
 INSERT INTO unit (name) VALUES ('kg');
 
 INSERT INTO status (name) VALUES ('template'), ('planned'), ('done');
+
+INSERT INTO category (name)
+VALUES
+  ('biceps'),
+  ('triceps'),
+  ('chest'),
+  ('calves'),
+  ('abdominals'),
+  ('forearms'),
+  ('quadriceps'),
+  ('hamstrings'),
+  ('glutes'),
+  ('lats'),
+  ('upper back'),
+  ('lower back');

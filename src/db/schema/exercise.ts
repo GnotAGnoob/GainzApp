@@ -1,4 +1,4 @@
-import { integer, pgTable, serial, timestamp, unique, varchar } from "drizzle-orm/pg-core";
+import { integer, pgTable, serial, text, timestamp, unique, varchar } from "drizzle-orm/pg-core";
 import { category } from "./category";
 import { relations } from "drizzle-orm";
 import { unit } from "./unit";
@@ -7,6 +7,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { MAX_TEXT_LENGTH } from "../../lib/constants";
 import type { dbQueryOmit } from "$src/lib/server/dbHelpers";
 import { supersetExercise } from "./supersetExercise";
+import { user } from "./user";
 
 export const exercise = pgTable(
 	"exercise",
@@ -23,14 +24,19 @@ export const exercise = pgTable(
 		unitId: integer("unit_id")
 			.references(() => unit.id)
 			.notNull(),
+		userId: text("userId").references(() => user.id, { onDelete: "cascade" }),
 	},
 	// user cannot have two categories with the same name
 	(table) => ({
-		unique: unique().on(table.name, table.categoryId),
+		unique: unique().on(table.name, table.categoryId, table.userId),
 	}),
 );
 
 export const exerciseRelations = relations(exercise, ({ one, many }) => ({
+	user: one(user, {
+		fields: [exercise.userId],
+		references: [user.id],
+	}),
 	category: one(category, {
 		fields: [exercise.categoryId],
 		references: [category.id],
@@ -42,7 +48,12 @@ export const exerciseRelations = relations(exercise, ({ one, many }) => ({
 	supersetExercise: many(supersetExercise),
 }));
 
-export type Exercise = Omit<InferSelectModel<typeof exercise>, keyof typeof dbQueryOmit>;
+export type Exercise = Omit<
+	InferSelectModel<typeof exercise> & {
+		isGlobal: boolean;
+	},
+	keyof typeof dbQueryOmit
+>;
 export type InsertExercise = InferInsertModel<typeof exercise>;
 
 export const exerciseInsertValidator = createInsertSchema(exercise);

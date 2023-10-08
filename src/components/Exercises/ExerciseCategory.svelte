@@ -40,7 +40,7 @@
 
 <section>
 	<div class="header">
-		<EditText text={category.name} isAddButton {onConfirm} {errorMessage}>
+		<EditText text={category.name} isAddButton isEditButton={!category.isGlobal} {onConfirm} {errorMessage}>
 			<h3 class="categoryTitle">{category.name}</h3>
 		</EditText>
 	</div>

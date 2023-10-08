@@ -25,19 +25,7 @@ export async function PATCH({ request, locals, params }) {
 		const returnedCategory = await db
 			.update(exercise)
 			.set({ name: updatedExercise.name })
-			.where(
-				and(
-					eq(exercise.id, updatedExercise.id),
-					eq(
-						// eslint-disable-next-line max-len
-						db
-							.select({ userId: category.userId })
-							.from(category)
-							.where(eq(category.id, exercise.categoryId)),
-						userId,
-					),
-				),
-			)
+			.where(and(eq(exercise.id, updatedExercise.id), eq(exercise.userId, userId)))
 			.returning();
 
 		if (!returnedCategory.length) {

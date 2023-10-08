@@ -7,16 +7,17 @@
 	import axios from "axios";
 	import InputDropdown from "../Atoms/InputDropdown.svelte";
 	import toast from "$src/lib/toast";
-	import { Modal } from "@svelteuidev/core";
 	import { categories, sortedCategories } from "$src/lib/stores/categories";
 	import type { Category } from "$src/db/schema/category";
 	import type { PageCategory } from "$src/routes/exercises/types";
 	import { apiRoutes } from "$src/lib/paths";
 	import ErrorText from "../Atoms/ErrorText.svelte";
+	import Modal from "$components/Modal.svelte";
 
 	const MAX_EXERCISES = 10;
 
 	export let category = "";
+	export let modalElement: Modal | undefined = undefined;
 
 	const emptyExercise = {
 		category: category,
@@ -34,14 +35,8 @@
 		(exercise) => exercise.category.length && exercise.name.length && exercise.unit.length,
 	);
 
-	let isAddExerciseOpen = false;
-
-	export const toggleModal = () => {
-		isAddExerciseOpen = !isAddExerciseOpen;
-
-		if (!isAddExerciseOpen) {
-			exercises = [{ ...emptyExercise }];
-		}
+	export const onClose = () => {
+		exercises = [{ ...emptyExercise }];
 	};
 
 	const onSelectUnit = (index: number) => {
@@ -117,7 +112,7 @@
 	$: disabledRemoveExerciseTitle = exercises.length === 1 ? dictionary.CANNOT_DELETE_LAST_EXERCISE : undefined;
 </script>
 
-<Modal target="body" opened={isAddExerciseOpen} on:close={toggleModal} size="lg">
+<Modal isOpened={false} {onClose} size="auto" bind:this={modalElement}>
 	<form class="form">
 		<h2 class="title">{dictionary.ADD_NEW_EXERCISES}</h2>
 		{#each exercises as exercise, index}
@@ -129,7 +124,9 @@
 							bind:value={exercise.category}
 							onCreateNew={(value) => onCreateNewCategory(value, index)}
 							onSelect={(valueIndex) => onSelectCategory(valueIndex, index)}
-							dropDownOptions={$sortedCategories?.map((category) => category.name)}
+							dropDownOptions={$sortedCategories
+								?.filter((category) => category.name.includes(exercise.category))
+								.map((category) => category.name)}
 						/>
 					</div>
 					<div class="input input_unit">

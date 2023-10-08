@@ -3,11 +3,12 @@
 	import { onMount } from "svelte";
 	import ExerciseForm from "./Exercises/ExerciseForm.svelte";
 	import { floatedCorner } from "$src/lib/stores/floatedCorner";
+	import type Modal from "./Modal.svelte";
 
 	const BOUNDARY = 200;
 
 	let isVisible = false;
-	let exerciseFormElement: ExerciseForm;
+	let exerciseFormElement: Modal;
 
 	const goToTop = () => {
 		window.scrollTo({
@@ -29,11 +30,11 @@
 
 <div class="floatingCorner">
 	{#if $floatedCorner.includes("addExercise")}
-		<button class="icon" on:click={exerciseFormElement.toggleModal}>
+		<button class="icon" on:click={exerciseFormElement.showModal}>
 			<!-- Solar nema normalni plus... -->
 			<Icon icon="iconoir:plus" />
 		</button>
-		<ExerciseForm bind:this={exerciseFormElement} />
+		<ExerciseForm bind:modalElement={exerciseFormElement} />
 	{/if}
 	{#if $floatedCorner.includes("addWorkout")}
 		<button class="icon">

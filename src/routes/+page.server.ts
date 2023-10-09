@@ -38,8 +38,6 @@ export async function load({ locals }): Promise<PageExercisesData | HttpError> {
 
 		const [units, categories] = await Promise.all([unitsPromise, categoriesPromise]);
 
-		console.log(units, categories);
-
 		return {
 			units,
 			categories,

@@ -5,9 +5,9 @@ import { z } from "zod";
 import { exercise } from "$src/db/schema/exercise";
 import { handleError } from "$src/lib/server/error";
 import { dbQueryOmit, getUserId } from "$src/lib/server/dbHelpers";
-import { eq, inArray } from "drizzle-orm";
 import type { PageCategory } from "$src/routes/exercises/types";
 import { json } from "@sveltejs/kit";
+import { eq, isNull, or, sql } from "drizzle-orm";
 
 export async function POST({ request, locals }) {
 	try {
@@ -23,7 +23,6 @@ export async function POST({ request, locals }) {
 
 		const exercises = schema.parse(await request.json());
 
-		// todo unit a category s dropdown s tlacitkem na pridani viz gmail s tabama
 		const categoriesSet = new Set<string>();
 		const unitSet = new Set<string>();
 
@@ -38,19 +37,23 @@ export async function POST({ request, locals }) {
 
 		let returnCategories: PageCategory[] = [];
 
-		// todo check the creation of categories if not on null + make make global categories uneditable
 		await db.transaction(async (transaction) => {
-			await transaction.insert(category).values(categories).onConflictDoNothing();
+			try {
+				await transaction.transaction(async (transaction2) => {
+					await transaction2.insert(category).values(categories).onConflictDoNothing();
+				});
+			} catch (error) {
+				/* empty */
+			}
 
 			const unitsPromise = transaction.query.unit.findMany({
 				columns: dbQueryOmit,
-				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-				where: (table, _) => inArray(table.name, [...unitSet]),
+				where: (table, { inArray }) => inArray(table.name, [...unitSet]),
 			});
 			const categoriesPromise = transaction.query.category.findMany({
 				columns: dbQueryOmit,
-				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-				where: (table, { and }) => and(inArray(table.name, [...categoriesSet]), eq(table.userId, userId)),
+				where: (table, { and, or, isNull, inArray, eq }) =>
+					and(inArray(table.name, [...categoriesSet]), or(eq(table.userId, userId), isNull(table.userId))),
 			});
 
 			const [unitsReturned, categoriesReturned] = await Promise.all([unitsPromise, categoriesPromise]);
@@ -83,15 +86,23 @@ export async function POST({ request, locals }) {
 			// could be optimized with where clause
 			returnCategories = await transaction.query.category.findMany({
 				columns: dbQueryOmit,
+				where: or(eq(category.userId, userId), isNull(category.userId)),
 				with: {
 					exercises: {
 						columns: { ...dbQueryOmit },
+						where: or(eq(category.userId, userId), isNull(category.userId)),
 						with: {
 							unit: {
 								columns: dbQueryOmit,
 							},
 						},
+						extras: {
+							isGlobal: sql<boolean>`(${exercise.userId} IS NULL)`.as("is_global"),
+						},
 					},
+				},
+				extras: {
+					isGlobal: sql<boolean>`(${category.userId} IS NULL)`.as("is_global"),
 				},
 			});
 		});

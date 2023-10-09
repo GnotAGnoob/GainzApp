@@ -7,6 +7,7 @@
 	export let isOpened = false;
 
 	let modalElement: HTMLDialogElement;
+	let modalContentElement: HTMLDivElement;
 
 	export let onClose: (() => void) | undefined = undefined;
 
@@ -16,20 +17,20 @@
 	};
 
 	const onBackdropClick = (event: MouseEvent) => {
-		if (event.target === modalElement) {
+		if (!modalContentElement.contains(event.target as Node)) {
 			handleClose();
 		}
 	};
 
 	onMount(() => {
-		modalElement.addEventListener("click", onBackdropClick);
+		modalElement.addEventListener("mouseup", onBackdropClick);
 
 		if (isOpened) {
 			modalElement.showModal();
 		}
 
 		return () => {
-			modalElement.removeEventListener("click", onBackdropClick);
+			modalElement.removeEventListener("mouseup", onBackdropClick);
 		};
 	});
 
@@ -39,38 +40,35 @@
 </script>
 
 <dialog class="modal" bind:this={modalElement}>
-	<div class="modalContent modalContent_{size}">
-		<div class="close">
-			<Button on:click={handleClose} padding="sm" type="noBackground" isPaddingSame>
-				<div class="closeIcon">
-					<Icon icon="iconoir:plus" />
-				</div>
-			</Button>
+	<div class="modalInside modalInside_{size}">
+		<div class="modalContent" bind:this={modalContentElement}>
+			<div class="close">
+				<Button on:click={handleClose} padding="sm" type="noBackground" isPaddingSame>
+					<div class="closeIcon">
+						<Icon icon="iconoir:plus" />
+					</div>
+				</Button>
+			</div>
+			<slot />
 		</div>
-		<slot />
 	</div>
 </dialog>
 
 <style lang="scss">
 	.modal {
-		position: relative;
-
-		margin-inline: auto;
-		margin-top: 15vh;
+		width: 100%;
+		height: 100%;
+		max-width: unset;
+		max-height: unset;
 		border: none;
-		border-radius: $border-md;
 
-		box-shadow: $box-shadow-hover;
+		background-color: transparent;
 
-		&::backdrop {
-			background-color: var(--accent-neutral-900);
-			opacity: 0.4;
-		}
+		&Inside {
+			margin-inline: auto;
+			margin-top: 15vh;
 
-		&Content {
-			padding: $space-md;
-
-			background-color: var(--background-color);
+			width: fit-content;
 
 			&_sm {
 				width: $space-xxxl;
@@ -83,6 +81,22 @@
 			&_lg {
 				width: $space-xxxxl + $space-xxxl;
 			}
+		}
+
+		&Content {
+			position: relative;
+
+			margin-inline: min($space-xl, 2.5vw);
+			border-radius: $border-md;
+			padding: $space-md;
+
+			background-color: var(--background-color);
+			box-shadow: $box-shadow;
+		}
+
+		&::backdrop {
+			background-color: var(--accent-neutral-900);
+			opacity: 0.4;
 		}
 	}
 

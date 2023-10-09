@@ -25,9 +25,11 @@
 	let isLoading = false;
 	$: reduceOptions = dropDownOptions?.slice(0, MAX_DROPDOWN_ITEMS);
 
-	const onClick = (index: number) => {
+	const onClick = (index: number, event: MouseEvent) => {
 		if (!dropDownOptions) return;
 
+		// @ts-ignore
+		event.currentTarget?.blur();
 		onSelect?.(index);
 		value = dropDownOptions[index];
 	};
@@ -111,8 +113,11 @@
 		<div class="options" bind:this={optionsElement}>
 			{#each reduceOptions || [] as option, index}
 				<div class="button">
-					<Button isFullSize type="noBackground" borderRadius="none" on:click={() => onClick(index)}
-						>{option}</Button
+					<Button
+						isFullSize
+						type="noBackground"
+						borderRadius="none"
+						on:click={(event) => onClick(index, event)}>{option}</Button
 					>
 				</div>
 			{/each}

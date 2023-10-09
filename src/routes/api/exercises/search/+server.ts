@@ -1,11 +1,13 @@
-import { MAX_TEXT_LENGTH } from "$src/lib/constants";
+import { MAX_DROPDOWN_ITEMS, MAX_TEXT_LENGTH } from "$src/lib/constants";
 import db from "$src/lib/server/db";
 import { z } from "zod";
 import { handleError } from "$src/lib/server/error";
-import { getUserId } from "$src/lib/server/dbHelpers";
+import { dbQueryOmit, getUserId } from "$lib/server/dbHelpers";
 import { json } from "@sveltejs/kit";
-import { sql } from "drizzle-orm";
+import { eq, isNull, sql, or } from "drizzle-orm";
 import type { PageExercise } from "$src/routes/workouts/types";
+import { exercise } from "$src/db/schema/exercise";
+import { category } from "$src/db/schema/category.js";
 
 export async function GET({ url, locals }) {
 	try {
@@ -21,34 +23,68 @@ export async function GET({ url, locals }) {
 			limit: parseInt(url.searchParams.get("limit") || "100"),
 		});
 
-		const returnedFullExercises = (await db.execute(
-			sql`SELECT
-			category, name, exercise_id as "exerciseId", category_id as "categoryId",
-			"category_userId" as "categoryUserId", "exercise_userId" as "exerciseUserId"
-			FROM execute_exercise_search(${search.text.trimEnd()}, ${userId}, ${search.limit}, false)`,
-		)) as Array<{
-			categoryId: number;
-			category: string;
-			name: string;
-			exerciseId: number;
-			categoryUserId: string;
-			exerciseUserId: string;
-		}>;
+		let transformedExercises: PageExercise[] = [];
 
-		console.log(returnedFullExercises);
+		if (!search.text.length) {
+			// todo make it based on the user's most used exercises
+			const returnedFullExercises = await db.query.exercise.findMany({
+				where: or(eq(exercise.userId, userId), isNull(exercise.userId)),
+				columns: { ...dbQueryOmit },
+				with: {
+					category: {
+						columns: { ...dbQueryOmit },
+						extras: {
+							isGlobal: sql<boolean>`(${category.userId} IS NULL)`.as("is_global"),
+						},
+					},
+				},
+				extras: {
+					isGlobal: sql<boolean>`(${exercise.userId} IS NULL)`.as("is_global"),
+				},
+				orderBy: (_, { desc }) => [desc(sql`random()`)],
+			});
 
-		const transformedExercises: PageExercise[] = returnedFullExercises.map((fullExercise) => ({
-			category: {
-				id: fullExercise.categoryId,
-				name: fullExercise.category,
-				isGlobal: fullExercise.categoryUserId === null,
-			},
-			exercise: {
-				id: fullExercise.exerciseId,
-				name: fullExercise.name,
-				isGlobal: fullExercise.exerciseUserId === null,
-			},
-		}));
+			transformedExercises = returnedFullExercises.map((fullExercise) => ({
+				category: {
+					...fullExercise.category,
+				},
+				exercise: {
+					id: fullExercise.id,
+					name: fullExercise.name,
+					isGlobal: fullExercise.isGlobal,
+				},
+			}));
+
+			transformedExercises = transformedExercises.slice(0, MAX_DROPDOWN_ITEMS);
+		} else {
+			const returnedFullExercises = (await db.execute(
+				sql`SELECT
+				category, name, exercise_id as "exerciseId", category_id as "categoryId",
+				"category_userId" as "categoryUserId", "exercise_userId" as "exerciseUserId"
+				FROM execute_exercise_search(
+					${search.text.trimEnd()}, ${userId}, ${search.limit || MAX_DROPDOWN_ITEMS}, false)`,
+			)) as Array<{
+				categoryId: number;
+				category: string;
+				name: string;
+				exerciseId: number;
+				categoryUserId: string;
+				exerciseUserId: string;
+			}>;
+
+			transformedExercises = returnedFullExercises.map((fullExercise) => ({
+				category: {
+					id: fullExercise.categoryId,
+					name: fullExercise.category,
+					isGlobal: fullExercise.categoryUserId === null,
+				},
+				exercise: {
+					id: fullExercise.exerciseId,
+					name: fullExercise.name,
+					isGlobal: fullExercise.exerciseUserId === null,
+				},
+			}));
+		}
 
 		return json(transformedExercises);
 	} catch (error) {

@@ -23,7 +23,6 @@
 
 	const fetchDropdownData = async () => {
 		try {
-			// todo, aby na prazdny string hazel nejake vysledky
 			const { data } = await axios.get<PageSupersetExercise[]>(apiRoutes.exercisesSearch, {
 				params: { text: value, limit: MAX_DROPDOWN_ITEMS },
 			});

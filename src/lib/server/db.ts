@@ -1,15 +1,16 @@
 import { DATABASE_URL } from "$env/static/private";
-import { drizzle, type PostgresJsDatabase } from "drizzle-orm/postgres-js";
-import { drizzle as neonDrizzle, type NeonHttpDatabase } from "drizzle-orm/neon-http";
+import { drizzle } from "drizzle-orm/postgres-js";
+import { drizzle as neonDrizzle } from "drizzle-orm/neon-http";
 import { neon, neonConfig } from "@neondatabase/serverless";
 import postgres from "postgres";
 
 import schema from "$db/schema";
 import { envError } from "../error";
+import type { Database } from "./dbTypes";
 
 if (!DATABASE_URL) throw envError("DATABASE_URL");
 
-let db: PostgresJsDatabase<typeof schema> | NeonHttpDatabase<typeof schema>;
+let db: Database;
 neonConfig.fetchConnectionCache = true;
 
 if (import.meta.env.MODE === "development") {

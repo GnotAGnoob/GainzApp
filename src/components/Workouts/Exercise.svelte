@@ -1,8 +1,7 @@
 <script lang="ts">
-	export let exercise = {
-		category: { name: "category", id: 1 },
-		exercise: { name: "category", id: 2 },
-	};
+	import type { PageExercise, PageSupersetExercise } from "$src/routes/workouts/types";
+
+	export let exercise: PageSupersetExercise | PageExercise;
 </script>
 
 <div class="exercise">

@@ -7,7 +7,7 @@ import { json } from "@sveltejs/kit";
 import { eq, isNull, sql, or } from "drizzle-orm";
 import type { PageExercise } from "$src/routes/workouts/types";
 import { exercise } from "$src/db/schema/exercise";
-import { category } from "$src/db/schema/category.js";
+import { category } from "$src/db/schema/category";
 
 export async function GET({ url, locals }) {
 	try {

@@ -38,7 +38,8 @@
 			exercise.name = oldValue;
 
 			if (axios.isAxiosError(error)) {
-				errorMessage = errorMessage = error.response?.data;
+				errorMessage = error.response?.data;
+				return;
 			}
 
 			// @ts-ignore

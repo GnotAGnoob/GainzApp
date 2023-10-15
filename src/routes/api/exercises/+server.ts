@@ -7,7 +7,7 @@ import { handleError } from "$src/lib/server/error";
 import { dbQueryOmit, getUserId } from "$src/lib/server/dbHelpers";
 import type { PageCategory } from "$src/routes/exercises/types";
 import { json } from "@sveltejs/kit";
-import { eq, isNull, or, sql } from "drizzle-orm";
+import dbCategoriesExercisesPromise from "$src/lib/server/dbCategoriesExercisesPromise.js";
 
 export async function POST({ request, locals }) {
 	try {
@@ -40,7 +40,17 @@ export async function POST({ request, locals }) {
 		await db.transaction(async (transaction) => {
 			try {
 				await transaction.transaction(async (transaction2) => {
-					await transaction2.insert(category).values(categories).onConflictDoNothing();
+					const allCategories = await transaction2.query.category.findMany({
+						columns: dbQueryOmit,
+						where: (table, { eq, or, isNull }) => or(eq(table.userId, userId), isNull(exercise.userId)),
+					});
+
+					const categoriesToInsert = categories.filter(
+						(category) =>
+							!allCategories.find((existingCategory) => existingCategory.name === category.name),
+					);
+
+					await transaction2.insert(category).values(categoriesToInsert).onConflictDoNothing();
 				});
 			} catch (error) {
 				/* empty */
@@ -66,45 +76,8 @@ export async function POST({ request, locals }) {
 
 			await transaction.insert(exercise).values(insertExercises);
 
-			// maybe this is better
-			// const returnedExercises = await transaction.execute(sql`
-			// INSERT INTO exercise (name, unit_id, category_id)
-			// SELECT
-			// 	e.name AS name, unit.id AS unit_id, category.id AS category_id
-			// FROM
-			// 	(VALUES
-			// 		('test', 'kg', 'biceps')
-			// 	) AS e(name, unit_name, category_name)
-			// JOIN
-			// 	unit ON e.unit_name = unit.name
-			// JOIN
-			// 	category ON e.category_name = category.name
-			// WHERE
-			// 	"userId" = ${userId}
-			// RETURNING name, unit_id, category_id`);
-
 			// could be optimized with where clause
-			returnCategories = await transaction.query.category.findMany({
-				columns: dbQueryOmit,
-				where: or(eq(category.userId, userId), isNull(category.userId)),
-				with: {
-					exercises: {
-						columns: { ...dbQueryOmit },
-						where: or(eq(category.userId, userId), isNull(category.userId)),
-						with: {
-							unit: {
-								columns: dbQueryOmit,
-							},
-						},
-						extras: {
-							isGlobal: sql<boolean>`(${exercise.userId} IS NULL)`.as("is_global"),
-						},
-					},
-				},
-				extras: {
-					isGlobal: sql<boolean>`(${category.userId} IS NULL)`.as("is_global"),
-				},
-			});
+			returnCategories = await dbCategoriesExercisesPromise(userId, transaction);
 		});
 
 		return json(returnCategories);

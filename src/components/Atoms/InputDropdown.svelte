@@ -15,7 +15,7 @@
 	export let onBlur: (() => void) | undefined = undefined;
 	export let isSelect = false;
 	const readOnly = isSelect && { readonly: true };
-	value = isSelect && !value.length ? dropDownOptions?.[0] || "" : value;
+	$: value = isSelect && !value.length ? dropDownOptions?.[0] || "" : value;
 
 	let input: HTMLDivElement | null = null;
 	let inputElement: HTMLInputElement | null = null;

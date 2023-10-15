@@ -8,6 +8,9 @@
 	export let isAddButton = false;
 	export let isEditButton = false;
 	export let onConfirm: (newValue: string) => Promise<void>;
+	export let onDelete: (() => Promise<void>) | undefined = undefined;
+	export let deleteConfirmationText: string | undefined = undefined;
+
 	export let errorMessage: string | null = null;
 	export let buttonType: ButtonType | undefined = undefined;
 	export let inputSize: "sm" | "md" | "lg" = "md";
@@ -43,7 +46,10 @@
 		onCancel={handleCancel}
 		onConfirm={handleConfirm}
 		onEditMode={handleEditMode}
+		{onDelete}
 		editTitle={dictionary.EDIT_TEXT}
+		deleteTitle={dictionary.DELETE}
+		{deleteConfirmationText}
 		{isAddButton}
 		{isEditButton}
 		category={text}

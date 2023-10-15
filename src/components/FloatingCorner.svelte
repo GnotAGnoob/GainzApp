@@ -3,7 +3,7 @@
 	import { onMount } from "svelte";
 	import ExerciseForm from "./Exercises/ExerciseForm.svelte";
 	import { floatedCorner } from "$src/lib/stores/floatedCorner";
-	import type Modal from "./Modal.svelte";
+	import type Modal from "./Modals/Modal.svelte";
 
 	const BOUNDARY = 200;
 

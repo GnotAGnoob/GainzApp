@@ -11,7 +11,7 @@ import * as unit from "./unit";
 import * as user from "./user";
 import * as verificationTokens from "./verificationTokens";
 import * as workout from "./workout";
-import * as exerciseSearch from "./exerciseSearch";
+// import * as exerciseSearch from "./exerciseSearch";
 
 export default {
 	...account,
@@ -26,5 +26,5 @@ export default {
 	...user,
 	...verificationTokens,
 	...workout,
-	...exerciseSearch,
+	// ...exerciseSearch,
 };

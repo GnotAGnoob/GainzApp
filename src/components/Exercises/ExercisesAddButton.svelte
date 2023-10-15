@@ -4,7 +4,7 @@
 	import ExerciseForm from "./ExerciseForm.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import type { ComponentProps } from "svelte";
-	import type Modal from "../Modal.svelte";
+	import type Modal from "$components/Modals/Modal.svelte";
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	interface $$Props extends ComponentProps<Button> {

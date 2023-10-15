@@ -4,12 +4,15 @@
 	import Icon from "@iconify/svelte";
 	import Button from "./Atoms/Button/Button.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
+	import ConfirmationModal from "./Modals/ConfirmationModal.svelte";
 
 	export let category = "";
 	export let isAddButton = false;
 	export let onEditMode: (() => void) | undefined = undefined;
 	export let onConfirm: (() => void) | undefined = undefined;
 	export let onDelete: (() => void) | undefined = undefined;
+	export let onCancelDelete: (() => void) | undefined = undefined;
+	export let deleteConfirmationText: string | undefined = undefined;
 	export let deleteTitle: string | undefined = undefined;
 	export let editTitle: string | undefined = undefined;
 	export let onCancel: (() => void) | undefined = undefined;
@@ -21,6 +24,7 @@
 	export let isEditButton = true;
 
 	export let isInEditMode = false;
+	let modal: ConfirmationModal;
 
 	const handleEditMode = () => {
 		isInEditMode = true;
@@ -75,7 +79,7 @@
 					fontSize="md"
 					title={deleteTitle}
 					isPaddingSame
-					on:click={handleDelete}
+					on:click={deleteConfirmationText ? modal.showModal : handleDelete}
 				>
 					<span class="icon icon_medium">
 						<Icon icon="solar:trash-bin-trash-linear" />
@@ -111,6 +115,15 @@
 			</Button>
 		{/if}
 	</div>
+
+	{#if deleteConfirmationText}
+		<ConfirmationModal
+			bind:this={modal}
+			text={deleteConfirmationText}
+			onConfirm={handleDelete}
+			onCancel={onCancelDelete}
+		/>
+	{/if}
 </div>
 
 <style lang="scss">

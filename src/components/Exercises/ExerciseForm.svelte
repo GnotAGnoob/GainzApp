@@ -12,7 +12,7 @@
 	import type { PageCategory } from "$src/routes/exercises/types";
 	import { apiRoutes } from "$src/lib/paths";
 	import ErrorText from "../Atoms/ErrorText.svelte";
-	import Modal from "$components/Modal.svelte";
+	import Modal from "$src/components/Modals/Modal.svelte";
 
 	const MAX_EXERCISES = 10;
 
@@ -20,14 +20,11 @@
 	export let modalElement: Modal | undefined = undefined;
 
 	const emptyExercise = {
+		categoryId: -1,
 		category: category,
 		name: "",
 		unit: "",
 		errorMessage: "",
-	};
-	const lastSelectedValues = {
-		category: category,
-		unit: "",
 	};
 
 	let exercises = [{ ...emptyExercise }];
@@ -35,22 +32,23 @@
 		(exercise) => exercise.category.length && exercise.name.length && exercise.unit.length,
 	);
 
+	$: categoryNames = $sortedCategories.map((category) => category.name);
+	$: formCategories = new Set(exercises.map((exercise) => exercise.category));
+	$: dropdownCategories = Array.from(new Set([...categoryNames, ...formCategories]));
+
 	export const onClose = () => {
 		exercises = [{ ...emptyExercise }];
 	};
 
-	const onSelectUnit = (index: number) => {
-		lastSelectedValues.unit = exercises[index].unit;
-	};
-
-	const onSelectCategory = (valueIndex: number, inputsIndex: number) => {
+	const onSelectCategory = (_: number, inputsIndex: number) => {
 		exercises[inputsIndex].errorMessage = "";
-		lastSelectedValues.category = $sortedCategories[valueIndex].name;
 	};
 
 	const onAddExercise = () => {
 		if (exercises.length < MAX_EXERCISES) {
-			exercises = [...exercises, { ...emptyExercise, ...lastSelectedValues }];
+			const unit = exercises.length ? exercises[exercises.length - 1].unit : "";
+			const category = exercises.length ? exercises[exercises.length - 1].category : "";
+			exercises = [...exercises, { ...emptyExercise, category, unit }];
 		}
 	};
 
@@ -73,6 +71,7 @@
 			);
 
 			$categories = newCategories;
+			modalElement?.closeModal();
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
 				exercises[
@@ -112,7 +111,7 @@
 	$: disabledRemoveExerciseTitle = exercises.length === 1 ? dictionary.CANNOT_DELETE_LAST_EXERCISE : undefined;
 </script>
 
-<Modal isOpened={false} {onClose} size="auto" bind:this={modalElement}>
+<Modal isOpened={false} {onClose} size="lg" bind:this={modalElement}>
 	<form class="form">
 		<h2 class="title">{dictionary.ADD_NEW_EXERCISES}</h2>
 		{#each exercises as exercise, index}
@@ -124,16 +123,20 @@
 							bind:value={exercise.category}
 							onCreateNew={(value) => onCreateNewCategory(value, index)}
 							onSelect={(valueIndex) => onSelectCategory(valueIndex, index)}
-							dropDownOptions={$sortedCategories
-								?.filter((category) => category.name.includes(exercise.category))
-								.map((category) => category.name)}
+							dropDownOptions={dropdownCategories
+								?.filter(
+									(category) =>
+										category.includes(exercise.category) &&
+										(categoryNames.includes(category) ||
+											(formCategories.has(category) && category !== exercise.category)),
+								)
+								.map((category) => category)}
 						/>
 					</div>
 					<div class="input input_unit">
 						<InputDropdown
 							label={dictionary.UNIT}
 							bind:value={exercise.unit}
-							onSelect={onSelectUnit}
 							dropDownOptions={$page.data?.units?.map((unit) => unit.name)}
 							isSelect
 						/>
@@ -212,6 +215,10 @@
 
 			@media (min-width: $bp-512) {
 				flex-wrap: nowrap;
+			}
+
+			&Wrapper {
+				max-width: $space-xxxxl + $space-xxl;
 			}
 		}
 

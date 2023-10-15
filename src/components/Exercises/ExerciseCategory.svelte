@@ -7,11 +7,13 @@
 	import type { PageCategory } from "$src/routes/exercises/types";
 	import toast from "$src/lib/toast";
 	import { apiRoutes } from "$src/lib/paths";
+	import { categories } from "$src/lib/stores/categories";
 
 	export let category: PageCategory;
 
 	let errorMessage: string | null = null;
 
+	// editing name
 	const onConfirm = async (newValue: string) => {
 		if (newValue === "" || newValue === category.name) {
 			return;
@@ -22,14 +24,39 @@
 		try {
 			category.name = newValue;
 
-			await axios.patch<Category>(`${apiRoutes.category}${category.id}`, { name: newValue });
+			const { data } = await axios.patch<Category>(`${apiRoutes.category}${category.id}`, { name: newValue });
+
+			category.name = data.name;
 		} catch (error) {
 			toast.error(dictionary.RENAMING_CATEGORY_FAILED);
 
 			category.name = oldValue;
 
 			if (axios.isAxiosError(error)) {
-				errorMessage = errorMessage = error.response?.data;
+				errorMessage = error.response?.data;
+				return;
+			}
+
+			// @ts-ignore
+			errorMessage = error?.message || dictionary.UNKNOWN_ERROR;
+		}
+	};
+
+	const onDelete = async () => {
+		const oldCategories = [...$categories];
+
+		try {
+			$categories = $categories.filter((c) => c.id !== category.id);
+			const { data } = await axios.delete<PageCategory[]>(`${apiRoutes.category}${category.id}`);
+			$categories = data;
+		} catch (error) {
+			toast.error(dictionary.DELETING_CATEGORY_FAILED);
+
+			$categories = oldCategories;
+
+			if (axios.isAxiosError(error)) {
+				errorMessage = error.response?.data;
+				return;
 			}
 
 			// @ts-ignore
@@ -40,7 +67,17 @@
 
 <section>
 	<div class="header">
-		<EditText text={category.name} isAddButton isEditButton={!category.isGlobal} {onConfirm} {errorMessage}>
+		<EditText
+			text={category.name}
+			isAddButton
+			isEditButton={!category.isGlobal}
+			{onConfirm}
+			onDelete={!category.isGlobal ? onDelete : undefined}
+			deleteConfirmationText={category.exercises?.length
+				? dictionary.ARE_YOU_SURE_YOU_WANT_TO_DETELE_CATEGORY
+				: undefined}
+			{errorMessage}
+		>
 			<h3 class="categoryTitle">{category.name}</h3>
 		</EditText>
 	</div>

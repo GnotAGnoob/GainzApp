@@ -69,7 +69,7 @@
 
 		if (!optionsElement) return;
 
-		optionsElement.scrollTop = 0;
+		// optionsElement.scrollTop = 0;
 	};
 
 	onMount(() => {

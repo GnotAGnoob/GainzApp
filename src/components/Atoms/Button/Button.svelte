@@ -14,6 +14,7 @@
 	export let borderRadius: "none" | "sm" | "md" = "sm";
 	export let className = "";
 	export let title: string | undefined = undefined;
+	export let buttonType: "button" | "submit" | "reset" = "button";
 	export { className as class };
 </script>
 
@@ -31,6 +32,7 @@
 	on:click
 	disabled={!!disabledTitle || isLoading}
 	title={disabledTitle || title}
+	type={buttonType}
 >
 	{#if $$slots.leftIcon && !isLoading}
 		<span class="icon">

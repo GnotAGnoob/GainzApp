@@ -15,6 +15,7 @@
 	const handleClose = () => {
 		onClose?.();
 		modalElement.close();
+		window.document.documentElement.classList.remove("stopScrolling");
 	};
 
 	const onBackdropClick = (event: MouseEvent) => {
@@ -37,10 +38,11 @@
 
 	export const showModal = () => {
 		modalElement.showModal();
+		window.document.documentElement.classList.add("stopScrolling");
 	};
 
 	export const closeModal = () => {
-		modalElement.close();
+		handleClose();
 	};
 </script>
 

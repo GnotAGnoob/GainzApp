@@ -14,6 +14,8 @@ export interface PageExercise extends Exercise {
 	workoutHistory?: PageWorkout[];
 }
 
+export type PageMandatoryExercise = Required<PageExercise>;
+
 export interface PageCategory extends Category {
 	exercises?: PageExercise[];
 }

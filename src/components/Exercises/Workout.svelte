@@ -29,7 +29,6 @@
 
 	.workout {
 		--_background-color: #{$background-color-default};
-		--_text-color: #{$text-color-default};
 
 		display: flex;
 
@@ -39,7 +38,6 @@
 		gap: $space-sm;
 
 		font-weight: 700;
-		color: var(--_text-color);
 
 		background-color: var(--_background-color);
 
@@ -56,12 +54,10 @@
 		}
 
 		&_positive {
-			--_text-color: #{$text-color-best};
 			--_background-color: #{$background-color-best};
 		}
 
 		&_neutral {
-			--_text-color: #{$text-color-history};
 			--_background-color: #{$background-color-history};
 		}
 	}

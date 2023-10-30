@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { load } from "$src/routes/+page.server";
-	import Set from "./Set.svelte";
+	import Set from "./Set/Set.svelte";
 	import type { StylesType } from "$src/lib/types";
 
 	export let sets: Awaited<ReturnType<typeof load>>["categories"][0]["exercises"][0]["history"][0]["sets"];

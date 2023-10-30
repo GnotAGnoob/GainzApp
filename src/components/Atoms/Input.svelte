@@ -6,22 +6,41 @@
 	export let value: string;
 	export let isAlignCenter = false;
 	export let size: "sm" | "md" | "lg" = "md";
+	export let widthSize: "sm" | "md" | "lg" | "auto" | "dynamic" = "auto";
+	export let paddingLeft: "xs" | "sm" | "md" | "lg" | "none" = "sm";
+	export let paddingRight: "xs" | "sm" | "md" | "lg" | "none" = "sm";
+	export let isTextColorInherited = false;
 	export let isOnMountFocus = false;
 
+	const isDynamicWidth = widthSize === "dynamic";
+
 	let input: HTMLInputElement | null = null;
+	let dynamicText: HTMLDivElement | null = null;
+
+	let inputSize = 0;
 
 	onMount(() => {
 		if (isOnMountFocus) {
 			input?.focus();
 		}
 	});
+
+	const changeInputWidth = () => {
+		if (isDynamicWidth) {
+			setTimeout(() => (inputSize = dynamicText?.clientWidth || 0));
+		}
+	};
 </script>
 
-<span class="wrapper wrapper_{size}" class:wrapper_center={isAlignCenter}>
+<div
+	class="wrapper wrapper_{size} wrapperWidth_{widthSize}"
+	class:wrapper_center={isAlignCenter}
+	class:wrapper_inheritColor={isTextColorInherited}
+>
 	{#if label}
 		<label for="text" class="label">{label}</label>
 	{/if}
-	<div class="inputWrapper">
+	<div class="inputWrapper iconPaddingLeft_{paddingLeft} iconPaddingRight_{paddingRight}">
 		<div class="icon icon_left">
 			<slot />
 		</div>
@@ -29,8 +48,7 @@
 			id="text"
 			{...$$restProps}
 			class="input"
-			class:input_left={$$slots.default}
-			class:input_right={$$slots.rightIcon}
+			class:input_dynamic={isDynamicWidth}
 			bind:this={input}
 			bind:value
 			on:click
@@ -38,33 +56,63 @@
 			on:focus
 			on:blur
 			on:keyup
+			on:input={changeInputWidth}
 			maxlength={MAX_TEXT_LENGTH}
 			autocomplete="off"
+			style={isDynamicWidth ? `width: ${inputSize}px` : null}
 		/>
 		<div class="icon icon_right">
 			<slot name="rightIcon" />
 		</div>
+		{#if isDynamicWidth}
+			<div class="textMirror" bind:this={dynamicText}>{value}</div>
+		{/if}
 	</div>
-</span>
+</div>
 
 <style lang="scss">
+	.wrapper {
+		--_icon-left: 0;
+		--_icon-left-padding: 0;
+		--_icon-right: 0;
+		--_icon-right-padding: 0;
+
+		&Width_sm {
+			width: $space-lg + $space-md;
+		}
+
+		&Width_md {
+			width: $space-xl + $space-lg;
+		}
+
+		&Width_lg {
+			width: $space-xxl;
+		}
+
+		&_inheritColor {
+			.input,
+			.inputWrapper {
+				color: inherit;
+			}
+		}
+	}
 	.input {
 		width: 100%;
 		height: 100%;
 
-		padding: $space-xs $space-sm $space-xs;
+		padding-block: $space-sm;
+		padding-left: var(--_icon-left-padding);
+		padding-right: var(--_icon-right-padding);
 		border: none;
 
 		color: var(--text-primary);
 		background-color: transparent;
 		text-transform: none;
 
-		&_left {
-			padding-left: $space-md + $space-sm;
-		}
+		&_dynamic {
+			box-sizing: content-box;
 
-		&_right {
-			padding-right: $space-md + $space-sm;
+			min-width: 2ch;
 		}
 
 		&:focus {
@@ -74,6 +122,10 @@
 		.wrapper_sm & {
 			font-size: $text-tag;
 			padding: 0 $space-xs $space-xxs;
+		}
+
+		.wrapper_center & {
+			text-align: center;
 		}
 
 		&Wrapper {
@@ -91,10 +143,6 @@
 				border-color: var(--text-secondary);
 			}
 		}
-
-		.wrapper_center & {
-			text-align: center;
-		}
 	}
 
 	.label {
@@ -108,6 +156,16 @@
 		text-transform: capitalize;
 	}
 
+	.textMirror {
+		position: absolute;
+
+		opacity: 0;
+
+		pointer-events: none;
+
+		text-transform: none;
+	}
+
 	.icon {
 		display: flex;
 		position: absolute;
@@ -118,14 +176,67 @@
 
 		align-items: center;
 
-		z-index: -1;
-
 		&_left {
-			left: $space-xs;
+			left: var(--_icon-left);
 		}
 
 		&_right {
-			right: $space-xs;
+			right: var(--_icon-right);
+		}
+
+		&Padding {
+			&Right {
+				&_xs {
+					--_icon-right: 0;
+					--_icon-right-padding: #{$space-xs};
+				}
+
+				&_sm {
+					--_icon-right: #{$space-xxs};
+					--_icon-right-padding: #{$space-md};
+				}
+
+				&_md {
+					--_icon-right: #{$space-xs};
+					--_icon-right-padding: #{$space-md + $space-sm};
+				}
+
+				&_lg {
+					--_icon-right: #{$space-sm};
+					--_icon-right-padding: #{$space-lg};
+				}
+
+				&_none {
+					--_icon-right: 0;
+					--_icon-right-padding: 0;
+				}
+			}
+
+			&Left {
+				&_xs {
+					--_icon-left: 0;
+					--_icon-left-padding: #{$space-xs};
+				}
+				&_sm {
+					--_icon-left: 0;
+					--_icon-left-padding: #{$space-sm + $space-xs};
+				}
+
+				&_md {
+					--_icon-left: #{$space-xs};
+					--_icon-left-padding: #{$space-md + $space-sm};
+				}
+
+				&_lg {
+					--_icon-left: #{$space-sm};
+					--_icon-left-padding: #{$space-lg};
+				}
+
+				&_none {
+					--_icon-left: 0;
+					--_icon-left-padding: 0;
+				}
+			}
 		}
 	}
 </style>

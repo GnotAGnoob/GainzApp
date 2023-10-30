@@ -74,6 +74,7 @@
 		&Inside {
 			margin-inline: auto;
 			margin-top: 15vh;
+			max-width: 100%;
 
 			width: fit-content;
 

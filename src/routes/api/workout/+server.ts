@@ -3,13 +3,14 @@ import db from "$src/lib/server/db";
 import { z } from "zod";
 import { status } from "$src/db/schema/status";
 import { dbQueryOmit, getUserId } from "$src/lib/server/dbHelpers";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { error, json } from "@sveltejs/kit";
 import { workout } from "$src/db/schema/workout";
 import { superset } from "$src/db/schema/superset";
 import { supersetExercise } from "$src/db/schema/supersetExercise";
 import type { PagePlannedWorkout } from "$src/routes/workouts/types";
 import { handleError } from "$src/lib/server/error";
+import { exercise } from "$src/db/schema/exercise";
 
 export async function POST({ request, locals }) {
 	try {
@@ -104,7 +105,15 @@ export async function POST({ request, locals }) {
 												columns: {
 													...dbQueryOmit,
 												},
+												extras: {
+													isGlobal: sql<boolean>`(${exercise.userId} IS NULL)`.as(
+														"is_global",
+													),
+												},
 											},
+										},
+										extras: {
+											isGlobal: sql<boolean>`(${exercise.userId} IS NULL)`.as("is_global"),
 										},
 									},
 								},
@@ -128,6 +137,7 @@ export async function POST({ request, locals }) {
 						exercise: {
 							id: supersetExercise.exercise.id,
 							name: supersetExercise.exercise.name,
+							isGlobal: supersetExercise.exercise.isGlobal,
 						},
 					})),
 				})),

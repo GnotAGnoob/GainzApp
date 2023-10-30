@@ -23,7 +23,7 @@ export interface PageCreateWorkout {
 	supersets: PageCreateSuperset[];
 }
 
-export interface PagePlannedWorkout extends PageCreateWorkout {
+export interface PagePlannedWorkout {
 	id: number;
 	supersets: PageSuperset[];
 }

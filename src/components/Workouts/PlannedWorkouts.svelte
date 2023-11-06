@@ -1,11 +1,12 @@
 <script lang="ts">
 	import Scroller from "$src/components/Scroller/Scroller.svelte";
 	import Button from "$components/Atoms/Button/Button.svelte";
-	import WorkoutCard from "./WorkoutCard.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import Icon from "@iconify/svelte";
 	import type { PagePlannedWorkout } from "$src/routes/workouts/types";
 	import { plannedWorkouts as plannedWorkoutsStore } from "$src/lib/stores/plannedWorkouts";
+	import EditableWorkoutCard from "./WorkoutCard/EditableWorkoutCard.svelte";
+	import CreateWorkoutCard from "./WorkoutCard/CreateWorkoutCard.svelte";
 
 	export let plannedWorkouts: PagePlannedWorkout[] = [];
 	plannedWorkoutsStore.set(plannedWorkouts);
@@ -16,6 +17,14 @@
 
 	const onAddWorkout = () => {
 		isAddNewWorkout = true;
+	};
+
+	const onCancel = () => {
+		isAddNewWorkout = false;
+	};
+
+	const onConfirm = () => {
+		isAddNewWorkout = false;
 	};
 </script>
 
@@ -30,12 +39,12 @@
 			isScrollToEnd={isAddNewWorkout}
 		>
 			{#each $plannedWorkoutsStore as workout, index}
-				<WorkoutCard title={index + 1} {workout} />
+				<EditableWorkoutCard title={index + 1} {workout} />
 			{:else}
 				<!-- empty list -->
 			{/each}
 			{#if isAddNewWorkout}
-				<WorkoutCard title={dictionary.CREATING_NEW_WORKOUT} bind:isInEditMode={isAddNewWorkout} />
+				<CreateWorkoutCard title={dictionary.CREATING_NEW_WORKOUT} {onCancel} {onConfirm} />
 			{/if}
 		</Scroller>
 	{/if}

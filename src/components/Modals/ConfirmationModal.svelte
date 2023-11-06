@@ -19,6 +19,11 @@
 		onCancel?.();
 		modal.closeModal();
 	};
+
+	const handleConfirm = () => {
+		onConfirm?.();
+		modal.closeModal();
+	};
 </script>
 
 <Modal {size} bind:this={modal} onClose={onCancel}>
@@ -31,7 +36,7 @@
 			<Button type="negativeNoBackground" on:click={handleCancel}>
 				{dictionary.CANCEL}
 			</Button>
-			<Button type="positive" on:click={onConfirm}>
+			<Button type="positive" on:click={handleConfirm}>
 				{dictionary.CONFIRM}
 			</Button>
 		</div>

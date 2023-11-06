@@ -1,0 +1,93 @@
+<script lang="ts">
+	import Button from "$components/Atoms/Button/Button.svelte";
+	import { MAX_SUPERSETS } from "$src/lib/constants";
+	import { dictionary } from "$src/lib/language/dictionary";
+	import Icon from "@iconify/svelte";
+	import EditableSuperset from "../EditableSuperset.svelte";
+	import type { PageCreateSuperset, PageCreateWorkout, PagePlannedWorkout } from "$src/routes/workouts/types";
+	import ErrorText from "../../Atoms/ErrorText.svelte";
+	import toast from "$src/lib/toast";
+
+	const emptySuperset: PageCreateSuperset = { supersetExercises: [] };
+
+	export let workout: PageCreateWorkout | PagePlannedWorkout;
+	export let onConfirm: () => void;
+	export let onCancel: () => void;
+	export let errorMessage: string | undefined = undefined;
+
+	// might not be very performant
+	const workoutCopy = structuredClone(workout);
+	$: isWorkoutSame = JSON.stringify(workoutCopy) === JSON.stringify(workout);
+
+	$: areAllSupersetsFilled =
+		!workout ||
+		workout.supersets.every((superset) => {
+			if (!superset.supersetExercises.length) return false;
+
+			return superset.supersetExercises.every(
+				(activity) => activity.category.name.length && activity.exercise.name.length,
+			);
+		});
+	$: disabledSupersetText =
+		(workout && workout.supersets.length >= MAX_SUPERSETS && dictionary.YOU_CANNOT_CREATE_MORE_ITEMS) ||
+		(!areAllSupersetsFilled && dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS);
+
+	$: disableConfirmButton =
+		(!workout?.supersets[0].supersetExercises.length && dictionary.YOU_HAVE_TO_ADD_ATLEAST_ONE_EXERCISE) ||
+		(!areAllSupersetsFilled && dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS) ||
+		(isWorkoutSame && dictionary.YOU_HAVE_TO_MAKE_CHANGE);
+
+	const onAddSuperset = () => {
+		workout = { supersets: [...(workout?.supersets || []), { ...emptySuperset }] };
+	};
+
+	const handleConfirm = () => {
+		if (!areAllSupersetsFilled) {
+			toast.error(dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS);
+		}
+
+		onConfirm();
+	};
+</script>
+
+<div class="supersets">
+	{#each workout?.supersets || [] as superset, index}
+		<EditableSuperset bind:exercises={superset.supersetExercises} order={index + 1} />
+	{/each}
+	{#if errorMessage}
+		<ErrorText text={errorMessage} />
+	{/if}
+	<div class="button">
+		<Button type="info" padding="md" on:click={onAddSuperset} disabledTitle={disabledSupersetText} isFullSize>
+			<!-- Solar nema normalni plus... -->
+			<Icon icon="iconoir:plus" />
+			<span>{dictionary.ADD_NEW_SUPERSET}</span>
+		</Button>
+	</div>
+	<div class="buttons">
+		<Button type="negative" padding="md" on:click={onCancel} isFullSize>
+			<span>{dictionary.CANCEL}</span>
+		</Button>
+		<Button type="positive" padding="md" on:click={handleConfirm} disabledTitle={disableConfirmButton} isFullSize>
+			<span>{dictionary.CONFIRM}</span>
+		</Button>
+	</div>
+	<div />
+</div>
+
+<style lang="scss">
+	.supersets {
+		display: flex;
+
+		flex-direction: column;
+
+		gap: $space-sm + $space-xs;
+	}
+
+	.button {
+		&s {
+			display: flex;
+			gap: $space-sm;
+		}
+	}
+</style>

@@ -1,0 +1,91 @@
+<script lang="ts">
+	import EditButtons from "$components/EditButtons.svelte";
+	import { dictionary } from "$src/lib/language/dictionary";
+
+	export let title: number | string;
+	export let isInEditMode: boolean;
+	export let onCancel: (() => void) | undefined = undefined;
+	export let onDelete: (() => void) | undefined = undefined;
+
+	// todo pri vytvareni noveho workoutu ostatni nezvetsovat
+	// todo neco s tim, kdyz jsou prazdny workouts
+	// todo udelat aby vytvareni bylo samostatne od editace a zobrazeni
+</script>
+
+<li class="wrapper">
+	<h4 class="title">{title}</h4>
+	<div class="workoutWrapper">
+		<div class="edit">
+			<EditButtons
+				buttonType="noBackground_2"
+				isAbsolute={false}
+				buttonPadding="sm"
+				isConfirmButton={false}
+				deleteConfirmationText={dictionary.ARE_YOU_SURE_YOU_WANT_TO_DETELE_WORKOUT}
+				{onCancel}
+				{onDelete}
+				deleteTitle={dictionary.DELETE_WORKOUT}
+				bind:isInEditMode
+			/>
+		</div>
+		<slot />
+	</div>
+</li>
+
+<style lang="scss">
+	@import "../workouts.scss";
+
+	.wrapper {
+		display: flex;
+
+		width: $space-xxxl;
+		height: 100%;
+
+		justify-content: center;
+		flex-direction: column;
+
+		gap: $space-xs;
+
+		@media (min-width: $bp-396) {
+			width: $space-xxxl + $space-xl;
+		}
+
+		@media (min-width: $bp-760) {
+			width: $space-xxxl + $space-xxl;
+		}
+	}
+
+	.workout {
+		&Wrapper {
+			display: flex;
+			position: relative;
+
+			padding: ($space-md) $card-side-padding ($space-sm);
+
+			min-height: $space-xxl;
+			max-height: $space-xxxxl;
+			overflow-y: auto;
+			overflow-x: hidden;
+
+			flex-direction: column;
+			gap: $space-sm;
+			flex-grow: 1;
+
+			border-radius: $border-md;
+			background-color: var(--accent-neutral-100);
+		}
+	}
+
+	.title {
+		text-align: center;
+
+		font-weight: 900;
+		color: var(--text-secondary);
+	}
+
+	.edit {
+		position: absolute;
+		top: $space-xs;
+		right: -$space-xs;
+	}
+</style>

@@ -80,8 +80,10 @@ END; $$;
 CREATE OR REPLACE FUNCTION insert_workout_last_spot() 
 RETURNS TRIGGER AS $$
 BEGIN
-    -- Determine the new order as the maximum order + 1
-    NEW."order" := COALESCE((SELECT MAX("order") FROM workout WHERE "userId" = NEW."userId" AND status_id = NEW.status_id), 0) + 1;
+    IF NEW."order" IS NULL THEN
+        -- Determine the new order as the maximum order + 1
+        NEW."order" := COALESCE((SELECT MAX("order") FROM workout WHERE "userId" = NEW."userId" AND status_id = NEW.status_id), 0) + 1;
+    END IF;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -121,8 +123,10 @@ EXECUTE FUNCTION update_workout_order();
 CREATE OR REPLACE FUNCTION insert_superset_last_spot() 
 RETURNS TRIGGER AS $$
 BEGIN
-    -- Determine the new order as the maximum order + 1
-    NEW."order" := COALESCE((SELECT MAX("order") FROM superset WHERE workout_id = NEW.workout_id), 0) + 1;
+    IF NEW."order" IS NULL THEN
+        -- Determine the new order as the maximum order + 1
+        NEW."order" := COALESCE((SELECT MAX("order") FROM superset WHERE workout_id = NEW.workout_id), 0) + 1;
+    END IF;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -161,8 +165,10 @@ EXECUTE FUNCTION update_superset_order();
 CREATE OR REPLACE FUNCTION insert_superset_exercise_last_spot() 
 RETURNS TRIGGER AS $$
 BEGIN
-    -- Determine the new order as the maximum order + 1
-    NEW."order" := COALESCE((SELECT MAX("order") FROM "supersetExercise" WHERE superset_id = NEW.superset_id), 0) + 1;
+    IF NEW."order" IS NULL THEN
+        -- Determine the new order as the maximum order + 1
+        NEW."order" := COALESCE((SELECT MAX("order") FROM "supersetExercise" WHERE superset_id = NEW.superset_id), 0) + 1;
+    END IF;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;

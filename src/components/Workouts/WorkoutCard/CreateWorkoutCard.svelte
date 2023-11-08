@@ -6,7 +6,8 @@
 	import axios from "axios";
 	import toast from "$src/lib/toast";
 	import { apiRoutes } from "$src/lib/paths";
-	import InteractiveWorkoutSupersets from "$components/Workouts/WorkoutSupersets/InteractiveWorkoutSupersets.svelte";
+	// eslint-disable-next-line max-len
+	import InteractiveWorkoutSupersets from "$src/components/Workouts/WorkoutSupersets/InteractiveWorkoutSupersets.svelte";
 
 	const emptyWorkout: PageCreateWorkout = { supersets: [{ supersetExercises: [] }] };
 
@@ -46,6 +47,7 @@
 </script>
 
 <WorkoutCardTemplate isInEditMode {title} onCancel={handleCancel}>
+	<!-- change for fillwourkout superset -->
 	<InteractiveWorkoutSupersets
 		bind:workout={newWorkout}
 		onConfirm={handleConfirm}
@@ -53,6 +55,3 @@
 		{errorMessage}
 	/>
 </WorkoutCardTemplate>
-
-<style lang="scss">
-</style>

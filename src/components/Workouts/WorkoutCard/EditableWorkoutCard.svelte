@@ -9,7 +9,8 @@
 	import axios from "axios";
 	import toast from "$src/lib/toast";
 	import { apiRoutes } from "$src/lib/paths";
-	import WorkoutSupersetsTemplate from "$src/components/Workouts/WorkoutSupersets/InteractiveWorkoutSupersets.svelte";
+	// eslint-disable-next-line max-len
+	import InteractiveWorkoutSupersets from "$src/components/Workouts/WorkoutSupersets/InteractiveWorkoutSupersets.svelte";
 	import DisplayWorkoutSupersets from "$components/Workouts/WorkoutSupersets/DisplayWorkoutSupersets.svelte";
 
 	export let workout: PagePlannedWorkout;
@@ -74,7 +75,7 @@
 
 <WorkoutCardTemplate bind:isInEditMode {title} {onCancel} {onDelete}>
 	{#if isInEditMode}
-		<WorkoutSupersetsTemplate workout={workoutCopy} {onConfirm} {onCancel} {errorMessage} />
+		<InteractiveWorkoutSupersets workout={workoutCopy} {onConfirm} {onCancel} {errorMessage} />
 	{:else}
 		<DisplayWorkoutSupersets {workout} />
 		<div class="start">

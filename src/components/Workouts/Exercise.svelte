@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { PageExercise, PageSupersetExercise } from "$src/routes/workouts/types";
+	import type { PageExercise } from "$src/routes/workouts/types";
 
-	export let exercise: PageSupersetExercise | PageExercise;
+	export let exercise: PageExercise;
 </script>
 
 <div class="exercise">

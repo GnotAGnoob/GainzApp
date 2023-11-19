@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { dictionary } from "$src/lib/language/dictionary";
 	import { dateFormat } from "$src/lib/date";
-	import Sets from "./Sets.svelte";
+	import DisplaySets from "./Sets/DisplaySets.svelte";
 	import Scroller from "$components/Scroller/Scroller.svelte";
 	import type { PageWorkout } from "$src/routes/exercises/types";
 
@@ -15,7 +15,7 @@
 			{#each workouts as workout, index}
 				<li class="workout">
 					<date class="date">{dateFormat(workout.date)}</date>
-					<Sets type={index % 2 === 0 ? "neutral" : "neutral_2"} sets={workout.sets} />
+					<DisplaySets type={index % 2 === 0 ? "neutral" : "neutral_2"} sets={workout.sets} />
 				</li>
 			{/each}
 		</ul>

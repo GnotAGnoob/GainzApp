@@ -25,7 +25,7 @@
 	const handleConfirm = async () => {
 		try {
 			const { data: newPlannedWorkout } = await toast.promise(
-				axios.post<PagePlannedWorkout>(apiRoutes.workout, newWorkout),
+				axios.post<PagePlannedWorkout>(apiRoutes.planWorkout, newWorkout),
 				{
 					loading: `${dictionary.CREATING_WORKOUT}`,
 					success: `${dictionary.WORKOUT_SUCCESSFULLY_CREATED}`,

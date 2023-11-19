@@ -116,7 +116,7 @@ export const mapPlannedWorkouts = (
 		plannedWorkouts: dbWorkout.map((workout) => ({
 			...workout,
 			supersets: workout.supersets.map((superset) => ({
-				...superset,
+				id: superset.id,
 				supersetExercises: superset.supersetExercise.map((supersetExercise) => ({
 					...supersetExercise,
 					exercise: {
@@ -162,7 +162,6 @@ export const dbPostPlannedWorkoutPromise = (userId: string, newWorkout: PageInse
 			where: eq(status.name, "planned"),
 		});
 
-		console.log("daf", newWorkout.order);
 		const workoutId = await transaction
 			.insert(workout)
 			.values({

@@ -54,11 +54,21 @@
 		}
 
 		&Inner {
+			position: relative;
+
+			width: 100%;
+
 			.set:not(:first-child) &::before {
 				content: "";
 				display: block;
+				position: absolute;
+
 				width: $space-px;
-				height: 50%;
+				height: 75%;
+				margin-block: auto;
+				top: 0;
+				bottom: 0;
+
 				background-color: var(--_border-color);
 			}
 		}

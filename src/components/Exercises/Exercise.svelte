@@ -63,7 +63,7 @@
 	</li>
 {:else}
 	<li>
-		<WorkoutOverview exercise={fixedExercise}>
+		<WorkoutOverview workoutHistory={fixedExercise.workoutHistory} bestWorkout={fixedExercise.bestWorkout}>
 			<EditText
 				text={exercise.name}
 				{onConfirm}

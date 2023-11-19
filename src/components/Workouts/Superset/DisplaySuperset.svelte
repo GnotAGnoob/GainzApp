@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Exercise from "../Exercise.svelte";
+	import Exercise from "../Exercise/Exercise.svelte";
 	import type { PageExercise } from "$src/routes/workouts/types";
 
 	export let exercises: PageExercise[] = [];

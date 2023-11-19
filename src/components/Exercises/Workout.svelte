@@ -3,7 +3,7 @@
 	import type { StylesType } from "$src/lib/types";
 	import type { PageWorkout } from "$src/routes/exercises/types";
 	import Scroller from "$components/Scroller/Scroller.svelte";
-	import Sets from "./Sets.svelte";
+	import DisplaySets from "./Sets/DisplaySets.svelte";
 
 	export let workout: PageWorkout | undefined = undefined;
 	export let title: string;
@@ -19,7 +19,7 @@
 	</h5>
 	{#if workout}
 		<Scroller {type} arrowsPosition="top">
-			<Sets {type} sets={workout.sets} />
+			<DisplaySets {type} sets={workout.sets} />
 		</Scroller>
 	{/if}
 </div>

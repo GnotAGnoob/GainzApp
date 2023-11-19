@@ -1,5 +1,5 @@
 <script lang="ts">
-	import EditableExercise from "../EditableExercise.svelte";
+	import EditableExercise from "../Exercise/EditableExercise.svelte";
 	import type { PageExercise } from "$src/routes/workouts/types";
 	import SupersetTemplate from "./SupersetTemplate.svelte";
 

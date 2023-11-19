@@ -4,7 +4,7 @@
 	import Icon from "@iconify/svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import type { PageExercise } from "$src/routes/workouts/types";
-	import ExerciseDropdown from "../ExerciseDropdown.svelte";
+	import ExerciseDropdown from "$components/Workouts/Exercise/ExerciseDropdown.svelte";
 
 	export let exercises: PageExercise[];
 	export let order: number;

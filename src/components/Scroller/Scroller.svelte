@@ -154,7 +154,7 @@
 
 		&_largeFade {
 			--_side-padding: #{$space-lg};
-			--_background-start: 50%;
+			--_background-start: 25%;
 		}
 	}
 

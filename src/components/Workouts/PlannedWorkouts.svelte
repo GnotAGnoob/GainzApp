@@ -41,7 +41,7 @@
 			{#each $plannedWorkoutsStore as workout, index}
 				<EditableWorkoutCard title={index + 1} {workout} />
 			{:else}
-				<!-- empty list -->
+				<!-- todo empty -->
 			{/each}
 			{#if isAddNewWorkout}
 				<CreateWorkoutCard title={dictionary.CREATING_NEW_WORKOUT} {onCancel} {onConfirm} />

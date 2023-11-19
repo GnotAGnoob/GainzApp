@@ -1,9 +1,18 @@
 import type { Category } from "$src/db/schema/category";
 import type { Exercise } from "$src/db/schema/exercise";
 
+export interface PageCreateSetWeight {
+	repetition: string;
+	weight: string;
+}
+
 export interface PageExercise {
 	category: Category;
 	exercise: Exercise;
+}
+
+export interface PageCreateExercise extends PageExercise {
+	sets?: PageCreateSetWeight[];
 }
 
 export interface PageSupersetExercise extends PageExercise {
@@ -11,7 +20,8 @@ export interface PageSupersetExercise extends PageExercise {
 }
 
 export interface PageCreateSuperset {
-	supersetExercises: PageExercise[];
+	id?: number;
+	supersetExercises: PageCreateExercise[];
 }
 
 export interface PageSuperset {
@@ -20,6 +30,7 @@ export interface PageSuperset {
 }
 
 export interface PageCreateWorkout {
+	id?: number;
 	supersets: PageCreateSuperset[];
 }
 

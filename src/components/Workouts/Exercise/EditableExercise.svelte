@@ -1,5 +1,5 @@
 <script lang="ts">
-	import EditButtons from "../EditButtons.svelte";
+	import EditButtons from "../../EditButtons.svelte";
 	import Exercise from "./Exercise.svelte";
 	import type { PageExercise, PageSupersetExercise } from "$src/routes/workouts/types";
 	import ExerciseDropdown from "./ExerciseDropdown.svelte";
@@ -42,7 +42,7 @@
 {/if}
 
 <style lang="scss">
-	@import "./workouts.scss";
+	@import "../workouts.scss";
 
 	.exercise {
 		display: flex;

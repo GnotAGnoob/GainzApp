@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { insertInsteadRange } from "$lib/texts";
+	import { isStringNumber } from "$src/lib/checks";
 	import { MAX_TEXT_LENGTH } from "$src/lib/constants";
 	import { onMount } from "svelte";
 
 	export let label: string | undefined = undefined;
-	export let value: string;
+	export let value: string | undefined = undefined;
 	export let isAlignCenter = false;
 	export let size: "sm" | "md" | "lg" = "md";
 	export let widthSize: "sm" | "md" | "lg" | "auto" | "dynamic" = "auto";
@@ -11,6 +13,7 @@
 	export let paddingRight: "xs" | "sm" | "md" | "lg" | "none" = "sm";
 	export let isTextColorInherited = false;
 	export let isOnMountFocus = false;
+	export let isNumbersOnly = false;
 
 	const isDynamicWidth = widthSize === "dynamic";
 
@@ -28,6 +31,41 @@
 	const changeInputWidth = () => {
 		if (isDynamicWidth) {
 			setTimeout(() => (inputSize = dynamicText?.clientWidth || 0));
+		}
+	};
+
+	const handleKeyPress = (event: KeyboardEvent & { currentTarget: HTMLInputElement }) => {
+		if (isNumbersOnly) {
+			if (
+				!isStringNumber(
+					insertInsteadRange(
+						value || "",
+						event.key || "",
+						event.currentTarget.selectionStart,
+						event.currentTarget.selectionEnd,
+					),
+				)
+			) {
+				event.preventDefault();
+			}
+		}
+	};
+
+	const handlePaste = (event: ClipboardEvent & { currentTarget: HTMLInputElement }) => {
+		if (isNumbersOnly) {
+			const pastedText = event.clipboardData?.getData("text");
+			if (
+				!isStringNumber(
+					insertInsteadRange(
+						value || "",
+						pastedText || "",
+						event.currentTarget.selectionStart,
+						event.currentTarget.selectionEnd,
+					),
+				)
+			) {
+				event.preventDefault();
+			}
 		}
 	};
 </script>
@@ -57,6 +95,8 @@
 			on:blur
 			on:keyup
 			on:input={changeInputWidth}
+			on:keypress={handleKeyPress}
+			on:paste={handlePaste}
 			maxlength={MAX_TEXT_LENGTH}
 			autocomplete="off"
 			style={isDynamicWidth ? `width: ${inputSize}px` : null}

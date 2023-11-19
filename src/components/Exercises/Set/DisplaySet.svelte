@@ -4,13 +4,13 @@
 
 	export let setNumber: number;
 	export let weight: number;
-	export let reps: number;
+	export let repetition: number;
 	export let type: StylesType = "info";
 </script>
 
 <Set {setNumber} {type}>
 	<span class="weight" slot="weight"><span>{weight}</span><span class="weightText">kg</span></span>
-	<span class="reps" slot="reps"><span class="times">x</span><span>{reps}</span></span>
+	<span class="reps" slot="reps"><span class="times">x</span><span>{repetition}</span></span>
 </Set>
 
 <style lang="scss">

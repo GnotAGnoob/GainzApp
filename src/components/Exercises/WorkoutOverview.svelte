@@ -3,20 +3,21 @@
 	import { Collapse } from "@svelteuidev/core";
 	import Workout from "./Workout.svelte";
 	import History from "./History.svelte";
-	import type { PageMandatoryExercise } from "$src/routes/exercises/types";
+	import type { PageWorkout } from "$src/routes/exercises/types";
 
-	export let exercise: PageMandatoryExercise;
+	export let bestWorkout: PageWorkout;
+	export let workoutHistory: PageWorkout[];
 
 	let open = false;
-	const lastWorkout = exercise.workoutHistory[exercise.workoutHistory.length - 1];
-	const bestWorkout = exercise.bestWorkout;
+	const lastWorkout = workoutHistory[workoutHistory.length - 1];
+	const isEnoughHistory = workoutHistory.length > 1;
 </script>
 
-<button class="button" on:click={() => (open = !open)} class:button_historyless={exercise.workoutHistory}>
+<button class="button" on:click={() => (open = !open)} class:button_historyless={!isEnoughHistory}>
 	<li class="exercise">
 		<slot />
 		<div class="workoutsWrapper" class:workoutsWrapper_open={open}>
-			{#if lastWorkout.id !== bestWorkout.id}
+			{#if lastWorkout.id === bestWorkout.id}
 				<div>
 					<Workout title={dictionary.BEST_AND_LAST} workout={bestWorkout} type="positive" />
 				</div>
@@ -27,9 +28,9 @@
 				</div>
 			{/if}
 		</div>
-		{#if exercise.workoutHistory}
+		{#if isEnoughHistory}
 			<Collapse {open} transitionDuration={255}>
-				<History workouts={exercise.workoutHistory} />
+				<History workouts={workoutHistory} />
 			</Collapse>
 		{/if}
 	</li>

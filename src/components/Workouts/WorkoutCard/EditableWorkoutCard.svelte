@@ -30,7 +30,7 @@
 	const onConfirm = async () => {
 		try {
 			const { data: newPlannedWorkout } = await toast.promise(
-				axios.put<PagePlannedWorkout>(`${apiRoutes.workout}${workoutCopy.id}`, workoutCopy),
+				axios.put<PagePlannedWorkout>(`${apiRoutes.planWorkout}${workoutCopy.id}`, workoutCopy),
 				{
 					loading: `${dictionary.UPDATING_WORKOUT}`,
 					success: `${dictionary.WORKOUT_SUCCESSFULLY_UPDATED}`,
@@ -54,7 +54,7 @@
 		const oldWorkout = workout;
 		$plannedWorkouts = $plannedWorkouts.filter((plannedWorkout) => plannedWorkout.id !== workout.id);
 		try {
-			const { data } = await axios.delete<PagePlannedWorkout[]>(`${apiRoutes.workout}${workout.id}`);
+			const { data } = await axios.delete<PagePlannedWorkout[]>(`${apiRoutes.planWorkout}${workout.id}`);
 
 			$plannedWorkouts = data;
 		} catch (error) {

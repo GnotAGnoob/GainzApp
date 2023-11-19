@@ -30,5 +30,11 @@ export const dbQueryOmit = {
 	workoutId: false,
 	exerciseId: false,
 	supersetId: false,
+	supersetExerciseId: false,
 	order: false,
+} as const;
+
+export const dbInsertQueryOmit = {
+	...dbQueryOmit,
+	id: false,
 } as const;

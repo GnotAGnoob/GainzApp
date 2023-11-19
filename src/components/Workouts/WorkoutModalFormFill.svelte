@@ -5,8 +5,10 @@
 
 	export let modal: Modal;
 	export let workout: PagePlannedWorkout;
+
+	let fillWorkout: FillWorkoutSupersets;
 </script>
 
-<Modal size="lg" bind:this={modal}>
-	<FillWorkoutSupersets {workout} />
+<Modal size="lg" bind:this={modal} onClose={fillWorkout?.onCancel}>
+	<FillWorkoutSupersets bind:this={fillWorkout} {workout} overrideOnCancel={modal?.closeModal} />
 </Modal>

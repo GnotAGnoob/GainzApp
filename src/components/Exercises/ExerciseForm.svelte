@@ -116,7 +116,7 @@
 <Modal isOpened={false} {onClose} size="lg" bind:this={modalElement}>
 	<form class="form">
 		<h2 class="title">{dictionary.ADD_NEW_EXERCISES}</h2>
-		{#each exercises as exercise, index}
+		{#each exercises as exercise, index (exercise.name)}
 			<div class="inputsWrapper">
 				<div class="inputs">
 					<div class="input">

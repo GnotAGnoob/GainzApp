@@ -1,13 +1,13 @@
 <script lang="ts">
 	import DisplaySuperset from "../Superset/DisplaySuperset.svelte";
-	import type { PagePlannedWorkout } from "$src/routes/workouts/types";
+	import type { PageCreateWorkout } from "$src/routes/workouts/types";
 
-	export let workout: PagePlannedWorkout;
+	export let workout: PageCreateWorkout;
 </script>
 
 <div class="supersets">
 	{#each workout?.supersets || [] as superset, index}
-		<DisplaySuperset exercises={superset.supersetExercises} order={index + 1} />
+		<DisplaySuperset supersetExercises={superset.supersetExercises} order={index + 1} />
 	{/each}
 </div>
 

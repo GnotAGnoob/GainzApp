@@ -6,34 +6,37 @@
 	import { DEBOUNCE_TIME, MAX_DROPDOWN_ITEMS } from "$src/lib/constants";
 	import toast from "$src/lib/toast";
 	import { dictionary } from "$src/lib/language/dictionary";
-	import type { PageSupersetExercise } from "$src/routes/workouts/types";
+	import type { PageCreateSupersetExercise } from "$src/routes/workouts/types";
+	import type { ExerciseSearchResult } from "$src/routes/api/exercises/search/types";
 
-	const formatExercise = (exercise: Partial<PageSupersetExercise>) => {
-		const categoryName = exercise.category?.name;
-		const exerciseName = exercise.exercise?.name;
+	const formatExercise = (supersetExercise: Partial<PageCreateSupersetExercise>) => {
+		const categoryName = supersetExercise.exercise?.category?.name;
+		const exerciseName = supersetExercise.exercise?.name;
 		return categoryName ? `${categoryName}${exerciseName ? ` - ${exerciseName}` : ""}` : "";
 	};
 
-	export let exercise: Partial<PageSupersetExercise>;
+	export let supersetExercise: Partial<PageCreateSupersetExercise>;
 	export let onCancel: () => void;
 	export let onConfirm: () => void;
 
-	let value = formatExercise(exercise);
-	let dropdownItems: PageSupersetExercise[] = [];
+	let value = formatExercise(supersetExercise);
+	let dropdownItems: PageCreateSupersetExercise[] = [];
 
 	const fetchDropdownData = async () => {
 		try {
-			const { data } = await axios.get<PageSupersetExercise[]>(apiRoutes.exercisesSearch, {
+			const { data } = await axios.get<ExerciseSearchResult[]>(apiRoutes.exercisesSearch, {
 				params: { text: value, limit: MAX_DROPDOWN_ITEMS },
 			});
-			dropdownItems = data;
+			dropdownItems = data.map((item) => {
+				return { exercise: { ...item.exercise, category: item.category } };
+			});
 		} catch (error) {
 			toast.error(dictionary.UNKNOWN_ERROR);
 		}
 	};
 
 	const handleCancel = () => {
-		value = formatExercise(exercise);
+		value = formatExercise(supersetExercise);
 		onCancel();
 	};
 
@@ -42,8 +45,8 @@
 	const onSelect = (index: number) => {
 		if (dropdownItems.length <= index) return;
 
-		exercise = dropdownItems[index];
-		value = formatExercise(exercise);
+		supersetExercise = dropdownItems[index];
+		value = formatExercise(supersetExercise);
 
 		onConfirm();
 	};

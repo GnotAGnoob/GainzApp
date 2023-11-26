@@ -55,19 +55,24 @@
 
 		&Inner {
 			position: relative;
+			display: flex;
 
 			width: 100%;
+
+			justify-content: center;
 
 			.set:not(:first-child) &::before {
 				content: "";
 				display: block;
 				position: absolute;
 
+				top: 0;
+				bottom: 0;
+				left: 0;
+
 				width: $space-px;
 				height: 75%;
 				margin-block: auto;
-				top: 0;
-				bottom: 0;
 
 				background-color: var(--_border-color);
 			}

@@ -5,9 +5,9 @@ import { handleError } from "$src/lib/server/error";
 import { dbQueryOmit, getUserId } from "$lib/server/dbHelpers";
 import { json } from "@sveltejs/kit";
 import { eq, isNull, sql, or } from "drizzle-orm";
-import type { PageExercise } from "$src/routes/workouts/types";
 import { exercise } from "$src/db/schema/exercise";
 import { category } from "$src/db/schema/category";
+import type { ExerciseSearchResult } from "./types.js";
 
 export async function GET({ url, locals }) {
 	try {
@@ -23,7 +23,7 @@ export async function GET({ url, locals }) {
 			limit: parseInt(url.searchParams.get("limit") || "100"),
 		});
 
-		let transformedExercises: PageExercise[] = [];
+		let transformedExercises: ExerciseSearchResult[] = [];
 
 		if (!search.text.length) {
 			// todo make it based on the user's most used exercises

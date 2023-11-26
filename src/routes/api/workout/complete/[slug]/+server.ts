@@ -1,11 +1,11 @@
 import { workout } from "$src/db/schema/workout.js";
 import db from "$src/lib/server/db.js";
 import { getUserId } from "$src/lib/server/dbHelpers";
-import dbPlannedWorkouts, { dbPostPlannedWorkoutPromise } from "$src/lib/server/dbPlannedWorkouts.js";
-import { parseCreateWorkout } from "$src/lib/server/dbSchemaValidation";
+import dbPlannedWorkouts, { dbInsertWorkoutWithWeights } from "$src/lib/server/dbPlannedWorkouts";
+import { parseFilledWorkout } from "$src/lib/server/dbSchemaValidation";
 import { handleError } from "$src/lib/server/error";
-import type { PageInsertWorkout, PagePlannedWorkout } from "$src/routes/workouts/types.js";
-import { error, json } from "@sveltejs/kit";
+import type { PageInsertFillWorkout } from "$src/routes/workouts/types.js";
+import { json } from "@sveltejs/kit";
 import { and, eq } from "drizzle-orm";
 
 // export async function DELETE({ params, locals }) {
@@ -26,24 +26,21 @@ export async function PUT({ params, locals, request }) {
 	try {
 		const userId = await getUserId(locals);
 
-		const plannedWorkout: PagePlannedWorkout = await db.transaction(async (transaction) => {
+		const workoutChanges = await db.transaction(async (transaction) => {
 			await transaction
 				.delete(workout)
 				.where(and(eq(workout.id, parseInt(params.slug)), eq(workout.userId, userId)))
 				.returning();
 
-			const parsedWorkout: PageInsertWorkout = parseCreateWorkout(await request.json());
+			const parsedWorkout: PageInsertFillWorkout = parseFilledWorkout(await request.json());
 
-			const insertedWorkout = await dbPostPlannedWorkoutPromise(userId, parsedWorkout, transaction);
+			await dbInsertWorkoutWithWeights(userId, parsedWorkout, transaction);
+			const workouts = await dbPlannedWorkouts(userId, transaction);
 
-			return insertedWorkout;
+			return workouts;
 		});
 
-		if (!plannedWorkout) {
-			throw error(404, "Workout not found");
-		}
-
-		return json(plannedWorkout);
+		return json(workoutChanges);
 	} catch (error) {
 		const errorResponse = handleError(error);
 		return new Response(errorResponse.body.message, { status: errorResponse.status });

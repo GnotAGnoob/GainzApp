@@ -3,16 +3,17 @@
 	import { MAX_SUPERSETS } from "$src/lib/constants";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import Icon from "@iconify/svelte";
-	import type { PageCreateSuperset, PageCreateWorkout, PagePlannedWorkout } from "$src/routes/workouts/types";
+	import type { PageCreateSuperset, PageCreateWorkout } from "$src/routes/workouts/types";
 	import ErrorText from "../../Atoms/ErrorText.svelte";
 	import toast from "$src/lib/toast";
 
 	const emptySuperset: PageCreateSuperset = { supersetExercises: [] };
 
-	export let workout: PageCreateWorkout | PagePlannedWorkout;
+	export let workout: PageCreateWorkout;
 	export let onConfirm: () => void;
 	export let onCancel: () => void;
 	export let errorMessage: string | undefined = undefined;
+	export let disableConfirmButtonText: string | undefined = undefined;
 
 	// might not be very performant
 	const workoutCopy = structuredClone(workout);
@@ -24,7 +25,7 @@
 			if (!superset.supersetExercises.length) return false;
 
 			return superset.supersetExercises.every(
-				(activity) => activity.category.name.length && activity.exercise.name.length,
+				(activity) => activity.exercise.category.name.length && activity.exercise.name.length,
 			);
 		});
 	$: disabledSupersetText =
@@ -66,7 +67,13 @@
 		<Button type="negative" padding="md" on:click={onCancel} isFullSize>
 			<span>{dictionary.CANCEL}</span>
 		</Button>
-		<Button type="positive" padding="md" on:click={handleConfirm} disabledTitle={disableConfirmButton} isFullSize>
+		<Button
+			type="positive"
+			padding="md"
+			on:click={handleConfirm}
+			disabledTitle={disableConfirmButton || disableConfirmButtonText}
+			isFullSize
+		>
 			<span>{dictionary.CONFIRM}</span>
 		</Button>
 	</div>

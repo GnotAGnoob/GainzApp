@@ -1,13 +1,13 @@
 <script lang="ts">
 	import EditButtons from "../../EditButtons.svelte";
 	import Exercise from "./Exercise.svelte";
-	import type { PageExercise, PageSupersetExercise } from "$src/routes/workouts/types";
+	import type { PageCreateSupersetExercise } from "$src/routes/workouts/types";
 	import ExerciseDropdown from "./ExerciseDropdown.svelte";
 	import { dictionary } from "$lib/language/dictionary";
 
-	export let exercise: PageSupersetExercise | PageExercise;
+	export let supersetExercise: PageCreateSupersetExercise;
 	export let onDelete: () => void;
-	let isInEditMode = !exercise.category?.name.length;
+	let isInEditMode = !supersetExercise.exercise.category.name.length;
 
 	const onClick = () => {
 		isInEditMode = true;
@@ -20,12 +20,12 @@
 
 {#if isInEditMode}
 	<div class="input">
-		<ExerciseDropdown bind:exercise onCancel={turnEditModeOff} onConfirm={turnEditModeOff} />
+		<ExerciseDropdown bind:supersetExercise onCancel={turnEditModeOff} onConfirm={turnEditModeOff} />
 	</div>
 {:else}
 	<div class="exercise">
 		<button class="button" on:click={onClick}>
-			<Exercise {exercise} />
+			<Exercise {supersetExercise} />
 		</button>
 		<div class="edit">
 			<EditButtons

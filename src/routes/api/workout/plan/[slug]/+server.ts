@@ -4,7 +4,7 @@ import { getUserId } from "$src/lib/server/dbHelpers";
 import dbPlannedWorkouts, { dbPostPlannedWorkoutPromise } from "$src/lib/server/dbPlannedWorkouts.js";
 import { parseCreateWorkout } from "$src/lib/server/dbSchemaValidation";
 import { handleError } from "$src/lib/server/error";
-import type { PageInsertWorkout, PagePlannedWorkout } from "$src/routes/workouts/types.js";
+import type { PageInsertPlanWorkout, PagePlannedWorkout } from "$src/routes/workouts/types.js";
 import { error, json } from "@sveltejs/kit";
 import { and, eq } from "drizzle-orm";
 
@@ -32,7 +32,7 @@ export async function PUT({ params, locals, request }) {
 				.where(and(eq(workout.id, parseInt(params.slug)), eq(workout.userId, userId)))
 				.returning();
 
-			const parsedWorkout: PageInsertWorkout = parseCreateWorkout(await request.json());
+			const parsedWorkout: PageInsertPlanWorkout = parseCreateWorkout(await request.json());
 			parsedWorkout.order = deletedWorkout[0].order || undefined;
 
 			if (!parsedWorkout.order) {
@@ -43,10 +43,6 @@ export async function PUT({ params, locals, request }) {
 
 			return insertedWorkout;
 		});
-
-		if (!plannedWorkout) {
-			throw error(404, "Workout not found");
-		}
 
 		return json(plannedWorkout);
 	} catch (error) {

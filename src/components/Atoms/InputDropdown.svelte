@@ -111,7 +111,7 @@
 	</div>
 	<div class="optionsWrapper" class:optionsWrapper_loading={isLoading}>
 		<div class="options" bind:this={optionsElement}>
-			{#each reduceOptions || [] as option, index}
+			{#each reduceOptions || [] as option, index (option)}
 				<div class="button">
 					<Button
 						isFullSize

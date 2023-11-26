@@ -1,18 +1,18 @@
 <script lang="ts">
 	import EditableExercise from "../Exercise/EditableExercise.svelte";
-	import type { PageExercise } from "$src/routes/workouts/types";
+	import type { PageCreateSupersetExercise } from "$src/routes/workouts/types";
 	import SupersetTemplate from "./SupersetTemplate.svelte";
 
-	export let exercises: PageExercise[] = [];
+	export let supersetExercises: PageCreateSupersetExercise[] = [];
 	export let order: number;
 
 	const onDelete = (index: number) => {
-		exercises = exercises.filter((_, i) => i !== index);
+		supersetExercises = supersetExercises.filter((_, i) => i !== index);
 	};
 </script>
 
-<SupersetTemplate {order} bind:exercises>
-	{#each exercises as exercise, index}
-		<EditableExercise bind:exercise onDelete={() => onDelete(index)} />
+<SupersetTemplate {order} bind:supersetExercises>
+	{#each supersetExercises as exercise, index}
+		<EditableExercise bind:supersetExercise={exercise} onDelete={() => onDelete(index)} />
 	{/each}
 </SupersetTemplate>

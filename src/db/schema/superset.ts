@@ -29,7 +29,7 @@ export const supersetRelations = relations(superset, ({ one, many }) => ({
 		references: [workout.id],
 	}),
 
-	supersetExercise: many(supersetExercise),
+	supersetExercises: many(supersetExercise),
 }));
 
 export type Superset = InferSelectModel<typeof superset>;

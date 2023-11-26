@@ -12,7 +12,7 @@
 	<span class="title">{dictionary.HISTORY}</span>
 	<Scroller type="neutral" sideFade="medium" isScrollReverse arrowsPosition="top">
 		<ul class="workouts">
-			{#each workouts as workout, index}
+			{#each workouts as workout, index (workout.id)}
 				<li class="workout">
 					<date class="date">{dateFormat(workout.date)}</date>
 					<DisplaySets type={index % 2 === 0 ? "neutral" : "neutral_2"} sets={workout.sets} />

@@ -6,9 +6,9 @@
 </script>
 
 <div class="colors">
-	{#each colors as color}
+	{#each colors as color (color)}
 		<div class="color">
-			{#each numbers as number}
+			{#each numbers as number (number)}
 				<div class="swatch" style="background: var(--{color}-{number});" />
 			{/each}
 		</div>

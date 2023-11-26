@@ -17,6 +17,7 @@
 	let isOverflowingLeft = false;
 	let isOverflowingRight = false;
 
+	// todo nejak toto udelat dynamicky ie, kdyz se pridavaji prvky napr u vyplnovani setu
 	const setOverflowing = () => {
 		if (!scrollElement) return;
 
@@ -51,15 +52,15 @@
 		});
 	};
 
-	$: if (isScrollToEnd && scrollElement) {
+	export const scrollToEnd = (to: "end" | "start" = "end") => {
 		// timeout is needed because of possible added elements
 		setTimeout(() => {
 			if (!scrollElement) return;
 
-			let scrollDirection = 1;
+			let scrollDirection = to === "end" ? 1 : -1;
 
 			if (isScrollReverse) {
-				scrollDirection = -1;
+				scrollDirection *= -1;
 			}
 
 			scrollElement.scrollBy({
@@ -67,6 +68,10 @@
 				behavior: "smooth",
 			});
 		}, 0);
+	};
+
+	$: if (isScrollToEnd && scrollElement) {
+		scrollToEnd("end");
 	}
 </script>
 
@@ -166,7 +171,7 @@
 
 			width: max-content;
 			margin: auto;
-			padding-inline: var(--_side-padding);
+			padding-inline: min(var(--_side-padding), $space-md);
 			gap: $space-md;
 
 			grid-auto-columns: 1fr;

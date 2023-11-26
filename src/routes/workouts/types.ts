@@ -1,48 +1,74 @@
 import type { Category } from "$src/db/schema/category";
 import type { Exercise } from "$src/db/schema/exercise";
+import type { InsertSetWeight } from "$src/db/schema/setWeight";
 
-export interface PageCreateSetWeight {
+export interface PageSetWeight {
 	repetition: string;
 	weight: string;
 }
 
-export interface PageExercise {
-	category: Category;
-	exercise: Exercise;
-}
+// EXERCISE
 
-export interface PageCreateExercise extends PageExercise {
-	sets?: PageCreateSetWeight[];
-}
-
-export interface PageSupersetExercise extends PageExercise {
-	id: number;
-}
-
-export interface PageCreateSuperset {
+export interface PageFillSupersetExercise {
 	id?: number;
-	supersetExercises: PageCreateExercise[];
+	sets?: PageSetWeight[];
+	exercise: Exercise & {
+		category: Category;
+	};
 }
 
-export interface PageSuperset {
-	id: number;
-	supersetExercises: PageSupersetExercise[];
+export type PageCreateSupersetExercise = Pick<PageFillSupersetExercise, "exercise">;
+
+export type PageSupersetExercise = Required<PageFillSupersetExercise>;
+
+export type PagePlannedSupersetExercise = Pick<PageSupersetExercise, "id" | "exercise">;
+
+// Server
+export interface PageInsertFillSupersetExercise extends Omit<PageFillSupersetExercise, "sets"> {
+	sets: Pick<InsertSetWeight, "repetition" | "weight">[];
 }
 
-export interface PageCreateWorkout {
+// SUPERSETS
+export interface PageSupersetGeneric<T> {
 	id?: number;
-	supersets: PageCreateSuperset[];
+	supersetExercises: T[];
 }
 
-export interface PageInsertWorkout extends PageCreateWorkout {
+export type PageCreateSuperset = Omit<PageSupersetGeneric<PageCreateSupersetExercise>, "id">;
+
+export type PageFillSuperset = PageSupersetGeneric<PageFillSupersetExercise>;
+
+export type PagePlannedSuperset = Required<PageSupersetGeneric<PagePlannedSupersetExercise>>;
+
+export type PageSuperset = Required<PageSupersetGeneric<PageSupersetExercise>>;
+
+// Server
+export type PageInsertFillSuperset = PageSupersetGeneric<PageInsertFillSupersetExercise>;
+
+// WORKOUTS
+export interface PageFillWorkoutGeneric<T> {
+	id?: number;
+	supersets: T[];
+}
+
+export type PageCreateWorkout = Omit<PageFillWorkoutGeneric<PageCreateSuperset>, "id">;
+
+export type PageFillWorkout = PageFillWorkoutGeneric<PageFillSuperset>;
+
+export type PageWorkout = Required<PageFillWorkoutGeneric<PageSuperset>>;
+
+export type PagePlannedWorkout = Required<PageFillWorkoutGeneric<PagePlannedSuperset>>;
+
+// Server
+
+export type PageInsertFillWorkout = PageFillWorkoutGeneric<PageInsertFillSuperset>;
+
+export interface PageInsertPlanWorkout extends PageCreateWorkout {
 	order?: number;
 }
 
-export interface PagePlannedWorkout {
-	id: number;
-	supersets: PageSuperset[];
-}
-
+// PAGE DATA
 export interface PagePlannedWorkouts {
 	plannedWorkouts: PagePlannedWorkout[];
+	workoutHistory: PageWorkout[];
 }

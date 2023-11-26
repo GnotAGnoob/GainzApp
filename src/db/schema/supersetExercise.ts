@@ -1,10 +1,10 @@
 import { integer, pgTable, serial, timestamp, unique } from "drizzle-orm/pg-core";
 import { exercise } from "./exercise";
 import { superset } from "./superset";
+import { setWeight } from "./setWeight";
 import { relations } from "drizzle-orm";
 import type { InferSelectModel, InferInsertModel } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { setWeight } from "./setWeight";
 
 export const supersetExercise = pgTable(
 	"supersetExercise",
@@ -27,7 +27,7 @@ export const supersetExercise = pgTable(
 	}),
 );
 
-export const setRelations = relations(supersetExercise, ({ one, many }) => ({
+export const supersetExerciseRelations = relations(supersetExercise, ({ one, many }) => ({
 	exercise: one(exercise, {
 		fields: [supersetExercise.exerciseId],
 		references: [exercise.id],
@@ -44,4 +44,4 @@ export type SupersetExercise = InferSelectModel<typeof supersetExercise>;
 export type InsertSupersetExercise = InferInsertModel<typeof supersetExercise>;
 
 export const supersetExerciseInsertValidator = createInsertSchema(supersetExercise);
-export const supersetExerciseSelectValidator = createSelectSchema(supersetExercise);
+export const supersetExerciseelectValidator = createSelectSchema(supersetExercise);

@@ -1,7 +1,7 @@
-import type { PageInsertWorkout, PagePlannedWorkout, PagePlannedWorkouts } from "$src/routes/workouts/types";
-import { and, eq, sql } from "drizzle-orm";
+import type { PageInsertFillWorkout, PageInsertPlanWorkout, PagePlannedWorkouts } from "$src/routes/workouts/types";
+import { and, eq, inArray, sql } from "drizzle-orm";
 import { dbQueryOmit } from "./dbHelpers";
-import type { Database } from "./dbTypes";
+import type { Database, StatusId } from "./dbTypes";
 import db from "./db";
 import { category } from "$src/db/schema/category";
 import { exercise } from "$src/db/schema/exercise";
@@ -10,11 +10,14 @@ import { superset } from "$src/db/schema/superset";
 import { status } from "$src/db/schema/status";
 import { supersetExercise } from "$src/db/schema/supersetExercise";
 import { error } from "@sveltejs/kit";
+import { setWeight, type InsertSetWeight } from "$src/db/schema/setWeight";
 
-export const dbGetPlannedWorkoutsPromise = (userId: string, database?: Database) => {
-	const databaseConnection = database || db;
-	return databaseConnection.query.workout.findMany({
-		where: eq(workout.userId, userId),
+export const dbGetWorkoutsPromise = (userId: string, statusId: StatusId, database: Database = db) => {
+	return database.query.workout.findMany({
+		where: and(
+			eq(workout.userId, userId),
+			inArray(workout.statusId, database.select({ id: status.id }).from(status).where(eq(status.name, statusId))),
+		),
 		columns: {
 			...dbQueryOmit,
 			date: false,
@@ -28,11 +31,11 @@ export const dbGetPlannedWorkoutsPromise = (userId: string, database?: Database)
 				},
 				orderBy: (superset, { asc }) => [asc(superset.order)],
 				with: {
-					supersetExercise: {
+					supersetExercises: {
 						columns: {
 							...dbQueryOmit,
 						},
-						orderBy: (supersetExercise, { asc }) => [asc(supersetExercise.order)],
+						orderBy: (supersetExercises, { asc }) => [asc(supersetExercises.order)],
 						with: {
 							exercise: {
 								columns: {
@@ -52,6 +55,11 @@ export const dbGetPlannedWorkoutsPromise = (userId: string, database?: Database)
 									isGlobal: sql<boolean>`(${exercise.userId} IS NULL)`.as("is_global"),
 								},
 							},
+							sets: {
+								columns: {
+									...dbQueryOmit,
+								},
+							},
 						},
 					},
 				},
@@ -60,10 +68,13 @@ export const dbGetPlannedWorkoutsPromise = (userId: string, database?: Database)
 	});
 };
 
-export const dbGetPlannedWorkoutPromise = (userId: string, workoutId: number, database?: Database) => {
-	const databaseConnection = database || db;
-	return databaseConnection.query.workout.findFirst({
-		where: and(eq(workout.id, workoutId), eq(workout.userId, userId)),
+export const dbGetWorkoutPromise = (userId: string, workoutId: number, statusId: StatusId, database: Database = db) => {
+	return database.query.workout.findFirst({
+		where: and(
+			eq(workout.id, workoutId),
+			eq(workout.userId, userId),
+			inArray(workout.statusId, database.select({ id: status.id }).from(status).where(eq(status.name, statusId))),
+		),
 		columns: {
 			...dbQueryOmit,
 			date: false,
@@ -76,11 +87,11 @@ export const dbGetPlannedWorkoutPromise = (userId: string, workoutId: number, da
 				},
 				orderBy: (superset, { asc }) => [asc(superset.order)],
 				with: {
-					supersetExercise: {
+					supersetExercises: {
 						columns: {
 							...dbQueryOmit,
 						},
-						orderBy: (supersetExercise, { asc }) => [asc(supersetExercise.order)],
+						orderBy: (supersetExercises, { asc }) => [asc(supersetExercises.order)],
 
 						with: {
 							exercise: {
@@ -101,6 +112,11 @@ export const dbGetPlannedWorkoutPromise = (userId: string, workoutId: number, da
 									isGlobal: sql<boolean>`(${exercise.userId} IS NULL)`.as("is_global"),
 								},
 							},
+							sets: {
+								columns: {
+									...dbQueryOmit,
+								},
+							},
 						},
 					},
 				},
@@ -109,99 +125,106 @@ export const dbGetPlannedWorkoutPromise = (userId: string, workoutId: number, da
 	});
 };
 
-export const mapPlannedWorkouts = (
-	dbWorkout: Awaited<ReturnType<typeof dbGetPlannedWorkoutsPromise>>,
-): PagePlannedWorkouts => {
-	return {
-		plannedWorkouts: dbWorkout.map((workout) => ({
-			...workout,
-			supersets: workout.supersets.map((superset) => ({
-				id: superset.id,
-				supersetExercises: superset.supersetExercise.map((supersetExercise) => ({
-					...supersetExercise,
-					exercise: {
-						id: supersetExercise.exercise.id,
-						name: supersetExercise.exercise.name,
-						isGlobal: supersetExercise.exercise.isGlobal,
-					},
-					category: supersetExercise.exercise.category,
-				})),
+const dbInsertWorkout = async (userId: string, newWorkout: PageInsertPlanWorkout, transaction: Database) => {
+	const statusId = await transaction.query.status.findFirst({
+		columns: {
+			id: true,
+		},
+		where: eq(status.name, "planned"),
+	});
+
+	const workoutIds = await transaction
+		.insert(workout)
+		.values({
+			userId,
+			statusId: statusId?.id || -1,
+			order: newWorkout.order,
+		})
+		// @ts-ignore
+		.returning({ id: workout.id });
+
+	const supersetsIds = await transaction
+		.insert(superset)
+		.values(
+			newWorkout.supersets.map(() => ({
+				workoutId: workoutIds[0].id,
 			})),
-		})),
+		)
+		// @ts-ignore
+		.returning({ id: superset.id });
+
+	const supersetExercises = newWorkout.supersets.map((superset, supersetIndex) => {
+		return superset.supersetExercises.map((activity) => ({
+			exerciseId: activity.exercise.id,
+			supersetId: supersetsIds[supersetIndex].id,
+		}));
+	});
+
+	const supersetExerciseIds = await transaction
+		.insert(supersetExercise)
+		.values(supersetExercises.flat())
+		// @ts-ignore
+		.returning({ id: superset.id });
+
+	return {
+		workoutIds,
+		supersetExerciseIds,
+		statusId,
+		supersetsIds,
 	};
 };
 
-export const mapPlannedWorkout = (
-	dbWorkout: NonNullable<Awaited<ReturnType<typeof dbGetPlannedWorkoutPromise>>>,
-): PagePlannedWorkout => {
+export const dbInsertWorkoutWithWeights = async (
+	userId: string,
+	newWorkout: PageInsertFillWorkout,
+	transaction: Database,
+) => {
+	const data = await dbInsertWorkout(userId, newWorkout, transaction);
+
+	const setWeightValues: InsertSetWeight[] = [];
+	let index = 0;
+	newWorkout.supersets.forEach((superset) =>
+		superset.supersetExercises.forEach((activity) => {
+			activity.sets.forEach((set) =>
+				setWeightValues.push({
+					...set,
+					supersetExerciseId: data.supersetExerciseIds[index].id,
+				}),
+			);
+
+			index++;
+		}),
+	);
+
+	const setWeightIds = await transaction.insert(setWeight).values(setWeightValues).returning();
+
 	return {
-		...dbWorkout,
-		supersets: dbWorkout.supersets.map((superset) => ({
-			...superset,
-			supersetExercises: superset.supersetExercise.map((supersetExercise) => ({
-				...supersetExercise,
-				exercise: {
-					id: supersetExercise.exercise.id,
-					name: supersetExercise.exercise.name,
-					isGlobal: supersetExercise.exercise.isGlobal,
-				},
-				category: supersetExercise.exercise.category,
-			})),
-		})),
+		...data,
+		setWeightIds,
 	};
 };
 
-export const dbPostPlannedWorkoutPromise = (userId: string, newWorkout: PageInsertWorkout, database?: Database) => {
+export const dbPostPlannedWorkoutPromise = (userId: string, newWorkout: PageInsertPlanWorkout, database?: Database) => {
 	const databaseConnection = database || db;
 
 	return databaseConnection.transaction(async (transaction) => {
-		const statusId = await transaction.query.status.findFirst({
-			columns: {
-				id: true,
-			},
-			where: eq(status.name, "planned"),
-		});
+		const { workoutIds } = await dbInsertWorkout(userId, newWorkout, transaction);
 
-		const workoutId = await transaction
-			.insert(workout)
-			.values({
-				userId,
-				statusId: statusId?.id || -1,
-				order: newWorkout.order,
-			})
-			// @ts-ignore
-			.returning({ id: workout.id });
-
-		const supersetsIds = await transaction
-			.insert(superset)
-			.values(
-				newWorkout.supersets.map(() => ({
-					workoutId: workoutId[0].id,
-				})),
-			)
-			// @ts-ignore
-			.returning({ id: superset.id });
-
-		const supersetExercises = newWorkout.supersets.map((superset, supersetIndex) => {
-			return superset.supersetExercises.map((activity) => ({
-				exerciseId: activity.exercise.id,
-				supersetId: supersetsIds[supersetIndex].id,
-			}));
-		});
-
-		await transaction.insert(supersetExercise).values(supersetExercises.flat());
-
-		const insertedWorkout = await dbGetPlannedWorkoutPromise(userId, workoutId[0].id, transaction);
+		const insertedWorkout = await dbGetWorkoutPromise(userId, workoutIds[0].id, "planned", transaction);
 
 		if (!insertedWorkout) {
 			throw error(404, "Workout not found");
 		}
 
-		return mapPlannedWorkout(insertedWorkout);
+		return insertedWorkout;
 	});
 };
 
-export default async (userId: string, database?: Database) => {
-	const plannedWorkouts = await dbGetPlannedWorkoutsPromise(userId, database);
-	return mapPlannedWorkouts(plannedWorkouts);
+export default async (userId: string, database?: Database): Promise<PagePlannedWorkouts> => {
+	const [plannedWorkouts, workoutHistory] = await Promise.all([
+		dbGetWorkoutsPromise(userId, "planned", database),
+		dbGetWorkoutsPromise(userId, "done", database),
+	]);
+
+	return { plannedWorkouts, workoutHistory };
 };

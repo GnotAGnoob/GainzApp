@@ -1,16 +1,16 @@
 <script lang="ts">
 	import Exercise from "../Exercise/Exercise.svelte";
-	import type { PageExercise } from "$src/routes/workouts/types";
+	import type { PageCreateSupersetExercise } from "$src/routes/workouts/types";
 
-	export let exercises: PageExercise[] = [];
+	export let supersetExercises: PageCreateSupersetExercise[] = [];
 	export let order: number;
 </script>
 
 <div class="superset">
-	<h5 class="title">{order}. {exercises.length > 1 ? "superset" : "exercise"}</h5>
+	<h5 class="title">{order}. {supersetExercises.length > 1 ? "superset" : "exercise"}</h5>
 	<div class="exercises">
-		{#each exercises as exercise}
-			<Exercise {exercise} />
+		{#each supersetExercises as supersetExercise}
+			<Exercise {supersetExercise} />
 		{/each}
 	</div>
 </div>

@@ -9,7 +9,7 @@
 </script>
 
 <SetsTemplate>
-	{#each sets as set, index}
+	{#each sets as set, index (set.id)}
 		<DisplaySet {type} setNumber={index + 1} weight={set.weight} repetition={set.repetition} />
 	{/each}
 </SetsTemplate>

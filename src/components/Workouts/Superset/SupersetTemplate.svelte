@@ -3,53 +3,52 @@
 	import { MAX_SUPERSET_EXERCISES } from "$src/lib/constants";
 	import Icon from "@iconify/svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
-	import type { PageExercise } from "$src/routes/workouts/types";
+	import type { PageCreateSupersetExercise } from "$src/routes/workouts/types";
 	import ExerciseDropdown from "$components/Workouts/Exercise/ExerciseDropdown.svelte";
 
-	export let exercises: PageExercise[];
+	export let supersetExercises: PageCreateSupersetExercise[];
 	export let order: number;
 
-	let newExercise: Partial<PageExercise> | null = null;
+	let newSupersetExercise: Partial<PageCreateSupersetExercise> | null = null;
 
-	$: areExercisesFilled = exercises.every(
-		(exercise) => exercise.category.name.length && exercise.exercise.name.length,
+	$: areExercisesFilled = supersetExercises.every(
+		(exercise) => exercise.exercise.category.name.length && exercise.exercise.name.length,
 	);
 	$: disabledText =
-		(exercises.length >= MAX_SUPERSET_EXERCISES && dictionary.YOU_CANNOT_CREATE_MORE_ITEMS) ||
+		(supersetExercises.length >= MAX_SUPERSET_EXERCISES && dictionary.YOU_CANNOT_CREATE_MORE_ITEMS) ||
 		(!areExercisesFilled && dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS);
 
 	const onAddNewExercise = () => {
-		newExercise = {};
+		newSupersetExercise = {};
 	};
 
 	const onConfirmNewExercise = () => {
-		if (newExercise?.category && newExercise?.exercise) {
-			exercises = [
-				...exercises,
+		if (newSupersetExercise?.exercise?.category && newSupersetExercise?.exercise) {
+			supersetExercises = [
+				...supersetExercises,
 				{
-					category: newExercise.category,
-					exercise: newExercise.exercise,
+					exercise: newSupersetExercise.exercise,
 				},
 			];
-			newExercise = null;
+			newSupersetExercise = null;
 		}
 	};
 
 	const onCancelNewExercise = () => {
-		newExercise = null;
+		newSupersetExercise = null;
 	};
 
 	// todo smazat cely superset - btn
 </script>
 
 <div class="superset">
-	<h5 class="title">{order}. {exercises.length > 1 ? "superset" : "exercise"}</h5>
+	<h5 class="title">{order}. {supersetExercises.length > 1 ? "superset" : "exercise"}</h5>
 	<div class="exercises">
 		<slot />
-		{#if newExercise}
+		{#if newSupersetExercise}
 			<div class="input">
 				<ExerciseDropdown
-					bind:exercise={newExercise}
+					bind:supersetExercise={newSupersetExercise}
 					onCancel={onCancelNewExercise}
 					onConfirm={onConfirmNewExercise}
 				/>

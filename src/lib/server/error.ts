@@ -4,8 +4,7 @@ import { dictionary } from "../language/dictionary";
 import { HttpError, error } from "@sveltejs/kit";
 
 export const handleError = (err: unknown, errorHandling?: () => HttpError | undefined) => {
-	// eslint-disable-next-line no-console
-	console.log(err);
+	console.error(err);
 
 	if (err instanceof z.ZodError) {
 		return error(422, err.errors[0].message);

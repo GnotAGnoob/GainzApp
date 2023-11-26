@@ -1,25 +1,26 @@
 <script lang="ts">
-	import type { PageCreateWorkout } from "$src/routes/workouts/types";
+	import type { PageFillWorkout } from "$src/routes/workouts/types";
 	import axios from "axios";
 	import WourkoutSupersetsTemplate from "./WorkoutSupersetsTemplate.svelte";
 	import FillSuperset from "../Superset/FillSuperset.svelte";
+	import { apiRoutes } from "$src/lib/paths";
 
-	export let workout: PageCreateWorkout;
+	export let workout: PageFillWorkout;
 	const workoutCopy = structuredClone(workout);
 	export let overrideOnCancel: (() => void) | undefined = undefined;
 
 	let errorMessage: string | undefined = undefined;
+	// todo disable confirm button
 
 	export const onCancel = () => {
 		workout = structuredClone(workoutCopy);
 	};
 
 	const onConfirm = async () => {
-		// const mappedWorkout
 		try {
-			const { data } = await axios.post<PageCreateWorkout>("/api/workouts", workout);
+			const { data } = await axios.put<PageFillWorkout>(apiRoutes.completeWorkout + workout.id, workout);
 			console.log(workout);
-			// todo: send workout to backend
+			// todo: set data to store
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
 				errorMessage = `${error.response?.data}. idk which element/what happened. too lazy to detect errors`;
@@ -33,6 +34,6 @@
 
 <WourkoutSupersetsTemplate bind:workout {onConfirm} onCancel={overrideOnCancel || onCancel} {errorMessage}>
 	{#each workout?.supersets || [] as superset, index}
-		<FillSuperset bind:exercises={superset.supersetExercises} order={index + 1} />
+		<FillSuperset bind:supersetExercises={superset.supersetExercises} order={index + 1} />
 	{/each}
 </WourkoutSupersetsTemplate>

@@ -1,21 +1,15 @@
 <script lang="ts">
 	import EditableExercise from "./EditableExercise.svelte";
-	import type { PageCreateExercise } from "$src/routes/workouts/types";
+	import type { PageFillSupersetExercise } from "$src/routes/workouts/types";
 	import InputSets from "$src/components/Exercises/Sets/InputSets.svelte";
 	import WorkoutOverview from "$src/components/Exercises/WorkoutOverview.svelte";
 
-	export let exercise: PageCreateExercise;
+	export let supersetExercise: PageFillSupersetExercise;
 	export let onDelete: () => void;
-	exercise.sets = [
-		{
-			repetition: "",
-			weight: "",
-		},
-	];
 </script>
 
 <div class="container">
-	<EditableExercise bind:exercise {onDelete} />
+	<EditableExercise bind:supersetExercise {onDelete} />
 	<!-- todo exercise.workoutHistory.lenght && exercise.bestWorkout -->
 	{#if false}
 		<WorkoutOverview
@@ -84,7 +78,7 @@
 				},
 			]}
 		/>
-		<InputSets bind:sets={exercise.sets} />
+		<InputSets bind:sets={supersetExercise.sets} />
 	</div>
 </div>
 

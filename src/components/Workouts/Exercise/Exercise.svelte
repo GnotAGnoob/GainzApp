@@ -1,14 +1,14 @@
 <script lang="ts">
-	import type { PageExercise } from "$src/routes/workouts/types";
+	import type { PageCreateSupersetExercise } from "$src/routes/workouts/types";
 
-	export let exercise: PageExercise;
+	export let supersetExercise: PageCreateSupersetExercise;
 </script>
 
 <div class="exercise">
-	<span class="category">{exercise.category.name || ""}</span>
-	{#if exercise.exercise?.name}
+	<span class="category">{supersetExercise.exercise.category.name || ""}</span>
+	{#if supersetExercise.exercise?.name}
 		<span>-</span>
-		<span>{exercise.exercise.name}</span>
+		<span>{supersetExercise.exercise.name}</span>
 	{/if}
 </div>
 

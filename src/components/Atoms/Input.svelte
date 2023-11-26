@@ -2,7 +2,9 @@
 	import { insertInsteadRange } from "$lib/texts";
 	import { isStringNumber } from "$src/lib/checks";
 	import { MAX_TEXT_LENGTH } from "$src/lib/constants";
+	import type { ClipboardEventType, KeyboardEventType } from "$src/lib/types";
 	import { onMount } from "svelte";
+	import type { ClipboardEventHandler, KeyboardEventHandler } from "svelte/elements";
 
 	export let label: string | undefined = undefined;
 	export let value: string | undefined = undefined;
@@ -14,6 +16,8 @@
 	export let isTextColorInherited = false;
 	export let isOnMountFocus = false;
 	export let isNumbersOnly = false;
+	export let isError = false;
+	export let onKeyDown: KeyboardEventHandler<HTMLInputElement> | undefined = undefined;
 
 	const isDynamicWidth = widthSize === "dynamic";
 
@@ -21,6 +25,7 @@
 	let dynamicText: HTMLDivElement | null = null;
 
 	let inputSize = 0;
+	let isFirstInput = !value?.length;
 
 	onMount(() => {
 		if (isOnMountFocus) {
@@ -28,45 +33,76 @@
 		}
 	});
 
-	const changeInputWidth = () => {
+	const handleNumber = (
+		event: KeyboardEventType<HTMLInputElement> | ClipboardEventType<HTMLInputElement>,
+		selectionStart: number | null,
+		selectionEnd: number | null,
+		text: string,
+	) => {
+		if (isNumbersOnly) {
+			const newValue = insertInsteadRange(value || "", text, selectionStart, selectionEnd);
+			if (!isStringNumber(newValue)) {
+				event.preventDefault();
+
+				const correctedValue = newValue.replace(/^0+/, "");
+				if (isStringNumber(correctedValue)) {
+					value = correctedValue;
+
+					const target = event.currentTarget;
+
+					if (!target) return;
+
+					setTimeout(() => {
+						const cursorPosition = (selectionStart || 1) - 1;
+						target.setSelectionRange(cursorPosition, cursorPosition);
+
+						if (isDynamicWidth) {
+							inputSize = dynamicText?.clientWidth || 0;
+						}
+					});
+				}
+
+				return;
+			}
+		}
+	};
+
+	const handleInput = () => {
+		isFirstInput = false;
+
 		if (isDynamicWidth) {
 			setTimeout(() => (inputSize = dynamicText?.clientWidth || 0));
 		}
 	};
 
-	const handleKeyPress = (event: KeyboardEvent & { currentTarget: HTMLInputElement }) => {
-		if (isNumbersOnly) {
-			if (
-				!isStringNumber(
-					insertInsteadRange(
-						value || "",
-						event.key || "",
-						event.currentTarget.selectionStart,
-						event.currentTarget.selectionEnd,
-					),
-				)
-			) {
-				event.preventDefault();
+	const handleKeyPress: KeyboardEventHandler<HTMLInputElement> = (event) => {
+		handleNumber(event, event.currentTarget.selectionStart, event.currentTarget.selectionEnd, event.key);
+	};
+
+	const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
+		// todo check if possible
+		if (event.key === "Backspace" || event.key === "Delete") {
+			if (!value?.length) {
+				onKeyDown?.(event);
+				return;
 			}
+
+			const startOffset = event.key === "Backspace" ? -1 : 0;
+			const endOffset = event.key === "Delete" ? 1 : 0;
+			const selectionStart = event.currentTarget.selectionStart
+				? event.currentTarget.selectionStart + startOffset
+				: event.currentTarget.selectionStart;
+			const selectionEnd = event.currentTarget.selectionEnd
+				? event.currentTarget.selectionEnd + endOffset
+				: event.currentTarget.selectionEnd;
+
+			handleNumber(event, selectionStart, selectionEnd, "");
 		}
 	};
 
-	const handlePaste = (event: ClipboardEvent & { currentTarget: HTMLInputElement }) => {
-		if (isNumbersOnly) {
-			const pastedText = event.clipboardData?.getData("text");
-			if (
-				!isStringNumber(
-					insertInsteadRange(
-						value || "",
-						pastedText || "",
-						event.currentTarget.selectionStart,
-						event.currentTarget.selectionEnd,
-					),
-				)
-			) {
-				event.preventDefault();
-			}
-		}
+	const handlePaste: ClipboardEventHandler<HTMLInputElement> = (event) => {
+		const pastedText = event.clipboardData?.getData("text");
+		handleNumber(event, event.currentTarget.selectionStart, event.currentTarget.selectionEnd, pastedText || "");
 	};
 </script>
 
@@ -78,7 +114,10 @@
 	{#if label}
 		<label for="text" class="label">{label}</label>
 	{/if}
-	<div class="inputWrapper iconPaddingLeft_{paddingLeft} iconPaddingRight_{paddingRight}">
+	<div
+		class="inputWrapper iconPaddingLeft_{paddingLeft} iconPaddingRight_{paddingRight}"
+		class:inputWrapper_error={isError && !isFirstInput}
+	>
 		<div class="icon icon_left">
 			<slot />
 		</div>
@@ -94,8 +133,9 @@
 			on:focus
 			on:blur
 			on:keyup
-			on:input={changeInputWidth}
+			on:input={handleInput}
 			on:keypress={handleKeyPress}
+			on:keydown={handleKeyDown}
 			on:paste={handlePaste}
 			maxlength={MAX_TEXT_LENGTH}
 			autocomplete="off"
@@ -169,18 +209,41 @@
 		}
 
 		&Wrapper {
+			--_border-color: var(--accent-neutral-200);
+			--_border-height: #{$space-px};
+
 			display: flex;
 			position: relative;
-
-			border-bottom: $space-px solid var(--accent-neutral-200);
 
 			align-items: flex-end;
 			gap: $space-sm;
 
 			color: var(--text-secondary);
 
+			&::after {
+				content: "";
+
+				position: absolute;
+
+				bottom: 0;
+				height: var(--_border-height);
+				width: 100%;
+
+				background-color: var(--_border-color);
+			}
+
 			&:focus-within {
-				border-color: var(--text-secondary);
+				--_border-color: var(--text-secondary);
+			}
+
+			&_error {
+				&#{&} {
+					--_border-color: var(--accent-negative-400);
+				}
+
+				&:focus-within {
+					--_border-height: #{$space-px * 2};
+				}
 			}
 		}
 	}

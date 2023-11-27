@@ -125,12 +125,17 @@ export const dbGetWorkoutPromise = (userId: string, workoutId: number, statusId:
 	});
 };
 
-const dbInsertWorkout = async (userId: string, newWorkout: PageInsertPlanWorkout, transaction: Database) => {
+const dbInsertWorkout = async (
+	userId: string,
+	newWorkout: PageInsertPlanWorkout,
+	transaction: Database,
+	statusName: StatusId = "planned",
+) => {
 	const statusId = await transaction.query.status.findFirst({
 		columns: {
 			id: true,
 		},
-		where: eq(status.name, "planned"),
+		where: eq(status.name, statusName),
 	});
 
 	const workoutIds = await transaction
@@ -174,12 +179,12 @@ const dbInsertWorkout = async (userId: string, newWorkout: PageInsertPlanWorkout
 	};
 };
 
-export const dbInsertWorkoutWithWeights = async (
+export const dbInsertCompleteWorkout = async (
 	userId: string,
 	newWorkout: PageInsertFillWorkout,
 	transaction: Database,
 ) => {
-	const data = await dbInsertWorkout(userId, newWorkout, transaction);
+	const data = await dbInsertWorkout(userId, newWorkout, transaction, "done");
 
 	const setWeightValues: InsertSetWeight[] = [];
 	let index = 0;

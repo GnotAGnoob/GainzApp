@@ -1,7 +1,7 @@
 import { workout } from "$src/db/schema/workout.js";
 import db from "$src/lib/server/db.js";
 import { getUserId } from "$src/lib/server/dbHelpers";
-import dbPlannedWorkouts, { dbInsertWorkoutWithWeights } from "$src/lib/server/dbPlannedWorkouts";
+import dbPlannedWorkouts, { dbInsertCompleteWorkout } from "$src/lib/server/dbPlannedWorkouts";
 import { parseFilledWorkout } from "$src/lib/server/dbSchemaValidation";
 import { handleError } from "$src/lib/server/error";
 import type { PageInsertFillWorkout } from "$src/routes/workouts/types.js";
@@ -29,12 +29,11 @@ export async function PUT({ params, locals, request }) {
 		const workoutChanges = await db.transaction(async (transaction) => {
 			await transaction
 				.delete(workout)
-				.where(and(eq(workout.id, parseInt(params.slug)), eq(workout.userId, userId)))
-				.returning();
+				.where(and(eq(workout.id, parseInt(params.slug)), eq(workout.userId, userId)));
 
 			const parsedWorkout: PageInsertFillWorkout = parseFilledWorkout(await request.json());
 
-			await dbInsertWorkoutWithWeights(userId, parsedWorkout, transaction);
+			await dbInsertCompleteWorkout(userId, parsedWorkout, transaction);
 			const workouts = await dbPlannedWorkouts(userId, transaction);
 
 			return workouts;

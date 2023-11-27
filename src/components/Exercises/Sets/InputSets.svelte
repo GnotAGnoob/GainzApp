@@ -36,6 +36,7 @@
 	};
 
 	//todo: check if everything is filled and if there is not something half filled
+	// finished exercise not having the right status -> maybe get rid of the status? (idk with the templete -> maybe just have isTemplate)
 </script>
 
 <Scroller bind:this={scroller} sideFade="large" type="background" bottomPadding="medium" arrowsPosition="full">

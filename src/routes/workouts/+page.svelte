@@ -32,7 +32,7 @@
 	</div>
 	<div class="content">
 		{#if activeElement === 0}
-			<div class="planned">
+			<div class="fullWidth">
 				<PlannedWorkouts plannedWorkouts={data.plannedWorkouts} />
 			</div>
 		{:else if activeElement === 1}
@@ -47,7 +47,10 @@
 			tab error
 		{/if}
 		<section>
-			<!-- <h2>{dictionary.HISTORY}</h2> -->
+			<h2 class="title">{dictionary.WORKOUT_HISTORY}</h2>
+			<div class="fullWidth">
+				<!-- <PlannedWorkouts plannedWorkouts={data.workoutHistory} /> -->
+			</div>
 		</section>
 	</div>
 </div>
@@ -64,14 +67,23 @@
 	}
 
 	.content {
+		display: flex;
+
+		flex-direction: column;
+		gap: $space-lg;
 		margin-top: $space-sm + $space-xs;
 	}
 
-	.planned {
+	.fullWidth {
 		margin-inline: calc(-1 * var(--site-padding));
 	}
 
 	.icon {
 		font-size: $icon-xl;
+	}
+
+	.title {
+		font-size: $text;
+		text-align: center;
 	}
 </style>

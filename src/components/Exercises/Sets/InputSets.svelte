@@ -32,7 +32,7 @@
 	}
 
 	const handleDelete = (index: number) => {
-		sets = sets.filter((_, i) => i !== index);
+		sets = sets.toSpliced(index, 1);
 	};
 
 	//todo: check if everything is filled and if there is not something half filled

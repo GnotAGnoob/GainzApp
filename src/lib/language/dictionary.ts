@@ -40,6 +40,7 @@ export const dictionary = {
 	WORKOUT_SUCCESSFULLY_UPDATED: "Workout Successfully Updated",
 	SUCCESSFULLY_CREATED: "Successfully created",
 	UNIT: "Unit",
+	WORKOUT_HISTORY: "Workout History",
 	ALREADY_EXIST: "Already exist",
 	UNKNOWN_ERROR: "Unknown error",
 	NO_WORKOUTS: "No workouts",

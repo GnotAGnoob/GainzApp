@@ -10,6 +10,7 @@
 	export let type: StylesType = "neutral";
 	export let onDelete: (() => void) | undefined = undefined;
 	export let focus: "weight" | "repetition" | undefined = undefined;
+	export let isDisabled = false;
 
 	const handleDelete: KeyboardEventHandler<HTMLInputElement> = (event) => {
 		if ((event.key === "Backspace" || event.key === "Delete") && !weight.length && !repetition.length) {
@@ -19,22 +20,24 @@
 
 	$: isRepetitionError = repetition === "0" || !repetition.length;
 	$: isWeightError = !weight.length;
+	// todo fix type color
 </script>
 
-<Set {setNumber} {type}>
+<Set {setNumber} {type} {isDisabled}>
 	<Input
 		class="input"
 		slot="weight"
 		bind:value={weight}
 		isAlignCenter
 		widthSize="dynamic"
-		isTextColorInherited
+		type="inherit"
 		paddingRight="sm"
 		paddingLeft="xs"
 		isNumbersOnly
 		onKeyDown={handleDelete}
 		isError={isWeightError}
 		isOnMountFocus={focus === "weight"}
+		{isDisabled}
 	>
 		<span class="weightText" slot="rightIcon">kg</span>
 	</Input>
@@ -44,13 +47,14 @@
 		bind:value={repetition}
 		isAlignCenter
 		widthSize="dynamic"
-		isTextColorInherited
+		type="inherit"
 		paddingRight="xs"
 		paddingLeft="sm"
 		isNumbersOnly
 		onKeyDown={handleDelete}
 		isError={isRepetitionError}
 		isOnMountFocus={focus === "repetition"}
+		{isDisabled}
 	>
 		<span class="times">x</span>
 	</Input>

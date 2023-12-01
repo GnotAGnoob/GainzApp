@@ -49,6 +49,7 @@ export const dictionary = {
 	YOU_HAVE_TO_MAKE_CHANGE: "You have to make atleast one change",
 	YOU_HAVE_TO_ADD_ATLEAST_ONE_EXERCISE: "You have to add atleast one exercise",
 	YOU_HAVE_HAVE_TO_COMPLETE_PLANNING_THE_WORKOUT: "You have to complete planning the workout",
+	YOU_HAVE_HAVE_TO_FILL_ATLEAST_ONE_SET: "You have to fill atleast one set in each exercise",
 	YOU_CANNOT_CREATE_MORE_ITEMS: "You cannot create more items",
 	PLANNED_WORKOUTS: "Planned Workouts",
 	PLAN_NEW_WORKOUTS: "Plan New Workout",

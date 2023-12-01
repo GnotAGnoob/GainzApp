@@ -3,6 +3,7 @@
 	import Button from "../Atoms/Button/Button.svelte";
 	import { onMount } from "svelte";
 	import type { Size } from "./types";
+	import { modal } from "$src/lib/stores/modal";
 
 	export let size: Size = "md";
 	export let isOpened = false;
@@ -13,6 +14,8 @@
 	export let onClose: (() => void) | undefined = undefined;
 
 	const handleClose = () => {
+		if ($modal.closeDisabledText) return;
+
 		onClose?.();
 		modalElement.close();
 		window.document.documentElement.classList.remove("stopScrolling");
@@ -50,7 +53,13 @@
 	<div class="modalInside modalInside_{size}">
 		<div class="modalContent" bind:this={modalContentElement}>
 			<div class="close">
-				<Button on:click={handleClose} padding="sm" type="noBackground" isPaddingSame>
+				<Button
+					on:click={handleClose}
+					padding="sm"
+					type="noBackground"
+					isPaddingSame
+					disabledTitle={$modal.closeDisabledText}
+				>
 					<div class="closeIcon">
 						<Icon icon="iconoir:plus" />
 					</div>

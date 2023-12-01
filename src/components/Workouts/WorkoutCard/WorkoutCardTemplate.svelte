@@ -9,7 +9,6 @@
 
 	// todo pri vytvareni noveho workoutu ostatni nezvetsovat
 	// todo neco s tim, kdyz jsou prazdny workouts
-	// todo udelat aby vytvareni bylo samostatne od editace a zobrazeni
 </script>
 
 <li class="wrapper">

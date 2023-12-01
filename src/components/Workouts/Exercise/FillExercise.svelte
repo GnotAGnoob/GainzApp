@@ -10,7 +10,7 @@
 
 <div class="container">
 	<EditableExercise bind:supersetExercise {onDelete} />
-	<!-- todo exercise.workoutHistory.lenght && exercise.bestWorkout -->
+	<!-- todo exercise.workoutHistory.lenght && exercise.bestWorkout  & use actual data-->
 	{#if false}
 		<WorkoutOverview
 			bestWorkout={{

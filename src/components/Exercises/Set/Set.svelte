@@ -3,9 +3,10 @@
 
 	export let setNumber: number;
 	export let type: StylesType = "info";
+	export let isDisabled = false;
 </script>
 
-<li class="set set_{type}">
+<li class="set set_{type}" class:disabled={isDisabled}>
 	<div class="setNumberWrapper">
 		<div class="setNumber">{setNumber}</div>
 	</div>
@@ -51,6 +52,12 @@
 			--_border-color: #{$border-color-history-2};
 			--_text-secondary-color: #{$text-secondary-color-history-2};
 			--_text-color: #{$text-color-history-2};
+		}
+
+		&_neutral_3 {
+			--_border-color: #{$border-color-neutral-3};
+			--_text-secondary-color: #{$text-secondary-color-neutral-3};
+			--_text-color: #{$text-color-neutral-3};
 		}
 
 		&Inner {

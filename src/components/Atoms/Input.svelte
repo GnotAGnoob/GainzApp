@@ -2,7 +2,7 @@
 	import { insertInsteadRange } from "$lib/texts";
 	import { isStringNumber } from "$src/lib/checks";
 	import { MAX_TEXT_LENGTH } from "$src/lib/constants";
-	import type { ClipboardEventType, KeyboardEventType } from "$src/lib/types";
+	import type { ClipboardEventType, KeyboardEventType, StylesType } from "$src/lib/types";
 	import { onMount } from "svelte";
 	import type { ClipboardEventHandler, KeyboardEventHandler } from "svelte/elements";
 
@@ -13,11 +13,12 @@
 	export let widthSize: "sm" | "md" | "lg" | "auto" | "dynamic" = "auto";
 	export let paddingLeft: "xs" | "sm" | "md" | "lg" | "none" = "sm";
 	export let paddingRight: "xs" | "sm" | "md" | "lg" | "none" = "sm";
-	export let isTextColorInherited = false;
+	export let type: StylesType = "neutral";
 	export let isOnMountFocus = false;
 	export let isNumbersOnly = false;
 	export let isError = false;
 	export let onKeyDown: KeyboardEventHandler<HTMLInputElement> | undefined = undefined;
+	export let isDisabled = false;
 
 	const isDynamicWidth = widthSize === "dynamic";
 
@@ -80,7 +81,6 @@
 	};
 
 	const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
-		// todo check if possible
 		if (event.key === "Backspace" || event.key === "Delete") {
 			if (!value?.length) {
 				onKeyDown?.(event);
@@ -107,9 +107,9 @@
 </script>
 
 <div
-	class="wrapper wrapper_{size} wrapperWidth_{widthSize}"
+	class="wrapper wrapper_{size} wrapperWidth_{widthSize} wrapperType_{type}"
 	class:wrapper_center={isAlignCenter}
-	class:wrapper_inheritColor={isTextColorInherited}
+	class:disabled={isDisabled}
 >
 	{#if label}
 		<label for="text" class="label">{label}</label>
@@ -140,6 +140,7 @@
 			maxlength={MAX_TEXT_LENGTH}
 			autocomplete="off"
 			style={isDynamicWidth ? `width: ${inputSize}px` : null}
+			disabled={isDisabled}
 		/>
 		<div class="icon icon_right">
 			<slot name="rightIcon" />
@@ -169,10 +170,12 @@
 			width: $space-xxl;
 		}
 
-		&_inheritColor {
-			.input,
-			.inputWrapper {
-				color: inherit;
+		&Type {
+			&_inherit {
+				.input,
+				.inputWrapper {
+					color: inherit;
+				}
 			}
 		}
 	}

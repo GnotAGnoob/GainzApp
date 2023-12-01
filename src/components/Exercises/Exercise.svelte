@@ -98,7 +98,6 @@
 	}
 
 	.noWorkout {
-		// todo nastylovat podle pak dat
 		display: flex;
 
 		height: 100%;

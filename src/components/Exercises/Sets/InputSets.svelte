@@ -34,9 +34,6 @@
 	const handleDelete = (index: number) => {
 		sets = sets.toSpliced(index, 1);
 	};
-
-	//todo: check if everything is filled and if there is not something half filled
-	// finished exercise not having the right status -> maybe get rid of the status? (idk with the templete -> maybe just have isTemplate)
 </script>
 
 <Scroller bind:this={scroller} sideFade="large" type="background" bottomPadding="medium" arrowsPosition="full">
@@ -53,7 +50,7 @@
 		{/each}
 		{#key sets.length}
 			<InputSet
-				{type}
+				type="neutral_3"
 				setNumber={sets.length + 1}
 				bind:weight={newSet.weight}
 				bind:repetition={newSet.repetition}

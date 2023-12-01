@@ -1,4 +1,12 @@
-export type StylesType = "negative" | "positive" | "neutral" | "neutral_2" | "info" | "background";
+export type StylesType =
+	| "negative"
+	| "positive"
+	| "neutral"
+	| "neutral_2"
+	| "neutral_3"
+	| "info"
+	| "background"
+	| "inherit";
 
 type InputEventType<E, T extends EventTarget> = E & {
 	currentTarget: EventTarget & T;

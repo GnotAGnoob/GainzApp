@@ -7,7 +7,7 @@
 	export let isFullSize = false;
 	export let isRounded = false;
 	export let isPaddingSame = false;
-	export let disabledTitle: string | false | undefined = undefined;
+	export let disabledTitle: string | false | undefined | null = undefined;
 	export let padding: "xs" | "sm" | "md" | "lg" | "none" = "md";
 	export let paddingSide: "xs" | "sm" | "md" | "lg" | "xl" | undefined = undefined;
 	export let fontSize: "xs" | "sm" | "md" = "md";

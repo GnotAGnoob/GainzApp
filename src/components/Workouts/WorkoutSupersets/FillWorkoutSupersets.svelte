@@ -1,38 +1,36 @@
 <script lang="ts">
 	import type { PageFillWorkout } from "$src/routes/workouts/types";
-	import axios from "axios";
 	import WourkoutSupersetsTemplate from "./WorkoutSupersetsTemplate.svelte";
 	import FillSuperset from "../Superset/FillSuperset.svelte";
-	import { apiRoutes } from "$src/lib/paths";
+	import { dictionary } from "$lib/language/dictionary";
 
 	export let workout: PageFillWorkout;
-	const workoutCopy = structuredClone(workout);
 	export let overrideOnCancel: (() => void) | undefined = undefined;
+	export let onConfirm: () => void;
+	export let errorMessage: string | undefined;
 
-	let errorMessage: string | undefined = undefined;
-	// todo disable confirm button
+	const workoutCopy = structuredClone(workout);
+
+	$: isSomeSetEmpty = workout.supersets.some((superset) =>
+		superset.supersetExercises.some(
+			(supersetExercise) =>
+				!supersetExercise.sets?.length ||
+				supersetExercise.sets.some((set) => !set.repetition.length || !set.weight.length),
+		),
+	);
 
 	export const onCancel = () => {
 		workout = structuredClone(workoutCopy);
 	};
-
-	const onConfirm = async () => {
-		try {
-			const { data } = await axios.put<PageFillWorkout>(apiRoutes.completeWorkout + workout.id, workout);
-			console.log(workout);
-			// todo: set data to store
-		} catch (error) {
-			if (axios.isAxiosError(error)) {
-				errorMessage = `${error.response?.data}. idk which element/what happened. too lazy to detect errors`;
-				return;
-			}
-
-			errorMessage = "super unknown error";
-		}
-	};
 </script>
 
-<WourkoutSupersetsTemplate bind:workout {onConfirm} onCancel={overrideOnCancel || onCancel} {errorMessage}>
+<WourkoutSupersetsTemplate
+	bind:workout
+	{onConfirm}
+	onCancel={overrideOnCancel || onCancel}
+	{errorMessage}
+	disableConfirmButtonText={isSomeSetEmpty ? dictionary.YOU_HAVE_HAVE_TO_FILL_ATLEAST_ONE_SET : undefined}
+>
 	{#each workout?.supersets || [] as superset, index}
 		<FillSuperset bind:supersetExercises={superset.supersetExercises} order={index + 1} />
 	{/each}

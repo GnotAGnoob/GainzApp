@@ -62,4 +62,5 @@ export const dictionary = {
 	REACHED_MAX_EXERCISES: "Reached max exercises",
 	CANNOT_DELETE_LAST_EXERCISE: "Cannot delete last exercise",
 	START_WORKOUT: "Start Workout",
+	WAITING_FOR_RESPONSE: "Waiting for response",
 };

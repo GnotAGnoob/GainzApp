@@ -3,10 +3,10 @@
 	import Button from "../Atoms/Button/Button.svelte";
 	import { onMount } from "svelte";
 	import type { Size } from "./types";
-	import { modal } from "$src/lib/stores/modal";
 
 	export let size: Size = "md";
 	export let isOpened = false;
+	export let closeDisabledText: string | undefined = undefined;
 
 	let modalElement: HTMLDialogElement;
 	let modalContentElement: HTMLDivElement;
@@ -14,7 +14,7 @@
 	export let onClose: (() => void) | undefined = undefined;
 
 	const handleClose = () => {
-		if ($modal.closeDisabledText) return;
+		if (closeDisabledText) return;
 
 		onClose?.();
 		modalElement.close();
@@ -58,7 +58,7 @@
 					padding="sm"
 					type="noBackground"
 					isPaddingSame
-					disabledTitle={$modal.closeDisabledText}
+					disabledTitle={closeDisabledText}
 				>
 					<div class="closeIcon">
 						<Icon icon="iconoir:plus" />

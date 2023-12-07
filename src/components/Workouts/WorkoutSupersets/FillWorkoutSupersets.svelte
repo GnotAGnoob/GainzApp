@@ -8,6 +8,7 @@
 	export let overrideOnCancel: (() => void) | undefined = undefined;
 	export let onConfirm: () => void;
 	export let errorMessage: string | undefined;
+	export let isLoading = false;
 
 	const workoutCopy = structuredClone(workout);
 
@@ -20,6 +21,8 @@
 	);
 
 	export const onCancel = () => {
+		if (isLoading) return;
+
 		workout = structuredClone(workoutCopy);
 	};
 </script>
@@ -30,8 +33,9 @@
 	onCancel={overrideOnCancel || onCancel}
 	{errorMessage}
 	disableConfirmButtonText={isSomeSetEmpty ? dictionary.YOU_HAVE_HAVE_TO_FILL_ATLEAST_ONE_SET : undefined}
+	{isLoading}
 >
 	{#each workout?.supersets || [] as superset, index}
-		<FillSuperset bind:supersetExercises={superset.supersetExercises} order={index + 1} />
+		<FillSuperset bind:supersetExercises={superset.supersetExercises} order={index + 1} {isLoading} />
 	{/each}
 </WourkoutSupersetsTemplate>

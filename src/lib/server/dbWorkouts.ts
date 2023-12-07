@@ -20,7 +20,6 @@ export const dbGetWorkoutsPromise = (userId: string, statusId: StatusId, databas
 		),
 		columns: {
 			...dbQueryOmit,
-			date: false,
 			note: false,
 		},
 		orderBy: (workout, { asc }) => [asc(workout.order)],
@@ -61,6 +60,13 @@ export const dbGetWorkoutsPromise = (userId: string, statusId: StatusId, databas
 								},
 							},
 						},
+						// extras: {
+						// 	// todo
+						// 	// workoutHistory: sql<boolean>`(${workout.statusId} = ${status.id.done})`.as(
+						// 	// 	"workout_history",
+						// 	// ),
+						// 	// bestWorkout: sql<boolean>`(${workout.statusId} = ${status.id.done})`.as("best_workout"),
+						// },
 					},
 				},
 			},
@@ -77,7 +83,6 @@ export const dbGetWorkoutPromise = (userId: string, workoutId: number, statusId:
 		),
 		columns: {
 			...dbQueryOmit,
-			date: false,
 			note: false,
 		},
 		with: {

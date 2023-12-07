@@ -10,7 +10,7 @@
 		weight: "",
 	};
 
-	export let sets: PageSetWeight[] = [];
+	export let sets: PageSetWeight[];
 	export let type: StylesType = "neutral";
 
 	let newSet = { ...emptySet };

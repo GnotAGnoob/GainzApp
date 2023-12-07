@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { dateFormat } from "$src/lib/date";
 	import type { StylesType } from "$src/lib/types";
-	import type { PageWorkout } from "$src/routes/exercises/types";
+	import type { PageDisplaySupersetExercise } from "$src/routes/exercises/types";
 	import Scroller from "$components/Scroller/Scroller.svelte";
 	import DisplaySets from "./Sets/DisplaySets.svelte";
 
-	export let workout: PageWorkout | undefined = undefined;
+	export let workout: PageDisplaySupersetExercise | undefined = undefined;
 	export let title: string;
 	export let type: StylesType = "info";
 </script>
@@ -14,7 +14,7 @@
 	<h5 class="title">
 		<span>{title}</span>
 		{#if workout}
-			<date class="date">{dateFormat(workout.date)}</date>
+			<date class="date">{dateFormat(new Date(workout.date))}</date>
 		{/if}
 	</h5>
 	{#if workout}

@@ -3,13 +3,21 @@
 	import type { PageFillSupersetExercise } from "$src/routes/workouts/types";
 	import InputSets from "$src/components/Exercises/Sets/InputSets.svelte";
 	import WorkoutOverview from "$src/components/Exercises/WorkoutOverview.svelte";
+	import { dictionary } from "$src/lib/language/dictionary";
 
 	export let supersetExercise: PageFillSupersetExercise;
 	export let onDelete: () => void;
+	export let isLoading = false;
+
+	// todo fix history color
 </script>
 
 <div class="container">
-	<EditableExercise bind:supersetExercise {onDelete} />
+	<EditableExercise
+		bind:supersetExercise
+		{onDelete}
+		disabledText={isLoading ? dictionary.WAITING_FOR_RESPONSE : undefined}
+	/>
 	<!-- todo exercise.workoutHistory.lenght && exercise.bestWorkout  & use actual data-->
 	{#if false}
 		<WorkoutOverview
@@ -31,7 +39,7 @@
 					],
 				},
 				{
-					id: 77,
+					id: 22,
 					date: new Date(),
 					sets: [
 						{ id: 1, repetition: 1, weight: 1 },
@@ -53,7 +61,7 @@
 			}}
 			workoutHistory={[
 				{
-					id: 77,
+					id: 2,
 					date: new Date(),
 					sets: [
 						{ id: 1, repetition: 10, weight: 10 },

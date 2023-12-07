@@ -14,6 +14,7 @@
 	export let onCancel: () => void;
 	export let errorMessage: string | undefined = undefined;
 	export let disableConfirmButtonText: string | undefined = undefined;
+	export let isLoading = false;
 
 	// might not be very performant
 	const workoutCopy = structuredClone(workout);
@@ -28,20 +29,27 @@
 				(activity) => activity.exercise.category.name.length && activity.exercise.name.length,
 			);
 		});
+
+	$: loadingText = isLoading && dictionary.WAITING_FOR_RESPONSE;
 	$: disabledSupersetText =
 		(workout && workout.supersets.length >= MAX_SUPERSETS && dictionary.YOU_CANNOT_CREATE_MORE_ITEMS) ||
-		(!areAllSupersetsFilled && dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS);
+		(!areAllSupersetsFilled && dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS) ||
+		loadingText;
 
 	$: disableConfirmButton =
 		(!workout?.supersets[0].supersetExercises.length && dictionary.YOU_HAVE_TO_ADD_ATLEAST_ONE_EXERCISE) ||
 		(!areAllSupersetsFilled && dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS) ||
-		(isWorkoutSame && dictionary.YOU_HAVE_TO_MAKE_CHANGE);
+		(isWorkoutSame && dictionary.YOU_HAVE_TO_MAKE_CHANGE) ||
+		loadingText;
 
 	const onAddSuperset = () => {
+		if (isLoading) return;
 		workout = { supersets: [...(workout?.supersets || []), { ...emptySuperset }] };
 	};
 
 	const handleConfirm = () => {
+		if (isLoading) return;
+
 		if (!areAllSupersetsFilled) {
 			toast.error(dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS);
 			return;
@@ -64,7 +72,7 @@
 		</Button>
 	</div>
 	<div class="buttons">
-		<Button type="negative" padding="md" on:click={onCancel} isFullSize>
+		<Button type="negative" padding="md" on:click={onCancel} isFullSize disabledTitle={loadingText}>
 			<span>{dictionary.CANCEL}</span>
 		</Button>
 		<Button
@@ -73,6 +81,7 @@
 			on:click={handleConfirm}
 			disabledTitle={disableConfirmButton || disableConfirmButtonText}
 			isFullSize
+			{isLoading}
 		>
 			<span>{dictionary.CONFIRM}</span>
 		</Button>

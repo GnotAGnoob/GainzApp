@@ -3,9 +3,9 @@
 	import { dateFormat } from "$src/lib/date";
 	import DisplaySets from "./Sets/DisplaySets.svelte";
 	import Scroller from "$components/Scroller/Scroller.svelte";
-	import type { PageWorkout } from "$src/routes/exercises/types";
+	import type { PageDisplaySupersetExercise } from "$src/routes/exercises/types";
 
-	export let workouts: PageWorkout[];
+	export let workouts: PageDisplaySupersetExercise[];
 </script>
 
 <div class="history">
@@ -14,7 +14,7 @@
 		<ul class="workouts">
 			{#each workouts as workout, index (workout.id)}
 				<li class="workout">
-					<date class="date">{dateFormat(workout.date)}</date>
+					<date class="date">{dateFormat(new Date(workout.date))}</date>
 					<DisplaySets type={index % 2 === 0 ? "neutral" : "neutral_2"} sets={workout.sets} />
 				</li>
 			{/each}

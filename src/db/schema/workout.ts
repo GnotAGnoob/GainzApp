@@ -11,11 +11,11 @@ export const workout = pgTable(
 	"workout",
 	{
 		id: serial("id").primaryKey(),
-		date: timestamp("date").notNull().defaultNow(),
+		date: timestamp("date", { mode: "date" }).notNull().defaultNow(),
 		order: integer("order"),
 		note: varchar("note", { length: 255 }),
 
-		createdAt: timestamp("created_at").notNull().defaultNow(),
+		createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
 		updatedAt: timestamp("updated_at").notNull().defaultNow(),
 
 		userId: text("userId")

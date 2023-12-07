@@ -45,7 +45,8 @@ export const exerciseRelations = relations(exercise, ({ one, many }) => ({
 		fields: [exercise.unitId],
 		references: [unit.id],
 	}),
-	supersetExercise: many(supersetExercise),
+	supersetExercises: many(supersetExercise),
+	bestWorkouts: many(supersetExercise),
 }));
 
 export type Exercise = Omit<

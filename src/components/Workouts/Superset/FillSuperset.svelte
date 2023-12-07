@@ -5,16 +5,32 @@
 
 	export let supersetExercises: PageFillSupersetExercise[] = [];
 	export let order: number;
+	export let isLoading = false;
 
 	const onDelete = (index: number) => {
 		supersetExercises = supersetExercises.filter((_, i) => i !== index);
 	};
+
+	const onConfirmExercise = (supersetExercise: Partial<PageFillSupersetExercise>) => {
+		if (supersetExercise?.exercise?.category && supersetExercise?.exercise) {
+			supersetExercises = [
+				...supersetExercises,
+				{
+					exercise: supersetExercise.exercise,
+					sets: supersetExercise.sets || [],
+				},
+			];
+			return null;
+		}
+
+		return supersetExercise;
+	};
 </script>
 
-<SupersetTemplate {order} bind:supersetExercises>
+<SupersetTemplate {order} bind:supersetExercises {isLoading} {onConfirmExercise}>
 	<div class="container" class:containerCenter={supersetExercises.length < 2}>
 		{#each supersetExercises as supersetExercise, index}
-			<FillExercise bind:supersetExercise onDelete={() => onDelete(index)} />
+			<FillExercise bind:supersetExercise onDelete={() => onDelete(index)} {isLoading} />
 		{/each}
 	</div>
 </SupersetTemplate>

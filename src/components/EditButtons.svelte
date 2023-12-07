@@ -22,29 +22,38 @@
 	export let isPadding = true;
 	export let isConfirmButton = true;
 	export let isEditButton = true;
+	export let disabledText: string | undefined = undefined;
 
 	export let isInEditMode = false;
 	let modal: ConfirmationModal;
 
 	const handleEditMode = () => {
+		if (disabledText) return;
+
 		isInEditMode = true;
 
 		onEditMode?.();
 	};
 
 	const handleConfirm = () => {
+		if (disabledText) return;
+
 		isInEditMode = false;
 
 		onConfirm?.();
 	};
 
 	const handleDelete = () => {
+		if (disabledText) return;
+
 		isInEditMode = false;
 
 		onDelete?.();
 	};
 
 	const handleCancel = () => {
+		if (disabledText) return;
+
 		isInEditMode = false;
 
 		onCancel?.();
@@ -63,6 +72,7 @@
 					title={editTitle}
 					isPaddingSame
 					on:click={handleEditMode}
+					disabledTitle={disabledText}
 				>
 					<span class="icon">
 						<Icon icon="solar:pen-bold" />
@@ -80,6 +90,7 @@
 					title={deleteTitle}
 					isPaddingSame
 					on:click={deleteConfirmationText ? modal.showModal : handleDelete}
+					disabledTitle={disabledText}
 				>
 					<span class="icon icon_medium">
 						<Icon icon="solar:trash-bin-trash-linear" />
@@ -95,6 +106,7 @@
 					title={dictionary.CONFIRM}
 					isPaddingSame
 					on:click={handleConfirm}
+					disabledTitle={disabledText}
 				>
 					<span class="icon icon_larger">
 						<Icon icon="iconoir:check" />
@@ -108,6 +120,7 @@
 				title={dictionary.CANCEL}
 				isPaddingSame
 				on:click={handleCancel}
+				disabledTitle={disabledText}
 			>
 				<span class="icon icon_larger icon_plus">
 					<Icon icon="iconoir:plus" />

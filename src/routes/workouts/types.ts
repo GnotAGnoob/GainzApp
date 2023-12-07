@@ -1,6 +1,7 @@
 import type { Category } from "$src/db/schema/category";
 import type { Exercise } from "$src/db/schema/exercise";
 import type { InsertSetWeight } from "$src/db/schema/setWeight";
+import type { PageDisplaySupersetExercise, PageSupersetExerciseInfo } from "../exercises/types";
 
 export interface PageSetWeight {
 	repetition: string;
@@ -8,10 +9,9 @@ export interface PageSetWeight {
 }
 
 // EXERCISE
-
 export interface PageFillSupersetExercise {
 	id?: number;
-	sets?: PageSetWeight[];
+	sets: PageSetWeight[];
 	exercise: Exercise & {
 		category: Category;
 	};
@@ -19,7 +19,7 @@ export interface PageFillSupersetExercise {
 
 export type PageCreateSupersetExercise = Pick<PageFillSupersetExercise, "exercise">;
 
-export type PageSupersetExercise = Required<PageFillSupersetExercise>;
+export type PageSupersetExercise = PageFillSupersetExercise & PageDisplaySupersetExercise & PageSupersetExerciseInfo;
 
 export type PagePlannedSupersetExercise = Pick<PageSupersetExercise, "id" | "exercise">;
 

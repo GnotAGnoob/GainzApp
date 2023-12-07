@@ -3,10 +3,10 @@
 	import { Collapse } from "@svelteuidev/core";
 	import Workout from "./Workout.svelte";
 	import History from "./History.svelte";
-	import type { PageWorkout } from "$src/routes/exercises/types";
+	import type { PageDisplaySupersetExercise } from "$src/routes/exercises/types";
 
-	export let bestWorkout: PageWorkout;
-	export let workoutHistory: PageWorkout[];
+	export let bestWorkout: PageDisplaySupersetExercise;
+	export let workoutHistory: PageDisplaySupersetExercise[];
 
 	let open = false;
 	const lastWorkout = workoutHistory[workoutHistory.length - 1];

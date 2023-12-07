@@ -2,7 +2,7 @@ import { getUserId } from "$src/lib/server/dbHelpers";
 import { json } from "@sveltejs/kit";
 import { handleError } from "$src/lib/server/error";
 import { parseCreateWorkout } from "$src/lib/server/dbSchemaValidation.js";
-import { dbPostPlannedWorkoutPromise } from "$src/lib/server/dbPlannedWorkouts.js";
+import { dbPostPlannedWorkoutPromise } from "$src/lib/server/dbWorkouts.js";
 
 export async function POST({ request, locals }) {
 	try {

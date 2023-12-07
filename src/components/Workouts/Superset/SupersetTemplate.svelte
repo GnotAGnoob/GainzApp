@@ -8,33 +8,41 @@
 
 	export let supersetExercises: PageCreateSupersetExercise[];
 	export let order: number;
+	export let isLoading = false;
+	export let onConfirmExercise: (
+		exercise: Partial<PageCreateSupersetExercise>,
+	) => Partial<PageCreateSupersetExercise> | null;
 
 	let newSupersetExercise: Partial<PageCreateSupersetExercise> | null = null;
 
 	$: areExercisesFilled = supersetExercises.every(
 		(exercise) => exercise.exercise.category.name.length && exercise.exercise.name.length,
 	);
+	$: loadingText = isLoading && dictionary.WAITING_FOR_RESPONSE;
 	$: disabledText =
 		(supersetExercises.length >= MAX_SUPERSET_EXERCISES && dictionary.YOU_CANNOT_CREATE_MORE_ITEMS) ||
-		(!areExercisesFilled && dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS);
+		(!areExercisesFilled && dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS) ||
+		loadingText;
+
+	$: if (isLoading) {
+		newSupersetExercise = null;
+	}
 
 	const onAddNewExercise = () => {
+		if (isLoading) return;
+
 		newSupersetExercise = {};
 	};
 
 	const onConfirmNewExercise = () => {
-		if (newSupersetExercise?.exercise?.category && newSupersetExercise?.exercise) {
-			supersetExercises = [
-				...supersetExercises,
-				{
-					exercise: newSupersetExercise.exercise,
-				},
-			];
-			newSupersetExercise = null;
-		}
+		if (isLoading || !newSupersetExercise) return;
+
+		newSupersetExercise = onConfirmExercise(newSupersetExercise);
 	};
 
 	const onCancelNewExercise = () => {
+		if (isLoading) return;
+
 		newSupersetExercise = null;
 	};
 

@@ -1,7 +1,7 @@
 import { workout } from "$src/db/schema/workout.js";
 import db from "$src/lib/server/db.js";
 import { getUserId } from "$src/lib/server/dbHelpers";
-import dbPlannedWorkouts, { dbInsertCompleteWorkout } from "$src/lib/server/dbPlannedWorkouts";
+import dbPlannedWorkouts, { dbInsertCompleteWorkout } from "$src/lib/server/dbWorkouts";
 import { parseFilledWorkout } from "$src/lib/server/dbSchemaValidation";
 import { handleError } from "$src/lib/server/error";
 import type { PageInsertFillWorkout } from "$src/routes/workouts/types.js";

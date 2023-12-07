@@ -7,13 +7,22 @@
 
 	export let supersetExercise: PageCreateSupersetExercise;
 	export let onDelete: () => void;
+	export let disabledText: string | undefined = undefined;
 	let isInEditMode = !supersetExercise.exercise.category.name.length;
 
+	$: if (disabledText) {
+		isInEditMode = false;
+	}
+
 	const onClick = () => {
+		if (disabledText) return;
+
 		isInEditMode = true;
 	};
 
 	const turnEditModeOff = () => {
+		if (disabledText) return;
+
 		isInEditMode = false;
 	};
 </script>
@@ -24,7 +33,7 @@
 	</div>
 {:else}
 	<div class="exercise">
-		<button class="button" on:click={onClick}>
+		<button class="button" on:click={onClick} disabled={!!disabledText}>
 			<Exercise {supersetExercise} />
 		</button>
 		<div class="edit">
@@ -36,6 +45,7 @@
 				isAbsolute={false}
 				isPadding={false}
 				buttonType="noBackground_2"
+				{disabledText}
 			/>
 		</div>
 	</div>

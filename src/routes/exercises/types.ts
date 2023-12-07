@@ -1,23 +1,21 @@
 import type { Category } from "$src/db/schema/category";
 import type { Exercise } from "$src/db/schema/exercise";
-import type { InsertSetWeight } from "$src/db/schema/setWeight";
+import type { SetWeight } from "$src/db/schema/setWeight";
 import type { Unit } from "$src/db/schema/unit";
 
-export interface PageWorkoutWeightSet extends InsertSetWeight {
+export interface PageDisplaySupersetExercise {
 	id: number;
+	sets: SetWeight[];
+	date: string;
 }
 
-export interface PageWorkout {
-	id: number;
-	sets: PageWorkoutWeightSet[];
-	date: Date;
-}
-
-export interface PageExercise extends Exercise {
+export interface PageSupersetExerciseInfo {
 	unit: Unit;
-	bestWorkout?: PageWorkout;
-	workoutHistory?: PageWorkout[];
+	bestWorkout?: PageDisplaySupersetExercise;
+	workoutHistory?: PageDisplaySupersetExercise[];
 }
+
+export type PageExercise = Exercise & PageSupersetExerciseInfo;
 
 export type PageMandatoryExercise = Required<PageExercise>;
 

@@ -46,7 +46,7 @@
 </script>
 
 {#if !areWorkouts}
-	<li class="exercise">
+	<div class="exercise">
 		<EditText
 			text={exercise.name}
 			{onConfirm}
@@ -60,22 +60,20 @@
 		<h5 class="noWorkout">
 			{dictionary.NO_WORKOUTS}
 		</h5>
-	</li>
+	</div>
 {:else}
-	<li>
-		<WorkoutOverview workoutHistory={fixedExercise.workoutHistory} bestWorkout={fixedExercise.bestWorkout}>
-			<EditText
-				text={exercise.name}
-				{onConfirm}
-				isEditButton={!exercise.isGlobal}
-				{errorMessage}
-				buttonType="noBackground_2"
-				inputSize="sm"
-			>
-				<h4 class="name">{exercise.name}</h4>
-			</EditText>
-		</WorkoutOverview>
-	</li>
+	<WorkoutOverview workoutHistory={fixedExercise.workoutHistory} bestWorkout={fixedExercise.bestWorkout}>
+		<EditText
+			text={exercise.name}
+			{onConfirm}
+			isEditButton={!exercise.isGlobal}
+			{errorMessage}
+			buttonType="noBackground_2"
+			inputSize="sm"
+		>
+			<h4 class="name">{exercise.name}</h4>
+		</EditText>
+	</WorkoutOverview>
 {/if}
 
 <style lang="scss">
@@ -85,7 +83,6 @@
 		display: flex;
 
 		flex-direction: column;
-		min-width: $min-exercise-width;
 		height: 100%;
 
 		color: var(--text-secondary);

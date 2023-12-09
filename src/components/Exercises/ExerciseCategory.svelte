@@ -65,7 +65,7 @@
 	};
 </script>
 
-<section>
+<section class="wrapper">
 	<div class="header">
 		<EditText
 			text={category.name}
@@ -97,6 +97,10 @@
 <style lang="scss">
 	@import "./Exercises.scss";
 
+	.wrapper {
+		width: 100%;
+	}
+
 	.header {
 		display: flex;
 
@@ -104,18 +108,35 @@
 	}
 
 	.category {
-		display: flex;
+		--max-columns: 1;
+		display: grid;
 
 		min-width: $space-xxxl;
 		min-height: $space-xl + $space-sm;
 		padding: $space-sm $space-sm;
 		border-radius: $border-md;
 
-		flex-direction: column;
 		justify-content: center;
 		gap: $space-sm;
 
 		background-color: var(--accent-neutral-100);
+
+		grid-template-columns: repeat(
+			min(var(--max-columns), var(--columns)),
+			minmax($space-xxl + $space-xl, $space-xxxl + $space-xxl)
+		);
+
+		@media (min-width: $bp-512) {
+			--max-columns: 2;
+		}
+
+		@media (min-width: $bp-760) {
+			--max-columns: 3;
+		}
+
+		@media (min-width: $bp-1096) {
+			--max-columns: 4;
+		}
 
 		&Title {
 			text-align: center;
@@ -127,22 +148,6 @@
 			margin-top: $space-sm;
 
 			justify-content: center;
-		}
-
-		@media (min-width: $bp-512) {
-			--columns: 3;
-			--max-columns: 2;
-			display: grid;
-			align-items: flex-start;
-			grid-template-columns: repeat(min(var(--max-columns), var(--columns)), 1fr);
-		}
-
-		@media (min-width: $bp-760) {
-			--max-columns: 3;
-		}
-
-		@media (min-width: $bp-1096) {
-			--max-columns: 4;
 		}
 	}
 

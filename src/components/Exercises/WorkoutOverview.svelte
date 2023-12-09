@@ -14,7 +14,7 @@
 </script>
 
 <button class="button" on:click={() => (open = !open)} class:button_historyless={!isEnoughHistory}>
-	<li class="exercise">
+	<div class="exercise">
 		<slot />
 		<div class="workoutsWrapper" class:workoutsWrapper_open={open}>
 			{#if lastWorkout.id === bestWorkout.id}
@@ -33,14 +33,14 @@
 				<History workouts={workoutHistory} />
 			</Collapse>
 		{/if}
-	</li>
+	</div>
 </button>
 
 <style lang="scss">
 	@import "./Exercises.scss";
 
 	.button {
-		overflow-x: hidden;
+		width: 100%;
 
 		&_historyless {
 			pointer-events: none;
@@ -51,7 +51,8 @@
 		display: flex;
 
 		flex-direction: column;
-		min-width: $min-exercise-width;
+		min-width: $space-xxl + $space-xl;
+		width: 100%;
 		height: 100%;
 
 		color: var(--text-secondary);

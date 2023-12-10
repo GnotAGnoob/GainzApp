@@ -100,7 +100,7 @@
 		height: 100%;
 		min-height: $space-lg;
 		margin-top: $space-sm;
-		padding: $space-md;
+		padding: ($space-md + $space-xs) $space-md;
 		border-radius: $border-radius;
 
 		flex-grow: 1;

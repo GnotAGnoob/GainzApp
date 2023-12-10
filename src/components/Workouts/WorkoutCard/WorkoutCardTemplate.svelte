@@ -59,7 +59,7 @@
 			display: flex;
 			position: relative;
 
-			padding: ($space-md) $card-side-padding ($space-sm);
+			padding: ($space-md) $card-side-padding ($space-md);
 
 			min-height: $space-xxl;
 			max-height: $space-xxxxl;

@@ -29,6 +29,7 @@
 
 	.workout {
 		--_background-color: #{$background-color-default};
+		--_color: #{$text-color-default};
 
 		display: flex;
 
@@ -55,10 +56,12 @@
 
 		&_positive {
 			--_background-color: #{$background-color-best};
+			--_color: #{$text-color-best};
 		}
 
 		&_neutral {
 			--_background-color: #{$background-color-history};
+			--_color: var(--accent-positive-800);
 		}
 	}
 
@@ -72,5 +75,6 @@
 		font-weight: $text-title-weight;
 		font-size: $text-title;
 		text-transform: capitalize;
+		color: var(--_color);
 	}
 </style>

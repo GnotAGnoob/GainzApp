@@ -48,16 +48,17 @@ export type PageInsertFillSuperset = PageSupersetGeneric<PageInsertFillSupersetE
 // WORKOUTS
 export interface PageFillWorkoutGeneric<T> {
 	id?: number;
+	date?: string;
 	supersets: T[];
 }
 
-export type PageCreateWorkout = Omit<PageFillWorkoutGeneric<PageCreateSuperset>, "id">;
+export type PageCreateWorkout = Omit<PageFillWorkoutGeneric<PageCreateSuperset>, "id" | "date">;
 
-export type PageFillWorkout = PageFillWorkoutGeneric<PageFillSuperset>;
+export type PageFillWorkout = Omit<PageFillWorkoutGeneric<PageFillSuperset>, "date">;
 
 export type PageWorkout = Required<PageFillWorkoutGeneric<PageSuperset>>;
 
-export type PagePlannedWorkout = Required<PageFillWorkoutGeneric<PagePlannedSuperset>>;
+export type PagePlannedWorkout = Omit<Required<PageFillWorkoutGeneric<PagePlannedSuperset>>, "date">;
 
 // Server
 

@@ -68,6 +68,10 @@
 		}
 	}
 
+	.title {
+		color: $text-color-history;
+	}
+
 	.title,
 	.date {
 		font-size: $text-title;

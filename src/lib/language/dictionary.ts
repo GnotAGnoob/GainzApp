@@ -63,4 +63,5 @@ export const dictionary = {
 	CANNOT_DELETE_LAST_EXERCISE: "Cannot delete last exercise",
 	START_WORKOUT: "Start Workout",
 	WAITING_FOR_RESPONSE: "Waiting for response",
+	IF_YOU_SEE_THIS: "If you see this, something went wrong",
 };

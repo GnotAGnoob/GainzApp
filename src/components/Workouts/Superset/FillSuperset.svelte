@@ -1,7 +1,7 @@
 <script lang="ts">
 	import FillExercise from "../Exercise/FillExercise.svelte";
 	import type { PageFillSupersetExercise } from "$src/routes/workouts/types";
-	import SupersetTemplate from "./SupersetTemplate.svelte";
+	import SupersetTemplate from "./EditableSupersetTemplate.svelte";
 
 	export let supersetExercises: PageFillSupersetExercise[] = [];
 	export let order: number;

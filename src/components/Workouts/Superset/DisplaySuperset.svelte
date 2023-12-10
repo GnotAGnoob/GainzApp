@@ -21,6 +21,8 @@
 
 		flex-direction: column;
 
+		gap: $space-xxs;
+
 		line-height: 1;
 	}
 
@@ -36,8 +38,6 @@
 		gap: $space-xxs;
 
 		flex-direction: column;
-
-		padding-right: ($space-md + $space-xs);
 
 		color: var(--accent-neutral-700);
 	}

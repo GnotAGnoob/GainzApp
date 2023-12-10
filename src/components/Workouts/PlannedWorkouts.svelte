@@ -71,7 +71,6 @@
 		justify-content: center;
 
 		gap: $space-md;
-		// margin-top: $space-md + $space-sm;
 	}
 
 	.button {

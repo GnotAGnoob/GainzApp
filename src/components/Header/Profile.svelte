@@ -13,17 +13,21 @@
 <div class="wrapper {className}">
 	<Menu class="menu" placement="center" gutter={14}>
 		<div slot="control">
-			{#if $session?.user?.image}
-				<img class="profileButton image" src={$session.user.image} alt="profile" />
-			{:else}
-				<Button class="profileButton" isRounded isPaddingSame padding="sm" type="neutral">
-					<Icon class="profileIcon" icon="solar:user-bold" />
-				</Button>
-			{/if}
+			<Button class="profileButton" borderRadius="round" isPaddingSame padding="sm" type="neutral">
+				{#if $session?.user?.image}
+					<img class="image" src={$session.user.image} alt="profile" />
+				{:else}
+					<div class="profileIcon">
+						<Icon icon="solar:user-bold" />
+					</div>
+				{/if}
+			</Button>
 		</div>
 		<Menu.Item on:click={signOut}>
 			<div class="button">
-				<Icon class="buttonIcon" icon="solar:logout-2-linear" />
+				<div class="buttonIcon">
+					<Icon icon="solar:logout-2-linear" />
+				</div>
 				{dictionary.SIGN_OUT}
 			</div>
 		</Menu.Item>
@@ -68,7 +72,7 @@
 			overflow: hidden;
 		}
 
-		:global(.profileIcon) {
+		.profileIcon {
 			margin-top: $space-px * 2;
 		}
 	}
@@ -79,23 +83,16 @@
 		gap: $space-md;
 		align-items: center;
 
-		:global(.buttonIcon) {
-			$dimension: $space-md + $space-xs;
+		.buttonIcon {
+			font-size: $icon-xl;
 
-			margin-top: $space-px;
-
-			height: $dimension;
-			width: $dimension;
+			margin-top: $space-px * 2;
 
 			color: var(--text-secondary);
 		}
 	}
 
 	.image {
-		display: block;
-
-		border-radius: 20rem;
-
 		cursor: pointer;
 
 		&:hover {

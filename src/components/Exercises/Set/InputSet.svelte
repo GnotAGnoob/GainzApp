@@ -13,14 +13,13 @@
 	export let isDisabled = false;
 
 	const handleDelete: KeyboardEventHandler<HTMLInputElement> = (event) => {
-		if ((event.key === "Backspace" || event.key === "Delete") && !weight.length && !repetition.length) {
+		if ((event.key === "Backspace" || event.key === "Delete") && (!weight.length || !repetition.length)) {
 			onDelete?.();
 		}
 	};
 
 	$: isRepetitionError = repetition === "0" || !repetition.length;
 	$: isWeightError = !weight.length;
-	// todo fix type color
 </script>
 
 <Set {setNumber} {type} {isDisabled}>

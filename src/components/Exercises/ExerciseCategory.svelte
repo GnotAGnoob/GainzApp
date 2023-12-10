@@ -126,15 +126,15 @@
 			minmax($space-xxl + $space-xl, $space-xxxl + $space-xxl)
 		);
 
-		@media (min-width: $bp-512) {
+		@media (min-width: $bp-620) {
 			--max-columns: 2;
 		}
 
-		@media (min-width: $bp-760) {
+		@media (min-width: $bp-900) {
 			--max-columns: 3;
 		}
 
-		@media (min-width: $bp-1096) {
+		@media (min-width: $bp-1200) {
 			--max-columns: 4;
 		}
 

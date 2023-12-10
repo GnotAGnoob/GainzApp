@@ -92,6 +92,7 @@
 		text-align: center;
 		font-size: $text-tag;
 		font-weight: 700;
+		color: var(--text-secondary);
 	}
 
 	.noWorkout {

@@ -11,7 +11,7 @@
 	import { apiRoutes } from "$src/lib/paths";
 	// eslint-disable-next-line max-len
 	import InteractiveWorkoutSupersets from "$src/components/Workouts/WorkoutSupersets/InteractiveWorkoutSupersets.svelte";
-	import DisplayWorkoutSupersets from "$components/Workouts/WorkoutSupersets/DisplayWorkoutSupersets.svelte";
+	import DisplayWorkoutSupersets from "$src/components/Workouts/WorkoutSupersets/DisplayWorkoutSupersets.svelte";
 
 	export let workout: PagePlannedWorkout;
 	export let title: number | string;

@@ -5,13 +5,12 @@
 	export let isLoading = false;
 	export let type: ButtonType = "info";
 	export let isFullSize = false;
-	export let isRounded = false;
 	export let isPaddingSame = false;
 	export let disabledTitle: string | false | undefined | null = undefined;
 	export let padding: "xs" | "sm" | "md" | "lg" | "none" = "md";
 	export let paddingSide: "xs" | "sm" | "md" | "lg" | "xl" | undefined = undefined;
 	export let fontSize: "xs" | "sm" | "md" = "md";
-	export let borderRadius: "none" | "sm" | "md" = "sm";
+	export let borderRadius: "none" | "sm" | "md" | "round" = "sm";
 	export let className = "";
 	export let title: string | undefined = undefined;
 	export let buttonType: "button" | "submit" | "reset" = "button";
@@ -25,7 +24,6 @@
 		{className} borderRadius_{borderRadius} fontSize_{fontSize}
 	"
 	class:loading={isLoading}
-	class:rounded={isRounded}
 	class:fullSize={isFullSize}
 	class:paddingSame={isPaddingSame}
 	class:disabled={disabledTitle || isLoading}
@@ -155,10 +153,6 @@
 		line-height: 0;
 	}
 
-	.rounded {
-		border-radius: 20rem;
-	}
-
 	.padding {
 		--padding-block: #{$space-sm + $space-xs};
 		--padding-inline: #{$space-md};
@@ -236,6 +230,10 @@
 
 		&_md {
 			border-radius: $border-md;
+		}
+
+		&_round {
+			border-radius: 20rem;
 		}
 	}
 

@@ -31,10 +31,12 @@ export const supersetExerciseRelations = relations(supersetExercise, ({ one, man
 	exercise: one(exercise, {
 		fields: [supersetExercise.exerciseId],
 		references: [exercise.id],
+		relationName: "supersetExercises",
 	}),
-	exercise2: one(superset, {
-		fields: [supersetExercise.supersetId],
-		references: [superset.id],
+	exercise2: one(exercise, {
+		fields: [supersetExercise.exerciseId],
+		references: [exercise.id],
+		relationName: "bestWorkouts",
 	}),
 	superset: one(superset, {
 		fields: [supersetExercise.supersetId],

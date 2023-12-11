@@ -8,7 +8,7 @@
 	export let supersetExercise: PageSupersetExercise;
 </script>
 
-<Collapse isContentClickable>
+<Collapse isContentClickable arrowSize="sm" arrowPosition="left">
 	<span slot="title">
 		<Exercise {supersetExercise} />
 	</span>

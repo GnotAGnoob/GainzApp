@@ -7,6 +7,7 @@
 
 	export let type: StylesType = "neutral";
 	export let sideFade: "small" | "medium" | "large" = "small";
+	export let isSidePadding = true;
 	export let isScrollReverse = false;
 	export let wrapperTag: "div" | "ul" | "ol" = "div";
 	export let arrowsPosition: "top" | "full" | undefined = undefined;
@@ -77,7 +78,10 @@
 
 <svelte:window on:resize={setOverflowing} />
 
-<div class="arrowsWrapper arrowsWrapper_{type} arrowsWrapper_{sideFade}Fade">
+<div
+	class="arrowsWrapper arrowsWrapper_{type} arrowsWrapper_{sideFade}Fade"
+	class:arrowsWrapper_noSidePadding={!isSidePadding}
+>
 	{#if arrowsPosition}
 		{#if isOverflowingLeft}
 			<button class="button button_left button_{arrowsPosition}" on:click={(event) => scroll(event, "left")}>
@@ -160,6 +164,10 @@
 		&_largeFade {
 			--_side-padding: #{$space-lg};
 			--_background-start: 25%;
+		}
+
+		&_noSidePadding {
+			--_side-padding: 0;
 		}
 	}
 

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { dictionary } from "$src/lib/language/dictionary";
 	import { dateFormat } from "$src/lib/date";
 	import DisplaySets from "./Sets/DisplaySets.svelte";
 	import Scroller from "$components/Scroller/Scroller.svelte";
@@ -9,8 +8,7 @@
 </script>
 
 <div class="history">
-	<span class="title">{dictionary.HISTORY}</span>
-	<Scroller type="neutral" sideFade="medium" isScrollReverse arrowsPosition="top">
+	<Scroller type="neutral" sideFade="medium" isScrollReverse arrowsPosition="top" isSidePadding={false}>
 		<ul class="workouts">
 			{#each workouts as workout, index (workout.id)}
 				<li class="workout">
@@ -28,9 +26,6 @@
 	.history {
 		background-color: #{$background-color-history};
 
-		border-bottom-left-radius: $border-radius;
-		border-bottom-right-radius: $border-radius;
-
 		overflow-x: hidden;
 	}
 
@@ -39,7 +34,7 @@
 
 		display: flex;
 
-		padding: $space-xs $space-sm $space-sm;
+		padding: $space-sm $space-sm $space-sm;
 		margin-bottom: calc(-1 * var(--scroller-padding));
 
 		flex-direction: column;
@@ -48,14 +43,6 @@
 
 		color: var(--_text-color);
 
-		&:not(:first-child) {
-			border-top-left-radius: $border-sm;
-		}
-
-		&:not(:last-child) {
-			border-top-right-radius: $border-sm;
-		}
-
 		&:nth-child(2n) {
 			background-color: #{$background-color-history-2};
 			--_text-color: #{$text-color-history-2};
@@ -63,16 +50,8 @@
 
 		&s {
 			display: flex;
-
-			margin-top: $space-xs;
 		}
 	}
-
-	.title {
-		color: $text-color-history;
-	}
-
-	.title,
 	.date {
 		font-size: $text-title;
 		font-weight: $text-title-weight;

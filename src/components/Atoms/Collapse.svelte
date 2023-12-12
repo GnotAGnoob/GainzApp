@@ -16,7 +16,7 @@
 	};
 </script>
 
-<div class:isOpen>
+<div class="wrapper" class:isOpen>
 	{#if $$slots.title}
 		<button class="button" on:click={onClick} disabled={isDisabled}>
 			<div class="title" class:title_right={arrowPosition === "right"}>
@@ -36,6 +36,7 @@
 				<div class="content" bind:this={contentElement} style="--_height: {height}">
 					<slot name="content" />
 				</div>
+				<slot name="footer" />
 			{/if}
 		</button>
 	{/if}
@@ -44,11 +45,18 @@
 		<div class="content" bind:this={contentElement} style="--_height: {height}">
 			<slot name="content" />
 		</div>
+		<slot name="footer" />
 	{/if}
 </div>
 
 <style lang="scss">
 	$_transition-timing: 0.15s ease-in-out;
+
+	.wrapper {
+		display: flex;
+
+		flex-direction: column;
+	}
 
 	.button {
 		width: 100%;

@@ -8,9 +8,10 @@
 	export let workout: PageDisplaySupersetExercise | undefined = undefined;
 	export let title: string;
 	export let type: StylesType = "info";
+	export let isBottomBorderless = false;
 </script>
 
-<div class="workout workout_{type}">
+<div class="workout workout_{type}" class:workout_bottomBorderNone={isBottomBorderless}>
 	<h5 class="title">
 		<span>{title}</span>
 		{#if workout}
@@ -52,6 +53,13 @@
 		&:last-child {
 			border-top-right-radius: $border-radius;
 			border-bottom-right-radius: $border-radius;
+		}
+
+		&_bottomBorderNone {
+			&#{&} {
+				border-bottom-left-radius: unset;
+				border-bottom-right-radius: unset;
+			}
 		}
 
 		&_positive {

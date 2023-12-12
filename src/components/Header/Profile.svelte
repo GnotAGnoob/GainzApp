@@ -8,14 +8,16 @@
 
 	export let className = "";
 	export { className as class };
+
+	let imageError = false;
 </script>
 
 <div class="wrapper {className}">
 	<Menu class="menu" placement="center" gutter={14}>
 		<div slot="control">
 			<Button class="profileButton" borderRadius="round" isPaddingSame padding="sm" type="neutral">
-				{#if $session?.user?.image}
-					<img class="image" src={$session.user.image} alt="profile" />
+				{#if $session?.user?.image && !imageError}
+					<img class="image" src={$session.user.image} alt="profile" on:error={() => (imageError = true)} />
 				{:else}
 					<div class="profileIcon">
 						<Icon icon="solar:user-bold" />

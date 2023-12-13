@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-	<title>{getPageTitle("404")}</title>
+	<title>{getPageTitle(`${$page.status}`)}</title>
 </svelte:head>
 
 <!-- TODO HANDLE DIFFERENT ERRORS -->

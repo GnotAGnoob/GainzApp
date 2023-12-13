@@ -9,7 +9,7 @@
 
 	let contentElement: HTMLDivElement;
 
-	$: height = contentElement?.scrollHeight ? `${contentElement?.scrollHeight}px` : "auto";
+	$: height = contentElement?.scrollHeight ? `${Math.floor(contentElement?.scrollHeight)}px` : "auto";
 
 	const onClick = () => {
 		isOpen = !isOpen;

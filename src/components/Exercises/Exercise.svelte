@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { dictionary } from "$src/lib/language/dictionary";
-	import type { PageExercise, PageMandatoryExercise } from "$src/routes/exercises/types";
+	import type { PageExercise } from "$src/routes/exercises/types";
 	import toast from "$src/lib/toast";
 	import axios from "axios";
 	import type { Exercise } from "$src/db/schema/exercise";
@@ -9,10 +9,6 @@
 	import WorkoutOverview from "./WorkoutOverview.svelte";
 
 	export let exercise: PageExercise;
-	// todo fix this picovina
-	const fixedExercise: PageMandatoryExercise = exercise as unknown as PageMandatoryExercise;
-
-	const areWorkouts = exercise.workoutHistory?.length && exercise.bestWorkout;
 
 	let errorMessage: string | null = null;
 
@@ -45,7 +41,7 @@
 	};
 </script>
 
-{#if !areWorkouts}
+{#if !(exercise.workoutHistory?.length && exercise.bestWorkout)}
 	<div class="exercise">
 		<EditText
 			text={exercise.name}
@@ -62,7 +58,7 @@
 		</h5>
 	</div>
 {:else}
-	<WorkoutOverview workoutHistory={fixedExercise.workoutHistory} bestWorkout={fixedExercise.bestWorkout}>
+	<WorkoutOverview workoutHistory={exercise.workoutHistory} bestWorkout={exercise.bestWorkout}>
 		<EditText
 			text={exercise.name}
 			{onConfirm}

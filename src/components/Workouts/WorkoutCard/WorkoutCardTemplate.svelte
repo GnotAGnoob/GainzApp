@@ -8,7 +8,6 @@
 	export let onDelete: (() => void) | undefined = undefined;
 
 	// todo pri vytvareni noveho workoutu ostatni nezvetsovat
-	// todo neco s tim, kdyz jsou prazdny workouts
 </script>
 
 <li class="wrapper">

@@ -7,7 +7,7 @@
 	import axios from "axios";
 	import InputDropdown from "../Atoms/InputDropdown.svelte";
 	import toast from "$src/lib/toast";
-	import { categories, sortedCategories } from "$src/lib/stores/categories";
+	import { categories } from "$src/lib/stores/categories";
 	import type { Category } from "$src/db/schema/category";
 	import type { PageCategory } from "$src/routes/exercises/types";
 	import { apiRoutes } from "$src/lib/paths";
@@ -32,7 +32,7 @@
 		(exercise) => exercise.category.length && exercise.name.length && exercise.unit.length,
 	);
 
-	$: categoryNames = $sortedCategories.map((category) => category.name);
+	$: categoryNames = $categories.map((category) => category.name);
 	$: formCategories = new Set(exercises.map((exercise) => exercise.category));
 	$: dropdownCategories = Array.from(new Set([...categoryNames, ...formCategories]));
 

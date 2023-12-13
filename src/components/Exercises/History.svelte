@@ -13,7 +13,7 @@
 			{#each workouts as workout, index (workout.id)}
 				<li class="workout">
 					<date class="date">{dateFormat(new Date(workout.date))}</date>
-					<DisplaySets type={index % 2 === 0 ? "neutral" : "neutral_2"} sets={workout.sets} />
+					<DisplaySets type={index % 2 === 1 ? "neutral" : "neutral_2"} sets={workout.sets} />
 				</li>
 			{/each}
 		</ul>
@@ -43,7 +43,7 @@
 
 		color: var(--_text-color);
 
-		&:nth-child(2n) {
+		&:nth-child(2n + 1) {
 			background-color: #{$background-color-history-2};
 			--_text-color: #{$text-color-history-2};
 		}

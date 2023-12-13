@@ -44,9 +44,7 @@
 			{/if}
 		</div>
 		<div slot="footer" class="historyButton" class:historyButton_open={isOpen}>
-			<!-- {#if !isOpen} -->
 			<div>{dictionary.HISTORY}</div>
-			<!-- {/if} -->
 			<div class="icon">
 				<Icon icon="solar:alt-arrow-right-bold" />
 			</div>
@@ -68,31 +66,6 @@
 		min-width: $space-xxl + $space-xl;
 
 		z-index: 1;
-
-		&::after {
-			content: "";
-			position: absolute;
-
-			inset: 40% 0 10% 0;
-
-			background-color: #{$background-color-history};
-			opacity: 0;
-
-			// transition: opacity 0.15s ease-in-out;
-			z-index: -1;
-		}
-
-		&.isOpen {
-			&::after {
-				opacity: 1;
-			}
-		}
-
-		&:not(.isOpen) {
-			&::after {
-				transition: opacity 0s 0.15s ease-in-out;
-			}
-		}
 	}
 
 	.workouts {

@@ -2,7 +2,6 @@
 	import { categories } from "$src/lib/stores/categories";
 	import { floatedCorner } from "$src/lib/stores/floatedCorner";
 	import Exercises from "$src/components/Exercises/Exercises.svelte";
-	import { sortedCategories } from "$src/lib/stores/categories";
 
 	export let data;
 
@@ -10,4 +9,4 @@
 	$floatedCorner = ["addExercise"];
 </script>
 
-<Exercises categories={$sortedCategories} />
+<Exercises categories={$categories} />

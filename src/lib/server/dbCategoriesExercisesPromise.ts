@@ -105,7 +105,6 @@ export const dbCategoriesExercisesPromise = (userId: string, database: Database 
 export default async (userId: string, database: Database = db): Promise<PageExercisesData> => {
 	const unitsPromise = db.select({ id: unit.id, name: unit.name }).from(unit);
 
-	// todo dokoncit query
 	const categoriesPromise = dbCategoriesExercisesPromise(userId, database);
 
 	const [units, categories] = await Promise.all([unitsPromise, categoriesPromise]);

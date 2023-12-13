@@ -64,7 +64,7 @@
 		display: flex;
 
 		flex-direction: column;
-		gap: $space-lg;
+		gap: $space-xl;
 		margin-top: $space-md;
 	}
 

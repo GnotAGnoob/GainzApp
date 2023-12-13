@@ -8,8 +8,6 @@
 	export let supersetExercise: PageFillSupersetExercise;
 	export let onDelete: () => void;
 	export let isLoading = false;
-
-	// todo fix history color
 </script>
 
 <div class="container">

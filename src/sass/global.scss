@@ -1,7 +1,5 @@
 @use "./variables/colors.scss" as *;
-@import "$nodeModules/normalize.css/normalize.css";
-
-// TODO vsechny importy na @use
+@use "$nodeModules/normalize.css/normalize.css" as *;
 
 :root,
 ::backdrop {

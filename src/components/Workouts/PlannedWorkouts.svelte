@@ -7,6 +7,8 @@
 	import { plannedWorkouts as plannedWorkoutsStore } from "$src/lib/stores/plannedWorkouts";
 	import EditablePlanWorkoutCard from "./WorkoutCard/EditablePlanWorkoutCard.svelte";
 	import PlanWorkoutCard from "./WorkoutCard/PlanWorkoutCard.svelte";
+	import EmptyCard from "../Atoms/EmptyCard.svelte";
+	import { text } from "@sveltejs/kit";
 
 	export let plannedWorkouts: PagePlannedWorkout[] = [];
 	plannedWorkoutsStore.set(plannedWorkouts);
@@ -40,13 +42,13 @@
 		>
 			{#each $plannedWorkoutsStore as workout, index (workout.id)}
 				<EditablePlanWorkoutCard title={index + 1} {workout} />
-			{:else}
-				<!-- todo empty -->
 			{/each}
 			{#if isAddNewWorkout}
 				<PlanWorkoutCard title={dictionary.CREATING_NEW_WORKOUT} {onCancel} {onConfirm} />
 			{/if}
 		</Scroller>
+	{:else}
+		<EmptyCard text={dictionary.YOU_HAVE_NOT_PLANNED_ANY_WORKOUTS} />
 	{/if}
 	<div class="button">
 		<Button

@@ -43,6 +43,7 @@ export const dictionary = {
 	WORKOUT_HISTORY: "Workout History",
 	ALREADY_EXIST: "Already exist",
 	UNKNOWN_ERROR: "Unknown error",
+	YOU_HAVE_NOT_PLANNED_ANY_WORKOUTS: "You have not planned any workouts",
 	NO_WORKOUTS: "No workouts",
 	NO_EXERCISES_CREATED: "No exercises created",
 	YOU_HAVE_TO_FILL_ALL_FIELDS: "You have to fill all fields",

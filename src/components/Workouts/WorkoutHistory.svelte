@@ -3,6 +3,8 @@
 	import type { PageWorkout } from "$src/routes/workouts/types";
 	import { workoutHistory as workoutHistoryStore } from "$src/lib/stores/workoutHistory";
 	import EditableWorkoutCard from "./WorkoutCard/EditableWorkoutCard.svelte";
+	import EmptyCard from "../Atoms/EmptyCard.svelte";
+	import { dictionary } from "$src/lib/language/dictionary";
 
 	export let workoutHistory: PageWorkout[] = [];
 	workoutHistoryStore.set(workoutHistory);
@@ -20,10 +22,10 @@
 		>
 			{#each $workoutHistoryStore as workout (workout.id)}
 				<EditableWorkoutCard {workout} />
-			{:else}
-				<!-- todo empty -->
 			{/each}
 		</Scroller>
+	{:else}
+		<EmptyCard text={dictionary.NO_WORKOUTS} />
 	{/if}
 </section>
 

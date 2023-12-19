@@ -73,6 +73,7 @@
 	};
 </script>
 
+<!-- todo fix dropdown cut by overflow -->
 <WorkoutCardTemplate bind:isInEditMode {title} {onCancel} {onDelete}>
 	{#if isInEditMode}
 		<InteractiveWorkoutSupersets workout={workoutCopy} {onConfirm} {onCancel} {errorMessage} />

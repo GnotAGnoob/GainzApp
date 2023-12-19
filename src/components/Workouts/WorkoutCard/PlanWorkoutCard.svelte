@@ -47,7 +47,6 @@
 </script>
 
 <WorkoutCardTemplate isInEditMode {title} onCancel={handleCancel}>
-	<!-- change for fillwourkout superset -->
 	<InteractiveWorkoutSupersets
 		bind:workout={newWorkout}
 		onConfirm={handleConfirm}

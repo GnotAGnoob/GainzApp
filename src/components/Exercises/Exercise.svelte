@@ -39,6 +39,8 @@
 			errorMessage = error?.message || dictionary.UNKNOWN_ERROR;
 		}
 	};
+
+	console.log(exercise);
 </script>
 
 {#if !(exercise.workoutHistory?.length && exercise.bestWorkout)}

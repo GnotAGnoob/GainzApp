@@ -5,10 +5,13 @@
 	import { dictionary } from "$src/lib/language/dictionary";
 	import type { PageCreateSupersetExercise } from "$src/routes/workouts/types";
 	import ExerciseDropdown from "$components/Workouts/Exercise/ExerciseDropdown.svelte";
+	import EditButtons from "$src/components/EditButtons.svelte";
 
 	export let supersetExercises: PageCreateSupersetExercise[];
 	export let order: number;
 	export let isLoading = false;
+	export let onDeleteSuperset: () => void;
+	export let disabledDeleteText: string | undefined = undefined;
 	export let onConfirmExercise: (
 		exercise: Partial<PageCreateSupersetExercise>,
 	) => Partial<PageCreateSupersetExercise> | null;
@@ -23,6 +26,8 @@
 		(supersetExercises.length >= MAX_SUPERSET_EXERCISES && dictionary.YOU_CANNOT_CREATE_MORE_ITEMS) ||
 		(!areExercisesFilled && dictionary.YOU_HAVE_TO_FILL_ALL_FIELDS) ||
 		loadingText;
+	$: deleteConfirmationText =
+		supersetExercises.length > 1 ? dictionary.ARE_YOU_SURE_YOU_WANT_TO_DETELE_SUPERSET : undefined;
 
 	$: if (isLoading) {
 		newSupersetExercise = null;
@@ -45,12 +50,24 @@
 
 		newSupersetExercise = null;
 	};
-
-	// todo smazat cely superset - btn
 </script>
 
 <div class="superset">
-	<h5 class="title">{order}. {supersetExercises.length > 1 ? "superset" : "exercise"}</h5>
+	<div class="titleWrapper">
+		<h5 class="title">{order}. {supersetExercises.length > 1 ? "superset" : "exercise"}</h5>
+		<EditButtons
+			isAbsolute={false}
+			isEditButton={false}
+			onAdd={onAddNewExercise}
+			onDelete={onDeleteSuperset}
+			disabledText={disabledText || undefined}
+			{deleteConfirmationText}
+			buttonPadding="xs"
+			isPadding={false}
+			{disabledDeleteText}
+			disabledAddText={newSupersetExercise ? dictionary.YOU_ARE_ALREADY_ADDING_NEW_EXERCISE : undefined}
+		/>
+	</div>
 	<div class="exercises">
 		<slot />
 		{#if newSupersetExercise}
@@ -92,6 +109,15 @@
 		font-size: $text-tag;
 		font-weight: 700;
 		color: var(--text-secondary);
+
+		&Wrapper {
+			display: flex;
+
+			align-items: center;
+			justify-content: space-between;
+
+			gap: $space-xs;
+		}
 	}
 
 	.superset {

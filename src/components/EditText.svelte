@@ -5,8 +5,8 @@
 	import { dictionary } from "$lib/language/dictionary";
 
 	export let text = "";
-	export let isAddButton = false;
 	export let isEditButton = false;
+	export let onAdd: (() => void) | undefined = undefined;
 	export let onConfirm: (newValue: string) => Promise<void>;
 	export let onDelete: (() => Promise<void>) | undefined = undefined;
 	export let deleteConfirmationText: string | undefined = undefined;
@@ -47,12 +47,11 @@
 		onConfirm={handleConfirm}
 		onEditMode={handleEditMode}
 		{onDelete}
+		{onAdd}
 		editTitle={dictionary.EDIT_TEXT}
 		deleteTitle={dictionary.DELETE}
 		{deleteConfirmationText}
-		{isAddButton}
 		{isEditButton}
-		category={text}
 		{buttonType}
 	>
 		{#if isInEditMode}

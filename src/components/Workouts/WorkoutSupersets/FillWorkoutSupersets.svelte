@@ -3,6 +3,7 @@
 	import WourkoutSupersetsTemplate from "./WorkoutSupersetsTemplate.svelte";
 	import FillSuperset from "../Superset/FillSuperset.svelte";
 	import { dictionary } from "$lib/language/dictionary";
+	import { superset } from "$src/db/schema/superset";
 
 	export let workout: PageFillWorkout;
 	export let overrideOnCancel: (() => void) | undefined = undefined;
@@ -25,6 +26,12 @@
 
 		workout = structuredClone(workoutCopy);
 	};
+
+	const onDeleteSuperset = (index: number) => {
+		if (isLoading || workout.supersets.length === 1) return;
+
+		workout.supersets = workout.supersets.filter((_, i) => i !== index);
+	};
 </script>
 
 <WourkoutSupersetsTemplate
@@ -36,6 +43,14 @@
 	{isLoading}
 >
 	{#each workout?.supersets || [] as superset, index}
-		<FillSuperset bind:supersetExercises={superset.supersetExercises} order={index + 1} {isLoading} />
+		<FillSuperset
+			bind:supersetExercises={superset.supersetExercises}
+			order={index + 1}
+			{isLoading}
+			onDeleteSuperset={() => onDeleteSuperset(index)}
+			disabledDeleteText={workout.supersets.length <= 1
+				? dictionary.YOU_HAVE_TO_HAVE_ATLEAST_ONE_SUPERSET
+				: undefined}
+		/>
 	{/each}
 </WourkoutSupersetsTemplate>

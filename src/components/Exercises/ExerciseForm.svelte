@@ -110,13 +110,13 @@
 	$: disabledAddExerciseTitle = exercises.length === MAX_EXERCISES ? dictionary.REACHED_MAX_EXERCISES : undefined;
 	$: disabledRemoveExerciseTitle = exercises.length === 1 ? dictionary.CANNOT_DELETE_LAST_EXERCISE : undefined;
 
-	// modal scrolling block
+	// todo modal scrolling block dropdown
 </script>
 
 <Modal isOpened={false} {onClose} size="lg" bind:this={modalElement}>
 	<form class="form">
 		<h2 class="title">{dictionary.ADD_NEW_EXERCISES}</h2>
-		{#each exercises as exercise, index (exercise.name)}
+		{#each exercises as exercise, index}
 			<div class="inputsWrapper">
 				<div class="inputs">
 					<div class="input">

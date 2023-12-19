@@ -8,10 +8,13 @@
 	import toast from "$src/lib/toast";
 	import { apiRoutes } from "$src/lib/paths";
 	import { categories } from "$src/lib/stores/categories";
+	import ExerciseForm from "./ExerciseForm.svelte";
+	import type Modal from "$components/Modals/Modal.svelte";
 
 	export let category: PageCategory;
 
 	let errorMessage: string | null = null;
+	let exerciseFormElement: Modal;
 
 	// editing name
 	const onConfirm = async (newValue: string) => {
@@ -63,13 +66,17 @@
 			errorMessage = error?.message || dictionary.UNKNOWN_ERROR;
 		}
 	};
+
+	const onAdd = () => {
+		exerciseFormElement.showModal();
+	};
 </script>
 
 <section class="wrapper">
 	<div class="header">
 		<EditText
 			text={category.name}
-			isAddButton
+			{onAdd}
 			isEditButton={!category.isGlobal}
 			{onConfirm}
 			onDelete={!category.isGlobal ? onDelete : undefined}
@@ -80,6 +87,7 @@
 		>
 			<h3 class="categoryTitle">{category.name}</h3>
 		</EditText>
+		<ExerciseForm category={category.name} bind:modalElement={exerciseFormElement} />
 	</div>
 	<div class="categoryInner">
 		<ul class="category" style={`--columns: ${category.exercises?.length || 1}`}>

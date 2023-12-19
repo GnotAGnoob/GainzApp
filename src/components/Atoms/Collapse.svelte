@@ -9,9 +9,10 @@
 
 	let contentElement: HTMLDivElement;
 
-	$: height = contentElement?.scrollHeight ? `${Math.floor(contentElement?.scrollHeight)}px` : "auto";
+	let height = "auto";
 
 	const onClick = () => {
+		height = contentElement?.scrollHeight ? `${Math.floor(contentElement?.scrollHeight)}px` : "auto";
 		isOpen = !isOpen;
 	};
 </script>
@@ -79,7 +80,7 @@
 		height: 0;
 		overflow-y: hidden;
 
-		transition: height $_transition-timing;
+		transition: height $_transition-timing, visibility 0s 0.15s;
 
 		visibility: hidden;
 
@@ -87,6 +88,8 @@
 			height: var(--_height, auto);
 
 			visibility: visible;
+
+			transition: height $_transition-timing;
 		}
 	}
 

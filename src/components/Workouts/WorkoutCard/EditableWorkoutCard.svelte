@@ -71,6 +71,7 @@
 
 <WorkoutCardTemplate bind:isInEditMode title={moment(workout.date).format("D. M. Y")} {onCancel} {onDelete}>
 	{#if isInEditMode}
+		<!-- todo -->
 		<!-- <InteractiveWorkoutSupersets workout={workoutCopy} {onConfirm} {onCancel} {errorMessage} /> -->
 	{:else}
 		<DisplayWorkoutSupersetsWithSets {workout} />

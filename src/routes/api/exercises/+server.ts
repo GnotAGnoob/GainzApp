@@ -7,7 +7,7 @@ import { handleError } from "$src/lib/server/error";
 import { dbQueryOmit, getUserId } from "$src/lib/server/dbHelpers";
 import type { PageCategory } from "$src/routes/exercises/types";
 import { json } from "@sveltejs/kit";
-import dbCategoriesExercisesPromise from "$src/lib/server/dbCategoriesExercisesPromise.js";
+import { dbMapCategories, dbCategoriesExercisesPromise } from "$src/lib/server/dbCategoriesExercisesPromise.js";
 
 export async function POST({ request, locals }) {
 	try {
@@ -34,8 +34,6 @@ export async function POST({ request, locals }) {
 			name: categoryName,
 			userId,
 		}));
-
-		let returnCategories: PageCategory[] = [];
 
 		await db.transaction(async (transaction) => {
 			try {
@@ -72,13 +70,14 @@ export async function POST({ request, locals }) {
 				name: exercise.name,
 				unitId: unitsReturned.find((unit) => unit.name === exercise.unit)?.id as number,
 				categoryId: categoriesReturned.find((category) => category.name === exercise.category)?.id as number,
+				userId,
 			}));
 
 			await transaction.insert(exercise).values(insertExercises);
-
-			// could be optimized with where clause
-			returnCategories = await dbCategoriesExercisesPromise(userId, transaction);
 		});
+
+		const newCategories = await dbCategoriesExercisesPromise(userId, db);
+		const returnCategories: PageCategory[] = dbMapCategories(newCategories);
 
 		return json(returnCategories);
 	} catch (error) {

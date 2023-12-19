@@ -1,4 +1,3 @@
-import { category } from "$src/db/schema/category";
 import { MAX_TEXT_LENGTH } from "$src/lib/constants";
 import db from "$src/lib/server/db";
 import { z } from "zod";

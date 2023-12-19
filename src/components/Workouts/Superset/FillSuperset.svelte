@@ -1,11 +1,13 @@
 <script lang="ts">
 	import FillExercise from "../Exercise/FillExercise.svelte";
 	import type { PageFillSupersetExercise } from "$src/routes/workouts/types";
-	import SupersetTemplate from "./EditableSupersetTemplate.svelte";
+	import EditableSupersetTemplate from "./EditableSupersetTemplate.svelte";
 
 	export let supersetExercises: PageFillSupersetExercise[] = [];
 	export let order: number;
 	export let isLoading = false;
+	export let onDeleteSuperset: () => void;
+	export let disabledDeleteText: string | undefined = undefined;
 
 	const onDelete = (index: number) => {
 		supersetExercises = supersetExercises.filter((_, i) => i !== index);
@@ -27,13 +29,20 @@
 	};
 </script>
 
-<SupersetTemplate {order} bind:supersetExercises {isLoading} {onConfirmExercise}>
+<EditableSupersetTemplate
+	{order}
+	bind:supersetExercises
+	{isLoading}
+	{onConfirmExercise}
+	{onDeleteSuperset}
+	{disabledDeleteText}
+>
 	<div class="container" class:containerCenter={supersetExercises.length < 2}>
 		{#each supersetExercises as supersetExercise, index}
 			<FillExercise bind:supersetExercise onDelete={() => onDelete(index)} {isLoading} />
 		{/each}
 	</div>
-</SupersetTemplate>
+</EditableSupersetTemplate>
 
 <style lang="scss">
 	.container {

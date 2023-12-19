@@ -10,7 +10,7 @@ import { workout } from "$src/db/schema/workout";
 import { setWeight } from "$src/db/schema/setWeight";
 import { status } from "$src/db/schema/status";
 import { unit } from "$src/db/schema/unit";
-import type { PageCategory, PageExercisesData, PageSupersetExerciseInfo } from "$src/routes/exercises/types";
+import type { PageCategory, PageExercisesData } from "$src/routes/exercises/types";
 
 export const dbCategoriesExercisesPromise = (userId: string, database: Database = db) => {
 	// nejak sikovne rozdelit
@@ -101,6 +101,18 @@ export const dbCategoriesExercisesPromise = (userId: string, database: Database 
 		},
 	});
 };
+export const dbMapCategories = (
+	categories: Awaited<ReturnType<typeof dbCategoriesExercisesPromise>>,
+): PageCategory[] => {
+	return categories.map((category) => ({
+		...category,
+		exercises: category.exercises?.map((exercise) => ({
+			...exercise,
+			bestWorkout: exercise.bestWorkouts.length ? exercise.bestWorkouts[0] : undefined,
+			workoutHistory: exercise.supersetExercises.length ? exercise.supersetExercises : undefined,
+		})),
+	}));
+};
 
 export default async (userId: string, database: Database = db): Promise<PageExercisesData> => {
 	const unitsPromise = db.select({ id: unit.id, name: unit.name }).from(unit);
@@ -109,14 +121,7 @@ export default async (userId: string, database: Database = db): Promise<PageExer
 
 	const [units, categories] = await Promise.all([unitsPromise, categoriesPromise]);
 
-	const mappedCategories: PageCategory[] = categories.map((category) => ({
-		...category,
-		exercises: category.exercises?.map((exercise) => ({
-			...exercise,
-			bestWorkout: exercise.bestWorkouts.length ? exercise.bestWorkouts[0] : undefined,
-			workoutHistory: exercise.supersetExercises.length ? exercise.supersetExercises : undefined,
-		})),
-	}));
+	const mappedCategories: PageCategory[] = dbMapCategories(categories);
 
 	return { units, categories: mappedCategories };
 };

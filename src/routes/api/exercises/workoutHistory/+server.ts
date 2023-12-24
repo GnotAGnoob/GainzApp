@@ -88,7 +88,7 @@ export async function POST({ request, locals }) {
 				bestWorkout: bestWorkouts[0],
 			};
 		});
-
+		console.log(remappedData);
 		return json(remappedData);
 	} catch (error) {
 		const errorResponse = handleError(error);

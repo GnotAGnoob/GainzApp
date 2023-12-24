@@ -28,7 +28,7 @@
 				params: { text: value, limit: MAX_DROPDOWN_ITEMS },
 			});
 			dropdownItems = data.map((item) => {
-				return { exercise: { ...item.exercise, category: item.category } };
+				return { exercise: { ...item.exercise, category: item.category }, unit: item.unit };
 			});
 		} catch (error) {
 			toast.error(dictionary.UNKNOWN_ERROR);

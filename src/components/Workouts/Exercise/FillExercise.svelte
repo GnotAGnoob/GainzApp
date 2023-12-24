@@ -4,10 +4,14 @@
 	import InputSets from "$src/components/Exercises/Sets/InputSets.svelte";
 	import WorkoutOverview from "$src/components/Exercises/WorkoutOverview.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
+	import Icon from "@iconify/svelte";
 
 	export let supersetExercise: PageFillSupersetExercise;
 	export let onDelete: () => void;
 	export let isLoading = false;
+	export let isFetching = false;
+
+	$: lastWorkout = supersetExercise.workoutHistory?.[0];
 </script>
 
 <div class="container">
@@ -16,75 +20,24 @@
 		{onDelete}
 		disabledText={isLoading ? dictionary.WAITING_FOR_RESPONSE : undefined}
 	/>
-	<!-- todo exercise.workoutHistory.lenght && exercise.bestWorkout  & use actual data-->
-	{#if false}
-		<WorkoutOverview
-			bestWorkout={{
-				id: 77,
-				date: new Date(),
-				sets: [
-					{ id: 1, repetition: 1, weight: 1 },
-					{ id: 2, repetition: 2, weight: 2 },
-				],
-			}}
-			workoutHistory={[
-				{
-					id: 77,
-					date: new Date(),
-					sets: [
-						{ id: 1, repetition: 1, weight: 1 },
-						{ id: 2, repetition: 2, weight: 2 },
-					],
-				},
-				{
-					id: 22,
-					date: new Date(),
-					sets: [
-						{ id: 1, repetition: 1, weight: 1 },
-						{ id: 2, repetition: 2, weight: 2 },
-					],
-				},
-			]}
-		/>
-	{/if}
 	<div class="wrapper">
-		<WorkoutOverview
-			bestWorkout={{
-				id: 77,
-				date: new Date(),
-				sets: [
-					{ id: 1, repetition: 10, weight: 1 },
-					{ id: 2, repetition: 20, weight: 2 },
-				],
-			}}
-			workoutHistory={[
-				{
-					id: 2,
-					date: new Date(),
-					sets: [
-						{ id: 1, repetition: 10, weight: 10 },
-						{ id: 2, repetition: 20, weight: 10 },
-					],
-				},
-				{
-					id: 87,
-					date: new Date(),
-					sets: [
-						{ id: 1, repetition: 10, weight: 10 },
-						{ id: 2, repetition: 9, weight: 10 },
-					],
-				},
-				{
-					id: 77,
-					date: new Date(),
-					sets: [
-						{ id: 1, repetition: 1, weight: 1 },
-						{ id: 2, repetition: 2, weight: 2 },
-					],
-				},
-			]}
-		/>
-		<InputSets bind:sets={supersetExercise.sets} />
+		{#if supersetExercise.workoutHistory?.length && supersetExercise.bestWorkout}
+			<WorkoutOverview
+				bestWorkout={supersetExercise.bestWorkout}
+				workoutHistory={supersetExercise.workoutHistory}
+			/>
+		{:else}
+			<h5 class="noWorkout">
+				{#if isFetching}
+					<div class="icon">
+						<Icon icon="eos-icons:loading" />
+					</div>
+				{:else}
+					{dictionary.NO_WORKOUT_HISTORY}
+				{/if}
+			</h5>
+		{/if}
+		<InputSets bind:sets={supersetExercise.sets} initialWeightValue={lastWorkout?.sets[0].weight} />
 	</div>
 </div>
 
@@ -97,7 +50,27 @@
 	.wrapper {
 		display: flex;
 
+		margin-top: $space-xs;
+
 		flex-direction: column;
 		gap: $space-md;
+	}
+
+	.icon {
+		font-size: $icon-xxl;
+	}
+
+	.noWorkout {
+		display: flex;
+
+		width: 100%;
+		height: $space-xl + $space-lg;
+		border-radius: $border-md;
+		margin: auto;
+
+		align-items: center;
+		justify-content: center;
+
+		background-color: var(--accent-neutral-100);
 	}
 </style>

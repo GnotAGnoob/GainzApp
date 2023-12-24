@@ -6,6 +6,7 @@
 	export let supersetExercises: PageFillSupersetExercise[] = [];
 	export let order: number;
 	export let isLoading = false;
+	export let isFetching = false;
 	export let onDeleteSuperset: () => void;
 	export let disabledDeleteText: string | undefined = undefined;
 
@@ -18,6 +19,8 @@
 			supersetExercises = [
 				...supersetExercises,
 				{
+					// todo fix
+					unit: { id: 1, name: "kg" },
 					exercise: supersetExercise.exercise,
 					sets: supersetExercise.sets || [],
 				},
@@ -39,7 +42,7 @@
 >
 	<div class="container" class:containerCenter={supersetExercises.length < 2}>
 		{#each supersetExercises as supersetExercise, index}
-			<FillExercise bind:supersetExercise onDelete={() => onDelete(index)} {isLoading} />
+			<FillExercise bind:supersetExercise onDelete={() => onDelete(index)} {isLoading} {isFetching} />
 		{/each}
 	</div>
 </EditableSupersetTemplate>

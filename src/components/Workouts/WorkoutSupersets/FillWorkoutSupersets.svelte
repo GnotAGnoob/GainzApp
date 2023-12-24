@@ -3,13 +3,13 @@
 	import WourkoutSupersetsTemplate from "./WorkoutSupersetsTemplate.svelte";
 	import FillSuperset from "../Superset/FillSuperset.svelte";
 	import { dictionary } from "$lib/language/dictionary";
-	import { superset } from "$src/db/schema/superset";
 
 	export let workout: PageFillWorkout;
 	export let overrideOnCancel: (() => void) | undefined = undefined;
 	export let onConfirm: () => void;
 	export let errorMessage: string | undefined;
 	export let isLoading = false;
+	export let isFetching = false;
 
 	const workoutCopy = structuredClone(workout);
 
@@ -47,6 +47,7 @@
 			bind:supersetExercises={superset.supersetExercises}
 			order={index + 1}
 			{isLoading}
+			{isFetching}
 			onDeleteSuperset={() => onDeleteSuperset(index)}
 			disabledDeleteText={workout.supersets.length <= 1
 				? dictionary.YOU_HAVE_TO_HAVE_ATLEAST_ONE_SUPERSET

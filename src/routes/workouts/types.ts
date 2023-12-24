@@ -9,7 +9,7 @@ export interface PageSetWeight {
 }
 
 // EXERCISE
-export interface PageFillSupersetExercise {
+export interface PageFillSupersetExercise extends PageSupersetExerciseInfo {
 	id?: number;
 	sets: PageSetWeight[];
 	exercise: Exercise & {
@@ -17,11 +17,14 @@ export interface PageFillSupersetExercise {
 	};
 }
 
-export type PageCreateSupersetExercise = Pick<PageFillSupersetExercise, "exercise">;
+export type PageCreateSupersetExercise = Pick<PageFillSupersetExercise, "exercise" | "unit">;
 
-export type PageSupersetExercise = PageFillSupersetExercise & PageDisplaySupersetExercise & PageSupersetExerciseInfo;
+export type PageSupersetExercise = Omit<
+	PageFillSupersetExercise & PageDisplaySupersetExercise,
+	"bestWorkout" | "workoutHistoy"
+>;
 
-export type PagePlannedSupersetExercise = Pick<PageSupersetExercise, "id" | "exercise">;
+export type PagePlannedSupersetExercise = Pick<PageSupersetExercise, "id" | "exercise" | "unit">;
 
 // Server
 export interface PageInsertFillSupersetExercise extends Omit<PageFillSupersetExercise, "sets"> {

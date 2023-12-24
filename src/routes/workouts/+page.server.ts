@@ -8,7 +8,7 @@ export async function load({ locals }): Promise<PagePlannedWorkouts | HttpError>
 	try {
 		const userId = await getUserId(locals);
 
-		return dbPlannedWorkouts(userId);
+		return await dbPlannedWorkouts(userId);
 	} catch (error) {
 		throw handleError(error);
 	}

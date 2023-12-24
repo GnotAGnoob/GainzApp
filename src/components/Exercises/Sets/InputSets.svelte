@@ -12,8 +12,9 @@
 
 	export let sets: PageSetWeight[];
 	export let type: StylesType = "neutral";
+	export let initialWeightValue: number | undefined = undefined;
 
-	let newSet = { ...emptySet };
+	$: newSet = { ...emptySet, weight: initialWeightValue !== undefined ? `${initialWeightValue}` : emptySet.weight };
 
 	let scroller: Scroller | null = null;
 	let focusOn: "weight" | "repetition" | undefined;

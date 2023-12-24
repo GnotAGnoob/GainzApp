@@ -24,7 +24,6 @@
 	export let disabledText: string | undefined = undefined;
 	export let disabledDeleteText: string | undefined = undefined;
 	export let disabledAddText: string | undefined = undefined;
-	// todo disabled status for buttons
 
 	export let isInEditMode = false;
 	let modal: ConfirmationModal;

@@ -46,6 +46,7 @@ export const dictionary = {
 	UNKNOWN_ERROR: "Unknown error",
 	YOU_HAVE_NOT_PLANNED_ANY_WORKOUTS: "You have not planned any workouts",
 	NO_WORKOUTS: "No workouts",
+	NO_WORKOUT_HISTORY: "No workout history",
 	NO_EXERCISES_CREATED: "No exercises created",
 	YOU_HAVE_TO_FILL_ALL_FIELDS: "You have to fill all fields",
 	YOU_ARE_ALREADY_ADDING_NEW_EXERCISE: "You are already adding new exercise",

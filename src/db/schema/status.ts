@@ -22,3 +22,9 @@ export type InsertStatus = InferInsertModel<typeof status>;
 
 export const statusInsertValidator = createInsertSchema(status);
 export const statusSelectValidator = createSelectSchema(status);
+
+export const STATUS = {
+	planned: "planned",
+	done: "done",
+	template: "template",
+} as const;

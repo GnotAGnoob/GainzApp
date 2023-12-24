@@ -7,6 +7,7 @@
 	export let size: Size = "md";
 	export let isOpened = false;
 	export let closeDisabledText: string | undefined = undefined;
+	export let onShowModal: (() => void) | undefined = undefined;
 
 	let modalElement: HTMLDialogElement;
 	let modalContentElement: HTMLDivElement;
@@ -41,6 +42,7 @@
 
 	export const showModal = () => {
 		modalElement.showModal();
+		onShowModal?.();
 		window.document.documentElement.classList.add("stopScrolling");
 	};
 

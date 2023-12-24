@@ -8,7 +8,6 @@
 	import EditablePlanWorkoutCard from "./WorkoutCard/EditablePlanWorkoutCard.svelte";
 	import PlanWorkoutCard from "./WorkoutCard/PlanWorkoutCard.svelte";
 	import EmptyCard from "../Atoms/EmptyCard.svelte";
-	import { text } from "@sveltejs/kit";
 
 	export let plannedWorkouts: PagePlannedWorkout[] = [];
 	plannedWorkoutsStore.set(plannedWorkouts);

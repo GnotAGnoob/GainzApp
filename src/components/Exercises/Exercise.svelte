@@ -39,8 +39,6 @@
 			errorMessage = error?.message || dictionary.UNKNOWN_ERROR;
 		}
 	};
-
-	console.log(exercise);
 </script>
 
 {#if !(exercise.workoutHistory?.length && exercise.bestWorkout)}
@@ -87,9 +85,12 @@
 	}
 
 	.name {
+		margin-bottom: $space-sm;
+
 		text-align: center;
 		font-size: $text-tag;
 		font-weight: 700;
+		line-height: 1;
 		color: var(--text-secondary);
 	}
 
@@ -98,7 +99,6 @@
 
 		height: 100%;
 		min-height: $space-lg;
-		margin-top: $space-sm;
 		padding: ($space-md + $space-xs) $space-md;
 		border-radius: $border-radius;
 

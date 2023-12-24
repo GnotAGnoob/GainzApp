@@ -1,5 +1,10 @@
-import type { PageInsertFillWorkout, PageInsertPlanWorkout, PagePlannedWorkouts } from "$src/routes/workouts/types";
-import { and, eq, inArray, sql } from "drizzle-orm";
+import type {
+	PageInsertFillWorkout,
+	PageInsertPlanWorkout,
+	PagePlannedWorkouts,
+	PageWorkout,
+} from "$src/routes/workouts/types";
+import { and, eq, inArray, sql, asc, desc } from "drizzle-orm";
 import { dbQueryOmit } from "./dbHelpers";
 import type { Database, StatusId } from "./dbTypes";
 import db from "./db";
@@ -7,10 +12,52 @@ import { category } from "$src/db/schema/category";
 import { exercise } from "$src/db/schema/exercise";
 import { workout } from "$src/db/schema/workout";
 import { superset } from "$src/db/schema/superset";
-import { status } from "$src/db/schema/status";
+import { STATUS, status } from "$src/db/schema/status";
 import { supersetExercise } from "$src/db/schema/supersetExercise";
 import { error } from "@sveltejs/kit";
 import { setWeight, type InsertSetWeight } from "$src/db/schema/setWeight";
+
+const bestSupersetExercises = (userId: string, database: Database = db) => {
+	return sql`
+		SELECT
+		*
+		FROM
+		(
+		SELECT
+			se."id" AS "superset_exercise_id",
+			se."exercise_id" AS "exercise_id",
+			w.date as "date",
+			ARRAY_AGG(
+			JSON_BUILD_OBJECT(
+				'set_id', sw."id",
+				'repetition', sw."repetition",
+				'weight', sw."weight"
+			)
+			) AS "sets",
+			ROW_NUMBER() OVER (PARTITION BY se."exercise_id" ORDER BY SUM(sw."repetition" * sw."weight") DESC) AS "rnk"
+		FROM
+			"supersetExercise" se
+			JOIN "setWeight" sw ON se."id" = sw."superset_exercise_id"
+			JOIN "superset" s ON se."superset_id" = s."id"
+			JOIN "workout" w ON s."workout_id" = w."id"
+		WHERE
+			w."userId" = ${userId}
+			AND w."status_id" = ${database.select({ id: status.id }).from(status).where(eq(status.name, STATUS.done))}
+		GROUP BY
+			se."id", se."exercise_id", w.date
+		) rse
+		WHERE
+		rse."rnk" = 1
+	`;
+};
+
+export const bestSupersetExercise = (userId: string, database: Database = db) => {
+	return sql<boolean>`(select JSON_BUILD_OBJECT(
+		'id', superset_exercise_id,
+		'sets', sets,
+		'date', date
+		) from (${bestSupersetExercises(userId, database)}) best limit 1)`;
+};
 
 export const dbGetWorkoutsPromise = (userId: string, statusId: StatusId, database: Database = db) => {
 	return database.query.workout.findMany({
@@ -49,6 +96,11 @@ export const dbGetWorkoutsPromise = (userId: string, statusId: StatusId, databas
 											isGlobal: sql<boolean>`(${category.userId} IS NULL)`.as("is_global"),
 										},
 									},
+									unit: {
+										columns: {
+											...dbQueryOmit,
+										},
+									},
 								},
 								extras: {
 									isGlobal: sql<boolean>`(${exercise.userId} IS NULL)`.as("is_global"),
@@ -60,13 +112,6 @@ export const dbGetWorkoutsPromise = (userId: string, statusId: StatusId, databas
 								},
 							},
 						},
-						// extras: {
-						// 	// todo
-						// 	// workoutHistory: sql<boolean>`(${workout.statusId} = ${status.id.done})`.as(
-						// 	// 	"workout_history",
-						// 	// ),
-						// 	// bestWorkout: sql<boolean>`(${workout.statusId} = ${status.id.done})`.as("best_workout"),
-						// },
 					},
 				},
 			},
@@ -134,7 +179,7 @@ const dbInsertWorkout = async (
 	userId: string,
 	newWorkout: PageInsertPlanWorkout,
 	transaction: Database,
-	statusName: StatusId = "planned",
+	statusName: StatusId = STATUS.planned,
 ) => {
 	const statusId = await transaction.query.status.findFirst({
 		columns: {
@@ -189,7 +234,7 @@ export const dbInsertCompleteWorkout = async (
 	newWorkout: PageInsertFillWorkout,
 	transaction: Database,
 ) => {
-	const data = await dbInsertWorkout(userId, newWorkout, transaction, "done");
+	const data = await dbInsertWorkout(userId, newWorkout, transaction, STATUS.done);
 
 	const setWeightValues: InsertSetWeight[] = [];
 	let index = 0;
@@ -220,7 +265,7 @@ export const dbPostPlannedWorkoutPromise = (userId: string, newWorkout: PageInse
 	return databaseConnection.transaction(async (transaction) => {
 		const { workoutIds } = await dbInsertWorkout(userId, newWorkout, transaction);
 
-		const insertedWorkout = await dbGetWorkoutPromise(userId, workoutIds[0].id, "planned", transaction);
+		const insertedWorkout = await dbGetWorkoutPromise(userId, workoutIds[0].id, STATUS.planned, transaction);
 
 		if (!insertedWorkout) {
 			throw error(404, "Workout not found");
@@ -230,10 +275,12 @@ export const dbPostPlannedWorkoutPromise = (userId: string, newWorkout: PageInse
 	});
 };
 
-export default async (userId: string, database?: Database): Promise<PagePlannedWorkouts> => {
+export default async (userId: string, database: Database = db): Promise<PagePlannedWorkouts> => {
 	const [plannedWorkouts, workoutHistory] = await Promise.all([
-		dbGetWorkoutsPromise(userId, "planned", database),
-		dbGetWorkoutsPromise(userId, "done", database),
+		// todo pro done ordered by date a pro planned ordered by order
+		dbGetWorkoutsPromise(userId, STATUS.planned, database),
+		// fucked date type
+		dbGetWorkoutsPromise(userId, STATUS.done, database) as unknown as PageWorkout[],
 	]);
 
 	return { plannedWorkouts, workoutHistory };

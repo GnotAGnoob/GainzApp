@@ -7,6 +7,7 @@
 	export let order: number;
 	export let isLoading = false;
 	export let isFetching = false;
+	export let onExerciseSelect: (() => void) | undefined = undefined;
 	export let onDeleteSuperset: () => void;
 	export let disabledDeleteText: string | undefined = undefined;
 
@@ -14,7 +15,7 @@
 		supersetExercises = supersetExercises.filter((_, i) => i !== index);
 	};
 
-	const onConfirmExercise = (supersetExercise: Partial<PageFillSupersetExercise>) => {
+	const handleConfirmExercise = (supersetExercise: Partial<PageFillSupersetExercise>) => {
 		if (supersetExercise?.exercise?.category && supersetExercise?.exercise) {
 			supersetExercises = [
 				...supersetExercises,
@@ -25,6 +26,8 @@
 					sets: supersetExercise.sets || [],
 				},
 			];
+
+			onExerciseSelect?.();
 			return null;
 		}
 
@@ -36,7 +39,7 @@
 	{order}
 	bind:supersetExercises
 	{isLoading}
-	{onConfirmExercise}
+	onConfirmExercise={handleConfirmExercise}
 	{onDeleteSuperset}
 	{disabledDeleteText}
 >

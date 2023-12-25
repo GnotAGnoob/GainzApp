@@ -2,7 +2,12 @@
 	import Modal from "$components/Modals/Modal.svelte";
 	import { plannedWorkouts } from "$src/lib/stores/plannedWorkouts";
 	import { workoutHistory } from "$src/lib/stores/workoutHistory";
-	import type { PageFillWorkout, PagePlannedWorkout, PagePlannedWorkouts } from "$src/routes/workouts/types";
+	import type {
+		PageFillWorkout,
+		PagePlannedWorkout,
+		PagePlannedWorkouts,
+		PageSetWeight,
+	} from "$src/routes/workouts/types";
 	import axios from "axios";
 	import FillWorkoutSupersets from "./WorkoutSupersets/FillWorkoutSupersets.svelte";
 	import { apiRoutes } from "$src/lib/paths";
@@ -16,27 +21,34 @@
 	let errorMessage: string | undefined;
 	let isLoading = false;
 	let isFetching = false;
+	let isModalOpen = false;
 
-	let remappedWorkout: PageFillWorkout;
-	$: remappedWorkout = {
-		...workout,
-		supersets: workout.supersets.map((superset, index) => ({
-			...superset,
-			supersetExercises: superset.supersetExercises.map((supersetExercise, supersetExerciseIndex) => {
-				const key = supersetExercise.exercise.id;
-				const additionalInfo = $exerciseAdditionalInfo.get(key);
-				const remmapedWorkoutSets =
-					remappedWorkout?.supersets[index].supersetExercises[supersetExerciseIndex].sets;
+	const remapWorkout = (workout: PagePlannedWorkout | PageFillWorkout) => {
+		return {
+			...workout,
+			supersets: workout.supersets.map((superset) => ({
+				...superset,
+				supersetExercises: superset.supersetExercises.map((supersetExercise) => {
+					const key = supersetExercise.exercise.id;
+					const additionalInfo = $exerciseAdditionalInfo.get(key);
+					let sets: PageSetWeight[] = [];
 
-				return {
-					...supersetExercise,
-					sets: remmapedWorkoutSets || [],
-					bestWorkout: additionalInfo?.bestWorkout,
-					workoutHistory: additionalInfo?.workoutHistory,
-				};
-			}),
-		})),
+					if ("sets" in supersetExercise) {
+						sets = supersetExercise.sets;
+					}
+
+					return {
+						...supersetExercise,
+						sets,
+						bestWorkout: additionalInfo?.bestWorkout,
+						workoutHistory: additionalInfo?.workoutHistory,
+					};
+				}),
+			})),
+		};
 	};
+
+	let remappedWorkout: PageFillWorkout = remapWorkout(workout);
 
 	// todo fetch loading states everywhere (here is done)
 	const onConfirm = async () => {
@@ -63,7 +75,9 @@
 		isLoading = false;
 	};
 
-	const onShowModal = async () => {
+	const fetchAdditionalData = async () => {
+		if (isFetching) return;
+
 		const exerciseIds = new Set<number>();
 
 		remappedWorkout.supersets.forEach((superset) => {
@@ -87,12 +101,12 @@
 
 			const newMap: typeof $exerciseAdditionalInfo = new Map();
 			for (const item of data) {
-				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				const { id, ...rest } = item;
 				newMap.set(item.id, rest);
 			}
 
 			$exerciseAdditionalInfo = new Map([...$exerciseAdditionalInfo, ...newMap]);
+			remappedWorkout = remapWorkout(remappedWorkout);
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
 				errorMessage = `${error.response?.data}. error while fetching workout history`;
@@ -102,14 +116,27 @@
 			}
 			errorMessage = "super unknown error";
 		}
+
 		isFetching = false;
+	};
+
+	const onShowModal = () => {
+		isModalOpen = true;
+		fetchAdditionalData();
+	};
+
+	const onCancel = () => {
+		if (isLoading) return;
+
+		fillWorkout?.onCancel();
+		isModalOpen = false;
 	};
 </script>
 
 <Modal
 	size="lg"
 	bind:this={modal}
-	onClose={fillWorkout?.onCancel}
+	onClose={onCancel}
 	closeDisabledText={isLoading ? dictionary.WAITING_FOR_RESPONSE : undefined}
 	{onShowModal}
 >
@@ -117,6 +144,7 @@
 		bind:this={fillWorkout}
 		bind:workout={remappedWorkout}
 		overrideOnCancel={modal?.closeModal}
+		onExerciseSelect={fetchAdditionalData}
 		{onConfirm}
 		{errorMessage}
 		{isLoading}

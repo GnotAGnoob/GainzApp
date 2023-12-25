@@ -1,12 +1,13 @@
 import { category } from "$src/db/schema/category";
 import { MAX_TEXT_LENGTH } from "$src/lib/constants";
 import db from "$src/lib/server/db";
-import dbCategoriesExercisesPromise from "$src/lib/server/dbCategoriesExercisesPromise";
+import { dbCategoriesExercisesPromise, dbMapCategories } from "$src/lib/server/dbCategoriesExercisesPromise";
 import { z } from "zod";
 import { handleError } from "$src/lib/server/error";
 import { getUserId } from "$src/lib/server/dbHelpers";
 import { and, eq } from "drizzle-orm";
 import { json } from "@sveltejs/kit";
+import type { PageCategory } from "$src/routes/exercises/types";
 
 export async function PATCH({ request, locals, params }) {
 	try {
@@ -60,8 +61,9 @@ export async function DELETE({ locals, params }) {
 		}
 
 		const updatedCategoriesExercise = await dbCategoriesExercisesPromise(userId);
+		const mappedCategories: PageCategory[] = dbMapCategories(updatedCategoriesExercise);
 
-		return json(updatedCategoriesExercise);
+		return json(mappedCategories);
 	} catch (error) {
 		const errorResponse = handleError(error);
 		return new Response(errorResponse.body.message, { status: errorResponse.status });

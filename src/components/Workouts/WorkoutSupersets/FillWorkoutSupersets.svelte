@@ -6,6 +6,7 @@
 
 	export let workout: PageFillWorkout;
 	export let overrideOnCancel: (() => void) | undefined = undefined;
+	export let onExerciseSelect: (() => void) | undefined = undefined;
 	export let onConfirm: () => void;
 	export let errorMessage: string | undefined;
 	export let isLoading = false;
@@ -48,6 +49,7 @@
 			order={index + 1}
 			{isLoading}
 			{isFetching}
+			{onExerciseSelect}
 			onDeleteSuperset={() => onDeleteSuperset(index)}
 			disabledDeleteText={workout.supersets.length <= 1
 				? dictionary.YOU_HAVE_TO_HAVE_ATLEAST_ONE_SUPERSET

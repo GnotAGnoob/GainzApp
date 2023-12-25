@@ -71,10 +71,12 @@ export const dbCategoriesExercisesPromise = (userId: string, database: Database 
 	return database.query.category.findMany({
 		columns: dbQueryOmit,
 		where: or(eq(category.userId, userId), isNull(category.userId)),
+		orderBy: asc(category.name),
 		with: {
 			exercises: {
 				columns: { ...dbQueryOmit },
 				where: or(eq(exercise.userId, userId), isNull(exercise.userId)),
+				orderBy: asc(exercise.name),
 				with: {
 					unit: {
 						columns: dbQueryOmit,

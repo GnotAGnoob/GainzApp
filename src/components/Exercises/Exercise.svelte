@@ -43,32 +43,36 @@
 
 {#if !(exercise.workoutHistory?.length && exercise.bestWorkout)}
 	<div class="exercise">
-		<EditText
-			text={exercise.name}
-			{onConfirm}
-			isEditButton={!exercise.isGlobal}
-			{errorMessage}
-			buttonType="noBackground_2"
-			inputSize="sm"
-		>
-			<h4 class="name">{exercise.name}</h4>
-		</EditText>
+		<div class="title">
+			<EditText
+				text={exercise.name}
+				{onConfirm}
+				isEditButton={!exercise.isGlobal}
+				{errorMessage}
+				buttonType="noBackground_2"
+				inputSize="sm"
+			>
+				<h4 class="name">{exercise.name}</h4>
+			</EditText>
+		</div>
 		<h5 class="noWorkout">
 			{dictionary.NO_WORKOUTS}
 		</h5>
 	</div>
 {:else}
 	<WorkoutOverview workoutHistory={exercise.workoutHistory} bestWorkout={exercise.bestWorkout}>
-		<EditText
-			text={exercise.name}
-			{onConfirm}
-			isEditButton={!exercise.isGlobal}
-			{errorMessage}
-			buttonType="noBackground_2"
-			inputSize="sm"
-		>
-			<h4 class="name">{exercise.name}</h4>
-		</EditText>
+		<div class="title">
+			<EditText
+				text={exercise.name}
+				{onConfirm}
+				isEditButton={!exercise.isGlobal}
+				{errorMessage}
+				buttonType="noBackground_2"
+				inputSize="sm"
+			>
+				<h4 class="name">{exercise.name}</h4>
+			</EditText>
+		</div>
 	</WorkoutOverview>
 {/if}
 
@@ -84,9 +88,11 @@
 		color: var(--text-secondary);
 	}
 
-	.name {
+	.title {
 		margin-bottom: $space-sm;
+	}
 
+	.name {
 		text-align: center;
 		font-size: $text-tag;
 		font-weight: 700;

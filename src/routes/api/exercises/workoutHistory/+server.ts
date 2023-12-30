@@ -9,7 +9,7 @@ import { supersetExercise } from "$src/db/schema/supersetExercise.js";
 import { workout } from "$src/db/schema/workout.js";
 import { superset } from "$src/db/schema/superset.js";
 import type { WorkoutHistory } from "./types";
-import { bestSupersetExercises, dbSupersetExerciseDate } from "$src/lib/server/dbCategoriesExercisesPromise";
+import { bestSupersetExercises, mapSupersetExercises } from "$src/lib/server/dbCategoriesExercisesPromise";
 import { STATUS, status } from "$src/db/schema/status";
 
 export async function POST({ request, locals }) {
@@ -18,9 +18,7 @@ export async function POST({ request, locals }) {
 
 		const schema = z.array(z.number().positive());
 
-		const xc = await request.json();
-
-		const exerciseIds = schema.parse(xc);
+		const exerciseIds = schema.parse(await request.json());
 
 		const supersetExerciseIds = db
 			.select({ id: supersetExercise.id })
@@ -54,9 +52,14 @@ export async function POST({ request, locals }) {
 								...dbQueryOmit,
 							},
 						},
-					},
-					extras: {
-						date: dbSupersetExerciseDate(userId, db).as("date"),
+						superset: {
+							columns: { ...dbQueryOmit },
+							with: {
+								workout: {
+									columns: { ...dbQueryOmit },
+								},
+							},
+						},
 					},
 				},
 				bestWorkouts: {
@@ -69,9 +72,14 @@ export async function POST({ request, locals }) {
 						sets: {
 							columns: { ...dbQueryOmit },
 						},
-					},
-					extras: {
-						date: dbSupersetExerciseDate(userId, db).as("date"),
+						superset: {
+							columns: { ...dbQueryOmit },
+							with: {
+								workout: {
+									columns: { ...dbQueryOmit },
+								},
+							},
+						},
 					},
 				},
 			},
@@ -82,13 +90,11 @@ export async function POST({ request, locals }) {
 
 			return {
 				...rest,
-				workoutHistory: supersetExercises.map((supersetExercise) => ({
-					...supersetExercise,
-				})),
-				bestWorkout: bestWorkouts[0],
+				workoutHistory: mapSupersetExercises(supersetExercises),
+				bestWorkout: mapSupersetExercises(bestWorkouts)[0],
 			};
 		});
-		console.log(remappedData);
+
 		return json(remappedData);
 	} catch (error) {
 		const errorResponse = handleError(error);

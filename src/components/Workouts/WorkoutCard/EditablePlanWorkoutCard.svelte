@@ -38,8 +38,8 @@
 				},
 			);
 
-			workoutCopy = structuredClone(newPlannedWorkout);
 			workout = newPlannedWorkout;
+			workoutCopy = structuredClone(newPlannedWorkout);
 			isInEditMode = false;
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
@@ -74,9 +74,9 @@
 </script>
 
 <!-- todo fix dropdown cut by overflow -->
-<WorkoutCardTemplate bind:isInEditMode {title} {onCancel} {onDelete}>
+<WorkoutCardTemplate bind:isInEditMode {title} {onCancel} {onDelete} bottomPadding="sm">
 	{#if isInEditMode}
-		<InteractiveWorkoutSupersets workout={workoutCopy} {onConfirm} {onCancel} {errorMessage} />
+		<InteractiveWorkoutSupersets bind:workout={workoutCopy} {onConfirm} {onCancel} {errorMessage} />
 	{:else}
 		<DisplayWorkoutSupersets {workout} />
 		<div class="start">

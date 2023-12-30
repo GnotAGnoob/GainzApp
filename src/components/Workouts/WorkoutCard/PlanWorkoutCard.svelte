@@ -46,7 +46,7 @@
 	};
 </script>
 
-<WorkoutCardTemplate isInEditMode {title} onCancel={handleCancel}>
+<WorkoutCardTemplate isInEditMode {title} onCancel={handleCancel} bottomPadding="sm">
 	<InteractiveWorkoutSupersets
 		bind:workout={newWorkout}
 		onConfirm={handleConfirm}

@@ -20,8 +20,6 @@
 			supersetExercises = [
 				...supersetExercises,
 				{
-					// todo fix
-					unit: { id: 1, name: "kg" },
 					exercise: supersetExercise.exercise,
 					sets: supersetExercise.sets || [],
 				},

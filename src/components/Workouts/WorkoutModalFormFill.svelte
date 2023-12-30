@@ -21,7 +21,6 @@
 	let errorMessage: string | undefined;
 	let isLoading = false;
 	let isFetching = false;
-	let isModalOpen = false;
 
 	const remapWorkout = (workout: PagePlannedWorkout | PageFillWorkout) => {
 		return {
@@ -40,8 +39,11 @@
 					return {
 						...supersetExercise,
 						sets,
-						bestWorkout: additionalInfo?.bestWorkout,
-						workoutHistory: additionalInfo?.workoutHistory,
+						exercise: {
+							...supersetExercise.exercise,
+							bestWorkout: additionalInfo?.bestWorkout,
+							workoutHistory: additionalInfo?.workoutHistory,
+						},
 					};
 				}),
 			})),
@@ -60,6 +62,7 @@
 			);
 			$plannedWorkouts = data.plannedWorkouts;
 			$workoutHistory = data.workoutHistory;
+			// todo toast
 			modal?.closeModal();
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
@@ -121,7 +124,6 @@
 	};
 
 	const onShowModal = () => {
-		isModalOpen = true;
 		fetchAdditionalData();
 	};
 
@@ -129,7 +131,6 @@
 		if (isLoading) return;
 
 		fillWorkout?.onCancel();
-		isModalOpen = false;
 	};
 </script>
 

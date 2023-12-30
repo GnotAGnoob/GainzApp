@@ -50,6 +50,8 @@
 
 		&s {
 			display: flex;
+
+			flex-direction: row-reverse;
 		}
 	}
 	.date {

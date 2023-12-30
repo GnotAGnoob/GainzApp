@@ -126,6 +126,7 @@
 
 		justify-content: center;
 		gap: $space-sm;
+		row-gap: $space-md;
 
 		background-color: var(--accent-neutral-100);
 

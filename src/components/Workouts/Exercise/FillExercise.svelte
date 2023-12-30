@@ -11,7 +11,7 @@
 	export let isLoading = false;
 	export let isFetching = false;
 
-	$: lastWorkout = supersetExercise.workoutHistory?.[0];
+	$: lastWorkout = supersetExercise.exercise.workoutHistory?.[0];
 </script>
 
 <div class="container">
@@ -21,10 +21,10 @@
 		disabledText={isLoading ? dictionary.WAITING_FOR_RESPONSE : undefined}
 	/>
 	<div class="wrapper">
-		{#if supersetExercise.workoutHistory?.length && supersetExercise.bestWorkout}
+		{#if supersetExercise.exercise.workoutHistory?.length && supersetExercise.exercise.bestWorkout}
 			<WorkoutOverview
-				bestWorkout={supersetExercise.bestWorkout}
-				workoutHistory={supersetExercise.workoutHistory}
+				bestWorkout={supersetExercise.exercise.bestWorkout}
+				workoutHistory={supersetExercise.exercise.workoutHistory}
 			/>
 		{:else}
 			<h5 class="noWorkout">

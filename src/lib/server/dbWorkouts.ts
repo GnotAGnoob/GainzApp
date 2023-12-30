@@ -157,6 +157,11 @@ export const dbGetWorkoutPromise = (userId: string, workoutId: number, statusId:
 											isGlobal: sql<boolean>`(${exercise.userId} IS NULL)`.as("is_global"),
 										},
 									},
+									unit: {
+										columns: {
+											...dbQueryOmit,
+										},
+									},
 								},
 								extras: {
 									isGlobal: sql<boolean>`(${exercise.userId} IS NULL)`.as("is_global"),
@@ -277,7 +282,7 @@ export const dbPostPlannedWorkoutPromise = (userId: string, newWorkout: PageInse
 
 export default async (userId: string, database: Database = db): Promise<PagePlannedWorkouts> => {
 	const [plannedWorkouts, workoutHistory] = await Promise.all([
-		// todo pro done ordered by date a pro planned ordered by order
+		// todo pro done ordered by date a pro planned ordered by order + planned nema mit date
 		dbGetWorkoutsPromise(userId, STATUS.planned, database),
 		// fucked date type
 		dbGetWorkoutsPromise(userId, STATUS.done, database) as unknown as PageWorkout[],

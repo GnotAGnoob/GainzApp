@@ -11,8 +11,10 @@
 
 	let isOpen = false;
 
-	const lastWorkout = workoutHistory[workoutHistory.length - 1];
-	const isEnoughHistory = workoutHistory.length > 1;
+	$: lastWorkout = workoutHistory[workoutHistory.length - 1];
+	$: isEnoughHistory = workoutHistory.length > 1;
+
+	// todo opravit bug pri zacatku se zvetsi cely exercise
 </script>
 
 <div class="exercise" class:isOpen>
@@ -26,13 +28,13 @@
 							title={dictionary.BEST_AND_LAST}
 							workout={bestWorkout}
 							type="positive"
-							isBottomBorderless
+							isBottomBorderless={isEnoughHistory}
 						/>
 					</div>
 				{:else}
 					<div class="workouts">
 						<Workout title={dictionary.BEST} workout={bestWorkout} type="positive" isBottomBorderless />
-						<Workout title={dictionary.LAST} workout={lastWorkout} isBottomBorderless />
+						<Workout title={dictionary.LAST} workout={lastWorkout} isBottomBorderless={isEnoughHistory} />
 					</div>
 				{/if}
 			</div>
@@ -43,12 +45,16 @@
 				<History workouts={workoutHistory} />
 			{/if}
 		</div>
-		<div slot="footer" class="historyButton" class:historyButton_open={isOpen}>
-			<div>{dictionary.HISTORY}</div>
-			<div class="icon">
-				<Icon icon="solar:alt-arrow-right-bold" />
-			</div>
-		</div>
+		<svelte:fragment slot="footer">
+			{#if isEnoughHistory}
+				<div class="historyButton" class:historyButton_open={isOpen}>
+					<div>{dictionary.HISTORY}</div>
+					<div class="icon">
+						<Icon icon="solar:alt-arrow-right-bold" />
+					</div>
+				</div>
+			{/if}
+		</svelte:fragment>
 	</Collapse>
 </div>
 

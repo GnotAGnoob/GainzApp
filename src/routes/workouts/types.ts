@@ -1,6 +1,7 @@
 import type { Category } from "$src/db/schema/category";
 import type { Exercise } from "$src/db/schema/exercise";
 import type { InsertSetWeight } from "$src/db/schema/setWeight";
+import type { Unit } from "$src/db/schema/unit";
 import type { PageDisplaySupersetExercise, PageSupersetExerciseInfo } from "../exercises/types";
 
 export interface PageSetWeight {
@@ -9,22 +10,23 @@ export interface PageSetWeight {
 }
 
 // EXERCISE
-export interface PageFillSupersetExercise extends PageSupersetExerciseInfo {
+interface PageSupersetExerciseTemplate<T = object> {
 	id?: number;
 	sets: PageSetWeight[];
-	exercise: Exercise & {
-		category: Category;
-	};
+	exercise: Exercise &
+		T & {
+			category: Category;
+			unit: Unit;
+		};
 }
 
-export type PageCreateSupersetExercise = Pick<PageFillSupersetExercise, "exercise" | "unit">;
+export type PageFillSupersetExercise = PageSupersetExerciseTemplate<PageSupersetExerciseInfo>;
 
-export type PageSupersetExercise = Omit<
-	PageFillSupersetExercise & PageDisplaySupersetExercise,
-	"bestWorkout" | "workoutHistoy"
->;
+export type PageCreateSupersetExercise = Pick<PageSupersetExerciseTemplate, "exercise">;
 
-export type PagePlannedSupersetExercise = Pick<PageSupersetExercise, "id" | "exercise" | "unit">;
+export type PageSupersetExercise = PageSupersetExerciseTemplate & PageDisplaySupersetExercise;
+
+export type PagePlannedSupersetExercise = Pick<PageSupersetExercise, "id" | "exercise">;
 
 // Server
 export interface PageInsertFillSupersetExercise extends Omit<PageFillSupersetExercise, "sets"> {

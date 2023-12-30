@@ -32,7 +32,6 @@
 		(exercise) => exercise.category.length && exercise.name.length && exercise.unit.length,
 	);
 
-	$: console.log($categories);
 	$: categoryNames = $categories.map((category) => category.name);
 	$: formCategories = new Set(exercises.map((exercise) => exercise.category));
 	$: dropdownCategories = Array.from(new Set([...categoryNames, ...formCategories]));

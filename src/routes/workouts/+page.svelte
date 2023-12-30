@@ -40,11 +40,13 @@
 			{:else if activeElement === 1}
 				<!-- else if content here -->
 				<section>
-					switch tab between templates and planned workouts when making workout -> button make workout from
+					imagine that there are templates here
+					<!-- switch tab between templates and planned workouts 
+						when making workout -> button make workout from
 					templates option for creating workout somehow when creating create 3 scenarios -> template, planned,
 					and just create workout mozna u templatu pocitat s moznosti, ze budes vyjmenovavat jen kategorie
 					mozna jinak nez dropdown? mozna dropdown, kdyz selected tak do nejake pilule ale aby to bylo
-					writable
+					writable -->
 				</section>
 			{:else}
 				tab error

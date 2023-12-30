@@ -4,6 +4,7 @@
 
 	export let title: number | string;
 	export let isInEditMode: boolean;
+	export let bottomPadding: "sm" | "md" = "md";
 	export let onCancel: (() => void) | undefined = undefined;
 	export let onDelete: (() => void) | undefined = undefined;
 
@@ -12,7 +13,7 @@
 
 <li class="wrapper">
 	<h4 class="title">{title}</h4>
-	<div class="workoutWrapper">
+	<div class="workoutWrapper workoutWrapper_bottomPadding_{bottomPadding}">
 		<div class="edit">
 			<EditButtons
 				buttonType="noBackground_2"
@@ -26,7 +27,9 @@
 				bind:isInEditMode
 			/>
 		</div>
-		<slot />
+		<div class="workout">
+			<slot />
+		</div>
 	</div>
 </li>
 
@@ -54,23 +57,36 @@
 	}
 
 	.workout {
+		display: flex;
+
+		position: relative;
+
+		padding-inline: $card-side-padding;
+
+		flex-direction: column;
+		gap: $space-sm;
+		flex-grow: 1;
+
 		&Wrapper {
 			display: flex;
-			position: relative;
 
-			padding: ($space-md) $card-side-padding ($space-md);
-
+			padding-bottom: $space-md;
 			min-height: $space-xxl;
 			max-height: $space-xxxxl;
 			overflow-y: auto;
 			overflow-x: hidden;
 
 			flex-direction: column;
-			gap: $space-sm;
 			flex-grow: 1;
 
 			border-radius: $border-md;
 			background-color: var(--accent-neutral-100);
+
+			&_bottomPadding {
+				&_sm {
+					padding-bottom: $space-sm;
+				}
+			}
 		}
 	}
 
@@ -82,8 +98,8 @@
 	}
 
 	.edit {
-		position: absolute;
-		top: $space-xs;
-		right: -$space-xs;
+		margin-top: $space-xs;
+		margin-right: -$space-xs;
+		margin-left: auto;
 	}
 </style>

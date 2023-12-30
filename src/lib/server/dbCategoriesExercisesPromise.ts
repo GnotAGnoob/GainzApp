@@ -10,15 +10,32 @@ import { workout } from "$src/db/schema/workout";
 import { setWeight } from "$src/db/schema/setWeight";
 import { STATUS, status } from "$src/db/schema/status";
 import { unit } from "$src/db/schema/unit";
-import type { PageCategory, PageExercisesData } from "$src/routes/exercises/types";
+import type { PageCategory, PageDisplaySupersetExercise, PageExercisesData } from "$src/routes/exercises/types";
 
-export const bestSupersetExerciseId = (userId: string, database: Database = db) => {
-	return (
+export const bestSupersetExercises = (userId: string, database: Database = db) => {
+	const totalWeightAlias = sql<string>`"totalWeight"`.as("totalWeight");
+
+	const totalWeights = database
+		.select({
+			id: supersetExercise.id,
+			totalWeight: sql<number>`
+				SUM("setWeight".repetition * "setWeight".weight) AS "totalWeight"`,
+		})
+		.from(supersetExercise)
+		.innerJoin(setWeight, eq(setWeight.supersetExerciseId, supersetExercise.id))
+		.groupBy(supersetExercise.id)
+		.as("totalWeights");
+
+	const supersetExercises = database.$with("te").as(
 		database
 			.select({
-				idw: supersetExercise.id,
+				id: supersetExercise.id,
 				exerciseId: supersetExercise.exerciseId,
-				maxValue: sql<number>`max(${setWeight.weight} * ${setWeight.repetition})`,
+				totalWeight: totalWeightAlias,
+				rank: sql<number>`
+				ROW_NUMBER() OVER 
+				(PARTITION BY exercise.id ORDER BY "totalWeights"."totalWeight" DESC, workout.date ASC)
+				AS rank`,
 			})
 			.from(workout)
 			.where(
@@ -32,31 +49,19 @@ export const bestSupersetExerciseId = (userId: string, database: Database = db) 
 			.innerJoin(superset, eq(superset.workoutId, workout.id))
 			.innerJoin(supersetExercise, eq(supersetExercise.supersetId, superset.id))
 			.innerJoin(setWeight, eq(setWeight.supersetExerciseId, supersetExercise.id))
-			.groupBy(supersetExercise.id, workout.date)
-			// @ts-ignore
-			.orderBy(desc("maxValue"), asc(workout.date))
-			.limit(1)
+			.innerJoin(exercise, eq(exercise.id, supersetExercise.exerciseId))
+			.innerJoin(category, eq(category.id, exercise.categoryId))
+			.innerJoin(totalWeights, eq(totalWeights.id, supersetExercise.id))
+			.groupBy(supersetExercise.id, exercise.id, workout.date, totalWeightAlias),
 	);
-};
 
-export const bestSupersetExercises = (userId: string, database: Database = db) => {
-	return sql<number>`(select "supersetExercise".id from exercise
-		inner join lateral ${bestSupersetExerciseId(userId, database)} "supersetExercise" on true)`;
-};
-
-export const dbSupersetExerciseDate = (userId: string, database: Database = db) => {
-	const exerciseWorkout = database
-		.select({ date: workout.date })
-		.from(workout)
-		.where(and(eq(workout.userId, userId), eq(exercise.id, supersetExercise.exerciseId)))
-		.innerJoin(status, eq(status.id, workout.statusId))
-		.innerJoin(superset, eq(superset.workoutId, workout.id))
-		.innerJoin(supersetExercise, eq(supersetExercise.supersetId, superset.id));
-
-	return sql<string>`(
-		select "exerciseWorkout".date from exercise
-		inner join lateral ${exerciseWorkout} "exerciseWorkout" on true limit 1
-	)`;
+	return database
+		.with(supersetExercises)
+		.select({
+			id: supersetExercises.id,
+		})
+		.from(supersetExercises)
+		.where(sql`rank = 1`);
 };
 
 export const dbCategoriesExercisesPromise = (userId: string, database: Database = db) => {
@@ -87,11 +92,16 @@ export const dbCategoriesExercisesPromise = (userId: string, database: Database 
 							sets: {
 								columns: { ...dbQueryOmit },
 							},
+							superset: {
+								columns: { ...dbQueryOmit },
+								with: {
+									workout: {
+										columns: { ...dbQueryOmit },
+									},
+								},
+							},
 						},
 						where: inArray(supersetExercise.supersetId, usersSupersetIds),
-						extras: {
-							date: dbSupersetExerciseDate(userId, database).as("date"),
-						},
 					},
 					bestWorkouts: {
 						columns: { ...dbQueryOmit },
@@ -100,9 +110,14 @@ export const dbCategoriesExercisesPromise = (userId: string, database: Database 
 							sets: {
 								columns: { ...dbQueryOmit },
 							},
-						},
-						extras: {
-							date: dbSupersetExerciseDate(userId, database).as("date"),
+							superset: {
+								columns: { ...dbQueryOmit },
+								with: {
+									workout: {
+										columns: { ...dbQueryOmit },
+									},
+								},
+							},
 						},
 					},
 				},
@@ -117,6 +132,28 @@ export const dbCategoriesExercisesPromise = (userId: string, database: Database 
 	});
 };
 
+type dbSupersetExercise = Awaited<
+	ReturnType<typeof dbCategoriesExercisesPromise>
+>[0]["exercises"][0]["supersetExercises"][0];
+
+export const mapSupersetExercises = (supersetExercises: dbSupersetExercise[]): PageDisplaySupersetExercise[] => {
+	// be careful with the order
+	// when the drizzle allows ordering by joined table, redo it
+	supersetExercises.reverse();
+	return supersetExercises.map((supersetExercise) => {
+		const { superset, ...rest } = supersetExercise;
+		return {
+			...rest,
+			sets: rest.sets.map((set) => ({
+				...set,
+				weight: set.weight ?? undefined,
+				repetition: set.repetition ?? undefined,
+			})),
+			date: superset.workout.date.toISOString(),
+		};
+	});
+};
+
 export const dbMapCategories = (
 	categories: Awaited<ReturnType<typeof dbCategoriesExercisesPromise>>,
 ): PageCategory[] => {
@@ -126,8 +163,10 @@ export const dbMapCategories = (
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			const { bestWorkouts, ...newExercise } = {
 				...exercise,
-				bestWorkout: exercise.bestWorkouts.length ? exercise.bestWorkouts[0] : undefined,
-				workoutHistory: exercise.supersetExercises.length ? exercise.supersetExercises : undefined,
+				bestWorkout: exercise.bestWorkouts.length ? mapSupersetExercises(exercise.bestWorkouts)[0] : undefined,
+				workoutHistory: exercise.supersetExercises.length
+					? mapSupersetExercises(exercise.supersetExercises)
+					: undefined,
 			};
 
 			return newExercise;

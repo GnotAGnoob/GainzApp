@@ -40,7 +40,7 @@
 			isScrollToEnd={isAddNewWorkout}
 		>
 			{#each $plannedWorkoutsStore as workout, index (workout.id)}
-				<EditablePlanWorkoutCard title={index + 1} {workout} />
+				<EditablePlanWorkoutCard title={index + 1} bind:workout />
 			{/each}
 			{#if isAddNewWorkout}
 				<PlanWorkoutCard title={dictionary.CREATING_NEW_WORKOUT} {onCancel} {onConfirm} />

@@ -89,7 +89,7 @@
 	}
 
 	.title {
-		margin-bottom: $space-sm;
+		margin-bottom: $space-xs;
 	}
 
 	.name {

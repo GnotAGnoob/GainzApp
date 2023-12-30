@@ -1,12 +1,13 @@
 import { workout } from "$src/db/schema/workout.js";
 import db from "$src/lib/server/db.js";
 import { getUserId } from "$src/lib/server/dbHelpers";
-import dbPlannedWorkouts, { dbPostPlannedWorkoutPromise } from "$src/lib/server/dbWorkouts.js";
+import { dbGetWorkoutsPromise, dbPostPlannedWorkoutPromise } from "$src/lib/server/dbWorkouts.js";
 import { parseCreateWorkout } from "$src/lib/server/dbSchemaValidation";
 import { handleError } from "$src/lib/server/error";
 import type { PageInsertPlanWorkout, PagePlannedWorkout } from "$src/routes/workouts/types.js";
 import { error, json } from "@sveltejs/kit";
 import { and, eq } from "drizzle-orm";
+import { STATUS } from "$src/db/schema/status";
 
 export async function DELETE({ params, locals }) {
 	try {
@@ -14,7 +15,7 @@ export async function DELETE({ params, locals }) {
 
 		await db.delete(workout).where(and(eq(workout.id, parseInt(params.slug)), eq(workout.userId, userId)));
 
-		return json((await dbPlannedWorkouts(userId)).plannedWorkouts);
+		return json(await dbGetWorkoutsPromise(userId, STATUS.planned, db));
 	} catch (error) {
 		const errorResponse = handleError(error);
 		return new Response(errorResponse.body.message, { status: errorResponse.status });

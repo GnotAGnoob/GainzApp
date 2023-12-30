@@ -22,8 +22,6 @@
 		flex-direction: column;
 
 		gap: $space-xxs;
-
-		line-height: 1;
 	}
 
 	.title {

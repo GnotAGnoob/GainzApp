@@ -44,7 +44,7 @@
 
 	const onAddSuperset = () => {
 		if (isLoading) return;
-		workout = { supersets: [...(workout?.supersets || []), { ...emptySuperset }] };
+		workout = { ...workout, supersets: [...(workout?.supersets || []), { ...emptySuperset }] };
 	};
 
 	const handleConfirm = () => {

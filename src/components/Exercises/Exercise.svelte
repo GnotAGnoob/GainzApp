@@ -39,6 +39,8 @@
 			errorMessage = error?.message || dictionary.UNKNOWN_ERROR;
 		}
 	};
+
+	// todo delete exercise kdyz empty history tak bez potvrzeni
 </script>
 
 {#if !(exercise.workoutHistory?.length && exercise.bestWorkout)}

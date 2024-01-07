@@ -2,12 +2,12 @@
 	import FillExercise from "../Exercise/FillExercise.svelte";
 	import type { PageFillSupersetExercise } from "$src/routes/workouts/types";
 	import EditableSupersetTemplate from "./EditableSupersetTemplate.svelte";
+	import { exerciseAdditionalInfo } from "$src/lib/stores/exerciseAddionalInfo";
 
 	export let supersetExercises: PageFillSupersetExercise[] = [];
 	export let order: number;
 	export let isLoading = false;
 	export let isFetching = false;
-	export let onExerciseSelect: (() => void) | undefined = undefined;
 	export let onDeleteSuperset: () => void;
 	export let disabledDeleteText: string | undefined = undefined;
 
@@ -17,15 +17,19 @@
 
 	const handleConfirmExercise = (supersetExercise: Partial<PageFillSupersetExercise>) => {
 		if (supersetExercise?.exercise?.category && supersetExercise?.exercise) {
+			const additionalInfo = $exerciseAdditionalInfo.get(supersetExercise.exercise.id);
 			supersetExercises = [
 				...supersetExercises,
 				{
-					exercise: supersetExercise.exercise,
+					exercise: {
+						...supersetExercise.exercise,
+						bestWorkout: additionalInfo?.bestWorkout,
+						workoutHistory: additionalInfo?.workoutHistory,
+					},
 					sets: supersetExercise.sets || [],
 				},
 			];
 
-			onExerciseSelect?.();
 			return null;
 		}
 

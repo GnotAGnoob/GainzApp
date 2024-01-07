@@ -17,6 +17,7 @@
 	const handleClose = () => {
 		if (closeDisabledText) return;
 
+		isOpened = false;
 		onClose?.();
 		modalElement.close();
 		window.document.documentElement.classList.remove("stopScrolling");
@@ -41,6 +42,7 @@
 	});
 
 	export const showModal = () => {
+		isOpened = true;
 		modalElement.showModal();
 		onShowModal?.();
 		window.document.documentElement.classList.add("stopScrolling");
@@ -67,7 +69,9 @@
 					</div>
 				</Button>
 			</div>
-			<slot />
+			{#if modalElement?.open}
+				<slot />
+			{/if}
 		</div>
 	</div>
 </dialog>

@@ -19,7 +19,8 @@
 
 <div class="wrapper" class:isOpen>
 	{#if $$slots.title}
-		<button class="button" on:click={onClick} disabled={isDisabled}>
+		<div class="buttonWrapper">
+			<button class="button" on:click={onClick} disabled={isDisabled} />
 			<div class="title" class:title_right={arrowPosition === "right"}>
 				{#if arrowPosition === "left"}
 					<span class="icon icon_{arrowSize}">
@@ -39,7 +40,7 @@
 				</div>
 				<slot name="footer" />
 			{/if}
-		</button>
+		</div>
 	{/if}
 
 	{#if !isContentClickable}
@@ -60,10 +61,19 @@
 	}
 
 	.button {
+		position: absolute;
+
+		inset: 0;
 		width: 100%;
+
+		z-index: 1;
 
 		&:disabled {
 			cursor: default;
+		}
+
+		&Wrapper {
+			position: relative;
 		}
 	}
 

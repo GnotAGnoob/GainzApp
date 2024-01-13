@@ -35,6 +35,9 @@
 	const handleDelete = (index: number) => {
 		sets = sets.toSpliced(index, 1);
 	};
+
+	// todo, kdyz pribyde set, tak se useknoůu cisla dynamicka
+	// todo fix post workout a desetinne cisla
 </script>
 
 <Scroller bind:this={scroller} sideFade="large" type="background" bottomPadding="medium" arrowsPosition="full">

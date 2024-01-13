@@ -4,17 +4,24 @@
 	import axios from "axios";
 	import EditText from "../EditText.svelte";
 	import Exercise from "./Exercise.svelte";
-	import type { PageCategory } from "$src/routes/exercises/types";
+	import type { PageExercise, PageCategory } from "$src/routes/exercises/types";
 	import toast from "$src/lib/toast";
 	import { apiRoutes } from "$src/lib/paths";
 	import { categories } from "$src/lib/stores/categories";
 	import ExerciseForm from "./ExerciseForm.svelte";
 	import type Modal from "$components/Modals/Modal.svelte";
+	import { setContext } from "svelte";
+	import { writable } from "svelte/store";
 
 	export let category: PageCategory;
 
 	let errorMessage: string | null = null;
 	let exerciseFormElement: Modal;
+
+	const exercises = writable<PageExercise[] | undefined>();
+	$: exercises.set(category.exercises);
+
+	setContext("exercises", exercises);
 
 	// editing name
 	const onConfirm = async (newValue: string) => {
@@ -80,7 +87,7 @@
 			isEditButton={!category.isGlobal}
 			{onConfirm}
 			onDelete={!category.isGlobal ? onDelete : undefined}
-			deleteConfirmationText={category.exercises?.length
+			deleteConfirmationText={$exercises?.length
 				? dictionary.ARE_YOU_SURE_YOU_WANT_TO_DETELE_CATEGORY
 				: undefined}
 			{errorMessage}
@@ -90,9 +97,9 @@
 		<ExerciseForm category={category.name} bind:modalElement={exerciseFormElement} />
 	</div>
 	<div class="categoryInner">
-		<ul class="category" style={`--columns: ${category.exercises?.length || 1}`}>
-			{#if category.exercises?.length}
-				{#each category.exercises as exercise (exercise.name)}
+		<ul class="category" style={`--columns: ${$exercises?.length || 1}`}>
+			{#if $exercises?.length}
+				{#each $exercises as exercise (exercise.id)}
 					<Exercise {exercise} />
 				{/each}
 			{:else}

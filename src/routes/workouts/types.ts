@@ -28,11 +28,6 @@ export type PageSupersetExercise = PageSupersetExerciseTemplate & PageDisplaySup
 
 export type PagePlannedSupersetExercise = Pick<PageSupersetExercise, "id" | "exercise">;
 
-// Server
-export interface PageInsertFillSupersetExercise extends Omit<PageFillSupersetExercise, "sets"> {
-	sets: Pick<InsertSetWeight, "repetition" | "weight">[];
-}
-
 // SUPERSETS
 export interface PageSupersetGeneric<T> {
 	id?: number;
@@ -46,9 +41,6 @@ export type PageFillSuperset = PageSupersetGeneric<PageFillSupersetExercise>;
 export type PagePlannedSuperset = Required<PageSupersetGeneric<PagePlannedSupersetExercise>>;
 
 export type PageSuperset = Required<PageSupersetGeneric<PageSupersetExercise>>;
-
-// Server
-export type PageInsertFillSuperset = PageSupersetGeneric<PageInsertFillSupersetExercise>;
 
 // WORKOUTS
 export interface PageFillWorkoutGeneric<T> {
@@ -67,9 +59,21 @@ export type PagePlannedWorkout = Omit<Required<PageFillWorkoutGeneric<PagePlanne
 
 // Server
 
+interface PageInsertSupersetExercise {
+	id?: number;
+	exercise: Pick<Exercise, "id">;
+}
+export interface PageInsertFillSupersetExercise extends Omit<PageInsertSupersetExercise, "sets"> {
+	sets: Pick<InsertSetWeight, "repetition" | "weight">[];
+}
+
+export type PageInsertFillSuperset = PageSupersetGeneric<PageInsertFillSupersetExercise>;
+
 export type PageInsertFillWorkout = PageFillWorkoutGeneric<PageInsertFillSuperset>;
 
-export interface PageInsertPlanWorkout extends PageCreateWorkout {
+type PageInsertPlanSuperset = PageSupersetGeneric<PageInsertSupersetExercise>;
+
+export interface PageInsertPlanWorkout extends Omit<PageFillWorkoutGeneric<PageInsertPlanSuperset>, "date"> {
 	order?: number;
 }
 

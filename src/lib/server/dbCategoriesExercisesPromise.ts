@@ -3,14 +3,19 @@ import { and, asc, desc, eq, inArray, isNull, or, sql } from "drizzle-orm";
 import { dbQueryOmit } from "./dbHelpers";
 import { category } from "$src/db/schema/category";
 import { exercise } from "$src/db/schema/exercise";
-import type { Database } from "./dbTypes";
+import type { Database, StatusId } from "./dbTypes";
 import { supersetExercise } from "$src/db/schema/supersetExercise";
 import { superset } from "$src/db/schema/superset";
 import { workout } from "$src/db/schema/workout";
 import { setWeight } from "$src/db/schema/setWeight";
 import { STATUS, status } from "$src/db/schema/status";
 import { unit } from "$src/db/schema/unit";
-import type { PageCategory, PageDisplaySupersetExercise, PageExercisesData } from "$src/routes/exercises/types";
+import type {
+	PageCategory,
+	PageDisplaySupersetExercise,
+	PageExercise,
+	PageExercisesData,
+} from "$src/routes/exercises/types";
 
 export const bestSupersetExercises = (userId: string, database: Database = db) => {
 	const totalWeightAlias = sql<string>`"totalWeight"`.as("totalWeight");
@@ -64,15 +69,67 @@ export const bestSupersetExercises = (userId: string, database: Database = db) =
 		.where(sql`rank = 1`);
 };
 
-export const dbCategoriesExercisesPromise = (userId: string, database: Database = db) => {
-	const usersSupersetIds = database
+const dbUsersSupersetIds = (userId: string, database: Database = db, statusName: StatusId = STATUS.done) => {
+	return database
 		.select({ supersetId: superset.id })
 		.from(superset)
 		.innerJoin(workout, eq(workout.id, superset.workoutId))
 		.innerJoin(status, eq(status.id, workout.statusId))
-		.where(and(eq(workout.userId, userId), eq(status.name, STATUS.done)))
+		.where(and(eq(workout.userId, userId), eq(status.name, statusName)))
 		.orderBy(workout.date);
+};
 
+export const dbCategoryExercisesPromise = (userId: string, categoryId: number, database: Database = db) => {
+	return database.query.exercise.findMany({
+		// columns: { ...dbQueryOmit },
+		where: and(or(eq(exercise.userId, userId), isNull(exercise.userId)), eq(exercise.categoryId, categoryId)),
+		orderBy: asc(exercise.name),
+		with: {
+			unit: {
+				columns: dbQueryOmit,
+			},
+			supersetExercises: {
+				columns: { ...dbQueryOmit },
+				with: {
+					sets: {
+						columns: { ...dbQueryOmit },
+					},
+					superset: {
+						columns: { ...dbQueryOmit },
+						with: {
+							workout: {
+								columns: { ...dbQueryOmit },
+							},
+						},
+					},
+				},
+				where: inArray(supersetExercise.supersetId, dbUsersSupersetIds(userId, database)),
+			},
+			bestWorkouts: {
+				columns: { ...dbQueryOmit },
+				where: inArray(supersetExercise.id, bestSupersetExercises(userId, database)),
+				with: {
+					sets: {
+						columns: { ...dbQueryOmit },
+					},
+					superset: {
+						columns: { ...dbQueryOmit },
+						with: {
+							workout: {
+								columns: { ...dbQueryOmit },
+							},
+						},
+					},
+				},
+			},
+		},
+		extras: {
+			isGlobal: sql<boolean>`(${exercise.userId} IS NULL)`.as("is_global"),
+		},
+	});
+};
+
+export const dbCategoriesExercisesPromise = (userId: string, database: Database = db) => {
 	return database.query.category.findMany({
 		columns: dbQueryOmit,
 		where: or(eq(category.userId, userId), isNull(category.userId)),
@@ -101,7 +158,7 @@ export const dbCategoriesExercisesPromise = (userId: string, database: Database 
 								},
 							},
 						},
-						where: inArray(supersetExercise.supersetId, usersSupersetIds),
+						where: inArray(supersetExercise.supersetId, dbUsersSupersetIds(userId, database)),
 					},
 					bestWorkouts: {
 						columns: { ...dbQueryOmit },
@@ -132,9 +189,9 @@ export const dbCategoriesExercisesPromise = (userId: string, database: Database 
 	});
 };
 
-type dbSupersetExercise = Awaited<
-	ReturnType<typeof dbCategoriesExercisesPromise>
->[0]["exercises"][0]["supersetExercises"][0];
+type dbExercise = Awaited<ReturnType<typeof dbCategoriesExercisesPromise>>[0]["exercises"][0];
+
+type dbSupersetExercise = dbExercise["supersetExercises"][0];
 
 export const mapSupersetExercises = (supersetExercises: dbSupersetExercise[]): PageDisplaySupersetExercise[] => {
 	// be careful with the order
@@ -154,23 +211,27 @@ export const mapSupersetExercises = (supersetExercises: dbSupersetExercise[]): P
 	});
 };
 
+export const dbMapCategoryExercises = (exercises: dbExercise[]): PageExercise[] => {
+	return exercises.map((exercise) => {
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { bestWorkouts, ...newExercise } = {
+			...exercise,
+			bestWorkout: exercise.bestWorkouts.length ? mapSupersetExercises(exercise.bestWorkouts)[0] : undefined,
+			workoutHistory: exercise.supersetExercises.length
+				? mapSupersetExercises(exercise.supersetExercises)
+				: undefined,
+		};
+
+		return newExercise;
+	});
+};
+
 export const dbMapCategories = (
 	categories: Awaited<ReturnType<typeof dbCategoriesExercisesPromise>>,
 ): PageCategory[] => {
 	return categories.map((category) => ({
 		...category,
-		exercises: category.exercises?.map((exercise) => {
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			const { bestWorkouts, ...newExercise } = {
-				...exercise,
-				bestWorkout: exercise.bestWorkouts.length ? mapSupersetExercises(exercise.bestWorkouts)[0] : undefined,
-				workoutHistory: exercise.supersetExercises.length
-					? mapSupersetExercises(exercise.supersetExercises)
-					: undefined,
-			};
-
-			return newExercise;
-		}),
+		exercises: dbMapCategoryExercises(category.exercises),
 	}));
 };
 

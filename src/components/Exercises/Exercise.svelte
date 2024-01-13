@@ -7,10 +7,15 @@
 	import EditText from "$components/EditText.svelte";
 	import { apiRoutes } from "$src/lib/paths";
 	import WorkoutOverview from "./WorkoutOverview.svelte";
+	import { getContext } from "svelte";
+	import type { Writable } from "svelte/store";
 
 	export let exercise: PageExercise;
 
 	let errorMessage: string | null = null;
+	const deleteText = dictionary.ARE_YOU_SURE_YOU_WANT_TO_DETELE_EXERCISE || undefined;
+
+	const exercises = getContext<Writable<PageExercise[] | undefined>>("exercises");
 
 	const onConfirm = async (newValue: string) => {
 		if (newValue === "" || newValue === exercise.name) {
@@ -40,7 +45,27 @@
 		}
 	};
 
-	// todo delete exercise kdyz empty history tak bez potvrzeni
+	const onDelete = async () => {
+		if (!$exercises) {
+			return;
+		}
+
+		const oldExercises = [...$exercises];
+		try {
+			$exercises = $exercises.filter((e) => e.id !== exercise.id);
+			const { data } = await axios.delete<PageExercise[]>(`${apiRoutes.exercise}${exercise.id}`);
+			$exercises = data;
+		} catch (error) {
+			toast.error(dictionary.DELETING_EXERCISE_FAILED);
+			$exercises = oldExercises;
+			if (axios.isAxiosError(error)) {
+				errorMessage = error.response?.data;
+				return;
+			}
+			// @ts-ignore
+			errorMessage = error?.message || dictionary.UNKNOWN_ERROR;
+		}
+	};
 </script>
 
 {#if !(exercise.workoutHistory?.length && exercise.bestWorkout)}
@@ -50,6 +75,7 @@
 				text={exercise.name}
 				{onConfirm}
 				isEditButton={!exercise.isGlobal}
+				onDelete={!exercise.isGlobal ? onDelete : undefined}
 				{errorMessage}
 				buttonType="noBackground_2"
 				inputSize="sm"
@@ -68,6 +94,8 @@
 				text={exercise.name}
 				{onConfirm}
 				isEditButton={!exercise.isGlobal}
+				onDelete={!exercise.isGlobal ? onDelete : undefined}
+				deleteConfirmationText={deleteText}
 				{errorMessage}
 				buttonType="noBackground_2"
 				inputSize="sm"
@@ -91,7 +119,7 @@
 	}
 
 	.title {
-		margin-bottom: $space-xs;
+		margin-bottom: $space-xs + $space-xxs;
 	}
 
 	.name {

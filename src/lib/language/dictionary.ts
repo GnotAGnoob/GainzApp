@@ -27,8 +27,11 @@ export const dictionary = {
 	RENAMING_CATEGORY: "Renaming category",
 	RENAMING_CATEGORY_FAILED: "Renaming category failed",
 	DELETING_CATEGORY_FAILED: "Deleting category failed",
+	DELETING_EXERCISE_FAILED: "Deleting exercise failed",
 	DELETING_WORKOUT_FAILED: "Deleting workout failed",
 	ARE_YOU_SURE_YOU_WANT_TO_DETELE_CATEGORY: "Are you sure you want to delete this category with all the exercises?",
+	ARE_YOU_SURE_YOU_WANT_TO_DETELE_EXERCISE:
+		"Are you sure you want to delete this exercise with all the workout history?",
 	ARE_YOU_SURE_YOU_WANT_TO_DETELE_WORKOUT: "Are you sure you want to delete this workout with all the exercises?",
 	ARE_YOU_SURE_YOU_WANT_TO_DETELE_SUPERSET: "Are you sure you want to delete this superset with all the exercises?",
 	CATEGORY_SUCCESSFULLY_RENAMED: "Category Successfully Renamed",

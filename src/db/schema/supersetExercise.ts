@@ -15,9 +15,7 @@ export const supersetExercise = pgTable(
 		createdAt: timestamp("created_at").notNull().defaultNow(),
 		updatedAt: timestamp("updated_at").notNull().defaultNow(),
 
-		exerciseId: integer("exercise_id")
-			.references(() => exercise.id, { onDelete: "cascade" })
-			.notNull(),
+		exerciseId: integer("exercise_id").references(() => exercise.id, { onDelete: "cascade" }),
 		supersetId: integer("superset_id")
 			.references(() => superset.id, { onDelete: "cascade" })
 			.notNull(),

@@ -1,34 +1,48 @@
 {
-  "version": "5",
-  "dialect": "pg",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "5",
-      "when": 1696281478466,
-      "tag": "0000_cynical_iron_patriot",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1696281483029,
-      "tag": "0001_melodic_overlord",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1696633145837,
-      "tag": "0002_great_silk_fever",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1701912864933,
-      "tag": "0003_boring_lily_hollister",
-      "breakpoints": true
-    }
-  ]
+	"version": "5",
+	"dialect": "pg",
+	"entries": [
+		{
+			"idx": 0,
+			"version": "5",
+			"when": 1696281478466,
+			"tag": "0000_cynical_iron_patriot",
+			"breakpoints": true
+		},
+		{
+			"idx": 1,
+			"version": "5",
+			"when": 1696281483029,
+			"tag": "0001_melodic_overlord",
+			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "5",
+			"when": 1696633145837,
+			"tag": "0002_great_silk_fever",
+			"breakpoints": true
+		},
+		{
+			"idx": 3,
+			"version": "5",
+			"when": 1701912864933,
+			"tag": "0003_boring_lily_hollister",
+			"breakpoints": true
+		},
+		{
+			"idx": 4,
+			"version": "5",
+			"when": 1704840713478,
+			"tag": "0004_tranquil_kinsey_walden",
+			"breakpoints": true
+		},
+		{
+			"idx": 5,
+			"version": "5",
+			"when": 1704841470346,
+			"tag": "0005_serious_red_skull",
+			"breakpoints": true
+		}
+	]
 }

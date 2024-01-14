@@ -8,7 +8,7 @@
 	export let onCancel: (() => void) | undefined = undefined;
 	export let onDelete: (() => void) | undefined = undefined;
 
-	// todo pri vytvareni noveho workoutu ostatni nezvetsovat
+	// todo pri vytvareni noveho workoutu ostatni nezvetsovat mozna ten novy nedavat do scrollu?
 </script>
 
 <li class="wrapper">

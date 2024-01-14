@@ -18,8 +18,7 @@
 	let isOverflowingLeft = false;
 	let isOverflowingRight = false;
 
-	// todo nejak toto udelat dynamicky ie, kdyz se pridavaji prvky napr u vyplnovani setu
-	const setOverflowing = () => {
+	export const setOverflowing = () => {
 		if (!scrollElement) return;
 
 		const normalizedScrollLeft = Math.abs(scrollElement.scrollLeft);
@@ -100,7 +99,11 @@
 		on:scroll={setOverflowing}
 		class:contentWrapper_reverse={isScrollReverse}
 	>
-		<svelte:element this={wrapperTag} class="contentContainer contentContainer_{bottomPadding}">
+		<svelte:element
+			this={wrapperTag}
+			class="contentContainer contentContainer_{bottomPadding}"
+			class:contentContainer_reverse={isScrollReverse}
+		>
 			<slot />
 		</svelte:element>
 	</div>
@@ -175,18 +178,20 @@
 		&Container {
 			--scroller-padding: #{$space-sm};
 
-			display: grid;
+			display: flex;
 
 			width: max-content;
 			margin: auto;
 			padding-inline: min(var(--_side-padding), $space-md);
 			gap: $space-md;
 
-			grid-auto-columns: 1fr;
-			grid-auto-flow: column;
 			align-items: flex-start;
 
 			padding-bottom: var(--scroller-padding);
+
+			&_reverse {
+				flex-direction: row-reverse;
+			}
 
 			&_medium {
 				--scroller-padding: #{$space-md};

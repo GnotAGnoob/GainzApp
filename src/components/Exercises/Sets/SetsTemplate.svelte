@@ -11,13 +11,10 @@
 	@import "../Exercises.scss";
 
 	.sets {
-		display: grid;
+		display: flex;
 
 		width: max-content;
 		margin: auto;
-
-		grid-auto-columns: 1fr;
-		grid-auto-flow: column;
 
 		&Wrapper {
 			margin-inline: auto;

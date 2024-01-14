@@ -36,8 +36,9 @@
 		sets = sets.toSpliced(index, 1);
 	};
 
-	// todo, kdyz pribyde set, tak se useknoůu cisla dynamicka
-	// todo fix post workout a desetinne cisla
+	const handleInput = () => {
+		scroller?.setOverflowing();
+	};
 </script>
 
 <Scroller bind:this={scroller} sideFade="large" type="background" bottomPadding="medium" arrowsPosition="full">
@@ -50,6 +51,7 @@
 				bind:repetition={set.repetition}
 				onDelete={() => handleDelete(index)}
 				focus={index === sets.length - 1 ? focusOn : undefined}
+				onInput={handleInput}
 			/>
 		{/each}
 		{#key sets.length}
@@ -58,6 +60,7 @@
 				setNumber={sets.length + 1}
 				bind:weight={newSet.weight}
 				bind:repetition={newSet.repetition}
+				onInput={handleInput}
 			/>
 		{/key}
 	</SetsTemplate>

@@ -4,8 +4,9 @@ as
 select
 category.name as category, exercise.name as name, category.id as category_id,
 exercise.id as exercise_id, exercise."userId" as "exercise_userId", category."userId" as "category_userId",
+unit.name as unit, unit.id as unit_id,
 setweight(to_tsvector('simple', category.name), 'A') || setweight(to_tsvector('simple', coalesce(exercise.name, '')), 'B') as search_vector
-from category full join exercise on category.id = exercise.category_id;
+from category full join exercise on category.id = exercise.category_id inner join unit on exercise.unit_id = unit.id;
 CREATE INDEX category_exercise_search_index on category_exercise_search USING GIN (search_vector);
 
 CREATE OR REPLACE FUNCTION refresh_category_exercise_search()
@@ -36,6 +37,8 @@ RETURNS TABLE (
     name varchar(32),
     category_id INT,
     exercise_id INT,
+    unit varchar(32),
+    unit_id INT,
     "category_userId" TEXT,
     "exercise_userId" TEXT
 )
@@ -60,6 +63,8 @@ BEGIN
         ce.name, 
         ce.category_id, 
         ce.exercise_id, 
+        ce.unit,
+        ce.unit_id,
         ce."category_userId",
         ce."exercise_userId"
     FROM 

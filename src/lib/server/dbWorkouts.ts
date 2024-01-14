@@ -69,7 +69,7 @@ export const dbGetWorkoutsPromise = (userId: string, statusId: StatusId, databas
 			...dbQueryOmit,
 			note: false,
 		},
-		orderBy: (workout, { asc }) => [asc(workout.order)],
+		orderBy: (workout, { asc, desc }) => [statusId === "done" ? desc(workout.date) : asc(workout.order)],
 		with: {
 			supersets: {
 				columns: {
@@ -282,7 +282,6 @@ export const dbPostPlannedWorkoutPromise = (userId: string, newWorkout: PageInse
 
 export default async (userId: string, database: Database = db): Promise<PagePlannedWorkouts> => {
 	const [plannedWorkouts, workoutHistory] = await Promise.all([
-		// todo pro done ordered by date a pro planned ordered by order + planned nema mit date
 		dbGetWorkoutsPromise(userId, STATUS.planned, database),
 		// fucked date type
 		dbGetWorkoutsPromise(userId, STATUS.done, database) as unknown as PageWorkout[],

@@ -15,14 +15,15 @@
 	export let workout: PageWorkout;
 	export let isInEditMode = false;
 
-	let errorMessage: string | undefined = undefined;
-	let workoutCopy = structuredClone(workout);
+	// let errorMessage: string | undefined = undefined;
+	// let workoutCopy = structuredClone(workout);
 
 	const onCancel = () => {
-		workoutCopy = structuredClone(workout);
+		// workoutCopy = structuredClone(workout);
 		isInEditMode = false;
 	};
 
+	// todo
 	// const onConfirm = async () => {
 	// 	try {
 	// 		const { data: newPlannedWorkout } = await toast.promise(
@@ -60,12 +61,12 @@
 			workout = oldWorkout;
 
 			if (axios.isAxiosError(error)) {
-				errorMessage = error.response?.data;
+				// errorMessage = error.response?.data;
 				return;
 			}
 
 			// @ts-ignore
-			errorMessage = error?.message || dictionary.UNKNOWN_ERROR;
+			// errorMessage = error?.message || dictionary.UNKNOWN_ERROR;
 		}
 	};
 </script>

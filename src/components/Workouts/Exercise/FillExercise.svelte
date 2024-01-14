@@ -100,6 +100,7 @@
 				{/if}
 			</h5>
 		{/if}
+		<!-- todo fix roztahovani ostatnich -->
 		<InputSets bind:sets={supersetExercise.sets} initialWeightValue={lastWorkout?.sets[0].weight} />
 	</div>
 </div>

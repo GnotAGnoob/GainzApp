@@ -18,6 +18,7 @@
 	export let inputType: "float" | "integer" | "string" = "string";
 	export let isError = false;
 	export let onKeyDown: KeyboardEventHandler<HTMLInputElement> | undefined = undefined;
+	export let onInput: (() => void) | undefined = undefined;
 	export let isDisabled = false;
 
 	const isDynamicWidth = widthSize === "dynamic";
@@ -27,6 +28,8 @@
 
 	let inputSize = 0;
 	let isFirstInput = !value?.length;
+
+	$: if (value) onInput?.();
 
 	const updateWidthTimeout = () => {
 		setTimeout(() => {

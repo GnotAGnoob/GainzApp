@@ -37,6 +37,9 @@ export async function GET({ url, locals }) {
 							isGlobal: sql<boolean>`(${category.userId} IS NULL)`.as("is_global"),
 						},
 					},
+					unit: {
+						columns: { ...dbQueryOmit },
+					},
 				},
 				extras: {
 					isGlobal: sql<boolean>`(${exercise.userId} IS NULL)`.as("is_global"),
@@ -53,6 +56,7 @@ export async function GET({ url, locals }) {
 					name: fullExercise.name,
 					isGlobal: fullExercise.isGlobal,
 				},
+				unit: fullExercise.unit,
 			}));
 
 			transformedExercises = transformedExercises.slice(0, MAX_DROPDOWN_ITEMS);
@@ -60,7 +64,8 @@ export async function GET({ url, locals }) {
 			const returnedFullExercises = (await db.execute(
 				sql`SELECT
 				category, name, exercise_id as "exerciseId", category_id as "categoryId",
-				"category_userId" as "categoryUserId", "exercise_userId" as "exerciseUserId"
+				"category_userId" as "categoryUserId", "exercise_userId" as "exerciseUserId",
+				unit_id as "unitId", unit
 				FROM execute_exercise_search(
 					${search.text.trimEnd()}, ${userId}, ${search.limit || MAX_DROPDOWN_ITEMS}, false)`,
 			)) as Array<{
@@ -70,6 +75,8 @@ export async function GET({ url, locals }) {
 				exerciseId: number;
 				categoryUserId: string;
 				exerciseUserId: string;
+				unitId: number;
+				unit: string;
 			}>;
 
 			transformedExercises = returnedFullExercises.map((fullExercise) => ({
@@ -82,6 +89,10 @@ export async function GET({ url, locals }) {
 					id: fullExercise.exerciseId,
 					name: fullExercise.name,
 					isGlobal: fullExercise.exerciseUserId === null,
+				},
+				unit: {
+					id: fullExercise.unitId,
+					name: fullExercise.unit,
 				},
 			}));
 		}

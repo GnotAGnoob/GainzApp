@@ -9,6 +9,7 @@
 	export let repetition: string;
 	export let type: StylesType = "neutral";
 	export let onDelete: (() => void) | undefined = undefined;
+	export let onInput: (() => void) | undefined = undefined;
 	export let focus: "weight" | "repetition" | undefined = undefined;
 	export let isDisabled = false;
 
@@ -34,6 +35,7 @@
 		paddingLeft="xs"
 		inputType="float"
 		onKeyDown={handleDelete}
+		{onInput}
 		isError={isWeightError}
 		isOnMountFocus={focus === "weight"}
 		{isDisabled}
@@ -51,6 +53,7 @@
 		paddingLeft="sm"
 		inputType="integer"
 		onKeyDown={handleDelete}
+		{onInput}
 		isError={isRepetitionError}
 		isOnMountFocus={focus === "repetition"}
 		{isDisabled}

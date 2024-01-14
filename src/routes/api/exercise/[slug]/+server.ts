@@ -6,11 +6,7 @@ import { handleError } from "$src/lib/server/error";
 import { getUserId } from "$src/lib/server/dbHelpers";
 import { and, eq } from "drizzle-orm";
 import { json } from "@sveltejs/kit";
-import dbCategoriesExercisesPromise, {
-	dbCategoryExercisesPromise,
-	dbMapCategories,
-	dbMapCategoryExercises,
-} from "$src/lib/server/dbCategoriesExercisesPromise";
+import { dbCategoryExercisesPromise, dbMapCategoryExercises } from "$src/lib/server/dbCategoriesExercisesPromise";
 import type { PageExercise } from "$src/routes/exercises/types.js";
 
 export async function PATCH({ request, locals, params }) {
@@ -48,7 +44,6 @@ export async function PATCH({ request, locals, params }) {
 	}
 }
 
-// todo create deleted exercise and category a check edit button pokud jde kliknout
 export async function DELETE({ locals, params }) {
 	try {
 		const userId = await getUserId(locals);

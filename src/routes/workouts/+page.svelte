@@ -4,14 +4,14 @@
 	import PlannedWorkouts from "$src/components/Workouts/PlannedWorkouts.svelte";
 	import WorkoutHistory from "$src/components/Workouts/WorkoutHistory.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
-	import { floatedCorner } from "$src/lib/stores/floatedCorner";
+	// import { floatedCorner } from "$src/lib/stores/floatedCorner";
 	import Icon from "@iconify/svelte";
 
 	export let data;
 
 	let activeElement = 0;
 
-	$floatedCorner = ["addWorkout"];
+	// $floatedCorner = ["addWorkout"];
 </script>
 
 <div class="wrapper">

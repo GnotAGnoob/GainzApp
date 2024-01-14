@@ -13,8 +13,6 @@
 
 	$: lastWorkout = workoutHistory[workoutHistory.length - 1];
 	$: isEnoughHistory = workoutHistory.length > 1;
-
-	// todo opravit bug pri zacatku se zvetsi cely exercise
 </script>
 
 <div class="exercise" class:isOpen>

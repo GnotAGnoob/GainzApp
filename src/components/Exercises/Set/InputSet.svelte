@@ -32,7 +32,7 @@
 		type="inherit"
 		paddingRight="sm"
 		paddingLeft="xs"
-		isNumbersOnly
+		inputType="float"
 		onKeyDown={handleDelete}
 		isError={isWeightError}
 		isOnMountFocus={focus === "weight"}
@@ -49,7 +49,7 @@
 		type="inherit"
 		paddingRight="xs"
 		paddingLeft="sm"
-		isNumbersOnly
+		inputType="integer"
 		onKeyDown={handleDelete}
 		isError={isRepetitionError}
 		isOnMountFocus={focus === "repetition"}

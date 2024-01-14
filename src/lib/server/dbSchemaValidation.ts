@@ -17,11 +17,30 @@ const createSupersetExerciseObject = z.object({
 	}),
 });
 
+// const floatNumberParser = (value: string): number => {
+// 	const floatValue = parseFloat(value.replace(",", "."));
+
+// 	if (isNaN(floatValue)) {
+// 		throw new ZodError([
+// 			{
+// 				message: "Invalid number format",
+// 				path: [],
+// 				code: "custom",
+// 			},
+// 		]);
+// 	}
+
+// 	return floatValue;
+// };
+
+// const floatNumberSchema = z.string().transform(floatNumberParser);
+
 const fillSupersetExerciseObject = createSupersetExerciseObject.extend({
 	id: z.number().optional(),
 	sets: z
 		.array(
 			z.object({
+				// weight: floatNumberSchema.refine((val) => val >= 0, { message: "Weight must non negative" }),
 				weight: z.coerce.number().nonnegative(),
 				repetition: z.coerce.number().positive(),
 			}),

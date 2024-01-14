@@ -109,8 +109,6 @@
 
 	$: disabledAddExerciseTitle = exercises.length === MAX_EXERCISES ? dictionary.REACHED_MAX_EXERCISES : undefined;
 	$: disabledRemoveExerciseTitle = exercises.length === 1 ? dictionary.CANNOT_DELETE_LAST_EXERCISE : undefined;
-
-	// todo modal scrolling block dropdown
 </script>
 
 <Modal isOpened={false} {onClose} size="lg" bind:this={modalElement}>

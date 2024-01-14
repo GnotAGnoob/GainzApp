@@ -15,7 +15,7 @@
 	export let paddingRight: "xs" | "sm" | "md" | "lg" | "none" = "sm";
 	export let type: StylesType = "neutral";
 	export let isOnMountFocus = false;
-	export let isNumbersOnly = false;
+	export let inputType: "float" | "integer" | "string" = "string";
 	export let isError = false;
 	export let onKeyDown: KeyboardEventHandler<HTMLInputElement> | undefined = undefined;
 	export let isDisabled = false;
@@ -28,7 +28,17 @@
 	let inputSize = 0;
 	let isFirstInput = !value?.length;
 
+	const updateWidthTimeout = () => {
+		setTimeout(() => {
+			inputSize = dynamicText?.clientWidth || 0;
+		});
+	};
+
 	onMount(() => {
+		if (isDynamicWidth) {
+			updateWidthTimeout();
+		}
+
 		if (isOnMountFocus) {
 			input?.focus();
 		}
@@ -40,12 +50,30 @@
 		selectionEnd: number | null,
 		text: string,
 	) => {
-		if (isNumbersOnly) {
-			const newValue = insertInsteadRange(value || "", text, selectionStart, selectionEnd);
-			if (!isStringNumber(newValue)) {
-				event.preventDefault();
+		if (isDynamicWidth) {
+			updateWidthTimeout();
+		}
 
+		if (inputType === "integer") {
+			if (text === "." || text === ",") {
+				event.preventDefault();
+				return;
+			}
+		}
+
+		if (inputType !== "string") {
+			event.preventDefault();
+			let newValue = insertInsteadRange(value || "", text, selectionStart, selectionEnd);
+
+			if (inputType === "integer") {
+				newValue = parseInt(newValue).toString();
+			} else {
+				newValue = newValue.replace(",", ".");
+			}
+
+			if (!isStringNumber(newValue)) {
 				const correctedValue = newValue.replace(/^0+/, "");
+
 				if (isStringNumber(correctedValue)) {
 					value = correctedValue;
 
@@ -56,15 +84,24 @@
 					setTimeout(() => {
 						const cursorPosition = (selectionStart || 1) - 1;
 						target.setSelectionRange(cursorPosition, cursorPosition);
-
-						if (isDynamicWidth) {
-							inputSize = dynamicText?.clientWidth || 0;
-						}
 					});
 				}
 
 				return;
 			}
+
+			const target = event.currentTarget;
+
+			if (!target) return;
+
+			const difference = newValue.length - (value?.length || 0);
+
+			setTimeout(() => {
+				const cursorPosition = (selectionEnd || 0) + difference;
+				target.setSelectionRange(cursorPosition, cursorPosition);
+			});
+
+			value = newValue;
 		}
 	};
 
@@ -87,14 +124,20 @@
 				return;
 			}
 
-			const startOffset = event.key === "Backspace" ? -1 : 0;
-			const endOffset = event.key === "Delete" ? 1 : 0;
+			let startOffset = 0;
+			let endOffset = 0;
+
+			if (event.currentTarget.selectionStart === event.currentTarget.selectionEnd) {
+				startOffset = event.key === "Backspace" ? -1 : 0;
+				endOffset = event.key === "Delete" ? 1 : 0;
+			}
 			const selectionStart = event.currentTarget.selectionStart
 				? event.currentTarget.selectionStart + startOffset
 				: event.currentTarget.selectionStart;
-			const selectionEnd = event.currentTarget.selectionEnd
-				? event.currentTarget.selectionEnd + endOffset
-				: event.currentTarget.selectionEnd;
+			const selectionEnd =
+				event.currentTarget.selectionEnd !== null
+					? event.currentTarget.selectionEnd + endOffset
+					: event.currentTarget.selectionEnd;
 
 			handleNumber(event, selectionStart, selectionEnd, "");
 		}

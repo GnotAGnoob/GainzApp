@@ -13,11 +13,15 @@
 		</a>
 		{#if $session !== null}
 			<div class="mobile mobile_top">
-				<Profile class="profile" />
+				<div class="profile">
+					<Profile />
+				</div>
 			</div>
 			<div class="desktop">
 				<Navigation />
-				<Profile class="profile" />
+				<div class="profile">
+					<Profile />
+				</div>
 			</div>
 		{/if}
 	</div>

@@ -1,4 +1,3 @@
-import { prepareStylesSSR } from "@svelteuidev/core";
 import Google from "@auth/core/providers/google";
 import { SvelteKitAuth } from "@auth/sveltekit";
 import { GOOGLE_ID, GOOGLE_SECRET } from "$env/static/private";
@@ -44,4 +43,4 @@ const authorization: Handle = async ({ event, resolve }) => {
 // First handle authentication, then authorization
 // Each function acts as a middleware, receiving the request handle
 // And returning a handle which gets passed to the next function
-export const handle: Handle = sequence(prepareStylesSSR, authHandler, authorization);
+export const handle: Handle = sequence(authHandler, authorization);

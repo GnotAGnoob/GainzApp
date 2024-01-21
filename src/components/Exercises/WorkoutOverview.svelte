@@ -9,6 +9,8 @@
 	export let bestWorkout: PageDisplaySupersetExercise;
 	export let workoutHistory: PageDisplaySupersetExercise[];
 
+	let collapseElement: Collapse;
+
 	let isOpen = false;
 
 	$: lastWorkout = workoutHistory[workoutHistory.length - 1];
@@ -16,7 +18,7 @@
 </script>
 
 <div class="exercise" class:isOpen>
-	<Collapse isDisabled={!isEnoughHistory} isContentClickable bind:isOpen>
+	<Collapse isDisabled={!isEnoughHistory} isContentClickable bind:isOpen bind:this={collapseElement}>
 		<div class="title" slot="title">
 			<slot />
 			<div class="workoutsWrapper" class:workoutsWrapper_open={isOpen}>
@@ -45,12 +47,12 @@
 		</div>
 		<svelte:fragment slot="footer">
 			{#if isEnoughHistory}
-				<div class="historyButton" class:historyButton_open={isOpen}>
+				<button class="historyButton" class:historyButton_open={isOpen} on:click={collapseElement.handleClick}>
 					<div>{dictionary.HISTORY}</div>
 					<div class="icon">
 						<Icon icon="solar:alt-arrow-right-bold" />
 					</div>
-				</div>
+				</button>
 			{/if}
 		</svelte:fragment>
 	</Collapse>
@@ -62,6 +64,12 @@
 	.title,
 	.content {
 		width: 100%;
+	}
+
+	.content {
+		position: relative;
+
+		z-index: 1;
 	}
 
 	.exercise {
@@ -80,6 +88,9 @@
 
 	.historyButton {
 		display: flex;
+		position: relative;
+
+		width: 100%;
 
 		padding-block: $space-xs;
 		border-bottom-left-radius: $border-radius;
@@ -93,6 +104,8 @@
 		font-weight: 700;
 		font-size: $text-tag;
 		background-color: $background-color-history;
+
+		z-index: 1;
 
 		&:hover {
 			background-color: $background-color-history-2;

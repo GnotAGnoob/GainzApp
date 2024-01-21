@@ -74,4 +74,4 @@ pnpm test
 
 ## Component library
 
-https://www.svelteui.org
+https://www.bits-ui.com/docs/introduction

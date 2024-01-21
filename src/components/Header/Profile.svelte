@@ -1,108 +1,141 @@
 <script lang="ts">
 	import Icon from "@iconify/svelte";
 	import Button from "../Atoms/Button/Button.svelte";
-	import { Menu } from "@svelteuidev/core";
 	import { signOut } from "@auth/sveltekit/client";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import { session } from "$src/lib/stores/session";
-
-	export let className = "";
-	export { className as class };
-
-	let imageError = false;
+	import { Avatar, DropdownMenu } from "bits-ui";
 </script>
 
-<div class="wrapper {className}">
-	<Menu class="menu" placement="center" gutter={14}>
-		<div slot="control">
-			<Button class="profileButton" borderRadius="round" isPaddingSame padding="sm" type="neutral">
-				{#if $session?.user?.image && !imageError}
-					<img class="image" src={$session.user.image} alt="profile" on:error={() => (imageError = true)} />
-				{:else}
-					<div class="profileIcon">
-						<Icon icon="solar:user-bold" />
-					</div>
-				{/if}
-			</Button>
-		</div>
-		<Menu.Item on:click={signOut}>
-			<div class="button">
-				<div class="buttonIcon">
-					<Icon icon="solar:logout-2-linear" />
+<div class="wrapper">
+	<DropdownMenu.Root portal="#content">
+		<DropdownMenu.Trigger class="profileButton">
+			<Avatar.Root>
+				<Avatar.Image class="image" src={$session?.user?.image} alt="profile" />
+				<Avatar.Fallback class="profileIcon">
+					<Icon icon="solar:user-bold" />
+				</Avatar.Fallback>
+			</Avatar.Root>
+			<!-- use avatar component -->
+			<!-- <div class="profileIcon">
+				<Icon icon="solar:user-bold" />
+			</div> -->
+		</DropdownMenu.Trigger>
+
+		<DropdownMenu.Content class="dropdownMenu" side="bottom" sideOffset={12} align="center" collisionPadding={16}>
+			<!-- for dark mode -->
+			<!-- <DropdownMenu.CheckboxItem>
+			<DropdownMenu.CheckboxIndicator let:checked />
+		</DropdownMenu.CheckboxItem> -->
+			<!-- <DropdownMenu.Group>
+			<DropdownMenu.Item />
+		</DropdownMenu.Group> -->
+			<div class="container">
+				<div class="contentWrapper">
+					<DropdownMenu.Item>
+						<Button
+							padding="md"
+							borderRadius="none"
+							type="negativeNoBackground"
+							isFullSize
+							on:click={signOut}
+						>
+							<div class="buttonWrapper">
+								<div class="buttonIcon">
+									<Icon icon="solar:logout-2-linear" />
+								</div>
+								<p class="buttonText">{dictionary.SIGN_OUT}</p>
+							</div>
+						</Button>
+					</DropdownMenu.Item>
 				</div>
-				{dictionary.SIGN_OUT}
+				<!-- <DropdownMenu.Arrow class="dropdownArrow" /> -->
 			</div>
-		</Menu.Item>
-	</Menu>
+		</DropdownMenu.Content>
+	</DropdownMenu.Root>
 </div>
 
 <style lang="scss">
 	$icon-md-size: $space-lg;
 
-	:global(.svelteui-Menu-body) {
-		padding: 0;
-		border: unset;
-
-		background-color: var(--background-color-toast);
-		color: var(--text-primary);
-
-		box-shadow: $box-shadow;
-	}
-
-	:global(.svelteui-MenuItem-root) {
-		padding: $space-md $space-lg;
-		border-radius: 0;
-	}
-
-	:global(.svelteui-MenuItem-root.itemHovered) {
-		background-color: var(--accent-neutral-100);
-	}
-
 	.wrapper {
 		display: flex;
-
-		height: 100%;
-		min-height: 0;
 
 		:global(.profileButton) {
 			width: $icon-md-size;
 			height: $icon-md-size;
 
-			place-items: center;
-			place-content: center;
+			border-radius: 20rem;
 
 			overflow: hidden;
+
+			background-color: var(--accent-neutral-200);
+
+			&:hover {
+				background-color: var(--accent-neutral-300);
+			}
 		}
 
-		.profileIcon {
+		:global(.profileIcon) {
+			display: block;
 			margin-top: $space-px * 2;
+		}
+
+		:global(.image) {
+			&:hover {
+				filter: brightness(0.9);
+			}
+
+			&:active {
+				filter: brightness(0.8);
+			}
 		}
 	}
 
-	.button {
-		display: flex;
+	:global(.dropdownMenu) {
+		--_background: var(--background-color-toast);
 
-		gap: $space-md;
-		align-items: center;
+		color: var(--text-primary);
 
-		.buttonIcon {
-			font-size: $icon-xl;
+		.container {
+			border-radius: $border-sm;
 
-			margin-top: $space-px * 2;
+			background-color: var(--_background);
+			box-shadow: $box-shadow;
+		}
 
-			color: var(--text-secondary);
+		.contentWrapper {
+			position: relative;
+
+			padding: 0;
+			border-radius: $border-sm;
+
+			min-width: $space-xxl + $space-lg;
+
+			overflow: hidden;
+
+			background-color: var(--_background);
+			z-index: 1;
+		}
+
+		.button {
+			&Wrapper {
+				display: flex;
+
+				width: 100%;
+
+				gap: $space-md;
+
+				align-items: flex-start;
+			}
+
+			&Icon {
+				font-size: $icon-xl;
+			}
 		}
 	}
 
-	.image {
-		cursor: pointer;
-
-		&:hover {
-			filter: brightness(0.9);
-		}
-
-		&:active {
-			filter: brightness(0.8);
-		}
+	:global(.dropdownArrow) {
+		box-shadow: $box-shadow;
 	}
 </style>

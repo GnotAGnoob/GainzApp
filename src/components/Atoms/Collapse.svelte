@@ -11,7 +11,7 @@
 
 	let height = "auto";
 
-	const onClick = () => {
+	export const handleClick = () => {
 		height = contentElement?.scrollHeight ? `${Math.floor(contentElement?.scrollHeight)}px` : "auto";
 		isOpen = !isOpen;
 	};
@@ -20,7 +20,7 @@
 <div class="wrapper" class:isOpen>
 	{#if $$slots.title}
 		<div class="buttonWrapper">
-			<button class="button" on:click={onClick} disabled={isDisabled} />
+			<button class="button" on:click={handleClick} disabled={isDisabled} />
 			<div class="title" class:title_right={arrowPosition === "right"}>
 				{#if arrowPosition === "left"}
 					<span class="icon icon_{arrowSize}">

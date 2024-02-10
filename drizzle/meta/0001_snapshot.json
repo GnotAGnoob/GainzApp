@@ -1,6 +1,6 @@
 {
-  "id": "1e463823-6d1c-4cdb-9ca9-ae8e9b6e746b",
-  "prevId": "000ba20a-ec58-477c-898d-4f5f7dfb126e",
+  "id": "97f74214-2685-45d0-b524-95b205901479",
+  "prevId": "86c19d85-e6df-42f5-ae58-474542ec734a",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -114,7 +114,7 @@
         },
         "name": {
           "name": "name",
-          "type": "varchar(32)",
+          "type": "varchar(40)",
           "primaryKey": false,
           "notNull": true
         },
@@ -136,7 +136,7 @@
           "name": "userId",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         }
       },
       "indexes": {},
@@ -179,7 +179,7 @@
         },
         "name": {
           "name": "name",
-          "type": "varchar(32)",
+          "type": "varchar(40)",
           "primaryKey": false,
           "notNull": true
         },
@@ -208,6 +208,12 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
@@ -237,15 +243,29 @@
           ],
           "onUpdate": "no action",
           "onDelete": "no action"
+        },
+        "exercise_userId_user_id_fk": {
+          "name": "exercise_userId_user_id_fk",
+          "tableFrom": "exercise",
+          "columnsFrom": [
+            "userId"
+          ],
+          "tableTo": "user",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "exercise_name_category_id_unique": {
-          "name": "exercise_name_category_id_unique",
+        "exercise_name_category_id_userId_unique": {
+          "name": "exercise_name_category_id_userId_unique",
           "columns": [
             "name",
-            "category_id"
+            "category_id",
+            "userId"
           ],
           "nullsNotDistinct": false
         }
@@ -307,13 +327,13 @@
           "name": "repetition",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "weight": {
           "name": "weight",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -367,7 +387,7 @@
         },
         "name": {
           "name": "name",
-          "type": "varchar(32)",
+          "type": "varchar(40)",
           "primaryKey": false,
           "notNull": true
         },
@@ -453,7 +473,16 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "superset_workout_id_order_unique": {
+          "name": "superset_workout_id_order_unique",
+          "columns": [
+            "workout_id",
+            "order"
+          ],
+          "nullsNotDistinct": false
+        }
+      }
     },
     "supersetExercise": {
       "name": "supersetExercise",
@@ -489,7 +518,7 @@
           "name": "exercise_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "superset_id": {
           "name": "superset_id",
@@ -551,7 +580,7 @@
         },
         "name": {
           "name": "name",
-          "type": "varchar(32)",
+          "type": "varchar(40)",
           "primaryKey": false,
           "notNull": true
         },
@@ -767,7 +796,17 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "workout_status_id_userId_order_unique": {
+          "name": "workout_status_id_userId_order_unique",
+          "columns": [
+            "status_id",
+            "userId",
+            "order"
+          ],
+          "nullsNotDistinct": false
+        }
+      }
     }
   },
   "enums": {},

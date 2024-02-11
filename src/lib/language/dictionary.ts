@@ -72,4 +72,8 @@ export const dictionary = {
 	START_WORKOUT: "Start Workout",
 	WAITING_FOR_RESPONSE: "Waiting for response",
 	IF_YOU_SEE_THIS: "If you see this, something went wrong",
-};
+	HIDE_EMPTY: "Hide empty",
+	HIDE_GLOBAL: "Hide global",
+	HIDE_USER_DEFINED: "Hide user defined",
+	NO_EXERCISES_MATCH_THE_SELECTED_FILTERS: "No exercises match the selected filters",
+} as const;

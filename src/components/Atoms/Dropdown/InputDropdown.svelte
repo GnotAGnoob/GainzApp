@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Icon from "@iconify/svelte";
-	import Button from "./Button/Button.svelte";
-	import Input from "./Input.svelte";
+	import Button from "../Button/Button.svelte";
+	import Input from "../Input.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import { onMount } from "svelte";
 	import { MAX_DROPDOWN_ITEMS } from "$src/lib/constants";

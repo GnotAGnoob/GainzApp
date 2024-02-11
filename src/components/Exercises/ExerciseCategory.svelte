@@ -9,6 +9,7 @@
 	import { apiRoutes } from "$src/lib/paths";
 	import { categories } from "$src/lib/stores/categories";
 	import ExerciseForm from "./ExerciseForm.svelte";
+	import SelectDropdown from "$components/Atoms/Dropdown/SelectDropdown.svelte";
 	import type Modal from "$components/Modals/Modal.svelte";
 	import { setContext } from "svelte";
 	import { writable } from "svelte/store";
@@ -18,8 +19,41 @@
 	let errorMessage: string | null = null;
 	let exerciseFormElement: Modal;
 
+	type Filter = (typeof dictionary)[keyof Pick<
+		typeof dictionary,
+		"HIDE_EMPTY" | "HIDE_GLOBAL" | "HIDE_USER_DEFINED"
+	>];
+
+	let selectedFilters: Filter[] = [dictionary.HIDE_EMPTY];
+	const filterOptions: Filter[] = [dictionary.HIDE_EMPTY, dictionary.HIDE_GLOBAL, dictionary.HIDE_USER_DEFINED];
+
 	const exercises = writable<PageExercise[] | undefined>();
 	$: exercises.set(category.exercises);
+
+	let filteredExercises = $exercises;
+
+	$: {
+		if (!selectedFilters.length) {
+			filteredExercises = $exercises;
+		}
+
+		filteredExercises = $exercises?.filter((exercise) => {
+			// the conditions test if it is false
+			if (selectedFilters.includes(dictionary.HIDE_EMPTY) && !exercise.workoutHistory) {
+				return false;
+			}
+
+			if (selectedFilters.includes(dictionary.HIDE_GLOBAL) && exercise.isGlobal) {
+				return false;
+			}
+
+			if (selectedFilters.includes(dictionary.HIDE_USER_DEFINED) && !exercise.isGlobal) {
+				return false;
+			}
+
+			return true;
+		});
+	}
 
 	setContext("exercises", exercises);
 
@@ -95,15 +129,22 @@
 			<h3 class="categoryTitle">{category.name}</h3>
 		</EditText>
 		<ExerciseForm category={category.name} bind:modalElement={exerciseFormElement} />
+		<div class="filter">
+			<SelectDropdown options={filterOptions} bind:selected={selectedFilters} />
+		</div>
 	</div>
 	<div class="categoryInner">
-		<ul class="category" style={`--columns: ${$exercises?.length || 1}`}>
-			{#if $exercises?.length}
-				{#each $exercises as exercise (exercise.id)}
+		<ul class="category" style={`--columns: ${filteredExercises?.length || 1}`}>
+			{#if filteredExercises?.length}
+				{#each filteredExercises as exercise (exercise.id)}
 					<Exercise {exercise} />
 				{/each}
 			{:else}
-				<div class="empty">{dictionary.NO_EXERCISES_CREATED}</div>
+				<div class="empty">
+					{$exercises?.length
+						? dictionary.NO_EXERCISES_MATCH_THE_SELECTED_FILTERS
+						: dictionary.NO_EXERCISES_CREATED}
+				</div>
 			{/if}
 		</ul>
 	</div>
@@ -112,14 +153,19 @@
 <style lang="scss">
 	@import "./Exercises.scss";
 
-	.wrapper {
-		width: 100%;
-	}
-
 	.header {
 		display: flex;
+		position: relative;
 
 		justify-content: center;
+	}
+
+	.filter {
+		position: absolute;
+
+		right: 0;
+		top: 50%;
+		transform: translateY(-50%);
 	}
 
 	.category {

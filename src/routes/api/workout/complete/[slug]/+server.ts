@@ -4,7 +4,7 @@ import { getUserId } from "$src/lib/server/dbHelpers";
 import dbPlannedWorkouts, { dbGetWorkoutsPromise, dbInsertCompleteWorkout } from "$src/lib/server/dbWorkouts";
 import { parseFilledWorkout } from "$src/lib/server/dbSchemaValidation";
 import { handleError } from "$src/lib/server/error";
-import type { PageInsertFillWorkout, PageWorkout } from "$src/routes/workouts/types.js";
+import type { PageInsertFillWorkout, PageWorkout } from "$src/routes/types.js";
 import { json } from "@sveltejs/kit";
 import { and, eq } from "drizzle-orm";
 import { STATUS } from "$src/db/schema/status";

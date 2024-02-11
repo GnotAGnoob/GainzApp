@@ -5,137 +5,85 @@
 	import { dictionary } from "$src/lib/language/dictionary";
 	import { session } from "$src/lib/stores/session";
 	import { Avatar, DropdownMenu } from "bits-ui";
+	import Dropdown from "../Atoms/Dropdown/Dropdown.svelte";
 </script>
 
 <div class="wrapper">
-	<DropdownMenu.Root portal="#content">
-		<DropdownMenu.Trigger class="profileButton">
+	<Dropdown sideOffset={12}>
+		<div class="profileButton" slot="button">
 			<Avatar.Root>
-				<Avatar.Image class="image" src={$session?.user?.image} alt="profile" />
-				<Avatar.Fallback class="profileIcon">
-					<Icon icon="solar:user-bold" />
-				</Avatar.Fallback>
-			</Avatar.Root>
-			<!-- use avatar component -->
-			<!-- <div class="profileIcon">
-				<Icon icon="solar:user-bold" />
-			</div> -->
-		</DropdownMenu.Trigger>
-
-		<DropdownMenu.Content class="dropdownMenu" side="bottom" sideOffset={12} align="center" collisionPadding={16}>
-			<!-- for dark mode -->
-			<!-- <DropdownMenu.CheckboxItem>
-			<DropdownMenu.CheckboxIndicator let:checked />
-		</DropdownMenu.CheckboxItem> -->
-			<!-- <DropdownMenu.Group>
-			<DropdownMenu.Item />
-		</DropdownMenu.Group> -->
-			<div class="container">
-				<div class="contentWrapper">
-					<DropdownMenu.Item>
-						<Button
-							padding="md"
-							borderRadius="none"
-							type="negativeNoBackground"
-							isFullSize
-							on:click={signOut}
-						>
-							<div class="buttonWrapper">
-								<div class="buttonIcon">
-									<Icon icon="solar:logout-2-linear" />
-								</div>
-								<p class="buttonText">{dictionary.SIGN_OUT}</p>
-							</div>
-						</Button>
-					</DropdownMenu.Item>
+				<div class="image"><Avatar.Image src={$session?.user?.image} alt="profile" /></div>
+				<div class="profileIcon">
+					<Avatar.Fallback>
+						<Icon icon="solar:user-bold" />
+					</Avatar.Fallback>
 				</div>
-				<!-- <DropdownMenu.Arrow class="dropdownArrow" /> -->
-			</div>
-		</DropdownMenu.Content>
-	</DropdownMenu.Root>
+			</Avatar.Root>
+		</div>
+
+		<DropdownMenu.Item slot="content">
+			<Button padding="md" borderRadius="none" type="negativeNoBackground" isFullSize on:click={signOut}>
+				<div class="buttonWrapper">
+					<div class="buttonIcon">
+						<Icon icon="solar:logout-2-linear" />
+					</div>
+					<p class="buttonText">{dictionary.SIGN_OUT}</p>
+				</div>
+			</Button>
+		</DropdownMenu.Item>
+	</Dropdown>
 </div>
 
 <style lang="scss">
 	$icon-md-size: $space-lg;
 
-	.wrapper {
+	.profileButton {
 		display: flex;
 
-		:global(.profileButton) {
-			width: $icon-md-size;
-			height: $icon-md-size;
+		width: $icon-md-size;
+		height: $icon-md-size;
 
-			border-radius: 20rem;
+		border-radius: 20rem;
 
-			overflow: hidden;
+		justify-content: center;
+		align-items: center;
+		overflow: hidden;
 
-			background-color: var(--accent-neutral-200);
+		background-color: var(--accent-neutral-200);
 
-			&:hover {
-				background-color: var(--accent-neutral-300);
-			}
-		}
-
-		:global(.profileIcon) {
-			display: block;
-			margin-top: $space-px * 2;
-		}
-
-		:global(.image) {
-			&:hover {
-				filter: brightness(0.9);
-			}
-
-			&:active {
-				filter: brightness(0.8);
-			}
+		&:hover {
+			background-color: var(--accent-neutral-300);
 		}
 	}
 
-	:global(.dropdownMenu) {
-		--_background: var(--background-color-toast);
+	.profileIcon {
+		display: block;
+		margin-top: $space-px;
+	}
 
-		color: var(--text-primary);
-
-		.container {
-			border-radius: $border-sm;
-
-			background-color: var(--_background);
-			box-shadow: $box-shadow;
+	.image {
+		&:hover {
+			filter: brightness(0.9);
 		}
 
-		.contentWrapper {
-			position: relative;
-
-			padding: 0;
-			border-radius: $border-sm;
-
-			min-width: $space-xxl + $space-lg;
-
-			overflow: hidden;
-
-			background-color: var(--_background);
-			z-index: 1;
-		}
-
-		.button {
-			&Wrapper {
-				display: flex;
-
-				width: 100%;
-
-				gap: $space-md;
-
-				align-items: flex-start;
-			}
-
-			&Icon {
-				font-size: $icon-xl;
-			}
+		&:active {
+			filter: brightness(0.8);
 		}
 	}
 
-	:global(.dropdownArrow) {
-		box-shadow: $box-shadow;
+	.button {
+		&Wrapper {
+			display: flex;
+
+			width: 100%;
+
+			gap: $space-md;
+
+			align-items: flex-start;
+		}
+
+		&Icon {
+			font-size: $icon-xl;
+		}
 	}
 </style>

@@ -5,7 +5,7 @@
 	import Button from "../Atoms/Button/Button.svelte";
 	import Input from "../Atoms/Input.svelte";
 	import axios from "axios";
-	import InputDropdown from "../Atoms/InputDropdown.svelte";
+	import InputDropdown from "../Atoms/Dropdown/InputDropdown.svelte";
 	import toast from "$src/lib/toast";
 	import { categories } from "$src/lib/stores/categories";
 	import type { Category } from "$src/db/schema/category";

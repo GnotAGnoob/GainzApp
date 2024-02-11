@@ -1,9 +1,8 @@
 import { dictionary } from "./language/dictionary";
 
 export default {
-	"/": dictionary.HOME,
+	"/": dictionary.WORKOUTS,
 	"/exercises": dictionary.EXERCISES,
-	"/workouts": dictionary.WORKOUTS,
 } as const;
 
 export const apiRoutes = {

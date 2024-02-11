@@ -1,5 +1,5 @@
 import type { ExerciseAdditionalInfo } from "$src/lib/stores/exerciseAddionalInfo";
-import type { PageFillWorkout, PagePlannedWorkout, PageSetWeight } from "$src/routes/workouts/types";
+import type { PageFillWorkout, PagePlannedWorkout, PageSetWeight } from "$src/routes/types";
 
 export const remapWorkout = (
 	workout: PagePlannedWorkout | PageFillWorkout,

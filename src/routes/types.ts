@@ -2,7 +2,7 @@ import type { Category } from "$src/db/schema/category";
 import type { Exercise } from "$src/db/schema/exercise";
 import type { InsertSetWeight } from "$src/db/schema/setWeight";
 import type { Unit } from "$src/db/schema/unit";
-import type { PageDisplaySupersetExercise, PageSupersetExerciseInfo } from "../exercises/types";
+import type { PageDisplaySupersetExercise, PageSupersetExerciseInfo } from "./exercises/types";
 
 export interface PageSetWeight {
 	repetition: string;

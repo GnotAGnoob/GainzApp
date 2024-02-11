@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { MAX_SETS, MAX_TEXT_LENGTH } from "../constants";
-import type { PageInsertFillWorkout, PageInsertPlanWorkout } from "$src/routes/workouts/types";
+import type { PageInsertFillWorkout, PageInsertPlanWorkout } from "$src/routes/types";
 
 // ZOD DEFINITIONS
 

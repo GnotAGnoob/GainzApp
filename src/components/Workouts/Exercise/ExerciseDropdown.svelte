@@ -1,6 +1,6 @@
 <script lang="ts">
 	import axios from "axios";
-	import InputDropdown from "../../Atoms/InputDropdown.svelte";
+	import InputDropdown from "../../Atoms/Dropdown/InputDropdown.svelte";
 	import { debounce } from "debounce";
 	import { apiRoutes } from "$src/lib/paths";
 	import { DEBOUNCE_TIME, MAX_DROPDOWN_ITEMS } from "$src/lib/constants";

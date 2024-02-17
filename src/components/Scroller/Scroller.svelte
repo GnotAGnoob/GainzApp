@@ -185,8 +185,6 @@
 			padding-inline: min(var(--_side-padding), $space-md);
 			gap: $space-md;
 
-			align-items: flex-start;
-
 			padding-bottom: var(--scroller-padding);
 
 			&_reverse {

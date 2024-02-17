@@ -2,8 +2,8 @@
 	import Scroller from "$src/components/Scroller/Scroller.svelte";
 	import Button from "$components/Atoms/Button/Button.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
+	import type { PagePlannedWorkout } from "$src/routes/types";
 	import Icon from "@iconify/svelte";
-	import type { PagePlannedWorkout } from "$src/routes/workouts/types";
 	import { plannedWorkouts as plannedWorkoutsStore } from "$src/lib/stores/plannedWorkouts";
 	import EditablePlanWorkoutCard from "./WorkoutCard/EditablePlanWorkoutCard.svelte";
 	import PlanWorkoutCard from "./WorkoutCard/PlanWorkoutCard.svelte";

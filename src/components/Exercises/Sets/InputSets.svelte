@@ -1,7 +1,8 @@
 <script lang="ts">
 	import Scroller from "$components/Scroller/Scroller.svelte";
+	import { MAX_SETS } from "$src/lib/constants";
 	import type { StylesType } from "$src/lib/types";
-	import type { PageSetWeight } from "$src/routes/workouts/types";
+	import type { PageSetWeight } from "$src/routes/types";
 	import InputSet from "../Set/InputSet.svelte";
 	import SetsTemplate from "./SetsTemplate.svelte";
 
@@ -20,12 +21,14 @@
 	let focusOn: "weight" | "repetition" | undefined;
 	let currentFocus: "weight" | "repetition" | undefined;
 
+	$: isMaxSets = sets.length >= MAX_SETS;
+
 	$: {
 		focusOn = currentFocus;
 		currentFocus = newSet.weight.length && !newSet.repetition.length ? "repetition" : "weight";
 	}
 
-	$: if (newSet.repetition.length && newSet.weight.length) {
+	$: if (newSet.repetition.length && newSet.weight.length && !isMaxSets) {
 		sets.push(newSet);
 		newSet = { ...emptySet, weight: newSet.weight };
 
@@ -54,14 +57,16 @@
 				onInput={handleInput}
 			/>
 		{/each}
-		{#key sets.length}
-			<InputSet
-				type="neutral_3"
-				setNumber={sets.length + 1}
-				bind:weight={newSet.weight}
-				bind:repetition={newSet.repetition}
-				onInput={handleInput}
-			/>
-		{/key}
+		{#if !isMaxSets}
+			{#key sets.length}
+				<InputSet
+					type="neutral_3"
+					setNumber={sets.length + 1}
+					bind:weight={newSet.weight}
+					bind:repetition={newSet.repetition}
+					onInput={handleInput}
+				/>
+			{/key}
+		{/if}
 	</SetsTemplate>
 </Scroller>

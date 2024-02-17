@@ -8,11 +8,17 @@
 
 <style lang="scss">
 	.empty {
-		margin: $space-md auto $space-sm;
+		display: flex;
+
+		margin: auto;
 		padding: $space-lg $space-lg;
+		height: $space-xxl;
+		width: $space-xxxxl;
+		max-width: 100%;
 		border-radius: $border-sm;
 
 		justify-content: center;
+		align-items: center;
 
 		font-weight: 700;
 		background-color: var(--accent-neutral-100);

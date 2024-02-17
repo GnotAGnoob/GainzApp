@@ -121,6 +121,7 @@
 						<InputDropdown
 							label={dictionary.CATEGORY}
 							bind:value={exercise.category}
+							isOnMountFocus={!exercise.category}
 							onCreateNew={(value) => onCreateNewCategory(value, index)}
 							onSelect={(valueIndex) => onSelectCategory(valueIndex, index)}
 							dropDownOptions={dropdownCategories
@@ -142,7 +143,11 @@
 						/>
 					</div>
 					<div class="input input_name">
-						<Input bind:value={exercise.name} label={dictionary.EXERCISE_NAME} />
+						<Input
+							bind:value={exercise.name}
+							label={dictionary.EXERCISE_NAME}
+							isOnMountFocus={!!exercise.category}
+						/>
 					</div>
 					<div class="trash">
 						<Button

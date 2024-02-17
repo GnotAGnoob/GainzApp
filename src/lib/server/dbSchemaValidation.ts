@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { MAX_SETS, MAX_TEXT_LENGTH } from "../constants";
+import { MAX_SETS, MAX_SUPERSETS, MAX_SUPERSET_EXERCISES, MAX_TEXT_LENGTH } from "../constants";
 import type { PageInsertFillWorkout, PageInsertPlanWorkout } from "$src/routes/types";
 
 // ZOD DEFINITIONS
@@ -52,11 +52,13 @@ const fillSupersetExerciseObject = createSupersetExerciseObject.extend({
 // SCHEMA PARSERS
 export const parseCreateWorkout = (data: unknown): PageInsertPlanWorkout => {
 	const schema = z.object({
-		supersets: z.array(
-			z.object({
-				supersetExercises: z.array(createSupersetExerciseObject),
-			}),
-		),
+		supersets: z
+			.array(
+				z.object({
+					supersetExercises: z.array(createSupersetExerciseObject),
+				}),
+			)
+			.max(MAX_SUPERSETS),
 	});
 
 	return schema.parse(data);
@@ -64,12 +66,14 @@ export const parseCreateWorkout = (data: unknown): PageInsertPlanWorkout => {
 
 export const parseFilledWorkout = (data: unknown): PageInsertFillWorkout => {
 	const schema = z.object({
-		supersets: z.array(
-			z.object({
-				supersetExercises: z.array(fillSupersetExerciseObject),
-				id: z.number().optional(),
-			}),
-		),
+		supersets: z
+			.array(
+				z.object({
+					supersetExercises: z.array(fillSupersetExerciseObject),
+					id: z.number().optional(),
+				}),
+			)
+			.max(MAX_SUPERSET_EXERCISES),
 		date: z.string().optional(),
 		id: z.number().optional(),
 	});

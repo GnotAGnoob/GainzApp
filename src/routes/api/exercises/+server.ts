@@ -48,6 +48,8 @@ export async function POST({ request, locals }) {
 							!allCategories.find((existingCategory) => existingCategory.name === category.name),
 					);
 
+					if (!categoriesToInsert.length) return;
+
 					await transaction2.insert(category).values(categoriesToInsert).onConflictDoNothing();
 				});
 			} catch (error) {

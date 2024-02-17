@@ -40,7 +40,6 @@
 		display: flex;
 
 		width: $space-xxxl;
-		height: 100%;
 
 		justify-content: center;
 		flex-direction: column;

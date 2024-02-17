@@ -32,15 +32,15 @@
 				</Button>
 			</Tabs>
 		</div>
-		<div class="content">
+		<div class="content content_planned">
 			{#if activeElement === 0}
-				<div class="fullWidth">
+				<div>
 					<PlannedWorkouts plannedWorkouts={data.plannedWorkouts} />
 				</div>
 			{:else if activeElement === 1}
 				<!-- else if content here -->
 				<section>
-					imagine that there are templates here
+					<div class="tabs">TBD: imagine that there are templates here</div>
 					<!-- switch tab between templates and planned workouts 
 						when making workout -> button make workout from
 					templates option for creating workout somehow when creating create 3 scenarios -> template, planned,
@@ -55,7 +55,7 @@
 	</section>
 	<section>
 		<h2 class="title">{dictionary.WORKOUT_HISTORY}</h2>
-		<div class="fullWidth content">
+		<div class="content">
 			<WorkoutHistory workoutHistory={data.workoutHistory} />
 		</div>
 	</section>
@@ -66,8 +66,12 @@
 		display: flex;
 
 		flex-direction: column;
-		gap: $space-xl;
+		gap: $space-lg;
 		margin-top: $space-md;
+
+		@media (min-width: $bp-900) {
+			gap: $space-lg + $space-md;
+		}
 	}
 
 	.tabs {
@@ -77,11 +81,11 @@
 	}
 
 	.content {
-		margin-top: $space-sm + $space-xs;
-	}
+		margin-top: $space-sm;
 
-	.fullWidth {
-		margin-inline: calc(-1 * var(--site-padding));
+		&_planned {
+			margin-top: $space-sm + $space-xs;
+		}
 	}
 
 	.icon {

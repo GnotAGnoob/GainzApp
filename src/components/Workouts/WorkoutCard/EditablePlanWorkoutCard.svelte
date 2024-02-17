@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Button from "$components/Atoms/Button/Button.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
-	import type { PagePlannedWorkout } from "$src/routes/workouts/types";
+	import type { PagePlannedWorkout } from "$src/routes/types";
 	import WorkoutModalFormFill from "../WorkoutModalFormFill.svelte";
 	import type Modal from "../../Modals/Modal.svelte";
 	import WorkoutCardTemplate from "./WorkoutCardTemplate.svelte";
@@ -79,10 +79,18 @@
 		<InteractiveWorkoutSupersets bind:workout={workoutCopy} {onConfirm} {onCancel} {errorMessage} />
 	{:else}
 		<DisplayWorkoutSupersets {workout} />
-		<div class="start">
-			<Button type="noBackground_2" fontSize="sm" padding="sm" paddingSide="md" on:click={workoutModal.showModal}>
-				<span>{dictionary.START_WORKOUT}</span>
-			</Button>
+		<div class="startWrapper">
+			<div class="start">
+				<Button
+					type="noBackground_2"
+					fontSize="sm"
+					padding="sm"
+					paddingSide="md"
+					on:click={workoutModal.showModal}
+				>
+					<span>{dictionary.START_WORKOUT}</span>
+				</Button>
+			</div>
 		</div>
 		<WorkoutModalFormFill bind:modal={workoutModal} {workout} />
 	{/if}
@@ -90,7 +98,11 @@
 
 <style lang="scss">
 	.start {
-		margin-inline: auto;
-		margin-top: auto;
+		margin-top: $space-md;
+
+		&Wrapper {
+			margin-inline: auto;
+			margin-top: auto;
+		}
 	}
 </style>

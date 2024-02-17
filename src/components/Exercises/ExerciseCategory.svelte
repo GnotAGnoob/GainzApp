@@ -13,6 +13,7 @@
 	import type Modal from "$components/Modals/Modal.svelte";
 	import { setContext } from "svelte";
 	import { writable } from "svelte/store";
+	import EllipsisTooltip from "../Atoms/Tooltip/EllipsisTooltip.svelte";
 
 	export let category: PageCategory;
 
@@ -126,7 +127,7 @@
 				: undefined}
 			{errorMessage}
 		>
-			<h3 class="categoryTitle">{category.name}</h3>
+			<h3 class="categoryTitle"><EllipsisTooltip text={category.name} /></h3>
 		</EditText>
 		<ExerciseForm category={category.name} bind:modalElement={exerciseFormElement} />
 		<div class="filter">
@@ -201,6 +202,8 @@
 		}
 
 		&Title {
+			// todo make better when new edit buttons are done
+			max-width: $space-xxl + $space-lg;
 			text-align: center;
 		}
 

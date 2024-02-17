@@ -9,6 +9,7 @@
 	import WorkoutOverview from "./WorkoutOverview.svelte";
 	import { getContext } from "svelte";
 	import type { Writable } from "svelte/store";
+	import EllipsisTooltip from "../Atoms/Tooltip/EllipsisTooltip.svelte";
 
 	export let exercise: PageExercise;
 
@@ -80,7 +81,7 @@
 				buttonType="noBackground_2"
 				inputSize="sm"
 			>
-				<h4 class="name">{exercise.name}</h4>
+				<h4 class="name"><EllipsisTooltip text={exercise.name} /></h4>
 			</EditText>
 		</div>
 		<h5 class="noWorkout">
@@ -100,7 +101,7 @@
 				buttonType="noBackground_2"
 				inputSize="sm"
 			>
-				<h4 class="name">{exercise.name}</h4>
+				<h4 class="name"><EllipsisTooltip text={exercise.name} /></h4>
 			</EditText>
 		</div>
 	</WorkoutOverview>
@@ -123,6 +124,8 @@
 	}
 
 	.name {
+		max-width: $space-xxl + $space-xl + $space-lg;
+
 		text-align: center;
 		font-size: $text-tag;
 		font-weight: 700;

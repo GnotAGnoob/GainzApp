@@ -151,3 +151,7 @@ img {
 		background-color: var(--background-color-toast) !important;
 	}
 }
+
+.fullWidth {
+	margin-inline: calc(-1 * var(--site-padding));
+}

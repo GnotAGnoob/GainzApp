@@ -1,6 +1,6 @@
 <script lang="ts">
 	import EditableExercise from "./EditableExercise.svelte";
-	import type { PageFillSupersetExercise } from "$src/routes/workouts/types";
+	import type { PageFillSupersetExercise } from "$src/routes/types";
 	import InputSets from "$src/components/Exercises/Sets/InputSets.svelte";
 	import WorkoutOverview from "$src/components/Exercises/WorkoutOverview.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
@@ -16,6 +16,7 @@
 	export let isFetching = false;
 
 	$: lastWorkout = supersetExercise.exercise.workoutHistory?.[0];
+	$: lastWorkoutHighestWeight = lastWorkout?.sets.reduce((acc, set) => (set.weight > acc ? set.weight : acc), 0);
 
 	const fetchAdditionalData = async (exerciseId: number) => {
 		if (isFetching) return;
@@ -100,8 +101,7 @@
 				{/if}
 			</h5>
 		{/if}
-		<!-- todo fix roztahovani ostatnich -->
-		<InputSets bind:sets={supersetExercise.sets} initialWeightValue={lastWorkout?.sets[0].weight} />
+		<InputSets bind:sets={supersetExercise.sets} initialWeightValue={lastWorkoutHighestWeight} />
 	</div>
 </div>
 

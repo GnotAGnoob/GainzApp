@@ -6,7 +6,7 @@
 	import { DEBOUNCE_TIME, MAX_DROPDOWN_ITEMS } from "$src/lib/constants";
 	import toast from "$src/lib/toast";
 	import { dictionary } from "$src/lib/language/dictionary";
-	import type { PageCreateSupersetExercise } from "$src/routes/workouts/types";
+	import type { PageCreateSupersetExercise } from "$src/routes/types";
 	import type { ExerciseSearchResult } from "$src/routes/api/exercises/search/types";
 
 	const formatExercise = (supersetExercise: Partial<PageCreateSupersetExercise>) => {
@@ -21,6 +21,8 @@
 
 	let value = formatExercise(supersetExercise);
 	let dropdownItems: PageCreateSupersetExercise[] = [];
+
+	$: mappedDropdownItems = dropdownItems.map(formatExercise);
 
 	const fetchDropdownData = async () => {
 		try {
@@ -74,7 +76,7 @@
 
 <div class="input">
 	<InputDropdown
-		dropDownOptions={dropdownItems.map(formatExercise)}
+		dropDownOptions={mappedDropdownItems}
 		isOnMountFocus
 		bind:value
 		on:keyup={onEnterPress}

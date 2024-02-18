@@ -2,7 +2,7 @@
 	import Collapse from "$src/components/Atoms/Collapse.svelte";
 	import DisplaySets from "$src/components/Exercises/Sets/DisplaySets.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
-	import type { PageSupersetExercise } from "$src/routes/workouts/types";
+	import type { PageSupersetExercise } from "$src/routes/types";
 	import Exercise from "./Exercise.svelte";
 
 	export let supersetExercise: PageSupersetExercise;

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Exercise from "../Exercise/Exercise.svelte";
-	import type { PageCreateSupersetExercise } from "$src/routes/workouts/types";
+	import type { PageCreateSupersetExercise } from "$src/routes/types";
 
 	export let supersetExercises: PageCreateSupersetExercise[] = [];
 	export let order: number;

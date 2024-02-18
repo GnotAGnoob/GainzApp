@@ -1,6 +1,6 @@
 <script lang="ts">
 	import DisplaySuperset from "../Superset/DisplaySuperset.svelte";
-	import type { PageCreateWorkout } from "$src/routes/workouts/types";
+	import type { PageCreateWorkout } from "$src/routes/types";
 
 	export let workout: PageCreateWorkout;
 </script>

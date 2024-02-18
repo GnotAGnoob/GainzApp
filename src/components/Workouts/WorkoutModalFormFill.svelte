@@ -2,7 +2,7 @@
 	import Modal from "$components/Modals/Modal.svelte";
 	import { plannedWorkouts } from "$src/lib/stores/plannedWorkouts";
 	import { workoutHistory } from "$src/lib/stores/workoutHistory";
-	import type { PageFillWorkout, PagePlannedWorkout, PagePlannedWorkouts } from "$src/routes/workouts/types";
+	import type { PageFillWorkout, PagePlannedWorkout, PagePlannedWorkouts } from "$src/routes/types";
 	import axios from "axios";
 	import FillWorkoutSupersets from "./WorkoutSupersets/FillWorkoutSupersets.svelte";
 	import { apiRoutes } from "$src/lib/paths";
@@ -29,7 +29,6 @@
 			);
 			$plannedWorkouts = data.plannedWorkouts;
 			$workoutHistory = data.workoutHistory;
-			// todo toast
 			modal?.closeModal();
 		} catch (error) {
 			if (axios.isAxiosError(error)) {

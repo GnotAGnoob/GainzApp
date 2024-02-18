@@ -11,7 +11,7 @@
 
 	let activeElement = 0;
 
-	// $floatedCorner = ["addWorkout"];
+	// $floatedCorner = [];
 </script>
 
 <div class="wrapper">

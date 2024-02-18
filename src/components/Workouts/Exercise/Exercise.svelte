@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PageCreateSupersetExercise } from "$src/routes/workouts/types";
+	import type { PageCreateSupersetExercise } from "$src/routes/types";
 
 	export let supersetExercise: PageCreateSupersetExercise;
 </script>

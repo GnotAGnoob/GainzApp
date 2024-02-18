@@ -16,7 +16,7 @@
 	export let isSelect = false;
 	export let isOnMountFocus = false;
 	const readOnly = isSelect && { readonly: true };
-	$: value = isSelect && !value.length ? dropDownOptions?.[0] || "" : value;
+	value = isSelect && !value.length ? dropDownOptions?.[0] || "" : value;
 
 	let input: HTMLDivElement | null = null;
 	let inputElement: HTMLInputElement | null = null;
@@ -25,6 +25,10 @@
 
 	let isLoading = false;
 	$: reduceOptions = dropDownOptions?.slice(0, MAX_DROPDOWN_ITEMS);
+
+	$: if (reduceOptions && optionsElement) {
+		optionsElement.scrollTop = 0;
+	}
 
 	const onClick = (index: number, event: MouseEvent) => {
 		if (!dropDownOptions) return;

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import FillExercise from "../Exercise/FillExercise.svelte";
-	import type { PageFillSupersetExercise } from "$src/routes/workouts/types";
+	import type { PageFillSupersetExercise } from "$src/routes/types";
 	import EditableSupersetTemplate from "./EditableSupersetTemplate.svelte";
 	import { exerciseAdditionalInfo } from "$src/lib/stores/exerciseAddionalInfo";
 

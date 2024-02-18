@@ -3,7 +3,7 @@
 	import { MAX_SUPERSET_EXERCISES } from "$src/lib/constants";
 	import Icon from "@iconify/svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
-	import type { PageCreateSupersetExercise } from "$src/routes/workouts/types";
+	import type { PageCreateSupersetExercise } from "$src/routes/types";
 	import ExerciseDropdown from "$components/Workouts/Exercise/ExerciseDropdown.svelte";
 	import EditButtons from "$src/components/EditButtons.svelte";
 

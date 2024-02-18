@@ -1,5 +1,5 @@
 <script>
-	import { page } from "$app/stores";
+	import { page, navigating } from "$app/stores";
 	import { getPageTitle } from "$lib/getPageTitle";
 	import Header from "../components/Header/Header.svelte";
 	import FloatingCorner from "$src/components/FloatingCorner.svelte";
@@ -7,10 +7,15 @@
 	import "$sass/global.scss";
 	import EnvironmentBanner from "$src/components/EnvironmentBanner.svelte";
 	import { session } from "$src/lib/stores/session";
+	import { floatedCorner } from "$src/lib/stores/floatedCorner";
 
 	export let data;
 
 	session.set(data.session);
+
+	$: if ($navigating) {
+		$floatedCorner = [];
+	}
 </script>
 
 <svelte:head>

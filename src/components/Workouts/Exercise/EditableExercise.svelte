@@ -1,7 +1,7 @@
 <script lang="ts">
 	import EditButtons from "../../EditButtons.svelte";
 	import Exercise from "./Exercise.svelte";
-	import type { PageCreateSupersetExercise } from "$src/routes/workouts/types";
+	import type { PageCreateSupersetExercise } from "$src/routes/types";
 	import ExerciseDropdown from "./ExerciseDropdown.svelte";
 	import { dictionary } from "$lib/language/dictionary";
 

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import EditableExercise from "../Exercise/EditableExercise.svelte";
-	import type { PageCreateSupersetExercise } from "$src/routes/workouts/types";
+	import type { PageCreateSupersetExercise } from "$src/routes/types";
 	import EditableSupersetTemplate from "./EditableSupersetTemplate.svelte";
 
 	export let supersetExercises: PageCreateSupersetExercise[] = [];

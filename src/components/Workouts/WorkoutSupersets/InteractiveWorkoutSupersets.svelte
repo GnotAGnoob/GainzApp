@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PageCreateWorkout } from "$src/routes/workouts/types";
+	import type { PageCreateWorkout } from "$src/routes/types";
 	import WourkoutSupersetsTemplate from "./WorkoutSupersetsTemplate.svelte";
 	import EditableSuperset from "../Superset/EditableSuperset.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";

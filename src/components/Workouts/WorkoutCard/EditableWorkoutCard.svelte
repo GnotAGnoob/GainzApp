@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { dictionary } from "$src/lib/language/dictionary";
-	import type { PagePlannedWorkout, PageWorkout } from "$src/routes/workouts/types";
+	import type { PagePlannedWorkout, PageWorkout } from "$src/routes/types";
 	import WorkoutCardTemplate from "./WorkoutCardTemplate.svelte";
 	import axios from "axios";
 	import toast from "$src/lib/toast";

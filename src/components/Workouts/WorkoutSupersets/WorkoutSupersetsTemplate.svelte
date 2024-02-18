@@ -3,7 +3,7 @@
 	import { MAX_SUPERSETS } from "$src/lib/constants";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import Icon from "@iconify/svelte";
-	import type { PageCreateSuperset, PageCreateWorkout } from "$src/routes/workouts/types";
+	import type { PageCreateSuperset, PageCreateWorkout } from "$src/routes/types";
 	import ErrorText from "../../Atoms/ErrorText.svelte";
 	import toast from "$src/lib/toast";
 

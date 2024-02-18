@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PageWorkout } from "$src/routes/workouts/types";
+	import type { PageWorkout } from "$src/routes/types";
 	import DisplaySupersetWithSets from "../Superset/DisplaySupersetWithSets.svelte";
 
 	export let workout: PageWorkout;

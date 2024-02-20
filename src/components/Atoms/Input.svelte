@@ -68,7 +68,7 @@
 			event.preventDefault();
 			let newValue = insertInsteadRange(value || "", text, selectionStart, selectionEnd);
 
-			if (inputType === "integer") {
+			if (inputType === "integer" && newValue.length) {
 				newValue = parseInt(newValue).toString();
 			} else {
 				newValue = newValue.replace(",", ".");

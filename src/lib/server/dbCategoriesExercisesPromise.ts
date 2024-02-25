@@ -16,6 +16,7 @@ import type {
 	PageExercise,
 	PageExercisesData,
 } from "$src/routes/exercises/types";
+import { REPETITION_EMPHASIS } from "$lib/constants";
 
 export const bestSupersetExercises = (userId: string, database: Database = db) => {
 	const totalWeightAlias = sql<string>`"totalWeight"`.as("totalWeight");
@@ -24,7 +25,7 @@ export const bestSupersetExercises = (userId: string, database: Database = db) =
 		.select({
 			id: supersetExercise.id,
 			totalWeight: sql<number>`
-				SUM("setWeight".repetition * "setWeight".weight) AS "totalWeight"`,
+				SUM(POWER("setWeight".repetition, ${REPETITION_EMPHASIS}) * "setWeight".weight) AS "totalWeight"`,
 		})
 		.from(supersetExercise)
 		.innerJoin(setWeight, eq(setWeight.supersetExerciseId, supersetExercise.id))

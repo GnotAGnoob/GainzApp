@@ -11,6 +11,7 @@ import { STATUS, status } from "$src/db/schema/status";
 import { supersetExercise } from "$src/db/schema/supersetExercise";
 import { error } from "@sveltejs/kit";
 import { setWeight, type InsertSetWeight } from "$src/db/schema/setWeight";
+import { REPETITION_EMPHASIS } from "$lib/constants";
 
 const bestSupersetExercises = (userId: string, database: Database = db) => {
 	return sql`
@@ -29,7 +30,11 @@ const bestSupersetExercises = (userId: string, database: Database = db) => {
 				'weight', sw."weight"
 			)
 			) AS "sets",
-			ROW_NUMBER() OVER (PARTITION BY se."exercise_id" ORDER BY SUM(sw."repetition" * sw."weight") DESC) AS "rnk"
+			ROW_NUMBER() OVER (
+				PARTITION BY se."exercise_id" ORDER BY SUM(
+					POWER(sw."repetition", ${REPETITION_EMPHASIS}) * sw."weight"
+					) DESC
+				) AS "rnk"
 		FROM
 			"supersetExercise" se
 			JOIN "setWeight" sw ON se."id" = sw."superset_exercise_id"

@@ -8,6 +8,7 @@
 	import EnvironmentBanner from "$src/components/EnvironmentBanner.svelte";
 	import { session } from "$src/lib/stores/session";
 	import { floatedCorner } from "$src/lib/stores/floatedCorner";
+	// import Swatch from "$src/components/Swatch.svelte";
 
 	export let data;
 

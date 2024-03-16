@@ -4,10 +4,8 @@
 	"private": true,
 	"scripts": {
 		"dev": "vite dev --port 9001",
-		"staging": "vite dev --port 9001 --mode staging",
 		"prod": "vite dev --port 9001 --mode production",
 		"build": "vite build",
-		"build:staging": "vite build --mode staging",
 		"docker": "docker compose up -d",
 		"preview": "vite preview --port 9001",
 		"test": "playwright test",

@@ -1,0 +1,120 @@
+name: Build, Test, and Deploy
+# activate jobs manually
+
+on:
+    push:
+        branches:
+            - main
+    workflow_dispatch:
+
+jobs:
+    install:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+                  cache: "pnpm"
+
+            - name: Enable pnpm using corepack
+              run: |
+                  corepack enable pnpm
+                  corepack use pnpm@latest
+                  pnpm install
+
+    build:
+        runs-on: ubuntu-latest
+        needs: install
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            # - name: Setup Node.js
+            #   uses: actions/setup-node@v4
+            #   with:
+            #       node-version: "20"
+
+            - name: Build
+              run: pnpm build
+
+    # test:
+    #     runs-on: ubuntu-latest
+    #     needs: install
+
+    #     steps:
+    #         - name: Checkout repository
+    #           uses: actions/checkout@v4
+
+    #         - name: Setup Node.js
+    #           uses: actions/setup-node@v4
+    #           with:
+    #               node-version: "20"
+
+    #         - name: Enable pnpm using corepack
+    #           run: |
+    #               npm install -g corepack
+    #               corepack enable pnpm
+    #               corepack use pnpm@latest
+
+    #         - name: Install dependencies
+    #           run: pnpm install
+
+    #         - name: Test
+    #           run: pnpm test
+
+    check:
+        runs-on: ubuntu-latest
+        needs: install
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            # - name: Setup Node.js
+            #   uses: actions/setup-node@v4
+            #   with:
+            #       node-version: "20"
+
+            - name: Check TypeScript
+              run: pnpm check
+
+    lint:
+        runs-on: ubuntu-latest
+        needs: install
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            # - name: Setup Node.js
+            #   uses: actions/setup-node@v4
+            #   with:
+            #       node-version: "20"
+
+            - name: Lint with ESLint
+              run: pnpm lint
+
+    deploy:
+        # needs: [build, test, check, lint]
+        needs: [build, check, lint]
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            # - name: Setup Node.js
+            #   uses: actions/setup-node@v4
+            #   with:
+            #       node-version: "20"
+
+            - name: Deploy to Vercel
+              run: |
+                  # Your deployment commands here
+                  echo "Deploying to Vercel"

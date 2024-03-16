@@ -10,12 +10,6 @@ Install dependencies with `pnpm add` and start a development server:
 pnpm dev
 ```
 
-### staging version mode in dev
-
-```bash
-pnpm staging
-```
-
 ## Building
 
 To create a production version of your app:

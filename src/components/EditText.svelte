@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Input from "./Atoms/Input.svelte";
 	import EditButtons from "./EditButtons.svelte";
-	import type { ButtonType } from "./Atoms/Button/types.ts";
+	import type { ButtonType } from "./Atoms/Button/types";
 	import { dictionary } from "$lib/language/dictionary";
 
 	export let text = "";

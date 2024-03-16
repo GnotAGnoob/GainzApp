@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ButtonType } from "./Atoms/Button/types.ts";
+	import type { ButtonType } from "./Atoms/Button/types";
 	import Icon from "@iconify/svelte";
 	import Button from "./Atoms/Button/Button.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";

@@ -23,7 +23,7 @@ export const handleError = (err: unknown, errorHandling?: () => HttpError | unde
 		return response;
 	}
 
-	let errorMessage = dictionary.UNKNOWN_ERROR;
+	let errorMessage: string = dictionary.UNKNOWN_ERROR;
 
 	if (err instanceof Error) {
 		errorMessage = err.message;

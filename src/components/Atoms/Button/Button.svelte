@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ButtonType } from "./types.ts";
+	import type { ButtonType } from "./types";
 	import Icon from "@iconify/svelte";
 
 	export let isLoading = false;

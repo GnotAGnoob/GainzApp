@@ -12,8 +12,11 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
             - name: Setup
-              uses: ./.github/actions
+              uses: ./.github/setup
 
     build:
         runs-on: ubuntu-latest
@@ -23,20 +26,8 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v4
 
-            - name: Setup pnpm
-              uses: pnpm/action-setup@v3
-              with:
-                  version: 8
-
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: "20"
-                  cache: "pnpm"
-                  cache-dependency-path: "**/pnpm-lock.yaml"
-
-            - name: Install dependencies
-              run: pnpm install
+            - name: Setup
+              uses: ./.github/setup
 
             - name: Build
               run: pnpm build
@@ -67,6 +58,9 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v4
 
+            - name: Setup
+              uses: ./.github/setup
+
             # - name: Setup Node.js
             #   uses: actions/setup-node@v4
             #   with:
@@ -82,6 +76,9 @@ jobs:
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
+
+            - name: Setup
+              uses: ./.github/setup
 
             # - name: Setup Node.js
             #   uses: actions/setup-node@v4
@@ -99,6 +96,9 @@ jobs:
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
+
+            - name: Setup
+              uses: ./.github/setup
 
             # - name: Setup Node.js
             #   uses: actions/setup-node@v4

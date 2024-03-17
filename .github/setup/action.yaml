@@ -9,14 +9,14 @@ runs:
           with:
               version: 8
 
-        - name: Setup Node.js
-          shell: bash
-          uses: actions/setup-node@v4
-          with:
-              node-version: "20"
-              cache: "pnpm"
-              cache-dependency-path: "**/pnpm-lock.yaml"
+        # - name: Setup Node.js
+        #   shell: bash
+        #   uses: actions/setup-node@v4
+        #   with:
+        #       node-version: "20"
+        #       cache: "pnpm"
+        #       cache-dependency-path: "**/pnpm-lock.yaml"
 
-        - name: Install dependencies
-          shell: bash
-          run: pnpm install
+        # - name: Install dependencies
+        #   shell: bash
+        #   run: pnpm install

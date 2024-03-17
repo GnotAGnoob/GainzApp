@@ -4,7 +4,7 @@ runs:
     using: "composite"
     steps:
         - name: Setup pnpm
-          shell: bash
+          # shell: bash
           uses: pnpm/action-setup@v3
           with:
               version: 8

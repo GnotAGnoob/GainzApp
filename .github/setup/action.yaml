@@ -15,6 +15,6 @@ runs:
               cache: "pnpm"
               cache-dependency-path: "**/pnpm-lock.yaml"
 
-        # - name: Install dependencies
-        #   shell: bash
-        #   run: pnpm install
+        - name: Install dependencies
+          shell: bash
+          run: pnpm install

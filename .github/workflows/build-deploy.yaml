@@ -15,17 +15,20 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v4
 
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v3
+              with:
+                  version: 8
+
             - name: Setup Node.js
               uses: actions/setup-node@v4
               with:
                   node-version: "20"
                   cache: "pnpm"
+                  cache-dependency-path: "**/package-lock.json"
 
-            - name: Enable pnpm using corepack
-              run: |
-                  corepack enable pnpm
-                  corepack use pnpm@latest
-                  pnpm install
+            - name: Install dependencies
+              run: pnpm install
 
     build:
         runs-on: ubuntu-latest
@@ -55,15 +58,6 @@ jobs:
     #           uses: actions/setup-node@v4
     #           with:
     #               node-version: "20"
-
-    #         - name: Enable pnpm using corepack
-    #           run: |
-    #               npm install -g corepack
-    #               corepack enable pnpm
-    #               corepack use pnpm@latest
-
-    #         - name: Install dependencies
-    #           run: pnpm install
 
     #         - name: Test
     #           run: pnpm test

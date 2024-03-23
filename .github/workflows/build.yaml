@@ -1,4 +1,4 @@
-name: Install dependencies
+name: Build the project
 
 on:
     workflow_dispatch:

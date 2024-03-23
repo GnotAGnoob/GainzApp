@@ -25,7 +25,7 @@
 <!-- <Swatch /> -->
 
 <div class="content">
-	{#if import.meta.env.MODE === "development" || import.meta.env.MODE === "staging"}
+	{#if import.meta.env.MODE === "development"}
 		<EnvironmentBanner type={import.meta.env.MODE === "development" ? "positive" : "info"}>
 			This is a <span class="bannerText">{import.meta.env.MODE}</span> environment!
 		</EnvironmentBanner>

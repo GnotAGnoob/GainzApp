@@ -2,12 +2,11 @@
 	"name": "LiftTrckr",
 	"version": "0.0.1",
 	"private": true,
+	"type": "module",
 	"scripts": {
 		"dev": "vite dev --port 9001",
-		"staging": "vite dev --port 9001 --mode staging",
 		"prod": "vite dev --port 9001 --mode production",
 		"build": "vite build",
-		"build:staging": "vite build --mode staging",
 		"docker": "docker compose up -d",
 		"preview": "vite preview --port 9001",
 		"test": "playwright test",
@@ -45,7 +44,6 @@
 		"typescript": "^5.0.0",
 		"vite": "^4.4.2"
 	},
-	"type": "module",
 	"dependencies": {
 		"@auth/core": "^0.12.0",
 		"@auth/drizzle-adapter": "^0.3.2",

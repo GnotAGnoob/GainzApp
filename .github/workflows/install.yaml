@@ -1,0 +1,16 @@
+name: Install dependencies
+
+on:
+    workflow_dispatch:
+    workflow_call:
+
+jobs:
+    install:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Setup
+              uses: ./.github/setup

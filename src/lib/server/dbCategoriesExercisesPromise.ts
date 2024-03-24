@@ -1,5 +1,5 @@
 import db from "$src/lib/server/db";
-import { and, asc, desc, eq, inArray, isNull, or, sql } from "drizzle-orm";
+import { and, asc, eq, inArray, isNull, or, sql } from "drizzle-orm";
 import { dbQueryOmit } from "./dbHelpers";
 import { category } from "$src/db/schema/category";
 import { exercise } from "$src/db/schema/exercise";

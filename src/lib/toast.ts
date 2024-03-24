@@ -1,10 +1,4 @@
-import {
-	toast as toaster,
-	type Renderable,
-	type ToastOptions,
-	type ValueOrFunction,
-	type DefaultToastOptions,
-} from "svelte-french-toast";
+import { toast as toaster, type Renderable, type ToastOptions } from "svelte-french-toast";
 
 const opts: ToastOptions = {
 	duration: 3000,

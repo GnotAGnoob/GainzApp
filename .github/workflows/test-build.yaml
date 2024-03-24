@@ -4,6 +4,10 @@ on:
     push:
         branches:
             - main
+        paths:
+            - "src/**"
+            - "drizzle/**"
+            - "pnpm-lock.yaml"
     workflow_dispatch:
 
 jobs:

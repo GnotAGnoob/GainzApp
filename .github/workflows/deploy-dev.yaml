@@ -3,6 +3,11 @@ name: Deploy to devevelopment environment
 env:
     VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
     VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+    NEON_DATABASE_USERNAME: ${{ secrets.NEON_DATABASE_USERNAME }}
+    NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+    NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
+    GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
 on:
     workflow_dispatch:
@@ -13,6 +18,7 @@ jobs:
 
     deploy:
         runs-on: ubuntu-latest
+        permissions: write-all
         needs: checks
         steps:
             - name: Checkout repository
@@ -21,14 +27,44 @@ jobs:
             - name: Setup
               uses: ./.github/setup
 
-            # - name: Install Vercel CLI
-            #   run: pnpm install --global vercel@latest
+            - name: Get branch name
+              id: branch-name
+              uses: tj-actions/branch-names@v8
 
-            # - name: Pull Vercel Environment Information
-            #   run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+            - name: Create Neon Branch
+              id: create-branch
+              uses: neondatabase/create-branch-action@v4
+              with:
+                  project_id: ${{ env.NEON_PROJECT_ID }}
+                  parent: master
+                  branch_name: preview/pr-${{ github.event.number }}-${{ steps.branch-name.outputs.current_branch }}
+                  username: ${{ env.NEON_DATABASE_USERNAME }}
+                  api_key: ${{ env.NEON_API_KEY }}
 
-            # - name: Build Project Artifacts
-            #   run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+            - name: Run Migrations
+              run: |
+                  touch .env
 
-            # - name: Deploy Project Artifacts to Vercel
-            #   run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+                  echo DATABASE_URL=${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require >> .env
+
+                  pnpm run db:migrate
+
+            - name: Install Vercel CLI
+              run: pnpm install --global vercel@latest
+
+            - name: Pull Vercel Environment Information
+              run: vercel pull --yes --environment=preview --token=${{ env.VERCEL_TOKEN }}
+
+            - name: Build Project Artifacts
+              run: vercel build --token=${{ env.VERCEL_TOKEN }}
+
+            - name: Deploy Project Artifacts to Vercel
+              run: vercel deploy --prebuilt --token=${{ env.VERCEL_TOKEN }}
+
+            - name: Comment on Pull Request
+              uses: thollander/actions-comment-pull-request@v2
+              with:
+                  GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+                  message: |
+                      Vercel Preview URL :rocket: : ${{ steps.deploy.outputs.preview_url }}
+                      Neon branch :elephant: : https://console.neon.tech/app/projects/${{ env.NEON_PROJECT_ID }}/branches/${{ steps.create-branch.outputs.branch_id }}

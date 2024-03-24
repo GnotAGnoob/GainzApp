@@ -1,7 +1,14 @@
 name: Test, Check & Lint
 
 on:
-    workflow_call:
+    push:
+        branches:
+            - main
+        paths:
+            - "src/**"
+            - "drizzle/**"
+            - "pnpm-lock.yaml"
+    workflow_dispatch:
 
 jobs:
     # test:

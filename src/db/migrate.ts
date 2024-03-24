@@ -7,22 +7,19 @@ const databaseUrl = process.env.DATABASE_URL;
 
 if (!databaseUrl) throw envError("DATABASE_URL");
 
-let dbClient;
-
 try {
 	const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
 	if (isDev) {
-		dbClient = connectDbDev(databaseUrl);
+		const dbClient = connectDbDev(databaseUrl);
 		await migrate(dbClient.db, { migrationsFolder: "drizzle" });
+		await dbClient.dbConnection.end();
 	} else {
-		dbClient = connectDbProduction(databaseUrl);
+		const dbClient = connectDbProduction(databaseUrl);
 		await neonMigrate(dbClient.db, { migrationsFolder: "drizzle" });
 	}
 	// eslint-disable-next-line no-console
 	console.info("Migration script complete");
 } catch (error) {
-	throw new Error(`Migration failed: ${error}`);
+	console.error("Error during migration:", error);
+	process.exit(1);
 }
-
-// @ts-ignore
-await dbClient.dbConnection.end();

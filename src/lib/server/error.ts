@@ -1,7 +1,7 @@
 import postgres from "postgres";
 import { z } from "zod";
 import { dictionary } from "../language/dictionary";
-import { HttpError, error } from "@sveltejs/kit";
+import { type HttpError, error } from "@sveltejs/kit";
 
 export const handleError = (err: unknown, errorHandling?: () => HttpError | undefined) => {
 	console.error(err);

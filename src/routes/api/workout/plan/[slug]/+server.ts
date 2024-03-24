@@ -4,7 +4,7 @@ import { getUserId } from "$src/lib/server/dbHelpers";
 import { dbGetWorkoutsPromise, dbPostPlannedWorkoutPromise } from "$src/lib/server/dbWorkouts.js";
 import { parseCreateWorkout } from "$src/lib/server/dbSchemaValidation";
 import { handleError } from "$src/lib/server/error";
-import type { PageInsertPlanWorkout, PagePlannedWorkout } from "$src/routes/types.js";
+import type { PageInsertPlanWorkout } from "$src/routes/types.js";
 import { error, json } from "@sveltejs/kit";
 import { and, eq } from "drizzle-orm";
 import { STATUS } from "$src/db/schema/status";
@@ -27,7 +27,7 @@ export async function PUT({ params, locals, request }) {
 	try {
 		const userId = await getUserId(locals);
 
-		const plannedWorkout: PagePlannedWorkout = await db.transaction(async (transaction) => {
+		const plannedWorkout = await db.transaction(async (transaction) => {
 			const deletedWorkout = await transaction
 				.delete(workout)
 				.where(and(eq(workout.id, parseInt(params.slug)), eq(workout.userId, userId)))

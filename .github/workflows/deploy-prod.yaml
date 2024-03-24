@@ -12,7 +12,7 @@ on:
 
 jobs:
     checks:
-        uses: ./.github/workflows/checks.yaml
+        uses: ./.github/workflows/checks-template.yaml
 
     deploy:
         runs-on: ubuntu-latest

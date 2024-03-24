@@ -1,4 +1,4 @@
-name: Test, Check & Lint
+name: Runs Checks
 
 on:
     push:
@@ -11,56 +11,5 @@ on:
     workflow_dispatch:
 
 jobs:
-    # test:
-    #     runs-on: ubuntu-latest
-
-    #     steps:
-    #         - name: Checkout repository
-    #           uses: actions/checkout@v4
-
-    # - name: Setup
-    #   uses: ./.github/setup
-
-    #         - name: Test
-    #           run: pnpm test
-
-    # todo add saving report
-
-    check:
-        runs-on: ubuntu-latest
-
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
-
-            - name: Setup
-              uses: ./.github/setup
-
-            - name: Check TypeScript
-              run: pnpm check
-
-    lint:
-        runs-on: ubuntu-latest
-
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
-
-            - name: Setup
-              uses: ./.github/setup
-
-            - name: Lint with ESLint
-              run: pnpm lint
-
-    prettier:
-        runs-on: ubuntu-latest
-
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
-
-            - name: Setup
-              uses: ./.github/setup
-
-            - name: Check the styling with Prettier
-              run: pnpm prettier
+    checks:
+        uses: ./.github/workflows/checks-template.yaml

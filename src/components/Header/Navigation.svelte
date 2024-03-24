@@ -8,10 +8,7 @@
 
 <nav>
 	<ul>
-		<Tabs
-			let:prop={onClick}
-			activeElement={Object.keys(paths).findIndex((path) => path === $page.url.pathname)}
-		>
+		<Tabs let:prop={onClick} activeElement={Object.keys(paths).findIndex((path) => path === $page.url.pathname)}>
 			{#each Object.entries(paths) as [href, text], index (href)}
 				<NavbarLink {href} {text} {onClick} {index} />
 			{/each}

@@ -8,6 +8,7 @@
 		"prod": "vite dev --port 9001 --mode production",
 		"prepare": "svelte-kit sync",
 		"build": "vite build",
+		"build:ci": "vite build --mode ci",
 		"docker": "docker compose up -d",
 		"preview": "vite preview --port 9001",
 		"test": "playwright test",

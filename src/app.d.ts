@@ -17,7 +17,6 @@ declare global {
 	namespace NodeJS {
 		interface Global {
 			_db: PostgresJsDatabase<typeof schema> | NeonHttpDatabase<typeof schema> | undefined;
-			_dbConnection: any;
 		}
 	}
 }

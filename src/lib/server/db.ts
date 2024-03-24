@@ -1,20 +1,27 @@
-import { DATABASE_URL } from "$env/static/private";
-import { connectDbDev, connectDbProduction } from "$src/db/connect";
+import { env } from "$env/dynamic/private";
+import { drizzle } from "drizzle-orm/postgres-js";
+import { drizzle as neonDrizzle } from "drizzle-orm/neon-http";
+import { neon, neonConfig } from "@neondatabase/serverless";
+import postgres from "postgres";
+
+import schema from "$db/schema";
 import { envError } from "../error";
+import type { Database } from "./dbTypes";
 
-if (!DATABASE_URL) throw envError("DATABASE_URL");
+if (!env.DATABASE_URL) throw envError("DATABASE_URL");
 
-// todo add build back to check
-// eslint-disable-next-line no-console
-console.log("DATABASE_URL", import.meta.env.MODE);
+neonConfig.fetchConnectionCache = true;
 
-if (!global._db || !global._dbConnection) {
-	const db = import.meta.env.MODE === "development" ? connectDbDev(DATABASE_URL) : connectDbProduction(DATABASE_URL);
-
-	global._db = db.db;
-	global._dbConnection = db.dbConnection;
+if (!global._db) {
+	if (import.meta.env.MODE === "development") {
+		const queryClient = postgres(env.DATABASE_URL, { max: 1 });
+		global._db = drizzle(queryClient, { schema });
+	} else {
+		const sql = neon(env.DATABASE_URL);
+		global._db = neonDrizzle(sql, { schema });
+	}
 }
 
-export default global._db;
-export const db = global._dbConnection;
-export const connection = global._dbConnection;
+const db: Database = global._db;
+
+export default db;

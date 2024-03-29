@@ -1,5 +1,8 @@
 name: Check Template
 
+env:
+    DATABASE_URL: does not matter
+
 on:
     workflow_call:
 

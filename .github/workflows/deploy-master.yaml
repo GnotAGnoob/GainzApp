@@ -14,6 +14,9 @@ jobs:
         runs-on: ubuntu-latest
         name: Environment
         environment: master
+        steps:
+            - name: Environment
+              run: echo "Master environment"
 
     checks:
         needs: environment
@@ -22,6 +25,7 @@ jobs:
     deploy:
         runs-on: ubuntu-latest
         needs: checks
+        environment: master
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4

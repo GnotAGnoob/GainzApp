@@ -1,9 +1,9 @@
 name: Deploy Production
 
-    # todo deploy master and production
-    # make deploy template
-    # make google login work or some other way to login in branches
-    # add build back to the checks
+# todo deploy master and production
+# make deploy template
+# make google login work or some other way to login in branches
+# add build back to the checks
 
 env:
     VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}

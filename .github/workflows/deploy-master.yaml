@@ -28,13 +28,13 @@ jobs:
         environment: master
         steps:
             - name: ec
-              uses: echo ${{ env.DATABASE_URL }}
+              run: echo ${{ env.DATABASE_URL }}
             - name: ec
-              uses: echo ${{ secrets.DATABASE_URL }}
+              run: echo ${{ secrets.DATABASE_URL }}
             - name: ec
-              uses: echo ${{ env }}
+              run: echo ${{ env }}
             - name: ec
-              uses: echo ${{ secrets }}
+              run: echo ${{ secrets }}
 
             - name: Checkout repository
               uses: actions/checkout@v4

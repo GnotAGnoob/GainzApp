@@ -8,21 +8,26 @@ import schema from "$db/schema";
 import { envError } from "../error";
 import type { Database } from "./dbTypes";
 
-if (!DATABASE_URL) throw envError("DATABASE_URL");
+let databaseUrl = DATABASE_URL;
 
-let db: Database;
+if (import.meta.env.MODE === "ci") {
+	databaseUrl = "postgres://ci:ci@localhost:1234/postgres";
+}
+
+if (!databaseUrl) throw envError("DATABASE_URL");
+
 neonConfig.fetchConnectionCache = true;
 
-if (import.meta.env.MODE === "development") {
-	if (!global._db) {
-		const queryClient = postgres(DATABASE_URL, { max: 1 });
+if (!global._db) {
+	if (import.meta.env.MODE === "development") {
+		const queryClient = postgres(databaseUrl, { max: 1 });
 		global._db = drizzle(queryClient, { schema });
+	} else {
+		const sql = neon(databaseUrl);
+		global._db = neonDrizzle(sql, { schema });
 	}
-
-	db = global._db;
-} else {
-	const sql = neon(DATABASE_URL);
-	db = neonDrizzle(sql, { schema });
 }
+
+const db: Database = global._db;
 
 export default db;

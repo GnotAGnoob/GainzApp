@@ -1,6 +1,6 @@
 import Google from "@auth/core/providers/google";
 import { SvelteKitAuth } from "@auth/sveltekit";
-import { GOOGLE_ID, GOOGLE_SECRET } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import db from "$src/lib/server/db";
 
@@ -8,13 +8,18 @@ import { envError } from "$src/lib/error";
 import { sequence } from "@sveltejs/kit/hooks";
 import { redirect, type Handle } from "@sveltejs/kit";
 
-if (!GOOGLE_ID) throw envError("GOOGLE_ID");
+if (import.meta.env.MODE === "ci") {
+	env.GOOGLE_ID = "google-id";
+	env.GOOGLE_SECRET = "google-secret";
+}
 
-if (!GOOGLE_SECRET) throw envError("GOOGLE_SECRET");
+if (!env.GOOGLE_ID) throw envError("GOOGLE_ID");
+
+if (!env.GOOGLE_SECRET) throw envError("GOOGLE_SECRET");
 
 const authHandler = SvelteKitAuth({
 	adapter: DrizzleAdapter(db),
-	providers: [Google({ clientId: GOOGLE_ID, clientSecret: GOOGLE_SECRET })],
+	providers: [Google({ clientId: env.GOOGLE_ID, clientSecret: env.GOOGLE_SECRET })],
 });
 
 const authorization: Handle = async ({ event, resolve }) => {

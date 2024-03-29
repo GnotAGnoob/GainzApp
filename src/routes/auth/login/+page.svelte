@@ -8,6 +8,7 @@
 	let email = "";
 	let password = "";
 
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	const onSubmit = async () => {};
 </script>
 

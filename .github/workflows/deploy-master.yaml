@@ -33,13 +33,6 @@ jobs:
             - name: Setup
               uses: ./.github/setup
 
-            - name: echoes
-              run: |
-                  echo ${{ secrets.DATABASE_URL }}
-                  echo ${{ env.DATABASE_URL }}
-                  echo ${{ secrets }}
-                  echo ${{ env }}
-
             - name: Run Migrations
               run: pnpm run db:migrate
 

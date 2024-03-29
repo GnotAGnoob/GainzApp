@@ -8,6 +8,10 @@ import schema from "$db/schema";
 import { envError } from "../error";
 import type { Database } from "./dbTypes";
 
+if (import.meta.env.MODE === "ci") {
+	env.DATABASE_URL = "postgres://ci:ci@localhost:1234/postgres";
+}
+
 if (!env.DATABASE_URL) throw envError("DATABASE_URL");
 
 neonConfig.fetchConnectionCache = true;

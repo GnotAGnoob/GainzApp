@@ -8,6 +8,11 @@ import { envError } from "$src/lib/error";
 import { sequence } from "@sveltejs/kit/hooks";
 import { redirect, type Handle } from "@sveltejs/kit";
 
+if (import.meta.env.MODE === "ci") {
+	env.GOOGLE_ID = "google-id";
+	env.GOOGLE_SECRET = "google-secret";
+}
+
 if (!env.GOOGLE_ID) throw envError("GOOGLE_ID");
 
 if (!env.GOOGLE_SECRET) throw envError("GOOGLE_SECRET");

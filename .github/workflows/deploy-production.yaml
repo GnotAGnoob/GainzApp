@@ -16,7 +16,13 @@ on:
     workflow_dispatch:
 
 jobs:
+    environment:
+        runs-on: ubuntu-latest
+        name: Environment
+        environment: production
+
     checks:
+        needs: environment
         uses: ./.github/workflows/checks-template.yaml
 
     deploy:
@@ -41,6 +47,6 @@ jobs:
             - name: Build Project Artifacts
               run: vercel build --prod --token=${{ env.VERCEL_TOKEN }}
 
-            - name: Deploy Preview to Vercel
+            - name: Deploy Production to Vercel
               id: deploy
               run: vercel deploy --prebuilt --prod --token=${{ env.VERCEL_TOKEN }}

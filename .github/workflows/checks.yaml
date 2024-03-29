@@ -1,5 +1,8 @@
 name: Runs checks and builds the project
 
+env:
+    DATABASE_URL: does not matter
+
 on:
     push:
         branches:

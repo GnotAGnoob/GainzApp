@@ -52,6 +52,7 @@
 		"@auth/drizzle-adapter": "^0.3.2",
 		"@auth/sveltekit": "^0.3.6",
 		"@neondatabase/serverless": "^0.6.0",
+		"@sveltejs/adapter-vercel": "^5.2.0",
 		"axios": "^1.6.0",
 		"bits-ui": "^0.14.0",
 		"debounce": "^1.2.1",

@@ -1,5 +1,4 @@
-name:
-    Deploy Production
+name: Deploy Production
 
     # todo deploy master and production
     # make deploy template
@@ -16,12 +15,22 @@ on:
     workflow_dispatch:
 
 jobs:
+    environment:
+        runs-on: ubuntu-latest
+        name: Environment
+        environment: production
+        steps:
+            - name: Environment
+              run: echo "Production environment"
+
     checks:
+        needs: environment
         uses: ./.github/workflows/checks-template.yaml
 
     deploy:
         runs-on: ubuntu-latest
         needs: checks
+        environment: production
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
@@ -41,6 +50,6 @@ jobs:
             - name: Build Project Artifacts
               run: vercel build --prod --token=${{ env.VERCEL_TOKEN }}
 
-            - name: Deploy Preview to Vercel
+            - name: Deploy Production to Vercel
               id: deploy
               run: vercel deploy --prebuilt --prod --token=${{ env.VERCEL_TOKEN }}

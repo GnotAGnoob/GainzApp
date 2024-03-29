@@ -1,4 +1,4 @@
-name: Deploy Preview
+name: Deploy Master
 
 env:
     VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -10,12 +10,22 @@ on:
     workflow_dispatch:
 
 jobs:
+    environment:
+        runs-on: ubuntu-latest
+        name: Environment
+        environment: master
+        steps:
+            - name: Environment
+              run: echo "Master environment"
+
     checks:
+        needs: environment
         uses: ./.github/workflows/checks-template.yaml
 
     deploy:
         runs-on: ubuntu-latest
         needs: checks
+        environment: master
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
@@ -35,6 +45,6 @@ jobs:
             - name: Build Project Artifacts
               run: vercel build --token=${{ env.VERCEL_TOKEN }}
 
-            - name: Deploy Preview to Vercel
+            - name: Deploy Master to Vercel
               id: deploy
               run: vercel deploy --prebuilt --token=${{ env.VERCEL_TOKEN }}

@@ -4,7 +4,7 @@ env:
     VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
     VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-    DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    DATABASE_URL: ${{ secrets.DATABASE_URL_MASTER }}
 
 on:
     workflow_dispatch:
@@ -27,15 +27,6 @@ jobs:
         needs: checks
         environment: master
         steps:
-            - name: ec
-              run: echo ${{ env.DATABASE_URL }}
-            - name: ec
-              run: echo ${{ secrets.DATABASE_URL }}
-            - name: ec
-              run: echo ${{ env }}
-            - name: ec
-              run: echo ${{ secrets }}
-
             - name: Checkout repository
               uses: actions/checkout@v4
 

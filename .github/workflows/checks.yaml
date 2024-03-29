@@ -24,5 +24,8 @@ jobs:
             - name: Setup
               uses: ./.github/setup
 
+            - name: env
+              run: env
+
             - name: Build
               run: pnpm build:ci

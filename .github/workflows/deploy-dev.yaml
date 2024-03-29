@@ -58,8 +58,9 @@ jobs:
             - name: Build Project Artifacts
               run: vercel build --token=${{ env.VERCEL_TOKEN }}
 
-            - name: Deploy Project Artifacts to Vercel
-              run: vercel deploy --prebuilt --token=${{ env.VERCEL_TOKEN }}
+            - name: Deploy Preview to Vercel
+              id: deploy
+              run: echo preview_url=$(vercel deploy --prebuilt --token=${{ env.VERCEL_TOKEN }}) >> $GITHUB_OUTPUT
 
             - name: Comment on Pull Request
               uses: thollander/actions-comment-pull-request@v2

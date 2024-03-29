@@ -27,6 +27,15 @@ jobs:
         needs: checks
         environment: master
         steps:
+            - name: ec
+              uses: echo ${{ env.DATABASE_URL }}
+            - name: ec
+              uses: echo ${{ secrets.DATABASE_URL }}
+            - name: ec
+              uses: echo ${{ env }}
+            - name: ec
+              uses: echo ${{ secrets }}
+
             - name: Checkout repository
               uses: actions/checkout@v4
 

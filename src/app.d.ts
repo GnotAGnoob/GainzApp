@@ -1,6 +1,6 @@
 import type { PageExercisesData } from "./routes/exercises/types";
 import { type PostgresJsDatabase } from "drizzle-orm/postgres-js";
-import { type NeonHttpDatabase } from "drizzle-orm/neon-http";
+import { type NeonDatabase } from "drizzle-orm/neon-serverless";
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
@@ -16,7 +16,7 @@ declare global {
 
 	namespace NodeJS {
 		interface Global {
-			_db: PostgresJsDatabase<typeof schema> | NeonHttpDatabase<typeof schema> | undefined;
+			_db: PostgresJsDatabase<typeof schema> | NeonDatabase<typeof schema> | undefined;
 		}
 	}
 }

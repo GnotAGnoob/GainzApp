@@ -1,12 +1,16 @@
 import { DATABASE_URL } from "$env/static/private";
-import { Pool } from "@neondatabase/serverless";
+import { Pool, neonConfig } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/postgres-js";
 import { drizzle as neonDrizzle } from "drizzle-orm/neon-serverless";
 import postgres from "postgres";
 
+import ws from "ws";
+
 import schema from "$db/schema";
 import { envError } from "../error";
 import type { Database } from "./dbTypes";
+
+neonConfig.webSocketConstructor = ws;
 
 let databaseUrl = DATABASE_URL;
 

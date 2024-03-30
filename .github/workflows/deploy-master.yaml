@@ -49,4 +49,4 @@ jobs:
               id: deploy
               run: |
                   url="$(vercel deploy --prebuilt --token=${{ env.VERCEL_TOKEN }})"
-                  vercel alias --token=${{ env.VERCEL_TOKEN }} set "$url" your-alias.app
+                  vercel alias --token=${{ env.VERCEL_TOKEN }} set "$url" lift-trckr-master.vercel.app

@@ -47,4 +47,6 @@ jobs:
 
             - name: Deploy Master to Vercel
               id: deploy
-              run: vercel deploy --prebuilt --token=${{ env.VERCEL_TOKEN }}
+              run: |
+                  url="$(vercel deploy --prebuilt --token=${{ env.VERCEL_TOKEN }})"
+                  vercel alias --token=${{ env.VERCEL_TOKEN }} set "$url" your-alias.app

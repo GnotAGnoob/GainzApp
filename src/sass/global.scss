@@ -56,10 +56,10 @@
 	--accent-negative-800: #{$color-red-800};
 	--accent-negative-900: #{$color-red-900};
 
-	--site-padding: #{$space-sm};
+	--site-padding: #{$space-md};
 
 	@media (min-width: $bp-512) {
-		--site-padding: #{$space-md};
+		--site-padding: #{$space-md + $space-sm};
 	}
 
 	@media (min-width: $bp-900) {

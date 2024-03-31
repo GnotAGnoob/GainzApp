@@ -11,6 +11,7 @@
 	export let paddingSide: "xs" | "sm" | "md" | "lg" | "xl" | undefined = undefined;
 	export let fontSize: "xs" | "sm" | "md" = "md";
 	export let borderRadius: "none" | "sm" | "md" | "round" = "sm";
+	export let isBold = true;
 	export let className = "";
 	export let title: string | undefined = undefined;
 	export let buttonType: "button" | "submit" | "reset" = "button";
@@ -26,6 +27,7 @@
 	class:loading={isLoading}
 	class:fullSize={isFullSize}
 	class:paddingSame={isPaddingSame}
+	class:bold={isBold}
 	class:disabled={disabledTitle || isLoading}
 	on:click
 	disabled={!!disabledTitle || isLoading}
@@ -62,7 +64,7 @@
 		justify-content: center;
 
 		font-size: $text;
-		font-weight: 700;
+		font-weight: 500;
 
 		color: var(--color);
 		background-color: var(--background);
@@ -150,6 +152,8 @@
 	}
 
 	.icon {
+		margin-top: $space-xxs;
+
 		line-height: 0;
 	}
 
@@ -262,5 +266,9 @@
 		&_md {
 			font-size: font.$font-sm;
 		}
+	}
+
+	.bold {
+		font-weight: 700;
 	}
 </style>

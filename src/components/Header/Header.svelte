@@ -14,7 +14,7 @@
 		{#if $session !== null}
 			<div class="mobile mobile_top">
 				<div class="profile">
-					<Profile />
+					<Profile sideOffset={42} />
 				</div>
 			</div>
 			<div class="desktop">

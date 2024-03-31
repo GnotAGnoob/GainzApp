@@ -6,10 +6,12 @@
 	import { session } from "$src/lib/stores/session";
 	import { Avatar, DropdownMenu } from "bits-ui";
 	import Dropdown from "../Atoms/Dropdown/Dropdown.svelte";
+
+	export let sideOffset = 12;
 </script>
 
 <div class="wrapper">
-	<Dropdown sideOffset={12}>
+	<Dropdown {sideOffset}>
 		<div class="profileButton" slot="button">
 			<Avatar.Root>
 				<div class="image"><Avatar.Image src={$session?.user?.image} alt="profile" /></div>

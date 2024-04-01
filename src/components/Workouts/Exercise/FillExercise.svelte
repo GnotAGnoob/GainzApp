@@ -107,8 +107,11 @@
 
 <style lang="scss">
 	.container {
-		max-width: $space-xxxl + $space-xl;
+		max-width: $space-xxxl + $space-xxl;
+		min-width: $space-xxxl;
 		width: 100%;
+
+		flex: 1;
 	}
 
 	.wrapper {

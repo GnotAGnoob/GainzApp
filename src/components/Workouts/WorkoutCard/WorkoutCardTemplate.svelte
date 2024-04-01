@@ -13,22 +13,24 @@
 
 <li class="wrapper">
 	<h4 class="title">{title}</h4>
-	<div class="workoutWrapper workoutWrapper_bottomPadding_{bottomPadding}">
-		<div class="edit">
-			<EditButtons
-				buttonType="noBackground_2"
-				isAbsolute={false}
-				buttonPadding="sm"
-				isConfirmButton={false}
-				deleteConfirmationText={dictionary.ARE_YOU_SURE_YOU_WANT_TO_DETELE_WORKOUT}
-				{onCancel}
-				{onDelete}
-				deleteTitle={dictionary.DELETE_WORKOUT}
-				bind:isInEditMode
-			/>
-		</div>
-		<div class="workout">
-			<slot />
+	<div class="container">
+		<div class="workoutWrapper workoutWrapper_bottomPadding_{bottomPadding}">
+			<div class="edit">
+				<EditButtons
+					buttonType="noBackground_2"
+					isAbsolute={false}
+					buttonPadding="sm"
+					isConfirmButton={false}
+					deleteConfirmationText={dictionary.ARE_YOU_SURE_YOU_WANT_TO_DETELE_WORKOUT}
+					{onCancel}
+					{onDelete}
+					deleteTitle={dictionary.DELETE_WORKOUT}
+					bind:isInEditMode
+				/>
+			</div>
+			<div class="workout">
+				<slot />
+			</div>
 		</div>
 	</div>
 </li>
@@ -39,7 +41,7 @@
 	.wrapper {
 		display: flex;
 
-		width: $space-xxxl;
+		width: $space-xxxl + $space-lg;
 
 		justify-content: center;
 		flex-direction: column;
@@ -53,6 +55,16 @@
 		@media (min-width: $bp-760) {
 			width: $space-xxxl + $space-xxl;
 		}
+	}
+
+	.container {
+		border-radius: $border-md;
+
+		flex-grow: 1;
+
+		background-color: var(--accent-neutral-100);
+
+		overflow-y: hidden;
 	}
 
 	.workout {
@@ -71,15 +83,12 @@
 
 			padding-bottom: $space-md;
 			min-height: $space-xxl;
+			height: 100%;
 			max-height: $space-xxxxl;
 			overflow-y: auto;
 			overflow-x: hidden;
 
 			flex-direction: column;
-			flex-grow: 1;
-
-			border-radius: $border-md;
-			background-color: var(--accent-neutral-100);
 
 			&_bottomPadding {
 				&_sm {

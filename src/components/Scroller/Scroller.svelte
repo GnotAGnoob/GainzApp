@@ -223,7 +223,7 @@
 		font-size: $icon-md;
 		background-color: var(--_background-color);
 
-		z-index: 10;
+		z-index: 30;
 
 		&:hover {
 			background-color: var(--_button-background-hover);

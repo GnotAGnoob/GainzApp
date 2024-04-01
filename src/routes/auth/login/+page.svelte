@@ -27,7 +27,7 @@
 		</div>
 		<span class="divider"><span class="dividerText">{dictionary.OR}</span></span>
 		<div class="buttons">
-			<Button type="info" on:click={() => signIn("google")}>
+			<Button type="noBackground" on:click={() => signIn("google")} isBold={false}>
 				<Icon icon="devicon:google" slot="leftIcon" />
 				<span>{dictionary.SIGN_IN_WITH} Google</span>
 			</Button>
@@ -61,6 +61,7 @@
 		&Wrapper {
 			display: flex;
 
+			width: min(100%, $space-xxxl);
 			gap: $space-lg;
 
 			flex-direction: column;
@@ -72,6 +73,7 @@
 
 		width: 100%;
 		padding-inline: $space-md;
+		margin-top: $space-sm;
 
 		align-items: center;
 
@@ -100,7 +102,7 @@
 
 			flex-direction: column;
 
-			gap: $space-sm;
+			gap: $space-xs;
 		}
 	}
 </style>

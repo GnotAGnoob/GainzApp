@@ -4,13 +4,13 @@
 	export let supersetExercise: PageCreateSupersetExercise;
 </script>
 
-<div class="exercise">
-	<span class="category">{supersetExercise.exercise.category.name || ""}</span>
+<span class="exercise">
+	<span class="category item">{supersetExercise.exercise.category.name || ""}</span>
 	{#if supersetExercise.exercise?.name}
-		<span>-</span>
-		<span>{supersetExercise.exercise.name}</span>
+		<span class="item">-</span>
+		<span class="item">{supersetExercise.exercise.name}</span>
 	{/if}
-</div>
+</span>
 
 <style lang="scss">
 	.category {
@@ -18,9 +18,10 @@
 	}
 
 	.exercise {
-		display: flex;
-
-		gap: $space-sm;
 		font-size: $text;
+
+		& > .item:not(:last-child) {
+			margin-right: $space-sm;
+		}
 	}
 </style>

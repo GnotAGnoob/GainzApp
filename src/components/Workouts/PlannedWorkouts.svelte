@@ -31,21 +31,23 @@
 
 <section class="wrapper">
 	{#if $plannedWorkoutsStore.length || isAddNewWorkout}
-		<Scroller
-			wrapperTag="ol"
-			sideFade="large"
-			type="background"
-			arrowsPosition="full"
-			bottomPadding="medium"
-			isScrollToEnd={isAddNewWorkout}
-		>
-			{#each $plannedWorkoutsStore as workout, index (workout.id)}
-				<EditablePlanWorkoutCard title={index + 1} bind:workout />
-			{/each}
-			{#if isAddNewWorkout}
-				<PlanWorkoutCard title={dictionary.CREATING_NEW_WORKOUT} {onCancel} {onConfirm} />
-			{/if}
-		</Scroller>
+		<div class="scroller">
+			<Scroller
+				wrapperTag="ol"
+				sideFade="large"
+				type="background"
+				arrowsPosition="full"
+				bottomPadding="medium"
+				isScrollToEnd={isAddNewWorkout}
+			>
+				{#each $plannedWorkoutsStore as workout, index (workout.id)}
+					<EditablePlanWorkoutCard title={index + 1} bind:workout />
+				{/each}
+				{#if isAddNewWorkout}
+					<PlanWorkoutCard title={dictionary.CREATING_NEW_WORKOUT} {onCancel} {onConfirm} />
+				{/if}
+			</Scroller>
+		</div>
 	{:else}
 		<EmptyCard text={dictionary.YOU_HAVE_NOT_PLANNED_ANY_WORKOUTS} />
 	{/if}
@@ -76,5 +78,11 @@
 
 	.button {
 		margin-inline: auto;
+	}
+
+	.scroller {
+		@media (max-width: $bp-512) {
+			margin-inline: calc(var(--site-padding) * -1);
+		}
 	}
 </style>

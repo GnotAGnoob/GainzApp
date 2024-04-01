@@ -66,6 +66,8 @@
 
 	.button {
 		flex: 1;
+
+		text-align: left;
 	}
 
 	.input {

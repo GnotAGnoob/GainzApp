@@ -62,6 +62,8 @@
 		flex-wrap: wrap;
 		align-items: flex-start;
 
+		justify-content: center;
+
 		row-gap: $space-xs;
 		column-gap: $space-lg;
 

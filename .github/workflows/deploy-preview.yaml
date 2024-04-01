@@ -7,7 +7,7 @@ env:
     NEON_DATABASE_USERNAME: ${{ secrets.NEON_DATABASE_USERNAME }}
     NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
     NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
-    GH_TOKEN: ${{ secrets.GH_TOKEN }}
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 on:
     workflow_dispatch:
@@ -65,7 +65,7 @@ jobs:
             - name: Comment on Pull Request
               uses: thollander/actions-comment-pull-request@v2
               with:
-                  GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+                  GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
                   message: |
                       Vercel Preview URL :rocket: : ${{ steps.deploy.outputs.preview_url }}
                       Neon branch :elephant: : https://console.neon.tech/app/projects/${{ env.NEON_PROJECT_ID }}/branches/${{ steps.create-branch.outputs.branch_id }}

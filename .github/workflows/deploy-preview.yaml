@@ -37,7 +37,8 @@ jobs:
               with:
                   project_id: ${{ env.NEON_PROJECT_ID }}
                   parent: master
-                  branch_name: preview/pr-${{ github.event.number }}-${{ steps.branch-name.outputs.current_branch }}
+                  # fix number
+                  branch_name: preview/pr-${{ steps.branch-name.outputs.current_branch }}
                   username: ${{ env.NEON_DATABASE_USERNAME }}
                   api_key: ${{ env.NEON_API_KEY }}
 

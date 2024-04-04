@@ -47,6 +47,9 @@ export async function GET({ url, locals }) {
 				orderBy: (_, { desc }) => [desc(sql`random()`)],
 			});
 
+			// eslint-disable-next-line no-console
+			console.log(returnedFullExercises);
+
 			transformedExercises = returnedFullExercises.map((fullExercise) => ({
 				category: {
 					...fullExercise.category,

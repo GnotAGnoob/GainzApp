@@ -48,12 +48,16 @@
 
 		gap: $space-xs;
 
-		@media (min-width: $bp-396) {
+		@media (min-width: $bp-360) {
 			width: $space-xxxl + $space-xl;
 		}
 
-		@media (min-width: $bp-760) {
+		@media (min-width: $bp-456) {
 			width: $space-xxxl + $space-xxl;
+		}
+
+		@media (min-width: $bp-960) {
+			width: $space-xxxl + $space-xxxl;
 		}
 	}
 

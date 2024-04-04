@@ -37,7 +37,8 @@ jobs:
               with:
                   project_id: ${{ env.NEON_PROJECT_ID }}
                   parent: master
-                  branch_name: preview/pr-${{ github.event.number }}-${{ steps.branch-name.outputs.current_branch }}
+                  # fix number
+                  branch_name: preview/pr-${{ steps.branch-name.outputs.current_branch }}
                   username: ${{ env.NEON_DATABASE_USERNAME }}
                   api_key: ${{ env.NEON_API_KEY }}
 
@@ -61,11 +62,3 @@ jobs:
             - name: Deploy Preview to Vercel
               id: deploy
               run: echo preview_url=$(vercel deploy --prebuilt --token=${{ env.VERCEL_TOKEN }}) >> $GITHUB_OUTPUT
-
-            - name: Comment on Pull Request
-              uses: thollander/actions-comment-pull-request@v2
-              with:
-                  GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
-                  message: |
-                      Vercel Preview URL :rocket: : ${{ steps.deploy.outputs.preview_url }}
-                      Neon branch :elephant: : https://console.neon.tech/app/projects/${{ env.NEON_PROJECT_ID }}/branches/${{ steps.create-branch.outputs.branch_id }}

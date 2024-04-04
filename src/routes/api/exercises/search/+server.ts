@@ -45,10 +45,8 @@ export async function GET({ url, locals }) {
 					isGlobal: sql<boolean>`(${exercise.userId} IS NULL)`.as("is_global"),
 				},
 				orderBy: (_, { desc }) => [desc(sql`random()`)],
+				limit: search.limit || MAX_DROPDOWN_ITEMS,
 			});
-
-			// eslint-disable-next-line no-console
-			console.log(returnedFullExercises);
 
 			transformedExercises = returnedFullExercises.map((fullExercise) => ({
 				category: {
@@ -81,6 +79,11 @@ export async function GET({ url, locals }) {
 				unitId: number;
 				unit: string;
 			}>;
+
+			// eslint-disable-next-line no-console
+			console.log(search, userId, MAX_DROPDOWN_ITEMS);
+			// eslint-disable-next-line no-console
+			console.log(returnedFullExercises);
 
 			transformedExercises = returnedFullExercises.map((fullExercise) => ({
 				category: {

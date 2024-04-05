@@ -21,7 +21,7 @@
 		font-size: $text;
 
 		& > .item:not(:last-child) {
-			margin-right: $space-sm;
+			margin-right: $space-xs;
 		}
 	}
 </style>

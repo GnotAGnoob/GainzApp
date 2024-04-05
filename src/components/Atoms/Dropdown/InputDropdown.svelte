@@ -124,6 +124,7 @@
 						isFullSize
 						type="noBackground"
 						borderRadius="none"
+						fontSize="inherit"
 						on:click={(event) => onClick(index, event)}>{option}</Button
 					>
 				</div>
@@ -184,8 +185,14 @@
 	}
 
 	.button {
+		font-size: $text-subheading;
+
 		&:not(:first-child) {
 			border-top: $space-px solid var(--accent-neutral-100);
+		}
+
+		@media (min-width: $bp-760) {
+			font-size: $text;
 		}
 	}
 

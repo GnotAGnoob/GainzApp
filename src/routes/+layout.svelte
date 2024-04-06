@@ -8,8 +8,7 @@
 	import EnvironmentBanner from "$src/components/EnvironmentBanner.svelte";
 	import { session } from "$src/lib/stores/session";
 	import { floatedCorner } from "$src/lib/stores/floatedCorner";
-	import { env } from "$env/dynamic/public";
-	import envs from "$env/static/public";
+	import env from "$env/static/public";
 	// import Swatch from "$src/components/Swatch.svelte";
 
 	export let data;
@@ -25,7 +24,7 @@
 	// eslint-disable-next-line no-console
 	console.log(env);
 	// eslint-disable-next-line no-console
-	console.log(envs);
+	console.log(process.env);
 </script>
 
 <svelte:head>

@@ -19,14 +19,10 @@
 		$floatedCorner = [];
 	}
 
-	const type = import.meta.env.MODE as ModeType;
-
 	// eslint-disable-next-line no-console
-	console.log("type", type);
+	console.log("type", import.meta.env.MODE);
 	// eslint-disable-next-line no-console
 	console.log("import.meta.env", import.meta.env);
-	// eslint-disable-next-line no-console
-	console.log("env", process.env);
 </script>
 
 <svelte:head>
@@ -36,8 +32,8 @@
 
 <div class="content">
 	{#if import.meta.env.MODE !== "production"}
-		<EnvironmentBanner {type}>
-			This is a <span class="bannerText">{type}</span> environment!
+		<EnvironmentBanner type={import.meta.env.MODE}>
+			This is a <span class="bannerText">{import.meta.env.MODE}</span> environment!
 		</EnvironmentBanner>
 	{/if}
 	<Header />

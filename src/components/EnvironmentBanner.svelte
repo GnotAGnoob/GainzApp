@@ -25,6 +25,7 @@
 
 		&_master {
 			background-color: var(--accent-info-800);
+			color: var(--text-invert);
 		}
 	}
 </style>

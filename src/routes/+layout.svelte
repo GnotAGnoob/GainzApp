@@ -20,6 +20,13 @@
 	}
 
 	const type = import.meta.env.MODE as ModeType;
+
+	// eslint-disable-next-line no-console
+	console.log("type", type);
+	// eslint-disable-next-line no-console
+	console.log("import.meta.env", import.meta.env);
+	// eslint-disable-next-line no-console
+	console.log("env", process.env);
 </script>
 
 <svelte:head>

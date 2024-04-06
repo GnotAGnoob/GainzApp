@@ -15,4 +15,4 @@ type InputEventType<E, T extends EventTarget> = E & {
 export type KeyboardEventType<T extends EventTarget> = InputEventType<KeyboardEvent, T>;
 export type ClipboardEventType<T extends EventTarget> = InputEventType<ClipboardEvent, T>;
 
-export type ModeType = "ci" | "development" | "production" | "master" | "preview";
+export type ModeType = "ci" | "development" | "production" | "master" | "preview" | string;

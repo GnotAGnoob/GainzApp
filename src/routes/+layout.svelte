@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { page, navigating } from "$app/stores";
 	import { getPageTitle } from "$lib/getPageTitle";
 	import Header from "../components/Header/Header.svelte";
@@ -8,6 +8,7 @@
 	import EnvironmentBanner from "$src/components/EnvironmentBanner.svelte";
 	import { session } from "$src/lib/stores/session";
 	import { floatedCorner } from "$src/lib/stores/floatedCorner";
+	import type { ModeType } from "$src/lib/types";
 	// import Swatch from "$src/components/Swatch.svelte";
 
 	export let data;
@@ -17,6 +18,11 @@
 	$: if ($navigating) {
 		$floatedCorner = [];
 	}
+
+	// eslint-disable-next-line no-console
+	console.log("type", import.meta.env.MODE);
+	// eslint-disable-next-line no-console
+	console.log("import.meta.env", import.meta.env);
 </script>
 
 <svelte:head>
@@ -25,8 +31,8 @@
 <!-- <Swatch /> -->
 
 <div class="content">
-	{#if import.meta.env.MODE === "development"}
-		<EnvironmentBanner type={import.meta.env.MODE === "development" ? "positive" : "info"}>
+	{#if import.meta.env.MODE !== "production"}
+		<EnvironmentBanner type={import.meta.env.MODE}>
 			This is a <span class="bannerText">{import.meta.env.MODE}</span> environment!
 		</EnvironmentBanner>
 	{/if}

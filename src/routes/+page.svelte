@@ -81,7 +81,7 @@
 	}
 
 	.content {
-		margin-top: $space-md;
+		margin-top: $space-sm + $space-xs;
 	}
 
 	.icon {

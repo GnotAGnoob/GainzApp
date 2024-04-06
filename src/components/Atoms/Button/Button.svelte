@@ -9,7 +9,7 @@
 	export let disabledTitle: string | false | undefined | null = undefined;
 	export let padding: "xs" | "sm" | "md" | "lg" | "none" = "md";
 	export let paddingSide: "xs" | "sm" | "md" | "lg" | "xl" | undefined = undefined;
-	export let fontSize: "xs" | "sm" | "md" = "md";
+	export let fontSize: "xs" | "sm" | "md" | "inherit" = "md";
 	export let borderRadius: "none" | "sm" | "md" | "round" = "sm";
 	export let isBold = true;
 	export let className = "";
@@ -265,6 +265,10 @@
 
 		&_md {
 			font-size: font.$font-sm;
+		}
+
+		&_inherit {
+			font-size: inherit;
 		}
 	}
 

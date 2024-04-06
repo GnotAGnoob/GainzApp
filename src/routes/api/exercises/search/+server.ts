@@ -80,11 +80,6 @@ export async function GET({ url, locals }) {
 				unit: string;
 			}>;
 
-			// eslint-disable-next-line no-console
-			console.log(search, userId, MAX_DROPDOWN_ITEMS);
-			// eslint-disable-next-line no-console
-			console.log(returnedFullExercises);
-
 			transformedExercises = returnedFullExercises.map((fullExercise) => ({
 				category: {
 					id: fullExercise.categoryId,

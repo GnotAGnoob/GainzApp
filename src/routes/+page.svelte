@@ -81,11 +81,7 @@
 	}
 
 	.content {
-		margin-top: $space-sm;
-
-		&_planned {
-			margin-top: $space-sm + $space-xs;
-		}
+		margin-top: $space-sm + $space-xs;
 	}
 
 	.icon {

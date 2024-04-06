@@ -133,7 +133,7 @@
 			background: transparent;
 			background: linear-gradient(90deg, var(--_background-color) var(--_background-start), transparent 100%);
 
-			z-index: 1;
+			z-index: 25;
 		}
 
 		&::before {

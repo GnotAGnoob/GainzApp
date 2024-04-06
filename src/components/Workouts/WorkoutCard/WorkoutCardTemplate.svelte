@@ -56,7 +56,7 @@
 			width: $space-xxxl + $space-xxl;
 		}
 
-		@media (min-width: $bp-960) {
+		@media (min-width: $bp-1200) {
 			width: $space-xxxl + $space-xxxl;
 		}
 	}

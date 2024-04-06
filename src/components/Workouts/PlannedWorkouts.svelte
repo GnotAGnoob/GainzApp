@@ -49,7 +49,9 @@
 			</Scroller>
 		</div>
 	{:else}
-		<EmptyCard text={dictionary.YOU_HAVE_NOT_PLANNED_ANY_WORKOUTS} />
+		<div class="empty">
+			<EmptyCard text={dictionary.YOU_HAVE_NOT_PLANNED_ANY_WORKOUTS} />
+		</div>
 	{/if}
 	<div class="button">
 		<Button
@@ -84,5 +86,9 @@
 		@media (max-width: $bp-512) {
 			margin-inline: calc(var(--site-padding) * -1);
 		}
+	}
+
+	.empty {
+		margin-top: $space-sm;
 	}
 </style>

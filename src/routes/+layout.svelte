@@ -8,7 +8,6 @@
 	import EnvironmentBanner from "$src/components/EnvironmentBanner.svelte";
 	import { session } from "$src/lib/stores/session";
 	import { floatedCorner } from "$src/lib/stores/floatedCorner";
-	import env from "$env/static/public";
 	// import Swatch from "$src/components/Swatch.svelte";
 
 	export let data;
@@ -21,8 +20,6 @@
 
 	// eslint-disable-next-line no-console
 	console.log(import.meta.env);
-	// eslint-disable-next-line no-console
-	console.log(env);
 	// eslint-disable-next-line no-console
 	console.log(process.env);
 </script>

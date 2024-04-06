@@ -17,11 +17,6 @@
 	$: if ($navigating) {
 		$floatedCorner = [];
 	}
-
-	// eslint-disable-next-line no-console
-	console.log(import.meta.env);
-	// eslint-disable-next-line no-console
-	console.log(process.env);
 </script>
 
 <svelte:head>

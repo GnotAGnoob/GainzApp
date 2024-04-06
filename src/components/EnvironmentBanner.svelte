@@ -1,5 +1,7 @@
 <script lang="ts">
-	export let type: "positive" | "info" = "positive";
+	import type { ModeType } from "$src/lib/types";
+
+	export let type: ModeType = "development";
 </script>
 
 <h2 class="banner banner_{type}">
@@ -17,8 +19,12 @@
 
 		background-color: var(--accent-positive-500);
 
-		&_info {
-			background-color: var(--accent-info-500);
+		&_preview {
+			background-color: var(--accent-info-300);
+		}
+
+		&_master {
+			background-color: var(--accent-info-800);
 		}
 	}
 </style>

@@ -2,9 +2,10 @@
 	import { insertInsteadRange } from "$lib/texts";
 	import { isStringNumber } from "$src/lib/checks";
 	import { MAX_TEXT_LENGTH } from "$src/lib/constants";
-	import type { ClipboardEventType, KeyboardEventType, StylesType } from "$src/lib/types";
+	import type { ClipboardEventType, InputEventType, KeyboardEventType, StylesType } from "$src/lib/types";
+	import { is } from "drizzle-orm";
 	import { onMount } from "svelte";
-	import type { ClipboardEventHandler, KeyboardEventHandler } from "svelte/elements";
+	import type { ClipboardEventHandler, EventHandler, KeyboardEventHandler } from "svelte/elements";
 
 	export let label: string | undefined = undefined;
 	export let value: string | undefined = undefined;
@@ -28,8 +29,6 @@
 
 	let inputSize = 0;
 	let isFirstInput = !value?.length;
-	let isKeyDownSupported = false;
-	let isKeyPressSupported = false;
 
 	$: if (value) onInput?.();
 
@@ -50,7 +49,10 @@
 	});
 
 	const handleNumber = (
-		event: KeyboardEventType<HTMLInputElement> | ClipboardEventType<HTMLInputElement>,
+		event:
+			| KeyboardEventType<HTMLInputElement>
+			| ClipboardEventType<HTMLInputElement>
+			| InputEventType<HTMLInputElement>,
 		selectionStart: number | null,
 		selectionEnd: number | null,
 		text: string,
@@ -68,6 +70,11 @@
 
 		if (inputType !== "string") {
 			event.preventDefault();
+
+			if (!isStringNumber(text) && ![".", ","].includes(text)) {
+				return;
+			}
+
 			let newValue = insertInsteadRange(value || "", text, selectionStart, selectionEnd);
 
 			if (inputType === "integer" && newValue.length) {
@@ -118,15 +125,11 @@
 		}
 	};
 
-	const handleKeyPress: KeyboardEventHandler<HTMLInputElement> = (event) => {
-		isKeyPressSupported = true;
-
-		handleNumber(event, event.currentTarget.selectionStart, event.currentTarget.selectionEnd, event.key);
+	const handleBeforeInput: EventHandler<InputEvent, HTMLInputElement> = (event) => {
+		handleNumber(event, event.currentTarget.selectionStart, event.currentTarget.selectionEnd, event.data || "");
 	};
 
 	const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
-		isKeyDownSupported = true;
-
 		if (event.key === "Backspace" || event.key === "Delete") {
 			if (!value?.length) {
 				onKeyDown?.(event);
@@ -149,18 +152,7 @@
 					: event.currentTarget.selectionEnd;
 
 			handleNumber(event, selectionStart, selectionEnd, "");
-		}
-	};
-
-	// because android does not fire keydown or press
-	const handleKeyUp: KeyboardEventHandler<HTMLInputElement> = (event) => {
-		if (!isKeyDownSupported && (event.key === "Backspace" || event.key === "Delete")) {
-			handleKeyDown(event);
 			return;
-		}
-
-		if (!isKeyPressSupported) {
-			handleKeyPress(event);
 		}
 	};
 
@@ -198,9 +190,8 @@
 			on:blur
 			on:keyup
 			on:input={handleInput}
-			on:keypress={handleKeyPress}
 			on:keydown={handleKeyDown}
-			on:keyup={handleKeyUp}
+			on:beforeinput={handleBeforeInput}
 			on:paste={handlePaste}
 			maxlength={MAX_TEXT_LENGTH}
 			autocomplete="off"

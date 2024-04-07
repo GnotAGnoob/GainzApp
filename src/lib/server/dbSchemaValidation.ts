@@ -1,5 +1,11 @@
 import { z } from "zod";
-import { MAX_SETS, MAX_SUPERSETS, MAX_SUPERSET_EXERCISES, MAX_TEXT_LENGTH } from "../constants";
+import {
+	MAX_SETS,
+	MAX_SUPERSETS,
+	MAX_SUPERSET_EXERCISES,
+	MAX_TEXT_LENGTH,
+	MAX_WEIGHT_DECIMAL_NUMBERS,
+} from "../constants";
 import type { PageInsertFillWorkout, PageInsertPlanWorkout } from "$src/routes/types";
 
 // ZOD DEFINITIONS
@@ -41,7 +47,15 @@ const fillSupersetExerciseObject = createSupersetExerciseObject.extend({
 		.array(
 			z.object({
 				// weight: floatNumberSchema.refine((val) => val >= 0, { message: "Weight must non negative" }),
-				weight: z.coerce.number().nonnegative(),
+				weight: z.coerce
+					.number()
+					.nonnegative()
+					.refine(
+						(n) => {
+							return n.toString().split(".")[1].length <= MAX_WEIGHT_DECIMAL_NUMBERS;
+						},
+						{ message: `Max precision is ${MAX_WEIGHT_DECIMAL_NUMBERS} decimal places` },
+					),
 				repetition: z.coerce.number().int().positive(),
 			}),
 		)

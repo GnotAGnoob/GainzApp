@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { insertInsteadRange } from "$lib/texts";
 	import { isStringNumber } from "$src/lib/checks";
-	import { MAX_TEXT_LENGTH } from "$src/lib/constants";
+	import { MAX_TEXT_LENGTH, MAX_WEIGHT_DECIMAL_NUMBERS } from "$src/lib/constants";
 	import type { ClipboardEventType, InputEventType, KeyboardEventType, StylesType } from "$src/lib/types";
-	import { is } from "drizzle-orm";
 	import { onMount } from "svelte";
 	import type { ClipboardEventHandler, EventHandler, KeyboardEventHandler } from "svelte/elements";
 
@@ -21,6 +20,7 @@
 	export let onKeyDown: KeyboardEventHandler<HTMLInputElement> | undefined = undefined;
 	export let onInput: (() => void) | undefined = undefined;
 	export let isDisabled = false;
+	export let maximumDecimalPlaces = MAX_WEIGHT_DECIMAL_NUMBERS;
 
 	const isDynamicWidth = widthSize === "dynamic";
 
@@ -81,6 +81,15 @@
 				newValue = parseInt(newValue).toString();
 			} else {
 				newValue = newValue.replace(",", ".");
+
+				const splittedNewValue = newValue.split(".");
+
+				if (
+					(splittedNewValue.length > 1 && splittedNewValue[1].length > maximumDecimalPlaces) ||
+					splittedNewValue.length > 2
+				) {
+					return;
+				}
 			}
 
 			if (!isStringNumber(newValue)) {

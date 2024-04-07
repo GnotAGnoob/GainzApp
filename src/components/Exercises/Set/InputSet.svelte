@@ -12,6 +12,7 @@
 	export let onInput: (() => void) | undefined = undefined;
 	export let focus: "weight" | "repetition" | undefined = undefined;
 	export let isDisabled = false;
+	export let isErrorVisualizationDisabled = false;
 
 	const handleDelete: KeyboardEventHandler<HTMLInputElement> = (event) => {
 		if ((event.key === "Backspace" || event.key === "Delete") && (!weight.length || !repetition.length)) {
@@ -19,8 +20,8 @@
 		}
 	};
 
-	$: isRepetitionError = repetition === "0" || !repetition.length;
-	$: isWeightError = !weight.length;
+	$: isRepetitionError = !isErrorVisualizationDisabled && (repetition === "0" || !repetition.length);
+	$: isWeightError = !isErrorVisualizationDisabled && !weight.length;
 </script>
 
 <Set {setNumber} {type} {isDisabled}>

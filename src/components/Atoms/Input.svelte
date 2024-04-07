@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { insertInsteadRange } from "$lib/texts";
 	import { isStringNumber } from "$src/lib/checks";
-	import { MAX_TEXT_LENGTH } from "$src/lib/constants";
-	import type { ClipboardEventType, KeyboardEventType, StylesType } from "$src/lib/types";
+	import { MAX_TEXT_LENGTH, MAX_WEIGHT_DECIMAL_NUMBERS } from "$src/lib/constants";
+	import type { ClipboardEventType, InputEventType, KeyboardEventType, StylesType } from "$src/lib/types";
 	import { onMount } from "svelte";
-	import type { ClipboardEventHandler, KeyboardEventHandler } from "svelte/elements";
+	import type { ClipboardEventHandler, EventHandler, KeyboardEventHandler } from "svelte/elements";
 
 	export let label: string | undefined = undefined;
 	export let value: string | undefined = undefined;
@@ -20,6 +20,7 @@
 	export let onKeyDown: KeyboardEventHandler<HTMLInputElement> | undefined = undefined;
 	export let onInput: (() => void) | undefined = undefined;
 	export let isDisabled = false;
+	export let maximumDecimalPlaces = MAX_WEIGHT_DECIMAL_NUMBERS;
 
 	const isDynamicWidth = widthSize === "dynamic";
 
@@ -48,7 +49,10 @@
 	});
 
 	const handleNumber = (
-		event: KeyboardEventType<HTMLInputElement> | ClipboardEventType<HTMLInputElement>,
+		event:
+			| KeyboardEventType<HTMLInputElement>
+			| ClipboardEventType<HTMLInputElement>
+			| InputEventType<HTMLInputElement>,
 		selectionStart: number | null,
 		selectionEnd: number | null,
 		text: string,
@@ -66,12 +70,26 @@
 
 		if (inputType !== "string") {
 			event.preventDefault();
+
+			if (!isStringNumber(text) && ![".", ","].includes(text)) {
+				return;
+			}
+
 			let newValue = insertInsteadRange(value || "", text, selectionStart, selectionEnd);
 
 			if (inputType === "integer" && newValue.length) {
 				newValue = parseInt(newValue).toString();
 			} else {
 				newValue = newValue.replace(",", ".");
+
+				const splittedNewValue = newValue.split(".");
+
+				if (
+					(splittedNewValue.length > 1 && splittedNewValue[1].length > maximumDecimalPlaces) ||
+					splittedNewValue.length > 2
+				) {
+					return;
+				}
 			}
 
 			if (!isStringNumber(newValue)) {
@@ -116,8 +134,8 @@
 		}
 	};
 
-	const handleKeyPress: KeyboardEventHandler<HTMLInputElement> = (event) => {
-		handleNumber(event, event.currentTarget.selectionStart, event.currentTarget.selectionEnd, event.key);
+	const handleBeforeInput: EventHandler<InputEvent, HTMLInputElement> = (event) => {
+		handleNumber(event, event.currentTarget.selectionStart, event.currentTarget.selectionEnd, event.data || "");
 	};
 
 	const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
@@ -143,6 +161,7 @@
 					: event.currentTarget.selectionEnd;
 
 			handleNumber(event, selectionStart, selectionEnd, "");
+			return;
 		}
 	};
 
@@ -180,13 +199,14 @@
 			on:blur
 			on:keyup
 			on:input={handleInput}
-			on:keypress={handleKeyPress}
 			on:keydown={handleKeyDown}
+			on:beforeinput={handleBeforeInput}
 			on:paste={handlePaste}
 			maxlength={MAX_TEXT_LENGTH}
 			autocomplete="off"
 			style={isDynamicWidth ? `width: ${inputSize}px` : null}
 			disabled={isDisabled}
+			type="text"
 		/>
 		<div class="icon icon_right">
 			<slot name="rightIcon" />

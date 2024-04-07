@@ -36,13 +36,13 @@ const createSupersetExerciseObject = z.object({
 // const floatNumberSchema = z.string().transform(floatNumberParser);
 
 const fillSupersetExerciseObject = createSupersetExerciseObject.extend({
-	id: z.number().optional(),
+	id: z.number().int().optional(),
 	sets: z
 		.array(
 			z.object({
 				// weight: floatNumberSchema.refine((val) => val >= 0, { message: "Weight must non negative" }),
 				weight: z.coerce.number().nonnegative(),
-				repetition: z.coerce.number().positive(),
+				repetition: z.coerce.number().int().positive(),
 			}),
 		)
 		.nonempty()

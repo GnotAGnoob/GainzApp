@@ -28,6 +28,8 @@
 
 	let inputSize = 0;
 	let isFirstInput = !value?.length;
+	let isKeyDownSupported = false;
+	let isKeyPressSupported = false;
 
 	$: if (value) onInput?.();
 
@@ -117,10 +119,14 @@
 	};
 
 	const handleKeyPress: KeyboardEventHandler<HTMLInputElement> = (event) => {
+		isKeyPressSupported = true;
+
 		handleNumber(event, event.currentTarget.selectionStart, event.currentTarget.selectionEnd, event.key);
 	};
 
 	const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (event) => {
+		isKeyDownSupported = true;
+
 		if (event.key === "Backspace" || event.key === "Delete") {
 			if (!value?.length) {
 				onKeyDown?.(event);
@@ -143,6 +149,18 @@
 					: event.currentTarget.selectionEnd;
 
 			handleNumber(event, selectionStart, selectionEnd, "");
+		}
+	};
+
+	// because android does not fire keydown or press
+	const handleKeyUp: KeyboardEventHandler<HTMLInputElement> = (event) => {
+		if (!isKeyDownSupported && (event.key === "Backspace" || event.key === "Delete")) {
+			handleKeyDown(event);
+			return;
+		}
+
+		if (!isKeyPressSupported) {
+			handleKeyPress(event);
 		}
 	};
 
@@ -182,11 +200,13 @@
 			on:input={handleInput}
 			on:keypress={handleKeyPress}
 			on:keydown={handleKeyDown}
+			on:keyup={handleKeyUp}
 			on:paste={handlePaste}
 			maxlength={MAX_TEXT_LENGTH}
 			autocomplete="off"
 			style={isDynamicWidth ? `width: ${inputSize}px` : null}
 			disabled={isDisabled}
+			type="text"
 		/>
 		<div class="icon icon_right">
 			<slot name="rightIcon" />

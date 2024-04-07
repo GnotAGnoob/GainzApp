@@ -65,6 +65,7 @@
 					bind:weight={newSet.weight}
 					bind:repetition={newSet.repetition}
 					onInput={handleInput}
+					isErrorVisualizationDisabled
 				/>
 			{/key}
 		{/if}

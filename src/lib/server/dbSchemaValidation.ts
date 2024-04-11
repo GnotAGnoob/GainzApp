@@ -51,8 +51,14 @@ const fillSupersetExerciseObject = createSupersetExerciseObject.extend({
 					.number()
 					.nonnegative()
 					.refine(
-						(n) => {
-							return n.toString().split(".")[1].length <= MAX_WEIGHT_DECIMAL_NUMBERS;
+						(number) => {
+							const numberSplit = number.toString().split(".");
+
+							if (numberSplit.length === 1) {
+								return true;
+							}
+
+							return numberSplit[1].length <= MAX_WEIGHT_DECIMAL_NUMBERS;
 						},
 						{ message: `Max precision is ${MAX_WEIGHT_DECIMAL_NUMBERS} decimal places` },
 					),

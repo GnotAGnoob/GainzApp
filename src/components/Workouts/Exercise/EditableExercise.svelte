@@ -8,6 +8,7 @@
 	export let supersetExercise: PageCreateSupersetExercise;
 	export let onDelete: () => void;
 	export let disabledText: string | undefined = undefined;
+	export let onSelect: ((supersetExercise: PageCreateSupersetExercise) => void) | undefined = undefined;
 	let isInEditMode = !supersetExercise.exercise.category.name.length;
 
 	$: if (disabledText) {
@@ -29,7 +30,7 @@
 
 {#if isInEditMode}
 	<div class="input">
-		<ExerciseDropdown bind:supersetExercise onCancel={turnEditModeOff} onConfirm={turnEditModeOff} />
+		<ExerciseDropdown bind:supersetExercise onCancel={turnEditModeOff} onConfirm={turnEditModeOff} {onSelect} />
 	</div>
 {:else}
 	<div class="exercise">

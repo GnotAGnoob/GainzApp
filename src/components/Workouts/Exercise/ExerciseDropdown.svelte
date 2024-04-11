@@ -18,6 +18,7 @@
 	export let supersetExercise: Partial<PageCreateSupersetExercise>;
 	export let onCancel: () => void;
 	export let onConfirm: () => void;
+	export let onSelect: ((supersetExercise: PageCreateSupersetExercise) => void) | undefined = undefined;
 
 	let value = formatExercise(supersetExercise);
 	let dropdownItems: PageCreateSupersetExercise[] = [];
@@ -44,12 +45,14 @@
 
 	const debounceFetch = debounce(fetchDropdownData, DEBOUNCE_TIME);
 
-	const onSelect = (index: number) => {
+	const handleSelect = (index: number) => {
 		if (dropdownItems.length <= index) return;
 
-		supersetExercise = dropdownItems[index];
+		const newSupersetExercise = dropdownItems[index];
+		supersetExercise = newSupersetExercise;
 		value = formatExercise(supersetExercise);
 
+		onSelect?.(newSupersetExercise);
 		onConfirm();
 	};
 
@@ -62,7 +65,7 @@
 
 			if (!dropdownItems.length) return;
 
-			onSelect(0);
+			handleSelect(0);
 			return;
 		}
 
@@ -82,7 +85,7 @@
 		on:keyup={onEnterPress}
 		onBlur={handleCancel}
 		{onFocus}
-		{onSelect}
+		onSelect={handleSelect}
 	/>
 </div>
 

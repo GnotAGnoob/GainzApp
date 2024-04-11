@@ -1,6 +1,6 @@
 <script lang="ts">
 	import EditableExercise from "./EditableExercise.svelte";
-	import type { PageFillSupersetExercise } from "$src/routes/types";
+	import type { PageCreateSupersetExercise, PageFillSupersetExercise } from "$src/routes/types";
 	import InputSets from "$src/components/Exercises/Sets/InputSets.svelte";
 	import WorkoutOverview from "$src/components/Exercises/WorkoutOverview.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
@@ -76,11 +76,19 @@
 
 		fetchAdditionalData(supersetExercise.exercise.id);
 	});
+
+	const handleSelect = (newSupersetExercise: PageCreateSupersetExercise) => {
+		supersetExercise = {
+			...newSupersetExercise,
+			sets: supersetExercise.sets,
+		};
+	};
 </script>
 
 <div class="container">
 	<EditableExercise
-		bind:supersetExercise
+		{supersetExercise}
+		onSelect={handleSelect}
 		{onDelete}
 		disabledText={isLoading ? dictionary.WAITING_FOR_RESPONSE : undefined}
 	/>

@@ -89,11 +89,11 @@ export const parseFilledWorkout = (data: unknown): PageInsertFillWorkout => {
 		supersets: z
 			.array(
 				z.object({
-					supersetExercises: z.array(fillSupersetExerciseObject),
+					supersetExercises: z.array(fillSupersetExerciseObject).max(MAX_SUPERSET_EXERCISES),
 					id: z.number().optional(),
 				}),
 			)
-			.max(MAX_SUPERSET_EXERCISES),
+			.max(MAX_SUPERSETS),
 		date: z.string().optional(),
 		id: z.number().optional(),
 	});

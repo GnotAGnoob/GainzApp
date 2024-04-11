@@ -3,10 +3,13 @@
 	import Button from "../Atoms/Button/Button.svelte";
 	import { onMount } from "svelte";
 	import type { Size } from "./types";
+	import { browser } from "$app/environment";
 
 	export let size: Size = "md";
+	// redo isOpen & do not export the functions
 	export let isOpened = false;
 	export let closeDisabledText: string | undefined = undefined;
+	// delete
 	export let onShowModal: (() => void) | undefined = undefined;
 
 	let modalElement: HTMLDialogElement;
@@ -14,13 +17,18 @@
 
 	export let onClose: (() => void) | undefined = undefined;
 
+	$: {
+		if (!isOpened && browser) {
+			window.document.documentElement.classList.remove("stopScrolling");
+		}
+	}
+
 	const handleClose = () => {
 		if (closeDisabledText) return;
 
 		isOpened = false;
 		onClose?.();
 		modalElement.close();
-		window.document.documentElement.classList.remove("stopScrolling");
 	};
 
 	const onBackdropClick = (event: MouseEvent) => {

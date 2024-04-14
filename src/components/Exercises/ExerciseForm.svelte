@@ -17,7 +17,7 @@
 	const MAX_EXERCISES = 10;
 
 	export let category = "";
-	export let modalElement: Modal | undefined = undefined;
+	export let isOpen: boolean;
 
 	const emptyExercise = {
 		categoryId: -1,
@@ -36,9 +36,11 @@
 	$: formCategories = new Set(exercises.map((exercise) => exercise.category));
 	$: dropdownCategories = Array.from(new Set([...categoryNames, ...formCategories]));
 
-	export const onClose = () => {
-		exercises = [{ ...emptyExercise }];
-	};
+	$: {
+		if (!isOpen) {
+			exercises = [{ ...emptyExercise }];
+		}
+	}
 
 	const onSelectCategory = (_: number, inputsIndex: number) => {
 		exercises[inputsIndex].errorMessage = "";
@@ -71,7 +73,7 @@
 			);
 
 			$categories = newCategories;
-			modalElement?.closeModal();
+			isOpen = false;
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
 				exercises[
@@ -111,7 +113,7 @@
 	$: disabledRemoveExerciseTitle = exercises.length === 1 ? dictionary.CANNOT_DELETE_LAST_EXERCISE : undefined;
 </script>
 
-<Modal isOpened={false} {onClose} size="lg" bind:this={modalElement}>
+<Modal bind:isOpen size="lg">
 	<form class="form">
 		<h2 class="title">{dictionary.ADD_NEW_EXERCISES}</h2>
 		{#each exercises as exercise, index}

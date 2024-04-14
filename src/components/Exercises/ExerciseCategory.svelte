@@ -18,7 +18,7 @@
 	export let category: PageCategory;
 
 	let errorMessage: string | null = null;
-	let exerciseFormElement: Modal;
+	let isModalOpen = false;
 
 	type Filter = (typeof dictionary)[keyof Pick<
 		typeof dictionary,
@@ -110,7 +110,7 @@
 	};
 
 	const onAdd = () => {
-		exerciseFormElement.showModal();
+		isModalOpen = true;
 	};
 </script>
 
@@ -129,7 +129,7 @@
 		>
 			<h3 class="categoryTitle"><EllipsisTooltip text={category.name} /></h3>
 		</EditText>
-		<ExerciseForm category={category.name} bind:modalElement={exerciseFormElement} />
+		<ExerciseForm category={category.name} bind:isOpen={isModalOpen} />
 		<div class="filter">
 			<SelectDropdown options={filterOptions} bind:selected={selectedFilters} />
 		</div>

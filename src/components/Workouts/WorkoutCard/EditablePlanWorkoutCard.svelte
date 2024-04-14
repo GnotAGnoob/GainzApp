@@ -3,7 +3,6 @@
 	import { dictionary } from "$src/lib/language/dictionary";
 	import type { PagePlannedWorkout } from "$src/routes/types";
 	import WorkoutModalFormFill from "../WorkoutModalFormFill.svelte";
-	import type Modal from "../../Modals/Modal.svelte";
 	import WorkoutCardTemplate from "./WorkoutCardTemplate.svelte";
 	import { plannedWorkouts } from "$lib/stores/plannedWorkouts";
 	import axios from "axios";
@@ -17,10 +16,9 @@
 	export let title: number | string;
 	export let isInEditMode = false;
 
-	let workoutModal: Modal;
-
 	let errorMessage: string | undefined = undefined;
 	let workoutCopy = structuredClone(workout);
+	let isModalOpen = false;
 
 	const onCancel = () => {
 		workoutCopy = structuredClone(workout);
@@ -71,6 +69,10 @@
 			errorMessage = error?.message || dictionary.UNKNOWN_ERROR;
 		}
 	};
+
+	const handleModalOpen = () => {
+		isModalOpen = true;
+	};
 </script>
 
 <!-- todo fix dropdown cut by overflow -->
@@ -81,18 +83,12 @@
 		<DisplayWorkoutSupersets {workout} />
 		<div class="startWrapper">
 			<div class="start">
-				<Button
-					type="noBackground_2"
-					fontSize="sm"
-					padding="sm"
-					paddingSide="md"
-					on:click={workoutModal.showModal}
-				>
+				<Button type="noBackground_2" fontSize="sm" padding="sm" paddingSide="md" on:click={handleModalOpen}>
 					<span>{dictionary.START_WORKOUT}</span>
 				</Button>
 			</div>
 		</div>
-		<WorkoutModalFormFill bind:modal={workoutModal} {workout} />
+		<WorkoutModalFormFill {workout} bind:isOpen={isModalOpen} />
 	{/if}
 </WorkoutCardTemplate>
 

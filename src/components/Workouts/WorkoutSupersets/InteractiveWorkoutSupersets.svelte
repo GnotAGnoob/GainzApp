@@ -16,7 +16,7 @@
 	};
 </script>
 
-<WourkoutSupersetsTemplate bind:workout {onConfirm} {onCancel} {errorMessage}>
+<WourkoutSupersetsTemplate bind:workout {onConfirm} {onCancel} {errorMessage} isSameAllowed={false}>
 	{#each workout?.supersets || [] as superset, index}
 		<EditableSuperset
 			bind:supersetExercises={superset.supersetExercises}

@@ -8,25 +8,30 @@
 	export let size: Size = "sm";
 	export let onConfirm: (() => void) | undefined = undefined;
 	export let onCancel: (() => void) | undefined = undefined;
+	export let isOpen: boolean;
 
-	let modal: Modal;
+	const handleOpenChange = (shouldOpen: boolean) => {
+		if (shouldOpen !== isOpen) {
+			if (!shouldOpen) {
+				onCancel?.();
+			}
 
-	export const showModal = () => {
-		modal.showModal();
+			isOpen = shouldOpen;
+		}
 	};
 
 	const handleCancel = () => {
 		onCancel?.();
-		modal.closeModal();
+		isOpen = false;
 	};
 
 	const handleConfirm = () => {
 		onConfirm?.();
-		modal.closeModal();
+		isOpen = false;
 	};
 </script>
 
-<Modal {size} bind:this={modal} onClose={onCancel}>
+<Modal {size} bind:isOpen onOpenChange={handleOpenChange}>
 	<div class="modal">
 		{#if text}
 			<h2 class="text">{text}</h2>

@@ -4,6 +4,7 @@
 	import type { Size } from "./types";
 	import { browser } from "$app/environment";
 	import { onDestroy } from "svelte";
+	import Portal from "../Portal.svelte";
 
 	export let size: Size = "md";
 	export let isOpen: boolean;
@@ -57,26 +58,28 @@
 </script>
 
 {#if isOpen}
-	<dialog class="modal" bind:this={modalElement}>
-		<div class="modalInside modalInside_{size}">
-			<div class="modalContent" bind:this={modalContentElement}>
-				<div class="close">
-					<Button
-						on:click={handleClose}
-						padding="sm"
-						type="noBackground"
-						isPaddingSame
-						disabledTitle={closeDisabledText}
-					>
-						<div class="closeIcon">
-							<Icon icon="iconoir:plus" />
-						</div>
-					</Button>
+	<Portal target="#modal">
+		<dialog class="modal" bind:this={modalElement}>
+			<div class="modalInside modalInside_{size}">
+				<div class="modalContent" bind:this={modalContentElement}>
+					<div class="close">
+						<Button
+							on:click={handleClose}
+							padding="sm"
+							type="noBackground"
+							isPaddingSame
+							disabledTitle={closeDisabledText}
+						>
+							<div class="closeIcon">
+								<Icon icon="iconoir:plus" />
+							</div>
+						</Button>
+					</div>
+					<slot />
 				</div>
-				<slot />
 			</div>
-		</div>
-	</dialog>
+		</dialog>
+	</Portal>
 {/if}
 
 <style lang="scss">

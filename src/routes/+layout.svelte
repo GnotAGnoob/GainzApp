@@ -44,6 +44,7 @@
 			</footer>
 		</div>
 	</div>
+	<div id="modal" />
 </div>
 
 <style lang="scss">

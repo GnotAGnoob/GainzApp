@@ -27,16 +27,17 @@
 			node.hidden = false;
 		};
 
+		const destroy = () => {
+			if (portalElement && node.parentNode === portalElement) {
+				portalElement.removeChild(node);
+			}
+		};
+
 		update(target);
 
 		return {
 			update,
-
-			destroy() {
-				if (portalElement && node.parentNode === portalElement) {
-					portalElement.removeChild(node);
-				}
-			},
+			destroy,
 		};
 	};
 </script>

@@ -9,13 +9,15 @@
 	export let size: Size = "md";
 	export let isOpen: boolean;
 	export let closeDisabledText: string | undefined = undefined;
-	/** if defined the outside component handles what happens if close is clicked */
+	/** if defined the outside component handles what happens if backdrop / close button is clicked */
 	export let onOpenChange: ((isOpen: boolean) => void) | undefined = undefined;
 
 	let modalElement: HTMLDialogElement | null = null;
 	let modalContentElement: HTMLDivElement;
 
 	const handleClose = () => {
+		if (closeDisabledText) return;
+
 		if (onOpenChange) {
 			onOpenChange(false);
 			return;

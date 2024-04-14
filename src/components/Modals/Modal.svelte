@@ -1,34 +1,29 @@
 <script lang="ts">
 	import Icon from "@iconify/svelte";
 	import Button from "../Atoms/Button/Button.svelte";
-	import { onMount } from "svelte";
 	import type { Size } from "./types";
 	import { browser } from "$app/environment";
+	import { onDestroy } from "svelte";
+	import Portal from "../Portal.svelte";
 
 	export let size: Size = "md";
-	// redo isOpen & do not export the functions
-	export let isOpened = false;
+	export let isOpen: boolean;
 	export let closeDisabledText: string | undefined = undefined;
-	// delete
-	export let onShowModal: (() => void) | undefined = undefined;
+	/** if defined the outside component handles what happens if backdrop / close button is clicked */
+	export let onOpenChange: ((isOpen: boolean) => void) | undefined = undefined;
 
-	let modalElement: HTMLDialogElement;
+	let modalElement: HTMLDialogElement | null = null;
 	let modalContentElement: HTMLDivElement;
-
-	export let onClose: (() => void) | undefined = undefined;
-
-	$: {
-		if (!isOpened && browser) {
-			window.document.documentElement.classList.remove("stopScrolling");
-		}
-	}
 
 	const handleClose = () => {
 		if (closeDisabledText) return;
 
-		isOpened = false;
-		onClose?.();
-		modalElement.close();
+		if (onOpenChange) {
+			onOpenChange(false);
+			return;
+		}
+
+		isOpen = false;
 	};
 
 	const onBackdropClick = (event: MouseEvent) => {
@@ -37,52 +32,57 @@
 		}
 	};
 
-	onMount(() => {
-		modalElement.addEventListener("mouseup", onBackdropClick);
+	$: {
+		onOpenChange?.(isOpen);
 
-		if (isOpened) {
-			modalElement.showModal();
+		if (isOpen) {
+			if (browser) {
+				window.document.documentElement.classList.add("stopScrolling");
+			}
+
+			modalElement?.addEventListener("mouseup", onBackdropClick);
+			modalElement?.showModal();
+		} else {
+			if (browser) {
+				window.document.documentElement.classList.remove("stopScrolling");
+			}
+
+			modalElement?.removeEventListener("mouseup", onBackdropClick);
+			modalElement?.close();
 		}
+	}
 
-		return () => {
-			modalElement.removeEventListener("mouseup", onBackdropClick);
-		};
+	onDestroy(() => {
+		if (browser) {
+			window.document.documentElement.classList.remove("stopScrolling");
+		}
 	});
-
-	export const showModal = () => {
-		isOpened = true;
-		modalElement.showModal();
-		onShowModal?.();
-		window.document.documentElement.classList.add("stopScrolling");
-	};
-
-	export const closeModal = () => {
-		handleClose();
-	};
 </script>
 
-<dialog class="modal" bind:this={modalElement}>
-	<div class="modalInside modalInside_{size}">
-		<div class="modalContent" bind:this={modalContentElement}>
-			<div class="close">
-				<Button
-					on:click={handleClose}
-					padding="sm"
-					type="noBackground"
-					isPaddingSame
-					disabledTitle={closeDisabledText}
-				>
-					<div class="closeIcon">
-						<Icon icon="iconoir:plus" />
+{#if isOpen}
+	<Portal target="#modal">
+		<dialog class="modal" bind:this={modalElement}>
+			<div class="modalInside modalInside_{size}">
+				<div class="modalContent" bind:this={modalContentElement}>
+					<div class="close">
+						<Button
+							on:click={handleClose}
+							padding="sm"
+							type="noBackground"
+							isPaddingSame
+							disabledTitle={closeDisabledText}
+						>
+							<div class="closeIcon">
+								<Icon icon="iconoir:plus" />
+							</div>
+						</Button>
 					</div>
-				</Button>
+					<slot />
+				</div>
 			</div>
-			{#if modalElement?.open}
-				<slot />
-			{/if}
-		</div>
-	</div>
-</dialog>
+		</dialog>
+	</Portal>
+{/if}
 
 <style lang="scss">
 	.modal {

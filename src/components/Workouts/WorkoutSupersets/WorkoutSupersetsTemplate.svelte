@@ -14,11 +14,12 @@
 	export let onCancel: () => void;
 	export let errorMessage: string | undefined = undefined;
 	export let disableConfirmButtonText: string | undefined = undefined;
+	export let isSameAllowed = true;
 	export let isLoading = false;
 
 	// might not be very performant
 	const workoutCopy = structuredClone(workout);
-	$: isWorkoutSame = JSON.stringify(workoutCopy) === JSON.stringify(workout);
+	$: isWorkoutSame = !isSameAllowed && JSON.stringify(workoutCopy) === JSON.stringify(workout);
 
 	$: areAllSupersetsFilled =
 		!workout ||

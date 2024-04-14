@@ -10,8 +10,8 @@
 	import { remapWorkout } from "$src/lib/remaps";
 	import { exerciseAdditionalInfo } from "$src/lib/stores/exerciseAddionalInfo";
 
-	export let modal: Modal;
 	export let workout: PagePlannedWorkout;
+	export let isOpen: boolean;
 
 	let fillWorkout: FillWorkoutSupersets;
 	let errorMessage: string | undefined;
@@ -29,7 +29,7 @@
 			);
 			$plannedWorkouts = data.plannedWorkouts;
 			$workoutHistory = data.workoutHistory;
-			modal?.closeModal();
+			isOpen = true;
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
 				errorMessage = `${error.response?.data}. idk which element/what happened. too lazy to detect errors`;
@@ -44,28 +44,22 @@
 		isLoading = false;
 	};
 
-	const onShowModal = () => {
-		fillWorkout?.fetchAdditionalData();
-	};
+	$: {
+		if (isOpen) {
+			fillWorkout?.fetchAdditionalData();
+		}
+	}
 
-	const onCancel = () => {
-		if (isLoading) return;
-
-		fillWorkout?.onCancel();
+	const handleCancel = () => {
+		isOpen = false;
 	};
 </script>
 
-<Modal
-	size="lg"
-	bind:this={modal}
-	onClose={onCancel}
-	closeDisabledText={isLoading ? dictionary.WAITING_FOR_RESPONSE : undefined}
-	{onShowModal}
->
+<Modal size="lg" closeDisabledText={isLoading ? dictionary.WAITING_FOR_RESPONSE : undefined} bind:isOpen>
 	<FillWorkoutSupersets
 		bind:this={fillWorkout}
 		bind:workout={remappedWorkout}
-		overrideOnCancel={modal?.closeModal}
+		overrideOnCancel={handleCancel}
 		{onConfirm}
 		{errorMessage}
 		{isLoading}

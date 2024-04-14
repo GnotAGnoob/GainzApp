@@ -25,8 +25,9 @@
 	export let disabledDeleteText: string | undefined = undefined;
 	export let disabledAddText: string | undefined = undefined;
 
+	let isModalOpen = false;
+
 	export let isInEditMode = false;
-	let modal: ConfirmationModal;
 
 	const handleEditMode = () => {
 		if (disabledText) return;
@@ -66,6 +67,10 @@
 		isInEditMode = false;
 
 		onAdd?.();
+	};
+
+	const handleModalOpen = () => {
+		isModalOpen = true;
 	};
 </script>
 
@@ -109,7 +114,7 @@
 					fontSize="md"
 					title={deleteTitle}
 					isPaddingSame
-					on:click={deleteConfirmationText ? modal.showModal : handleDelete}
+					on:click={deleteConfirmationText ? handleModalOpen : handleDelete}
 					disabledTitle={disabledText || disabledDeleteText}
 				>
 					<span class="icon icon_medium">
@@ -149,14 +154,12 @@
 		{/if}
 	</div>
 
-	{#if deleteConfirmationText}
-		<ConfirmationModal
-			bind:this={modal}
-			text={deleteConfirmationText}
-			onConfirm={handleDelete}
-			onCancel={onCancelDelete}
-		/>
-	{/if}
+	<ConfirmationModal
+		bind:isOpen={isModalOpen}
+		text={deleteConfirmationText}
+		onConfirm={handleDelete}
+		onCancel={onCancelDelete}
+	/>
 </div>
 
 <style lang="scss">

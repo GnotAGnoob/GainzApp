@@ -1,4 +1,4 @@
-import { MAX_INPUT_LENGTH } from "./constants";
+import { MAX_INPUT_NUMBER_LENGTH } from "./constants";
 
 export const insertInsteadRange = (
 	text: string,
@@ -6,7 +6,7 @@ export const insertInsteadRange = (
 	selectionStart: number | null,
 	selectionEnd: number | null,
 ) => {
-	const maxInsertLength = MAX_INPUT_LENGTH - text.length + (selectionEnd || 0) - (selectionStart || 0);
+	const maxInsertLength = MAX_INPUT_NUMBER_LENGTH - text.length + (selectionEnd || 0) - (selectionStart || 0);
 	const slicedInsert = insert.slice(0, Math.max(maxInsertLength, 0));
 
 	if (selectionStart === null || selectionEnd === null) {

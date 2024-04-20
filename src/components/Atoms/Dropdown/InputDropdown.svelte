@@ -15,6 +15,7 @@
 	export let onBlur: (() => void) | undefined = undefined;
 	export let isSelect = false;
 	export let isOnMountFocus = false;
+	export let maxTextLength: number | undefined = undefined;
 	const readOnly = isSelect && { readonly: true };
 	value = isSelect && !value.length ? dropDownOptions?.[0] || "" : value;
 
@@ -105,6 +106,7 @@
 			on:focus={onInputFocus}
 			on:keyup
 			on:blur={handleBlur}
+			maxLength={maxTextLength}
 			{isOnMountFocus}
 		>
 			<svelte:fragment slot="rightIcon">

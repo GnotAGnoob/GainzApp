@@ -21,6 +21,7 @@
 	export let onInput: (() => void) | undefined = undefined;
 	export let isDisabled = false;
 	export let maximumDecimalPlaces = MAX_WEIGHT_DECIMAL_NUMBERS;
+	export let maxLength = MAX_TEXT_LENGTH;
 
 	const isDynamicWidth = widthSize === "dynamic";
 
@@ -29,6 +30,14 @@
 
 	let inputSize = 0;
 	let isFirstInput = !value?.length;
+
+	const modes = {
+		float: "decimal",
+		integer: "numeric",
+		string: "text",
+	} as const;
+
+	$: inputMode = modes[inputType];
 
 	$: if (value) onInput?.();
 
@@ -202,11 +211,12 @@
 			on:keydown={handleKeyDown}
 			on:beforeinput={handleBeforeInput}
 			on:paste={handlePaste}
-			maxlength={MAX_TEXT_LENGTH}
+			maxlength={maxLength}
 			autocomplete="off"
 			style={isDynamicWidth ? `width: ${inputSize}px` : null}
 			disabled={isDisabled}
 			type="text"
+			inputmode={inputMode}
 		/>
 		<div class="icon icon_right">
 			<slot name="rightIcon" />

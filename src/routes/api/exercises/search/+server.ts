@@ -1,4 +1,4 @@
-import { MAX_DROPDOWN_ITEMS, MAX_TEXT_LENGTH } from "$src/lib/constants";
+import { MAX_DROPDOWN_ITEMS, MAX_DROPDOWN_SEARCH_LENGTH, MAX_TEXT_LENGTH } from "$src/lib/constants";
 import db from "$src/lib/server/db";
 import { z } from "zod";
 import { handleError } from "$src/lib/server/error";
@@ -14,7 +14,7 @@ export async function GET({ url, locals }) {
 		const userId = await getUserId(locals);
 
 		const schema = z.object({
-			text: z.string().max(MAX_TEXT_LENGTH),
+			text: z.string().max(MAX_DROPDOWN_SEARCH_LENGTH),
 			limit: z.number().int().positive().max(100).nullable(),
 		});
 

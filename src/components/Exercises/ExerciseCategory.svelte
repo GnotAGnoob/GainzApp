@@ -10,7 +10,6 @@
 	import { categories } from "$src/lib/stores/categories";
 	import ExerciseForm from "./ExerciseForm.svelte";
 	import SelectDropdown from "$components/Atoms/Dropdown/SelectDropdown.svelte";
-	import type Modal from "$components/Modals/Modal.svelte";
 	import { setContext } from "svelte";
 	import { writable } from "svelte/store";
 	import EllipsisTooltip from "../Atoms/Tooltip/EllipsisTooltip.svelte";

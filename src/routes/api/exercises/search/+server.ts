@@ -1,4 +1,4 @@
-import { MAX_DROPDOWN_ITEMS, MAX_DROPDOWN_SEARCH_LENGTH, MAX_TEXT_LENGTH } from "$src/lib/constants";
+import { MAX_DROPDOWN_ITEMS, MAX_DROPDOWN_SEARCH_LENGTH } from "$src/lib/constants";
 import db from "$src/lib/server/db";
 import { z } from "zod";
 import { handleError } from "$src/lib/server/error";

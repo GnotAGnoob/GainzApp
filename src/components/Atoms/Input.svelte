@@ -23,7 +23,7 @@
 	export let maximumDecimalPlaces = MAX_WEIGHT_DECIMAL_NUMBERS;
 	export let maxLength = MAX_TEXT_LENGTH;
 
-	const isDynamicWidth = widthSize === "dynamic";
+	$: isDynamicWidth = widthSize === "dynamic";
 
 	let input: HTMLInputElement | null = null;
 	let dynamicText: HTMLDivElement | null = null;
@@ -47,6 +47,12 @@
 		});
 	};
 
+	$: {
+		if (isDynamicWidth && value) {
+			updateWidthTimeout();
+		}
+	}
+
 	onMount(() => {
 		if (isDynamicWidth) {
 			updateWidthTimeout();
@@ -66,10 +72,6 @@
 		selectionEnd: number | null,
 		text: string,
 	) => {
-		if (isDynamicWidth) {
-			updateWidthTimeout();
-		}
-
 		if (inputType === "integer") {
 			if (text === "." || text === ",") {
 				event.preventDefault();

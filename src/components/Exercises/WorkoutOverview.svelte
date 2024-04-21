@@ -13,7 +13,7 @@
 
 	let isOpen = false;
 
-	$: lastWorkout = workoutHistory[workoutHistory.length - 1];
+	$: lastWorkout = workoutHistory[0];
 	$: isEnoughHistory = workoutHistory.length > 1;
 </script>
 

@@ -160,6 +160,14 @@ export const dbCategoriesExercisesPromise = (userId: string, database: Database 
 							},
 						},
 						where: inArray(supersetExercise.supersetId, dbUsersSupersetIds(userId, database)),
+						orderBy: (supersetExercise, { desc }) =>
+							desc(
+								db
+									.select({ date: workout.date })
+									.from(workout)
+									.innerJoin(superset, eq(superset.workoutId, workout.id))
+									.where(eq(superset.id, supersetExercise.supersetId)),
+							),
 					},
 					bestWorkouts: {
 						columns: { ...dbQueryOmit },
@@ -195,9 +203,6 @@ type dbExercise = Awaited<ReturnType<typeof dbCategoriesExercisesPromise>>[0]["e
 type dbSupersetExercise = dbExercise["supersetExercises"][0];
 
 export const mapSupersetExercises = (supersetExercises: dbSupersetExercise[]): PageDisplaySupersetExercise[] => {
-	// be careful with the order
-	// when the drizzle allows ordering by joined table, redo it
-	supersetExercises.reverse();
 	return supersetExercises.map((supersetExercise) => {
 		const { superset, ...rest } = supersetExercise;
 		return {

@@ -46,7 +46,7 @@
 
 <Scroller bind:this={scroller} sideFade="large" type="background" bottomPadding="medium" arrowsPosition="full">
 	<SetsTemplate>
-		{#each sets as set, index (set)}
+		{#each sets as set, index (index)}
 			<InputSet
 				{type}
 				setNumber={index + 1}

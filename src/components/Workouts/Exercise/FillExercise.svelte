@@ -5,10 +5,6 @@
 	import WorkoutOverview from "$src/components/Exercises/WorkoutOverview.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import Icon from "@iconify/svelte";
-	import { onMount } from "svelte";
-	import { exerciseAdditionalInfo } from "$src/lib/stores/exerciseAddionalInfo";
-	import axios from "axios";
-	import { apiRoutes } from "$src/lib/paths";
 
 	export let supersetExercise: PageFillSupersetExercise;
 	export let onDelete: () => void;
@@ -17,65 +13,6 @@
 
 	$: lastWorkout = supersetExercise.exercise.workoutHistory?.[0];
 	$: lastWorkoutHighestWeight = lastWorkout?.sets.reduce((acc, set) => (set.weight > acc ? set.weight : acc), 0);
-
-	const fetchAdditionalData = async (exerciseId: number) => {
-		if (isFetching) return;
-
-		try {
-			isFetching = true;
-			const { data } = await axios.post(apiRoutes.exercisesWorkoutHistory, [exerciseId]);
-
-			const newMap: typeof $exerciseAdditionalInfo = new Map();
-			for (const item of data) {
-				const { id, ...rest } = item;
-				newMap.set(item.id, rest);
-			}
-
-			$exerciseAdditionalInfo = new Map([...$exerciseAdditionalInfo, ...newMap]);
-
-			const additionalData = $exerciseAdditionalInfo.get(supersetExercise.exercise.id);
-
-			if (!additionalData) {
-				return;
-			}
-
-			supersetExercise = {
-				...supersetExercise,
-				exercise: {
-					...supersetExercise.exercise,
-					bestWorkout: additionalData.bestWorkout,
-					workoutHistory: additionalData.workoutHistory,
-				},
-			};
-		} catch (error) {
-			if (axios.isAxiosError(error)) {
-				return;
-			}
-		}
-		isFetching = false;
-	};
-
-	onMount(() => {
-		if (supersetExercise.exercise.bestWorkout && supersetExercise.exercise.workoutHistory) {
-			return;
-		}
-
-		const additionalData = $exerciseAdditionalInfo.get(supersetExercise.exercise.id);
-
-		if (additionalData) {
-			supersetExercise = {
-				...supersetExercise,
-				exercise: {
-					...supersetExercise.exercise,
-					bestWorkout: additionalData.bestWorkout,
-					workoutHistory: additionalData.workoutHistory,
-				},
-			};
-			return;
-		}
-
-		fetchAdditionalData(supersetExercise.exercise.id);
-	});
 
 	const handleSelect = (newSupersetExercise: PageCreateSupersetExercise) => {
 		supersetExercise = {

@@ -61,6 +61,14 @@ export async function POST({ request, locals }) {
 							},
 						},
 					},
+					orderBy: (supersetExercise, { desc }) =>
+						desc(
+							db
+								.select({ date: workout.date })
+								.from(workout)
+								.innerJoin(superset, eq(superset.workoutId, workout.id))
+								.where(eq(superset.id, supersetExercise.supersetId)),
+						),
 				},
 				bestWorkouts: {
 					columns: { ...dbQueryOmit },

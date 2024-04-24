@@ -182,7 +182,7 @@
 
 			width: max-content;
 			margin: auto;
-			padding-inline: min(var(--_side-padding), $space-md);
+			padding-inline: var(--_side-padding);
 			gap: $space-md;
 
 			padding-bottom: var(--scroller-padding);

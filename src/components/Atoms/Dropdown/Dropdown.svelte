@@ -5,6 +5,7 @@
 	export let align: "start" | "center" | "end" | undefined = "center";
 	export let side: "top" | "right" | "bottom" | "left" | undefined = "bottom";
 	export let sideOffset = 6;
+	export let collisionPadding = 16;
 
 	// todo vyjizdeni dropdownu
 </script>
@@ -15,12 +16,11 @@
 			<slot name="button" />
 		</DropdownMenu.Trigger>
 
-		<DropdownMenu.Content class="dropdownMenu" {side} {sideOffset} {align} collisionPadding={16}>
+		<DropdownMenu.Content class="dropdownMenu" {side} {sideOffset} {align} {collisionPadding}>
 			<div class="container">
 				<div class="contentWrapper">
 					<slot name="content" />
 				</div>
-				<!-- <DropdownMenu.Arrow class="dropdownArrow" /> -->
 			</div>
 		</DropdownMenu.Content>
 	</DropdownMenu.Root>
@@ -61,9 +61,5 @@
 			background-color: var(--_background);
 			z-index: 1;
 		}
-	}
-
-	:global(.dropdownArrow) {
-		box-shadow: $box-shadow;
 	}
 </style>

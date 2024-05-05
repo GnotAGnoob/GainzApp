@@ -18,6 +18,7 @@
 	};
 </script>
 
+<!-- todo rozdelit na dve komponenty   -->
 <div class="wrapper">
 	<Dropdown isCloseOnItemClick={false} align={"start"} sideOffset={6}>
 		<div class="icon" slot="button">

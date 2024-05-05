@@ -12,7 +12,7 @@
 		supersetExercises = supersetExercises.filter((_, i) => i !== index);
 	};
 
-	const onConfirmExercise = (supersetExercise: Partial<PageCreateSupersetExercise>) => {
+	const handleSelectExercise = (supersetExercise: Partial<PageCreateSupersetExercise>) => {
 		if (supersetExercise?.exercise?.category && supersetExercise?.exercise) {
 			supersetExercises = [
 				...supersetExercises,
@@ -27,7 +27,13 @@
 	};
 </script>
 
-<EditableSupersetTemplate {order} bind:supersetExercises {onConfirmExercise} {onDeleteSuperset} {disabledDeleteText}>
+<EditableSupersetTemplate
+	{order}
+	bind:supersetExercises
+	onSelectExercise={handleSelectExercise}
+	{onDeleteSuperset}
+	{disabledDeleteText}
+>
 	{#each supersetExercises as exercise, index}
 		<EditableExercise bind:supersetExercise={exercise} onDelete={() => onDelete(index)} />
 	{/each}

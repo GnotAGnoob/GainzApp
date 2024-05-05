@@ -12,7 +12,7 @@
 	export let isLoading = false;
 	export let onDeleteSuperset: () => void;
 	export let disabledDeleteText: string | undefined = undefined;
-	export let onConfirmExercise: (
+	export let onSelectExercise: (
 		exercise: Partial<PageCreateSupersetExercise>,
 	) => Partial<PageCreateSupersetExercise> | null;
 
@@ -33,19 +33,19 @@
 		newSupersetExercise = null;
 	}
 
-	const onAddNewExercise = () => {
+	const handleAddNewExercise = () => {
 		if (isLoading) return;
 
 		newSupersetExercise = {};
 	};
 
-	const onConfirmNewExercise = () => {
+	const handleSelectExercise = (supersetExercise: PageCreateSupersetExercise) => {
 		if (isLoading || !newSupersetExercise) return;
 
-		newSupersetExercise = onConfirmExercise(newSupersetExercise);
+		newSupersetExercise = onSelectExercise(supersetExercise);
 	};
 
-	const onCancelNewExercise = () => {
+	const handleCancelNewExercise = () => {
 		if (isLoading) return;
 
 		newSupersetExercise = null;
@@ -58,7 +58,7 @@
 		<EditButtons
 			isAbsolute={false}
 			isEditButton={false}
-			onAdd={onAddNewExercise}
+			onAdd={handleAddNewExercise}
 			onDelete={onDeleteSuperset}
 			disabledText={disabledText || undefined}
 			{deleteConfirmationText}
@@ -74,8 +74,8 @@
 			<div class="input">
 				<ExerciseDropdown
 					bind:supersetExercise={newSupersetExercise}
-					onCancel={onCancelNewExercise}
-					onConfirm={onConfirmNewExercise}
+					onCancel={handleCancelNewExercise}
+					onSelect={handleSelectExercise}
 				/>
 			</div>
 		{/if}
@@ -85,7 +85,7 @@
 			type="neutral"
 			isPaddingSame
 			padding="sm"
-			on:click={onAddNewExercise}
+			on:click={handleAddNewExercise}
 			disabledTitle={disabledText}
 			title={dictionary.ADD_NEW_EXERCISES}
 			isFullSize

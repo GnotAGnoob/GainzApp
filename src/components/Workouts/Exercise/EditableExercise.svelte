@@ -26,11 +26,16 @@
 
 		isInEditMode = false;
 	};
+
+	const handleSelectExercise = (supersetExercise: PageCreateSupersetExercise) => {
+		turnEditModeOff();
+		onSelect?.(supersetExercise);
+	};
 </script>
 
 {#if isInEditMode}
 	<div class="input">
-		<ExerciseDropdown bind:supersetExercise onCancel={turnEditModeOff} onConfirm={turnEditModeOff} {onSelect} />
+		<ExerciseDropdown bind:supersetExercise onCancel={turnEditModeOff} onSelect={handleSelectExercise} />
 	</div>
 {:else}
 	<div class="exercise">

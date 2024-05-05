@@ -55,7 +55,7 @@
 		"@auth/sveltekit": "^0.3.6",
 		"@neondatabase/serverless": "^0.6.0",
 		"axios": "^1.6.0",
-		"bits-ui": "^0.14.0",
+		"bits-ui": "^0.21.5",
 		"debounce": "^1.2.1",
 		"dotenv": "^16.3.1",
 		"drizzle-orm": "^0.28.6",

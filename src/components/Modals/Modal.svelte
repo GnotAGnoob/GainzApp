@@ -97,6 +97,7 @@
 		&Inside {
 			margin-inline: auto;
 			margin-top: 15vh;
+			margin-bottom: $space-xl;
 			max-width: 100%;
 
 			width: fit-content;

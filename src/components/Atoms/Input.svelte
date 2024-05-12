@@ -344,6 +344,7 @@
 		color: var(--text-secondary);
 		font-size: $text-subheading;
 		text-transform: capitalize;
+		text-align: left;
 	}
 
 	.textMirror {
@@ -365,6 +366,7 @@
 		height: 100%;
 
 		align-items: center;
+		pointer-events: none;
 
 		&_left {
 			left: var(--_icon-left);

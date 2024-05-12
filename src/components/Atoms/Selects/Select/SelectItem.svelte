@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Combobox } from "bits-ui";
+	import { Select } from "bits-ui";
 	import SelectItem from "../SelectItem.svelte";
 	import type { ButtonType } from "../../Button/types";
 
@@ -8,6 +8,6 @@
 	export let type: ButtonType | undefined = undefined;
 </script>
 
-<Combobox.Item {value} asChild let:builder>
+<Select.Item {value} asChild let:builder>
 	<SelectItem {padding} builders={[builder]} {type}><slot /></SelectItem>
-</Combobox.Item>
+</Select.Item>

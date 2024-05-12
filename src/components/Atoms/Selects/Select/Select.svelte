@@ -1,7 +1,8 @@
 <script lang="ts">
 	import Input from "$components/Atoms/Input.svelte";
-	import { Combobox } from "bits-ui";
+	import { Select } from "bits-ui";
 	import type { SelectHandlerType } from "../types";
+	import Icon from "@iconify/svelte";
 
 	export let disabled = false;
 	export let isMultiChoice = false;
@@ -16,22 +17,20 @@
 	export let collisionPadding = 16;
 	export let sameWidth = true;
 	export let placeholder: string | undefined = undefined;
-	export let isOnMountFocus = false;
 	export let maxTextLength: number | undefined = undefined;
 	export let onSelectedChange: SelectHandlerType<never> = undefined;
 	export let onOpenChange: ((isOpen: boolean) => void) | undefined = undefined;
 	export let onInputFocus: (() => void) | undefined = undefined;
 	export let onInputBlur: (() => void) | undefined = undefined;
-	export let isOpen = isOnMountFocus;
-	export let inputValue: string | undefined = undefined;
-	export let touchedInput = false;
+	export let isOpen = false;
 	export let label: string | undefined = undefined;
 	export let isPortalDisabled: boolean | undefined = undefined;
+	export let selected: string;
 
-	// todo vyresit, abych nemusel klikat 2x kdyz chci neco jineho
+	// TODO: fix double click when dropdown is open and click to input
 </script>
 
-<Combobox.Root
+<Select.Root
 	{disabled}
 	portal={isPortalDisabled ? null : "#modal"}
 	required={isRequired}
@@ -40,23 +39,29 @@
 	closeOnOutsideClick={isCloseOnOutsideClick}
 	{onSelectedChange}
 	{onOpenChange}
-	bind:touchedInput
-	bind:inputValue
+	typeahead
 	bind:open={isOpen}
 >
-	<Combobox.Input asChild let:builder>
-		<Input
-			{label}
-			builders={[builder]}
-			{placeholder}
-			maxLength={maxTextLength}
-			{isOnMountFocus}
-			on:focus={onInputFocus}
-			on:blur={onInputBlur}
-			value={inputValue}
-		/>
-	</Combobox.Input>
-	<Combobox.Content
+	<Select.Trigger asChild let:builder>
+		<div class="input">
+			<Input
+				readonly={true}
+				{label}
+				{placeholder}
+				maxLength={maxTextLength}
+				on:focus={onInputFocus}
+				on:blur={onInputBlur}
+				value={selected}
+				isAlignCenter
+				builders={[builder]}
+			>
+				<div class="icon" slot="rightIcon">
+					<Icon icon="solar:alt-arrow-down-linear" />
+				</div>
+			</Input>
+		</div>
+	</Select.Trigger>
+	<Select.Content
 		style="z-index: 75; position:absolute"
 		{side}
 		{sideOffset}
@@ -72,8 +77,8 @@
 
 			<slot name="bottom" />
 		</div>
-	</Combobox.Content>
-</Combobox.Root>
+	</Select.Content>
+</Select.Root>
 
 <style lang="scss">
 	.options {
@@ -92,6 +97,18 @@
 		&Main {
 			overflow-y: auto;
 			flex: 1;
+		}
+	}
+
+	.input {
+		&:focus-within {
+			.icon {
+				transform: rotate(180deg);
+			}
+		}
+
+		& :global(input) {
+			cursor: pointer;
 		}
 	}
 </style>

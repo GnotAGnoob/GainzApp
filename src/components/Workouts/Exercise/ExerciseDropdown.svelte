@@ -1,6 +1,5 @@
 <script lang="ts">
 	import axios from "axios";
-	import InputDropdown from "../../Atoms/Dropdown/InputDropdown.svelte";
 	import debounce from "debounce";
 	import { apiRoutes } from "$src/lib/paths";
 	import { DEBOUNCE_TIME, MAX_DROPDOWN_ITEMS, MAX_DROPDOWN_SEARCH_LENGTH } from "$src/lib/constants";
@@ -8,6 +7,8 @@
 	import { dictionary } from "$src/lib/language/dictionary";
 	import type { PageCreateSupersetExercise } from "$src/routes/types";
 	import type { ExerciseSearchResult } from "$src/routes/api/exercises/search/types";
+	import { InputSelect, InputSelectItem } from "$src/components/Atoms/Selects/InputSelect";
+	import type { SelectType } from "$src/components/Atoms/Selects/InputSelect/types";
 
 	const formatExercise = (supersetExercise: Partial<PageCreateSupersetExercise>) => {
 		const categoryName = supersetExercise.exercise?.category?.name;
@@ -17,18 +18,21 @@
 
 	export let supersetExercise: Partial<PageCreateSupersetExercise>;
 	export let onCancel: () => void;
-	export let onConfirm: () => void;
 	export let onSelect: ((supersetExercise: PageCreateSupersetExercise) => void) | undefined = undefined;
 
 	let value = formatExercise(supersetExercise);
 	let dropdownItems: PageCreateSupersetExercise[] = [];
 
-	$: mappedDropdownItems = dropdownItems.map(formatExercise);
+	let isOpen = true;
+
+	$: if (isOpen) {
+		fetchDropdownData();
+	}
 
 	const fetchDropdownData = async () => {
 		try {
 			const { data } = await axios.get<ExerciseSearchResult[]>(apiRoutes.exercisesSearch, {
-				params: { text: value, limit: MAX_DROPDOWN_ITEMS },
+				params: { text: value.trim(), limit: MAX_DROPDOWN_ITEMS },
 			});
 			dropdownItems = data.map((item) => {
 				return { exercise: { ...item.exercise, category: item.category, unit: item.unit } };
@@ -38,56 +42,50 @@
 		}
 	};
 
-	const handleCancel = () => {
-		value = formatExercise(supersetExercise);
-		onCancel();
-	};
-
 	const debounceFetch = debounce(fetchDropdownData, DEBOUNCE_TIME);
 
-	const handleSelect = (index: number) => {
-		if (dropdownItems.length <= index) return;
+	const handleSelect = (selectedValue: SelectType<PageCreateSupersetExercise>) => {
+		if (!selectedValue) return;
 
-		const newSupersetExercise = dropdownItems[index];
-		supersetExercise = newSupersetExercise;
-		value = formatExercise(supersetExercise);
+		let selectedSupersetExercise: PageCreateSupersetExercise;
 
-		onSelect?.(newSupersetExercise);
-		onConfirm();
-	};
-
-	const onEnterPress = (event: KeyboardEvent) => {
-		if (event.key === "Enter") {
-			if (!value.length) {
-				handleCancel();
-				return;
-			}
-
-			if (!dropdownItems.length) return;
-
-			handleSelect(0);
-			return;
+		if (Array.isArray(selectedValue)) {
+			selectedSupersetExercise = selectedValue[0].value;
+		} else {
+			selectedSupersetExercise = selectedValue.value;
 		}
 
-		debounceFetch();
+		supersetExercise = selectedSupersetExercise;
+		value = formatExercise(selectedSupersetExercise);
+		onSelect?.(selectedSupersetExercise);
 	};
 
-	const onFocus = () => {
-		fetchDropdownData();
+	const onOpenChange = (isOpen: boolean) => {
+		if (!isOpen) {
+			value = formatExercise(supersetExercise);
+			onCancel();
+			return;
+		}
 	};
+
+	$: if (value.length) {
+		debounceFetch();
+	}
 </script>
 
 <div class="input">
-	<InputDropdown
-		dropDownOptions={mappedDropdownItems}
+	<InputSelect
+		bind:inputValue={value}
+		onSelectedChange={handleSelect}
+		{onOpenChange}
 		isOnMountFocus
-		bind:value
-		on:keyup={onEnterPress}
-		onBlur={handleCancel}
-		{onFocus}
-		onSelect={handleSelect}
 		maxTextLength={MAX_DROPDOWN_SEARCH_LENGTH}
-	/>
+		bind:isOpen
+	>
+		{#each dropdownItems as item (item.exercise.id)}
+			<InputSelectItem value={item}>{formatExercise(item)}</InputSelectItem>
+		{/each}
+	</InputSelect>
 </div>
 
 <style lang="scss">

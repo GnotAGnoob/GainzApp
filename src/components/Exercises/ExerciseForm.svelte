@@ -3,16 +3,16 @@
 	import { dictionary } from "$src/lib/language/dictionary";
 	import Icon from "@iconify/svelte";
 	import Button from "../Atoms/Button/Button.svelte";
-	import Input from "../Atoms/Input.svelte";
 	import axios from "axios";
-	import InputDropdown from "../Atoms/Dropdown/InputDropdown.svelte";
 	import toast from "$src/lib/toast";
 	import { categories } from "$src/lib/stores/categories";
 	import type { Category } from "$src/db/schema/category";
 	import type { PageCategory } from "$src/routes/exercises/types";
 	import { apiRoutes } from "$src/lib/paths";
-	import ErrorText from "../Atoms/ErrorText.svelte";
 	import Modal from "$src/components/Modals/Modal.svelte";
+	import ExerciseFormRow from "./ExerciseFormRow.svelte";
+	import type { Unit } from "$src/db/schema/unit";
+	import type { SelectType } from "../Atoms/Selects/types";
 
 	const MAX_EXERCISES = 10;
 
@@ -23,10 +23,11 @@
 		categoryId: -1,
 		category: category,
 		name: "",
-		unit: "",
+		unit: $page.data?.units?.[0].name || "",
 		errorMessage: "",
 	};
 
+	let isLoading = false;
 	let exercises = [{ ...emptyExercise }];
 	$: areExercisesFilled = exercises.every(
 		(exercise) => exercise.category.length && exercise.name.length && exercise.unit.length,
@@ -42,7 +43,13 @@
 		}
 	}
 
-	const onSelectCategory = (_: number, inputsIndex: number) => {
+	const onSelectUnit = (inputsIndex: number, unit: SelectType<Unit>) => {
+		if (Array.isArray(unit) || !unit) return;
+
+		exercises[inputsIndex].unit = unit.value.name;
+	};
+
+	const onSelectCategory = (inputsIndex: number) => {
 		exercises[inputsIndex].errorMessage = "";
 	};
 
@@ -61,6 +68,8 @@
 	};
 
 	const onSubmit = async () => {
+		isLoading = true;
+
 		try {
 			exercises = exercises.map((exercise) => ({ ...exercise, errorMessage: "" }));
 			const { data: newCategories } = await toast.promise(
@@ -81,6 +90,8 @@
 				].errorMessage = `${error.response?.data}. idk which element/what happened. too lazy to detect errors`;
 			}
 		}
+
+		isLoading = false;
 	};
 
 	const onCreateNewCategory = (value: string, index: number) => {
@@ -117,56 +128,23 @@
 	<form class="form">
 		<h2 class="title">{dictionary.ADD_NEW_EXERCISES}</h2>
 		{#each exercises as exercise, index}
-			<div class="inputsWrapper">
-				<div class="inputs">
-					<div class="input">
-						<InputDropdown
-							label={dictionary.CATEGORY}
-							bind:value={exercise.category}
-							isOnMountFocus={!exercise.category}
-							onCreateNew={(value) => onCreateNewCategory(value, index)}
-							onSelect={(valueIndex) => onSelectCategory(valueIndex, index)}
-							dropDownOptions={dropdownCategories
-								?.filter(
-									(category) =>
-										category.includes(exercise.category) &&
-										(categoryNames.includes(category) ||
-											(formCategories.has(category) && category !== exercise.category)),
-								)
-								.map((category) => category)}
-						/>
-					</div>
-					<div class="input input_unit">
-						<InputDropdown
-							label={dictionary.UNIT}
-							bind:value={exercise.unit}
-							dropDownOptions={$page.data?.units?.map((unit) => unit.name)}
-							isSelect
-						/>
-					</div>
-					<div class="input input_name">
-						<Input
-							bind:value={exercise.name}
-							label={dictionary.EXERCISE_NAME}
-							isOnMountFocus={!!exercise.category}
-						/>
-					</div>
-					<div class="trash">
-						<Button
-							type="negative"
-							isPaddingSame
-							padding="md"
-							on:click={() => onRemoveExercise(index)}
-							disabledTitle={disabledRemoveExerciseTitle}
-						>
-							<Icon icon="solar:trash-bin-trash-linear" />
-						</Button>
-					</div>
-				</div>
-				{#if exercise.errorMessage.length > 0}
-					<ErrorText text={exercise.errorMessage} />
-				{/if}
-			</div>
+			<ExerciseFormRow
+				bind:exercise
+				categories={dropdownCategories?.filter(
+					(category) =>
+						category.includes(exercise.category) &&
+						(categoryNames.includes(category) ||
+							(formCategories.has(category) && category !== exercise.category)),
+				)}
+				onRemove={() => onRemoveExercise(index)}
+				onSelectCategory={() => onSelectCategory(index)}
+				onSelectUnit={(unit) => onSelectUnit(index, unit)}
+				onCreateNewCategory={(value) => onCreateNewCategory(value, index)}
+				isCategoryOnMountFocus={!!index}
+				units={$page.data?.units}
+				{isLoading}
+				{disabledRemoveExerciseTitle}
+			/>
 		{/each}
 		<Button
 			type="neutral"
@@ -201,39 +179,6 @@
 		font-size: $text-heading;
 
 		text-transform: capitalize;
-	}
-
-	.input {
-		flex: 1;
-
-		@media (max-width: $bp-512) {
-			min-width: 40%;
-		}
-
-		&s {
-			display: flex;
-
-			flex-wrap: wrap;
-			align-items: flex-end;
-
-			width: 100%;
-			column-gap: $space-md;
-			row-gap: $space-sm;
-
-			@media (min-width: $bp-512) {
-				flex-wrap: nowrap;
-			}
-
-			&Wrapper {
-				max-width: $space-xxxxl + $space-xxl;
-			}
-		}
-
-		&_unit {
-			flex: unset;
-			min-width: unset;
-			width: $space-xxl;
-		}
 	}
 
 	.submit {

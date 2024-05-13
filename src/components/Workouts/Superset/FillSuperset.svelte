@@ -15,7 +15,7 @@
 		supersetExercises = supersetExercises.filter((_, i) => i !== index);
 	};
 
-	const handleConfirmExercise = (supersetExercise: Partial<PageFillSupersetExercise>) => {
+	const handleSelectExercise = (supersetExercise: Partial<PageFillSupersetExercise>) => {
 		if (supersetExercise?.exercise?.category && supersetExercise?.exercise) {
 			const additionalInfo = $exerciseAdditionalInfo.get(supersetExercise.exercise.id);
 			supersetExercises = [
@@ -41,7 +41,7 @@
 	{order}
 	bind:supersetExercises
 	{isLoading}
-	onConfirmExercise={handleConfirmExercise}
+	onSelectExercise={handleSelectExercise}
 	{onDeleteSuperset}
 	{disabledDeleteText}
 >

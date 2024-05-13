@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { builderActions, getAttrs, type Builder } from "bits-ui";
 	import type { ButtonType } from "./types";
 	import Icon from "@iconify/svelte";
 
@@ -16,6 +17,7 @@
 	export let title: string | undefined = undefined;
 	export let buttonType: "button" | "submit" | "reset" = "button";
 	export { className as class };
+	export let builders: Builder[] = [];
 </script>
 
 <button
@@ -33,6 +35,8 @@
 	disabled={!!disabledTitle || isLoading}
 	title={disabledTitle || title}
 	type={buttonType}
+	use:builderActions={{ builders }}
+	{...getAttrs(builders)}
 >
 	{#if $$slots.leftIcon && !isLoading}
 		<span class="icon">

@@ -5,6 +5,7 @@
 	import type { ClipboardEventType, InputEventType, KeyboardEventType, StylesType } from "$src/lib/types";
 	import { onMount } from "svelte";
 	import type { ClipboardEventHandler, EventHandler, KeyboardEventHandler } from "svelte/elements";
+	import { builderActions, getAttrs, type Builder } from "bits-ui";
 
 	export let label: string | undefined = undefined;
 	export let value: string | undefined = undefined;
@@ -22,6 +23,8 @@
 	export let isDisabled = false;
 	export let maximumDecimalPlaces = MAX_WEIGHT_DECIMAL_NUMBERS;
 	export let maxLength = MAX_TEXT_LENGTH;
+	export let placeholder: string | undefined = undefined;
+	export let builders: Builder[] = [];
 
 	$: isDynamicWidth = widthSize === "dynamic";
 
@@ -219,6 +222,9 @@
 			disabled={isDisabled}
 			type="text"
 			inputmode={inputMode}
+			{placeholder}
+			use:builderActions={{ builders }}
+			{...getAttrs(builders)}
 		/>
 		<div class="icon icon_right">
 			<slot name="rightIcon" />
@@ -338,6 +344,7 @@
 		color: var(--text-secondary);
 		font-size: $text-subheading;
 		text-transform: capitalize;
+		text-align: left;
 	}
 
 	.textMirror {
@@ -359,6 +366,7 @@
 		height: 100%;
 
 		align-items: center;
+		pointer-events: none;
 
 		&_left {
 			left: var(--_icon-left);

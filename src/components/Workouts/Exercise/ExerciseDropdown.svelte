@@ -8,7 +8,7 @@
 	import type { PageCreateSupersetExercise } from "$src/routes/types";
 	import type { ExerciseSearchResult } from "$src/routes/api/exercises/search/types";
 	import { InputSelect, InputSelectItem } from "$src/components/Atoms/Selects/InputSelect";
-	import type { SelectType } from "$src/components/Atoms/Selects/InputSelect/types";
+	import type { SelectType } from "$src/components/Atoms/Selects/types";
 
 	const formatExercise = (supersetExercise: Partial<PageCreateSupersetExercise>) => {
 		const categoryName = supersetExercise.exercise?.category?.name;

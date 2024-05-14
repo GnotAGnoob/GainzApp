@@ -57,20 +57,22 @@
 		/>
 	</Combobox.Input>
 	<Combobox.Content
-		style="z-index: 75; position:absolute"
+		style="z-index: 150; position:absolute"
 		{side}
 		{sideOffset}
 		{align}
 		{alignOffset}
 		{collisionPadding}
 		{sameWidth}
+		fitViewport
 	>
-		<div class="options">
-			<div class="optionsMain">
-				<slot />
+		<div class="optionsWrapper">
+			<div class="options">
+				<div class="optionsMain">
+					<slot />
+				</div>
+				<slot name="bottom" />
 			</div>
-
-			<slot name="bottom" />
 		</div>
 	</Combobox.Content>
 </Combobox.Root>
@@ -80,18 +82,33 @@
 		display: flex;
 
 		flex-direction: column;
-		max-height: min(80vh, $space-xxxl + $space-xxl);
+		max-height: $space-xxxl + $space-xxl;
 		overflow: hidden;
 
-		border-bottom-left-radius: $border-sm;
-		border-bottom-right-radius: $border-sm;
 		box-shadow: $box-shadow;
 
 		background-color: var(--background-color);
 
+		&Wrapper {
+			display: flex;
+
+			height: inherit;
+			max-height: inherit;
+		}
+
 		&Main {
 			overflow-y: auto;
 			flex: 1;
+		}
+
+		:global([data-side="top"]) & {
+			border-top-left-radius: $border-sm;
+			border-top-right-radius: $border-sm;
+		}
+
+		:global([data-side="bottom"]) & {
+			border-bottom-left-radius: $border-sm;
+			border-bottom-right-radius: $border-sm;
 		}
 	}
 </style>

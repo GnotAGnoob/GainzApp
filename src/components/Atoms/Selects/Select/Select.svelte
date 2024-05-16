@@ -3,6 +3,7 @@
 	import { Select } from "bits-ui";
 	import type { SelectHandlerType } from "../types";
 	import Icon from "@iconify/svelte";
+	import { onMount } from "svelte";
 
 	export let disabled = false;
 	export let isMultiChoice = false;
@@ -24,15 +25,37 @@
 	export let onInputBlur: (() => void) | undefined = undefined;
 	export let isOpen = false;
 	export let label: string | undefined = undefined;
-	export let isPortalDisabled: boolean | undefined = undefined;
 	export let selected: string;
+
+	let portal: string | null = "#modal";
+	let isMounted = false;
+	let checkElement: HTMLElement | null = null;
+	const isOpenInitial = isOpen;
+
+	$: {
+		isOpen = false;
+	}
+
+	onMount(() => {
+		isMounted = true;
+		isOpen = isOpenInitial;
+		const modalElement = checkElement?.closest("#modal");
+
+		if (modalElement) {
+			portal = null;
+		}
+	});
 
 	// TODO: fix double click when dropdown is open and click to input
 </script>
 
+{#if !isMounted}
+	<div bind:this={checkElement} class="check" />
+{/if}
+
 <Select.Root
 	{disabled}
-	portal={isPortalDisabled ? null : "#modal"}
+	{portal}
 	required={isRequired}
 	multiple={isMultiChoice}
 	preventScroll={isPreventScroll}
@@ -83,6 +106,10 @@
 </Select.Root>
 
 <style lang="scss">
+	.check {
+		position: absolute;
+	}
+
 	.options {
 		display: flex;
 

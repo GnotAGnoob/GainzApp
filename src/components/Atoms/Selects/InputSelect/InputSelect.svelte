@@ -2,6 +2,7 @@
 	import Input from "$components/Atoms/Input.svelte";
 	import { Combobox } from "bits-ui";
 	import type { SelectHandlerType } from "../types";
+	import { onMount } from "svelte";
 
 	export let disabled = false;
 	export let isMultiChoice = false;
@@ -26,14 +27,36 @@
 	export let inputValue: string | undefined = undefined;
 	export let touchedInput = false;
 	export let label: string | undefined = undefined;
-	export let isPortalDisabled: boolean | undefined = undefined;
 
-	// todo vyresit, abych nemusel klikat 2x kdyz chci neco jineho
+	let portal: string | null = "#modal";
+	let isMounted = false;
+	let checkElement: HTMLElement | null = null;
+	const isOpenInitial = isOpen;
+
+	$: {
+		isOpen = false;
+	}
+
+	onMount(() => {
+		isMounted = true;
+		isOpen = isOpenInitial;
+		const modalElement = checkElement?.closest("#modal");
+
+		if (modalElement) {
+			portal = null;
+		}
+	});
+
+	// TODO: fix double click when dropdown is open and click to input
 </script>
+
+{#if !isMounted}
+	<div bind:this={checkElement} class="check" />
+{/if}
 
 <Combobox.Root
 	{disabled}
-	portal={isPortalDisabled ? null : "#modal"}
+	{portal}
 	required={isRequired}
 	multiple={isMultiChoice}
 	preventScroll={isPreventScroll}
@@ -78,6 +101,10 @@
 </Combobox.Root>
 
 <style lang="scss">
+	.check {
+		position: absolute;
+	}
+
 	.options {
 		display: flex;
 

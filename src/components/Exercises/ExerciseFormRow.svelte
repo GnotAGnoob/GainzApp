@@ -37,7 +37,6 @@
 				label={dictionary.CATEGORY}
 				isOnMountFocus={!exercise.category && isCategoryOnMountFocus}
 				onSelectedChange={onSelectCategory}
-				isPortalDisabled
 			>
 				{#each categories as category (category)}
 					<InputSelectItem value={category}>{category}</InputSelectItem>
@@ -53,7 +52,7 @@
 			</InputSelect>
 		</div>
 		<div class="input input_unit">
-			<Select selected={exercise.unit} label={dictionary.UNIT} onSelectedChange={onSelectUnit} isPortalDisabled>
+			<Select selected={exercise.unit} label={dictionary.UNIT} onSelectedChange={onSelectUnit}>
 				{#each units as unit (unit.name)}
 					<SelectItem value={unit}>{unit.name}</SelectItem>
 				{/each}

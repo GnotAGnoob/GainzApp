@@ -81,7 +81,6 @@
 		isOnMountFocus
 		maxTextLength={MAX_DROPDOWN_SEARCH_LENGTH}
 		bind:isOpen
-		isPortalDisabled
 	>
 		{#each dropdownItems as item (item.exercise.id)}
 			<InputSelectItem value={item}>{formatExercise(item)}</InputSelectItem>

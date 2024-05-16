@@ -78,21 +78,22 @@
 					onSelect={handleSelectExercise}
 				/>
 			</div>
+		{:else}
+			<div class="button">
+				<Button
+					type="neutral"
+					isPaddingSame
+					padding="sm"
+					on:click={handleAddNewExercise}
+					disabledTitle={disabledText}
+					title={dictionary.ADD_NEW_EXERCISES}
+					isFullSize
+				>
+					<!-- Solar nema normalni plus... -->
+					<Icon icon="iconoir:plus" />
+				</Button>
+			</div>
 		{/if}
-	</div>
-	<div class="button">
-		<Button
-			type="neutral"
-			isPaddingSame
-			padding="sm"
-			on:click={handleAddNewExercise}
-			disabledTitle={disabledText}
-			title={dictionary.ADD_NEW_EXERCISES}
-			isFullSize
-		>
-			<!-- Solar nema normalni plus... -->
-			<Icon icon="iconoir:plus" />
-		</Button>
 	</div>
 </div>
 

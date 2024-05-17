@@ -66,8 +66,6 @@
 		justify-content: space-between;
 		align-items: center;
 		gap: $space-sm;
-
-		margin-right: -$card-side-padding + $space-sm;
 	}
 
 	.button {

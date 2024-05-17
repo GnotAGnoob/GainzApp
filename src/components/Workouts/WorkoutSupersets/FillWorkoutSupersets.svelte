@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageFillWorkout } from "$src/routes/types";
-	import WourkoutSupersetsTemplate from "./WorkoutSupersetsTemplate.svelte";
+	import WorkoutSupersetsTemplate from "./WorkoutSupersetsTemplate.svelte";
 	import FillSuperset from "../Superset/FillSuperset.svelte";
 	import { dictionary } from "$lib/language/dictionary";
 	import axios from "axios";
@@ -90,7 +90,7 @@
 	});
 </script>
 
-<WourkoutSupersetsTemplate
+<WorkoutSupersetsTemplate
 	bind:workout
 	{onConfirm}
 	onCancel={overrideOnCancel || onCancel}
@@ -110,4 +110,4 @@
 				: undefined}
 		/>
 	{/each}
-</WourkoutSupersetsTemplate>
+</WorkoutSupersetsTemplate>

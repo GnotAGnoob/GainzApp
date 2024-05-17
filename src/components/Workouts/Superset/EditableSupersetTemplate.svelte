@@ -17,6 +17,7 @@
 	) => Partial<PageCreateSupersetExercise> | null;
 
 	let newSupersetExercise: Partial<PageCreateSupersetExercise> | null = null;
+	let buttonElement: HTMLElement | null = null;
 
 	$: areExercisesFilled = supersetExercises.every(
 		(exercise) => exercise.exercise.category.name.length && exercise.exercise.name.length,
@@ -50,6 +51,10 @@
 
 		newSupersetExercise = null;
 	};
+
+	$: {
+		buttonElement?.scrollIntoView({ behavior: "instant", block: "nearest" });
+	}
 </script>
 
 <div class="superset">
@@ -58,7 +63,6 @@
 		<EditButtons
 			isAbsolute={false}
 			isEditButton={false}
-			onAdd={handleAddNewExercise}
 			onDelete={onDeleteSuperset}
 			disabledText={disabledText || undefined}
 			{deleteConfirmationText}
@@ -79,7 +83,7 @@
 				/>
 			</div>
 		{:else}
-			<div class="button">
+			<div class="button" bind:this={buttonElement}>
 				<Button
 					type="neutral"
 					isPaddingSame

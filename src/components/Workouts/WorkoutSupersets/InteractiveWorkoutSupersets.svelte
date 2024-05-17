@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageCreateWorkout } from "$src/routes/types";
-	import WourkoutSupersetsTemplate from "./WorkoutSupersetsTemplate.svelte";
+	import WorkoutSupersetsTemplate from "./WorkoutSupersetsTemplate.svelte";
 	import EditableSuperset from "../Superset/EditableSuperset.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
 
@@ -16,7 +16,7 @@
 	};
 </script>
 
-<WourkoutSupersetsTemplate bind:workout {onConfirm} {onCancel} {errorMessage} isSameAllowed={false}>
+<WorkoutSupersetsTemplate bind:workout {onConfirm} {onCancel} {errorMessage} isSameAllowed={false}>
 	{#each workout?.supersets || [] as superset, index}
 		<EditableSuperset
 			bind:supersetExercises={superset.supersetExercises}
@@ -27,4 +27,4 @@
 				: undefined}
 		/>
 	{/each}
-</WourkoutSupersetsTemplate>
+</WorkoutSupersetsTemplate>

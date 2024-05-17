@@ -17,6 +17,8 @@
 	export let isSameAllowed = true;
 	export let isLoading = false;
 
+	let scrollElement: HTMLElement | null = null;
+
 	// might not be very performant
 	const workoutCopy = structuredClone(workout);
 	$: isWorkoutSame = !isSameAllowed && JSON.stringify(workoutCopy) === JSON.stringify(workout);
@@ -46,6 +48,10 @@
 	const onAddSuperset = () => {
 		if (isLoading) return;
 		workout = { ...workout, supersets: [...(workout?.supersets || []), { ...emptySuperset }] };
+
+		setTimeout(() => {
+			scrollElement?.scrollTo({ top: scrollElement.scrollHeight, behavior: "smooth" });
+		}, 0);
 	};
 
 	const handleConfirm = () => {
@@ -61,31 +67,35 @@
 </script>
 
 <div class="supersets">
-	<slot />
-	{#if errorMessage}
-		<ErrorText text={errorMessage} />
-	{/if}
-	<div class="button">
-		<Button type="info" padding="md" on:click={onAddSuperset} disabledTitle={disabledSupersetText} isFullSize>
-			<!-- Solar nema normalni plus... -->
-			<Icon icon="iconoir:plus" />
-			<span>{dictionary.ADD_NEW_SUPERSET}</span>
-		</Button>
+	<div class="content" bind:this={scrollElement}>
+		<slot />
 	</div>
-	<div class="buttons">
-		<Button type="negative" padding="md" on:click={onCancel} isFullSize disabledTitle={loadingText}>
-			<span>{dictionary.CANCEL}</span>
-		</Button>
-		<Button
-			type="positive"
-			padding="md"
-			on:click={handleConfirm}
-			disabledTitle={disableConfirmButton || disableConfirmButtonText}
-			isFullSize
-			{isLoading}
-		>
-			<span>{dictionary.CONFIRM}</span>
-		</Button>
+	<div class="controls">
+		{#if errorMessage}
+			<ErrorText text={errorMessage} />
+		{/if}
+		<div class="button">
+			<Button type="info" padding="md" on:click={onAddSuperset} disabledTitle={disabledSupersetText} isFullSize>
+				<!-- Solar nema normalni plus... -->
+				<Icon icon="iconoir:plus" />
+				<span>{dictionary.ADD_NEW_SUPERSET}</span>
+			</Button>
+		</div>
+		<div class="buttons">
+			<Button type="negative" padding="md" on:click={onCancel} isFullSize disabledTitle={loadingText}>
+				<span>{dictionary.CANCEL}</span>
+			</Button>
+			<Button
+				type="positive"
+				padding="md"
+				on:click={handleConfirm}
+				disabledTitle={disableConfirmButton || disableConfirmButtonText}
+				isFullSize
+				{isLoading}
+			>
+				<span>{dictionary.CONFIRM}</span>
+			</Button>
+		</div>
 	</div>
 	<div />
 </div>
@@ -97,6 +107,19 @@
 		flex-direction: column;
 
 		gap: $space-sm + $space-xs;
+
+		height: 100%;
+	}
+
+	.content {
+		flex: 1;
+		overflow-y: auto;
+	}
+
+	.controls {
+		display: flex;
+		flex-direction: column;
+		gap: $space-sm;
 	}
 
 	.button {

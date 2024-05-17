@@ -113,6 +113,7 @@
 	.options {
 		display: flex;
 
+		width: 100%;
 		flex-direction: column;
 		max-height: $space-xxxl + $space-xxl;
 		overflow: hidden;

@@ -81,6 +81,7 @@
 		flex-direction: column;
 		gap: $space-sm;
 		flex-grow: 1;
+		min-height: 0;
 
 		&Wrapper {
 			display: flex;
@@ -113,5 +114,6 @@
 		margin-top: $space-xs;
 		margin-right: -$space-xs;
 		margin-left: auto;
+		margin-bottom: $space-xs;
 	}
 </style>

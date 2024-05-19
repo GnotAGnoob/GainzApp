@@ -12,11 +12,12 @@
 	export let isLoading = false;
 	export let onDeleteSuperset: () => void;
 	export let disabledDeleteText: string | undefined = undefined;
+	export let isOnMountOpen = false;
 	export let onSelectExercise: (
 		exercise: Partial<PageCreateSupersetExercise>,
 	) => Partial<PageCreateSupersetExercise> | null;
 
-	let newSupersetExercise: Partial<PageCreateSupersetExercise> | null = null;
+	let newSupersetExercise: Partial<PageCreateSupersetExercise> | null = isOnMountOpen ? {} : null;
 	let buttonElement: HTMLElement | null = null;
 
 	$: areExercisesFilled = supersetExercises.every(

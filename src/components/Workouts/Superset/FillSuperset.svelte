@@ -10,6 +10,7 @@
 	export let isFetching = false;
 	export let onDeleteSuperset: () => void;
 	export let disabledDeleteText: string | undefined = undefined;
+	export let isOnMountOpenEdit = false;
 
 	const onDelete = (index: number) => {
 		supersetExercises = supersetExercises.filter((_, i) => i !== index);
@@ -44,6 +45,7 @@
 	onSelectExercise={handleSelectExercise}
 	{onDeleteSuperset}
 	{disabledDeleteText}
+	isOnMountOpen={isOnMountOpenEdit}
 >
 	<div class="container" class:containerCenter={supersetExercises.length < 2}>
 		{#each supersetExercises as supersetExercise, index}

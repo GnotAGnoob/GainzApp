@@ -26,6 +26,21 @@
 		),
 	);
 
+	let supersetLength = workout.supersets.length;
+
+	let isLastOpenEdit = false;
+	$: {
+		if (
+			supersetLength !== workout.supersets.length &&
+			!workout.supersets[workout.supersets.length - 1].supersetExercises.length
+		) {
+			isLastOpenEdit = true;
+		} else {
+			isLastOpenEdit = false;
+		}
+		supersetLength = workout.supersets.length;
+	}
+
 	export const onCancel = () => {
 		if (isLoading) return;
 
@@ -108,6 +123,7 @@
 			disabledDeleteText={workout.supersets.length <= 1
 				? dictionary.YOU_HAVE_TO_HAVE_ATLEAST_ONE_SUPERSET
 				: undefined}
+			isOnMountOpenEdit={index === workout.supersets.length - 1 && isLastOpenEdit}
 		/>
 	{/each}
 </WorkoutSupersetsTemplate>

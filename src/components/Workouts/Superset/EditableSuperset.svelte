@@ -7,6 +7,7 @@
 	export let order: number;
 	export let onDeleteSuperset: () => void;
 	export let disabledDeleteText: string | undefined = undefined;
+	export let isOnMountOpenEdit = false;
 
 	const onDelete = (index: number) => {
 		supersetExercises = supersetExercises.filter((_, i) => i !== index);
@@ -33,6 +34,7 @@
 	onSelectExercise={handleSelectExercise}
 	{onDeleteSuperset}
 	{disabledDeleteText}
+	isOnMountOpen={isOnMountOpenEdit}
 >
 	{#each supersetExercises as exercise, index}
 		<EditableExercise bind:supersetExercise={exercise} onDelete={() => onDelete(index)} />

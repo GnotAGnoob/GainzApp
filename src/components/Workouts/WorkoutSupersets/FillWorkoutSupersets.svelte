@@ -6,7 +6,6 @@
 	import axios from "axios";
 	import { apiRoutes } from "$src/lib/paths";
 	import { exerciseAdditionalInfo } from "$src/lib/stores/exerciseAddionalInfo";
-	import { onMount } from "svelte";
 	import { remapWorkout } from "$src/lib/remaps";
 
 	export let workout: PageFillWorkout;
@@ -99,10 +98,10 @@
 		isFetching = false;
 	};
 
-	onMount(() => {
+	$: if (workout) {
 		fetchAdditionalData();
 		workoutCopy = remapWorkout(workoutCopy, $exerciseAdditionalInfo);
-	});
+	}
 </script>
 
 <WorkoutSupersetsTemplate

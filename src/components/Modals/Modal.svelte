@@ -2,8 +2,6 @@
 	import Icon from "@iconify/svelte";
 	import Button from "../Atoms/Button/Button.svelte";
 	import type { Size } from "./types";
-	import { browser } from "$app/environment";
-	import { onDestroy } from "svelte";
 	import Portal from "../Portal.svelte";
 
 	export let size: Size = "md";
@@ -36,27 +34,13 @@
 		onOpenChange?.(isOpen);
 
 		if (isOpen) {
-			if (browser) {
-				window.document.documentElement.classList.add("stopScrolling");
-			}
-
 			modalElement?.addEventListener("mouseup", onBackdropClick);
 			modalElement?.showModal();
 		} else {
-			if (browser) {
-				window.document.documentElement.classList.remove("stopScrolling");
-			}
-
 			modalElement?.removeEventListener("mouseup", onBackdropClick);
 			modalElement?.close();
 		}
 	}
-
-	onDestroy(() => {
-		if (browser) {
-			window.document.documentElement.classList.remove("stopScrolling");
-		}
-	});
 </script>
 
 {#if isOpen}

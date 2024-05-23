@@ -74,6 +74,10 @@ html {
 	overflow-x: hidden;
 
 	scroll-behavior: smooth;
+
+	&:has(dialog[open]) {
+		overflow: hidden;
+	}
 }
 
 :where(*, *:before, *:after) {
@@ -125,10 +129,6 @@ body {
 
 	color: var(--text-primary);
 	background-color: var(--background-color);
-}
-
-.stopScrolling {
-	overflow: hidden;
 }
 
 img {

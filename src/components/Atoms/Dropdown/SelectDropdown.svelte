@@ -5,6 +5,7 @@
 
 	export let selected: string[] = [];
 	export let options: string[] = [];
+	export let isCloseOnItemClick = true;
 
 	const changeCheck = (index: number, checked: boolean) => {
 		const option = options[index];
@@ -20,7 +21,7 @@
 
 <!-- todo rozdelit na dve komponenty   -->
 <div class="wrapper">
-	<Dropdown isCloseOnItemClick={false} align={"start"} sideOffset={6}>
+	<Dropdown {isCloseOnItemClick} align={"start"} sideOffset={6}>
 		<div class="icon" slot="button">
 			<Icon icon="solar:tuning-2-linear" />
 			{#if selected.length}

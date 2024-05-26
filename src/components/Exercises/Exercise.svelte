@@ -120,7 +120,7 @@
 	}
 
 	.title {
-		margin-bottom: $space-xs + $space-xxs;
+		margin-bottom: $space-xs;
 	}
 
 	.name {

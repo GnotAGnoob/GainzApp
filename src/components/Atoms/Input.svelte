@@ -63,6 +63,7 @@
 
 		if (isOnMountFocus) {
 			input?.focus();
+			input?.select();
 		}
 	});
 

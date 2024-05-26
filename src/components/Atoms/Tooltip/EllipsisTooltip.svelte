@@ -32,6 +32,7 @@
 		text-overflow: ellipsis;
 		white-space: nowrap;
 
+		line-height: 1.2;
 		font-weight: inherit;
 		color: inherit;
 	}

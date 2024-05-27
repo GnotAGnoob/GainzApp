@@ -78,7 +78,7 @@
 		bind:inputValue={value}
 		onSelectedChange={handleSelect}
 		{onOpenChange}
-		isOnMountFocus
+		onMountBehaviour="select"
 		maxTextLength={MAX_DROPDOWN_SEARCH_LENGTH}
 		bind:isOpen
 	>

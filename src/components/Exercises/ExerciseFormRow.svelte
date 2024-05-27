@@ -35,7 +35,7 @@
 			<InputSelect
 				bind:inputValue={exercise.category}
 				label={dictionary.CATEGORY}
-				isOnMountFocus={!exercise.category && isCategoryOnMountFocus}
+				onMountBehaviour={!exercise.category && isCategoryOnMountFocus ? "focus" : "none"}
 				onSelectedChange={onSelectCategory}
 			>
 				{#each categories as category (category)}
@@ -59,7 +59,11 @@
 			</Select>
 		</div>
 		<div class="input input_name">
-			<Input bind:value={exercise.name} label={dictionary.EXERCISE_NAME} isOnMountFocus={!!exercise.category} />
+			<Input
+				bind:value={exercise.name}
+				label={dictionary.EXERCISE_NAME}
+				onMountBehaviour={exercise.category ? "focus" : "none"}
+			/>
 		</div>
 		<div class="trash">
 			<Button

@@ -38,7 +38,7 @@
 		onKeyDown={handleDelete}
 		{onInput}
 		isError={isWeightError}
-		isOnMountFocus={focus === "weight"}
+		onMountBehaviour={focus === "weight" ? "focus" : "none"}
 		{isDisabled}
 	>
 		<span class="weightText" slot="rightIcon">kg</span>
@@ -56,7 +56,7 @@
 		onKeyDown={handleDelete}
 		{onInput}
 		isError={isRepetitionError}
-		isOnMountFocus={focus === "repetition"}
+		onMountBehaviour={focus === "repetition" ? "focus" : "none"}
 		{isDisabled}
 	>
 		<span class="times">x</span>

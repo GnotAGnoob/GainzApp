@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { OnMountBehaviour } from "./../../types";
 	import Input from "$components/Atoms/Input.svelte";
 	import { Combobox } from "bits-ui";
 	import type { SelectHandlerType } from "../types";
@@ -17,13 +18,13 @@
 	export let collisionPadding = 16;
 	export let sameWidth = true;
 	export let placeholder: string | undefined = undefined;
-	export let isOnMountFocus = false;
+	export let onMountBehaviour: OnMountBehaviour = "none";
 	export let maxTextLength: number | undefined = undefined;
 	export let onSelectedChange: SelectHandlerType<never> = undefined;
 	export let onOpenChange: ((isOpen: boolean) => void) | undefined = undefined;
 	export let onInputFocus: (() => void) | undefined = undefined;
 	export let onInputBlur: (() => void) | undefined = undefined;
-	export let isOpen = isOnMountFocus;
+	export let isOpen = onMountBehaviour !== "none";
 	export let inputValue: string | undefined = undefined;
 	export let touchedInput = false;
 	export let label: string | undefined = undefined;
@@ -73,7 +74,7 @@
 			builders={[builder]}
 			{placeholder}
 			maxLength={maxTextLength}
-			{isOnMountFocus}
+			{onMountBehaviour}
 			on:focus={onInputFocus}
 			on:blur={onInputBlur}
 			value={inputValue}

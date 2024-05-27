@@ -6,6 +6,7 @@
 	import { onMount } from "svelte";
 	import type { ClipboardEventHandler, EventHandler, KeyboardEventHandler } from "svelte/elements";
 	import { builderActions, getAttrs, type Builder } from "bits-ui";
+	import type { OnMountBehaviour } from "./types";
 
 	export let label: string | undefined = undefined;
 	export let value: string | undefined = undefined;
@@ -15,7 +16,7 @@
 	export let paddingLeft: "xs" | "sm" | "md" | "lg" | "none" = "sm";
 	export let paddingRight: "xs" | "sm" | "md" | "lg" | "none" = "sm";
 	export let type: StylesType = "neutral";
-	export let isOnMountFocus = false;
+	export let onMountBehaviour: OnMountBehaviour = "none";
 	export let inputType: "float" | "integer" | "string" = "string";
 	export let isError = false;
 	export let onKeyDown: KeyboardEventHandler<HTMLInputElement> | undefined = undefined;
@@ -61,9 +62,14 @@
 			updateWidthTimeout();
 		}
 
-		if (isOnMountFocus) {
+		if (onMountBehaviour === "select") {
+			// Calling element.select() will not necessarily focus the input, so it is often used with HTMLElement.focus.
 			input?.focus();
 			input?.select();
+		}
+
+		if (onMountBehaviour === "focus") {
+			input?.focus();
 		}
 	});
 

@@ -15,7 +15,7 @@
 		height: $space-xxl;
 		width: $space-xxxxl;
 		max-width: 100%;
-		border-radius: $border-sm;
+		border-radius: $border-md;
 
 		justify-content: center;
 		align-items: center;

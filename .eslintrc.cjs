@@ -55,7 +55,13 @@ module.exports = {
 		"no-unused-vars": "off",
 		"@typescript-eslint/no-unused-vars": [
 			"warn",
-			{ destructuredArrayIgnorePattern: "^_$", ignoreRestSiblings: true },
+			{
+				destructuredArrayIgnorePattern: "^_$",
+				ignoreRestSiblings: true,
+				argsIgnorePattern: "^_",
+				varsIgnorePattern: "^_",
+				caughtErrorsIgnorePattern: "^_",
+			},
 		],
 		"no-shadow": "off",
 		"one-var": "off",

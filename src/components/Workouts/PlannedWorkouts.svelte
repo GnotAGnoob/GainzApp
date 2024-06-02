@@ -1,9 +1,8 @@
 <script lang="ts">
+	import PlannedWorkoutsTemplate from "./PlannedWorkoutsTemplate.svelte";
 	import Scroller from "$src/components/Scroller/Scroller.svelte";
-	import Button from "$components/Atoms/Button/Button.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import type { PagePlannedWorkout } from "$src/routes/types";
-	import Icon from "@iconify/svelte";
 	import { plannedWorkouts as plannedWorkoutsStore } from "$src/lib/stores/plannedWorkouts";
 	import EditablePlanWorkoutCard from "./WorkoutCard/EditablePlanWorkoutCard.svelte";
 	import PlanWorkoutCard from "./WorkoutCard/PlanWorkoutCard.svelte";
@@ -29,7 +28,7 @@
 	};
 </script>
 
-<section class="wrapper">
+<PlannedWorkoutsTemplate on:click={onAddWorkout} {disableNewWorkoutTitle}>
 	{#if $plannedWorkoutsStore.length || isAddNewWorkout}
 		<div class="scroller">
 			<Scroller
@@ -53,35 +52,9 @@
 			<EmptyCard text={dictionary.YOU_HAVE_NOT_PLANNED_ANY_WORKOUTS} />
 		</div>
 	{/if}
-	<div class="button">
-		<Button
-			fontSize="md"
-			type="info"
-			paddingSide="xl"
-			on:click={onAddWorkout}
-			disabledTitle={disableNewWorkoutTitle}
-		>
-			<Icon icon="iconoir:plus" slot="leftIcon" />
-			<span>{dictionary.PLAN_NEW_WORKOUTS}</span>
-		</Button>
-	</div>
-</section>
+</PlannedWorkoutsTemplate>
 
 <style lang="scss">
-	.wrapper {
-		display: flex;
-
-		flex-direction: column;
-
-		justify-content: center;
-
-		gap: $space-md;
-	}
-
-	.button {
-		margin-inline: auto;
-	}
-
 	.scroller {
 		@media (max-width: $bp-512) {
 			margin-inline: calc(var(--site-padding) * -1);

@@ -152,8 +152,10 @@ img {
 	}
 }
 
-:where(h1, h2, h3) {
+:where(h2, h3),
+h1 {
 	font-size: $text-heading;
+	margin: 0;
 }
 
 :where(h4, h5, h6) {

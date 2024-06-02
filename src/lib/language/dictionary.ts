@@ -76,4 +76,7 @@ export const dictionary = {
 	HIDE_GLOBAL: "Hide global",
 	HIDE_USER_DEFINED: "Hide user defined",
 	NO_EXERCISES_MATCH_THE_SELECTED_FILTERS: "No exercises match the selected filters",
+	WORKOUTS_LOADING: "Workouts are still loading",
+	OOOPS_SOMETHING_WENT_WRONG: "Ooops, something went wrong",
+	REFRESH_PAGE: "Refresh page",
 } as const;

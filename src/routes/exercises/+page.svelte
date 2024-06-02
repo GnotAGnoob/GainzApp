@@ -1,12 +1,28 @@
 <script lang="ts">
-	import { categories } from "$src/lib/stores/categories";
+	import SkeletonExercises from "./../../components/Exercises/SkeletonExercises.svelte";
 	import { floatedCorner } from "$src/lib/stores/floatedCorner";
 	import Exercises from "$src/components/Exercises/Exercises.svelte";
+	import ErrorPage from "$src/components/Errors/ErrorPage.svelte";
 
 	export let data;
 
-	categories.set(data.categories || []);
 	$floatedCorner = ["addExercise"];
 </script>
 
-<Exercises categories={$categories} />
+{#await data.streamed}
+	<div class="wrapper">
+		<SkeletonExercises />
+	</div>
+{:then result}
+	<div class="wrapper">
+		<Exercises categories={result.categories} />
+	</div>
+{:catch error}
+	<ErrorPage message={error.message} />
+{/await}
+
+<style lang="scss">
+	.wrapper {
+		margin-top: $space-md + $space-sm;
+	}
+</style>

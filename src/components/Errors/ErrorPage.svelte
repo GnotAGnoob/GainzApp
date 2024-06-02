@@ -1,11 +1,9 @@
-<!-- dev component for seeing all the color variables -->
 <script lang="ts">
 	import Error from "./Error.svelte";
-	import { dictionary } from "$src/lib/language/dictionary";
 
-	export let title: string | number = dictionary.OOOPS_SOMETHING_WENT_WRONG;
-	export let message: string = dictionary.UNKNOWN_ERROR;
-	export let isRefreshButton = true;
+	export let title: string | number | undefined = undefined;
+	export let message: string | undefined = undefined;
+	export let isRefreshButton: boolean | undefined = undefined;
 </script>
 
 <div class="wrapper">

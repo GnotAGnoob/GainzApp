@@ -1,11 +1,11 @@
 <script>
 	import { page } from "$app/stores";
 	import { getPageTitle } from "$lib/getPageTitle";
-	import Error from "$src/components/Errors/Error.svelte";
+	import ErrorPage from "$src/components/Errors/ErrorPage.svelte";
 </script>
 
 <svelte:head>
 	<title>{getPageTitle(`${$page.status}`)}</title>
 </svelte:head>
 
-<Error message={`${$page.status}: ${$page.error?.message}`} />
+<ErrorPage message={`${$page.status}: ${$page.error?.message}`} isRefreshButton={$page.status !== 404} />

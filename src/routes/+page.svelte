@@ -5,7 +5,7 @@
 	// import { floatedCorner } from "$src/lib/stores/floatedCorner";
 	import SkeletonWorkouts from "$src/components/Workouts/SkeletonWorkouts.svelte";
 	import SkeletonPlannedWorkouts from "$src/components/Workouts/SkeletonPlannedWorkouts.svelte";
-	import Error from "$src/components/Errors/Error.svelte";
+	import ErrorPage from "$src/components/Errors/ErrorPage.svelte";
 
 	export let data;
 
@@ -23,5 +23,5 @@
 		<WorkoutHistory slot="history" workoutHistory={result.workoutHistory} />
 	</PageTemplate>
 {:catch error}
-	<Error message={error.message} />
+	<ErrorPage message={error.message} />
 {/await}

@@ -6,6 +6,7 @@
 
 	export let title: string | number = dictionary.OOOPS_SOMETHING_WENT_WRONG;
 	export let message: string = dictionary.UNKNOWN_ERROR;
+	export let isRefreshButton = true;
 
 	const handleClick = () => {
 		location.reload();
@@ -17,11 +18,14 @@
 		<h1 class="title">{title}</h1>
 		<p class="message">{message}</p>
 	</div>
-	<Button on:click={handleClick} type="neutral">
-		<div class="button">
-			<Icon icon="iconoir:refresh" />{dictionary.REFRESH_PAGE}
-		</div>
-	</Button>
+
+	{#if isRefreshButton}
+		<Button on:click={handleClick} type="neutral">
+			<div class="button">
+				<Icon icon="iconoir:refresh" />{dictionary.REFRESH_PAGE}
+			</div>
+		</Button>
+	{/if}
 </div>
 
 <style lang="scss">

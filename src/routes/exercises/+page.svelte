@@ -2,22 +2,24 @@
 	import SkeletonExercises from "./../../components/Exercises/SkeletonExercises.svelte";
 	import { floatedCorner } from "$src/lib/stores/floatedCorner";
 	import Exercises from "$src/components/Exercises/Exercises.svelte";
-	import Error from "$src/components/Errors/Error.svelte";
+	import ErrorPage from "$src/components/Errors/ErrorPage.svelte";
 
 	export let data;
 
 	$floatedCorner = ["addExercise"];
 </script>
 
-<div class="wrapper">
-	{#await data.streamed}
+{#await data.streamed}
+	<div class="wrapper">
 		<SkeletonExercises />
-	{:then result}
+	</div>
+{:then result}
+	<div class="wrapper">
 		<Exercises categories={result.categories} />
-	{:catch error}
-		<Error message={error.message} />
-	{/await}
-</div>
+	</div>
+{:catch error}
+	<ErrorPage message={error.message} />
+{/await}
 
 <style lang="scss">
 	.wrapper {

@@ -97,6 +97,7 @@
 			}
 
 			let newValue = insertInsteadRange(value || "", text, selectionStart, selectionEnd);
+			newValue = newValue.trim();
 
 			if (inputType === "integer" && newValue.length) {
 				newValue = parseInt(newValue).toString();

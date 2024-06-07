@@ -76,6 +76,15 @@
 		<!-- todo -->
 		<!-- <InteractiveWorkoutSupersets workout={workoutCopy} {onConfirm} {onCancel} {errorMessage} /> -->
 	{:else}
-		<DisplayWorkoutSupersetsWithSets {workout} />
+		<div class="workouts">
+			<DisplayWorkoutSupersetsWithSets {workout} />
+		</div>
 	{/if}
 </WorkoutCardTemplate>
+
+<style lang="scss">
+	.workouts {
+		flex: 1;
+		overflow-y: auto;
+	}
+</style>

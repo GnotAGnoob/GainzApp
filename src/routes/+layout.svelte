@@ -8,13 +8,14 @@
 	import EnvironmentBanner from "$src/components/EnvironmentBanner.svelte";
 	import { session } from "$src/lib/stores/session";
 	import { floatedCorner } from "$src/lib/stores/floatedCorner";
+	import { browser } from "$app/environment";
 	// import Swatch from "$src/components/Swatch.svelte";
 
 	export let data;
 
 	session.set(data.session);
 
-	$: if ($navigating) {
+	$: if (browser && $navigating) {
 		$floatedCorner = [];
 	}
 </script>

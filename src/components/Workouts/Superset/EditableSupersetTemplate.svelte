@@ -54,7 +54,7 @@
 	};
 
 	$: {
-		buttonElement?.scrollIntoView({ behavior: "instant", block: "nearest" });
+		buttonElement?.scrollIntoView({ behavior: "smooth", block: "nearest" });
 	}
 </script>
 

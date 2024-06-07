@@ -80,7 +80,9 @@
 	{#if isInEditMode}
 		<InteractiveWorkoutSupersets bind:workout={workoutCopy} {onConfirm} {onCancel} {errorMessage} />
 	{:else}
-		<DisplayWorkoutSupersets {workout} />
+		<div class="workouts">
+			<DisplayWorkoutSupersets {workout} />
+		</div>
 		<div class="startWrapper">
 			<div class="start">
 				<Button type="noBackground_2" fontSize="sm" padding="sm" paddingSide="md" on:click={handleModalOpen}>
@@ -93,8 +95,15 @@
 </WorkoutCardTemplate>
 
 <style lang="scss">
+	.workouts {
+		flex: 1;
+		overflow-y: auto;
+
+		padding-bottom: $space-md;
+	}
+
 	.start {
-		margin-top: $space-md;
+		// margin-top: $space-md;
 
 		&Wrapper {
 			margin-inline: auto;

@@ -4,6 +4,8 @@
 	import { Combobox } from "bits-ui";
 	import type { SelectHandlerType } from "../types";
 	import { onMount } from "svelte";
+	import { slide } from "svelte/transition";
+	import { DEFAULT_TRANSITION_CONFIG } from "$src/lib/transitions";
 
 	export let disabled = false;
 	export let isMultiChoice = false;
@@ -89,6 +91,8 @@
 		{collisionPadding}
 		{sameWidth}
 		fitViewport
+		transition={slide}
+		transitionConfig={DEFAULT_TRANSITION_CONFIG}
 	>
 		<div class="optionsWrapper">
 			<div class="options">

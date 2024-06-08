@@ -9,6 +9,7 @@
 	import { session } from "$src/lib/stores/session";
 	import { floatedCorner } from "$src/lib/stores/floatedCorner";
 	import { browser } from "$app/environment";
+	import { onNavigate } from "$app/navigation";
 	// import Swatch from "$src/components/Swatch.svelte";
 
 	export let data;
@@ -18,6 +19,19 @@
 	$: if (browser && $navigating) {
 		$floatedCorner = [];
 	}
+
+	onNavigate((navigation) => {
+		// @ts-ignore
+		if (!document.startViewTransition) return;
+
+		return new Promise((resolve) => {
+			// @ts-ignore
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
+	});
 </script>
 
 <svelte:head>
@@ -74,6 +88,8 @@
 		flex-direction: column;
 
 		flex-grow: 1;
+
+		view-transition-name: main;
 	}
 
 	.footer {
@@ -101,5 +117,37 @@
 
 	.bannerText {
 		font-weight: 700;
+	}
+
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+		}
+	}
+	@keyframes fade-out {
+		to {
+			opacity: 0;
+		}
+	}
+
+	@keyframes slide-from-right {
+		from {
+			transform: translateX(30px);
+		}
+	}
+
+	@keyframes slide-to-left {
+		to {
+			transform: translateX(-30px);
+		}
+	}
+
+	:root::view-transition-old(main) {
+		animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out, 300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
+	}
+
+	:root::view-transition-new(main) {
+		animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
+			300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
 	}
 </style>

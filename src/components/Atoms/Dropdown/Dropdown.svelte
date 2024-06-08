@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { DEFAULT_TRANSITION_CONFIG } from "$src/lib/transitions";
 	import { DropdownMenu } from "bits-ui";
+	import { slide } from "svelte/transition";
 
 	export let isCloseOnItemClick = true;
 	export let align: "start" | "center" | "end" | undefined = "center";
@@ -16,7 +18,15 @@
 			<slot name="button" />
 		</DropdownMenu.Trigger>
 
-		<DropdownMenu.Content class="dropdownMenu" {side} {sideOffset} {align} {collisionPadding}>
+		<DropdownMenu.Content
+			class="dropdownMenu"
+			{side}
+			{sideOffset}
+			{align}
+			{collisionPadding}
+			transition={slide}
+			transitionConfig={DEFAULT_TRANSITION_CONFIG}
+		>
 			<div class="container">
 				<div class="contentWrapper">
 					<slot name="content" />

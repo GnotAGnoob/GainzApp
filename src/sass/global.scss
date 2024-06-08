@@ -99,8 +99,8 @@ html {
 	}
 
 	::-webkit-scrollbar {
-		width: $space-xs + $space-xxs;
-		height: $space-xs + $space-xxs;
+		width: $space-xs;
+		height: $space-xs;
 	}
 
 	/* Track */
@@ -215,4 +215,12 @@ h1 {
 
 .fullWidth {
 	margin-inline: calc(-1 * var(--site-padding));
+}
+
+@media (prefers-reduced-motion) {
+	::view-transition-group(*),
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		animation: none !important;
+	}
 }

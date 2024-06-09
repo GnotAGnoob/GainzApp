@@ -49,7 +49,7 @@
 
 		color: var(--text-primary);
 
-		z-index: 150;
+		z-index: 75;
 
 		.container {
 			border-radius: $border-radius;

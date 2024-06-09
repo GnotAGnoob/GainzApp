@@ -3,6 +3,7 @@
 	import Button from "../Atoms/Button/Button.svelte";
 	import type { Size } from "./types";
 	import Portal from "../Portal.svelte";
+	import { browser } from "$app/environment";
 
 	export let size: Size = "md";
 	export let isOpen: boolean;
@@ -34,13 +35,19 @@
 	};
 
 	$: {
+		let scrollPadding = 0;
 		onOpenChange?.(isOpen);
 
 		if (isOpen && !isOpenLocal) {
 			isOpenLocal = true;
+			scrollPadding = window.innerWidth - document.documentElement.clientWidth;
 		} else if (isOpen && isOpenLocal) {
 			modalElement?.addEventListener("mouseup", onBackdropClick);
 			modalElement?.showModal();
+
+			if (browser) {
+				document.documentElement.style.setProperty("--scrollbar-padding", `${scrollPadding}px`);
+			}
 
 			setTimeout(() => {
 				isDialogTransitionReady = true;
@@ -48,6 +55,10 @@
 		} else if (!isOpen && isOpenLocal) {
 			modalElement?.removeEventListener("mouseup", onBackdropClick);
 			modalElement?.close();
+
+			if (browser) {
+				document.documentElement.style.setProperty("--scrollbar-padding", "0");
+			}
 
 			const transitionEnd = () => {
 				isOpenLocal = false;
@@ -138,9 +149,9 @@
 			background-color: var(--background-color);
 			box-shadow: $box-shadow;
 
-			// animation: fadeInModal $animation-duration ease-out;
 			opacity: 0;
 			transform: scale(0.8);
+			transform-origin: 50% var(--transform-origin-vertical, 0);
 			transition: opacity $animation-duration ease-out, transform $animation-duration ease-out;
 		}
 
@@ -148,7 +159,6 @@
 			background-color: var(--accent-neutral-900);
 			opacity: 0;
 
-			// animation: fadeInBackdrop $animation-duration ease-out;
 			transition: display $animation-duration allow-discrete, overlay $animation-duration allow-discrete,
 				opacity $animation-duration;
 		}

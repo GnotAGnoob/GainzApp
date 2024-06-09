@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { DEFAULT_TRANSITION_CONFIG } from "$src/lib/transitions";
 	import { Tooltip } from "bits-ui";
+	import { scale } from "svelte/transition";
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	type $$Props = Tooltip.Props;
@@ -16,7 +18,14 @@
 		<Tooltip.Trigger class="trigger">
 			<slot />
 		</Tooltip.Trigger>
-		<Tooltip.Content {sideOffset} {align} {side} collisionPadding={16}>
+		<Tooltip.Content
+			{sideOffset}
+			{align}
+			{side}
+			collisionPadding={16}
+			transition={scale}
+			transitionConfig={DEFAULT_TRANSITION_CONFIG}
+		>
 			<div class="content">
 				<slot name="tooltip" />
 			</div>

@@ -76,7 +76,7 @@ html {
 
 	scroll-behavior: smooth;
 
-	&:has(dialog[open]) {
+	&:has(#modal dialog) {
 		overflow: hidden;
 	}
 }
@@ -99,8 +99,8 @@ html {
 	}
 
 	::-webkit-scrollbar {
-		width: $space-xs + $space-xxs;
-		height: $space-xs + $space-xxs;
+		width: $space-xs;
+		height: $space-xxs;
 	}
 
 	/* Track */
@@ -153,6 +153,8 @@ body {
 
 	min-height: 100vh;
 	width: 100%;
+	padding-right: var(--scrollbar-padding, 0);
+	overflow: visible !important;
 
 	flex-direction: column;
 	font-family: "Lato", sans-serif;
@@ -215,4 +217,12 @@ h1 {
 
 .fullWidth {
 	margin-inline: calc(-1 * var(--site-padding));
+}
+
+@media (prefers-reduced-motion) {
+	::view-transition-group(*),
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		animation: none !important;
+	}
 }

@@ -50,9 +50,6 @@
 
 	.header {
 		display: flex;
-		position: sticky;
-
-		top: 0;
 
 		width: 100%;
 		border-bottom: $header-border-height solid var(--accent-neutral-200);
@@ -60,8 +57,6 @@
 		flex-direction: column;
 
 		background-color: var(--background-color);
-
-		z-index: 100;
 
 		:global(.profile) {
 			margin-top: $space-px;

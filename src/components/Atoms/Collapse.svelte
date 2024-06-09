@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { DEFAULT_TRANSITION_CONFIG } from "$src/lib/transitions";
 	import Icon from "@iconify/svelte";
+	import { slide } from "svelte/transition";
 
 	export let isOpen = false;
 	export let isContentClickable = false;
@@ -9,10 +11,7 @@
 
 	let contentElement: HTMLDivElement;
 
-	let height = "auto";
-
 	export const handleClick = () => {
-		height = contentElement?.scrollHeight ? `${Math.floor(contentElement?.scrollHeight)}px` : "auto";
 		isOpen = !isOpen;
 	};
 </script>
@@ -35,18 +34,24 @@
 				{/if}
 			</div>
 			{#if isContentClickable}
-				<div class="content" bind:this={contentElement} style="--_height: {height}">
-					<slot name="content" />
-				</div>
+				{#if isOpen}
+					<div class="content" bind:this={contentElement} transition:slide={DEFAULT_TRANSITION_CONFIG}>
+						<slot name="content" />
+					</div>
+				{/if}
+
 				<slot name="footer" />
 			{/if}
 		</div>
 	{/if}
 
 	{#if !isContentClickable}
-		<div class="content" bind:this={contentElement} style="--_height: {height}">
-			<slot name="content" />
-		</div>
+		{#if isOpen}
+			<div class="content" bind:this={contentElement} transition:slide={DEFAULT_TRANSITION_CONFIG}>
+				<slot name="content" />
+			</div>
+		{/if}
+
 		<slot name="footer" />
 	{/if}
 </div>
@@ -88,31 +93,12 @@
 		}
 	}
 
-	.content {
-		height: 0;
-		overflow-y: hidden;
-
-		transition: height $_transition-timing, visibility 0s 0.15s;
-
-		visibility: hidden;
-
-		.isOpen & {
-			height: var(--_height, auto);
-
-			visibility: visible;
-
-			transition: height $_transition-timing;
-		}
-	}
-
 	.icon {
 		margin-top: $space-px * 1;
 
 		line-height: 0;
 		font-size: $icon-md;
 		color: var(--accent-neutral-600);
-
-		transition: transform $_transition-timing;
 
 		.isOpen & {
 			transform: rotate(90deg);

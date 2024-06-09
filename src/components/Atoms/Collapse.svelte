@@ -9,8 +9,6 @@
 	export let arrowSize: "sm" | "md" | "lg" | undefined = undefined;
 	export let arrowPosition: "left" | "right" | undefined = undefined;
 
-	let contentElement: HTMLDivElement;
-
 	export const handleClick = () => {
 		isOpen = !isOpen;
 	};
@@ -35,7 +33,7 @@
 			</div>
 			{#if isContentClickable}
 				{#if isOpen}
-					<div class="content" bind:this={contentElement} transition:slide={DEFAULT_TRANSITION_CONFIG}>
+					<div class="content" transition:slide={DEFAULT_TRANSITION_CONFIG}>
 						<slot name="content" />
 					</div>
 				{/if}
@@ -47,7 +45,7 @@
 
 	{#if !isContentClickable}
 		{#if isOpen}
-			<div class="content" bind:this={contentElement} transition:slide={DEFAULT_TRANSITION_CONFIG}>
+			<div class="content" transition:slide={DEFAULT_TRANSITION_CONFIG}>
 				<slot name="content" />
 			</div>
 		{/if}

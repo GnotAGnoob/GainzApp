@@ -62,6 +62,7 @@
 
 		background-color: var(--text-primary--hover);
 
+		// @ts-ignore
 		view-transition-name: divider;
 	}
 </style>

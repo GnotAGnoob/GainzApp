@@ -124,7 +124,7 @@
 {/if}
 
 <style lang="scss">
-	$transition-duration: 2s;
+	$transition-duration: 0.15s;
 
 	.modal {
 		width: 100%;

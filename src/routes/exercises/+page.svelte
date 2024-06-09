@@ -15,7 +15,7 @@
 	</div>
 {:then result}
 	<div class="wrapper">
-		<Exercises categories={result.categories} />
+		<Exercises categories={result.categories} units={result.units} />
 	</div>
 {:catch error}
 	<ErrorPage message={error.message} />

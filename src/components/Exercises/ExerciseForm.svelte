@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from "$app/stores";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import Icon from "@iconify/svelte";
 	import Button from "../Atoms/Button/Button.svelte";
@@ -13,6 +12,7 @@
 	import ExerciseFormRow from "./ExerciseFormRow.svelte";
 	import type { Unit } from "$src/db/schema/unit";
 	import type { SelectType } from "../Atoms/Selects/types";
+	import { units } from "$src/lib/stores/units";
 
 	const MAX_EXERCISES = 10;
 
@@ -23,7 +23,7 @@
 		categoryId: -1,
 		category: category,
 		name: "",
-		unit: $page.data?.units?.[0].name || "",
+		unit: $units[0]?.name || "",
 		errorMessage: "",
 	};
 
@@ -141,7 +141,7 @@
 				onSelectUnit={(unit) => onSelectUnit(index, unit)}
 				onCreateNewCategory={(value) => onCreateNewCategory(value, index)}
 				isCategoryOnMountFocus={!!index}
-				units={$page.data?.units}
+				units={$units}
 				{isLoading}
 				{disabledRemoveExerciseTitle}
 			/>

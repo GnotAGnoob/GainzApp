@@ -41,7 +41,7 @@
 		</div>
 
 		<div class="content" slot="content">
-			{#if isEnoughHistory && isOpen}
+			{#if isEnoughHistory}
 				<History workouts={workoutHistory} />
 			{/if}
 		</div>

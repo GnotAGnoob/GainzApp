@@ -4,6 +4,7 @@
 	import type { Size } from "./types";
 	import Portal from "../Portal.svelte";
 	import { browser } from "$app/environment";
+	import type { EventHandler } from "svelte/elements";
 
 	export let size: Size = "md";
 	export let isOpen: boolean;
@@ -16,6 +17,7 @@
 
 	let isOpenLocal = false;
 	let isDialogTransitionReady = false;
+	let scrollPadding = 0;
 
 	const handleClose = () => {
 		if (closeDisabledText) return;
@@ -34,16 +36,32 @@
 		}
 	};
 
+	const transitionEndClose = () => {
+		isOpenLocal = false;
+
+		if (browser) {
+			document.documentElement.style.setProperty("--scrollbar-padding", "0");
+		}
+	};
+
+	const transitionEndCancel = (event: Event) => {
+		event.preventDefault();
+		modalElement?.removeEventListener("transitionend", transitionEndClose);
+	};
+
 	$: {
-		let scrollPadding = 0;
 		onOpenChange?.(isOpen);
 
 		if (isOpen && !isOpenLocal) {
 			isOpenLocal = true;
 			scrollPadding = window.innerWidth - document.documentElement.clientWidth;
 		} else if (isOpen && isOpenLocal) {
-			modalElement?.addEventListener("mouseup", onBackdropClick);
 			modalElement?.showModal();
+
+			modalElement?.removeEventListener("transitionend", transitionEndClose);
+			modalElement?.removeEventListener("transitioncancel", transitionEndCancel);
+
+			modalElement?.addEventListener("mouseup", onBackdropClick);
 
 			if (browser) {
 				document.documentElement.style.setProperty("--scrollbar-padding", `${scrollPadding}px`);
@@ -53,50 +71,52 @@
 				isDialogTransitionReady = true;
 			});
 		} else if (!isOpen && isOpenLocal) {
-			modalElement?.removeEventListener("mouseup", onBackdropClick);
 			modalElement?.close();
 
-			if (browser) {
-				document.documentElement.style.setProperty("--scrollbar-padding", "0");
-			}
+			modalElement?.removeEventListener("mouseup", onBackdropClick);
 
-			const transitionEnd = () => {
-				isOpenLocal = false;
-			};
-
-			modalElement?.addEventListener("transitionend", transitionEnd, { once: true });
-			modalElement?.addEventListener(
-				"transitioncancel",
-				() => {
-					modalElement?.removeEventListener("transitionend", transitionEnd);
-				},
-				{ once: true },
-			);
+			setTimeout(() => {
+				modalElement?.addEventListener("transitionend", transitionEndClose, { once: true });
+				modalElement?.addEventListener("transitioncancel", transitionEndCancel, { once: true });
+			});
 		} else {
 			isDialogTransitionReady = false;
 		}
 	}
+
+	const handleCancel: EventHandler<Event, HTMLDialogElement> = (event) => {
+		event.preventDefault();
+
+		handleClose();
+	};
 </script>
 
 {#if isOpenLocal || isOpen}
 	<Portal target="#modal">
-		<dialog class="modal" bind:this={modalElement} class:mounted={isOpen && isOpenLocal && isDialogTransitionReady}>
-			<div class="modalInside modalInside_{size}">
-				<div class="modalContent" bind:this={modalContentElement}>
-					<div class="close">
-						<Button
-							on:click={handleClose}
-							padding="sm"
-							type="noBackground"
-							isPaddingSame
-							disabledTitle={closeDisabledText}
-						>
-							<div class="closeIcon">
-								<Icon icon="iconoir:plus" />
-							</div>
-						</Button>
+		<dialog
+			class="modal"
+			bind:this={modalElement}
+			class:mounted={isOpen && isOpenLocal && isDialogTransitionReady}
+			on:cancel={handleCancel}
+		>
+			<div class="modalInsideWrapper">
+				<div class="modalInside modalInside_{size}">
+					<div class="modalContent" bind:this={modalContentElement}>
+						<div class="close">
+							<Button
+								on:click={handleClose}
+								padding="sm"
+								type="noBackground"
+								isPaddingSame
+								disabledTitle={closeDisabledText}
+							>
+								<div class="closeIcon">
+									<Icon icon="iconoir:plus" />
+								</div>
+							</Button>
+						</div>
+						<slot />
 					</div>
-					<slot />
 				</div>
 			</div>
 		</dialog>
@@ -104,7 +124,7 @@
 {/if}
 
 <style lang="scss">
-	$animation-duration: 0.15s;
+	$transition-duration: 2s;
 
 	.modal {
 		width: 100%;
@@ -112,8 +132,8 @@
 		max-width: unset;
 		max-height: unset;
 		border: none;
-		transition: overlay $animation-duration ease-out allow-discrete,
-			display $animation-duration ease-out allow-discrete;
+		transition: overlay $transition-duration ease-out allow-discrete,
+			display $transition-duration ease-out allow-discrete;
 
 		background-color: transparent;
 
@@ -136,6 +156,23 @@
 			&_lg {
 				width: $space-xxxxl + $space-xxxl;
 			}
+
+			&Wrapper {
+				display: flex;
+
+				width: 100%;
+				height: 100%;
+
+				opacity: 0;
+				transform: scale(0.8);
+
+				transition: opacity $transition-duration ease-out, transform $transition-duration ease-out;
+
+				.mounted & {
+					opacity: 1;
+					transform: scale(1);
+				}
+			}
 		}
 
 		&Content {
@@ -148,30 +185,20 @@
 
 			background-color: var(--background-color);
 			box-shadow: $box-shadow;
-
-			opacity: 0;
-			transform: scale(0.8);
-			transform-origin: 50% var(--transform-origin-vertical, 0);
-			transition: opacity $animation-duration ease-out, transform $animation-duration ease-out;
 		}
 
 		&::backdrop {
 			background-color: var(--accent-neutral-900);
 			opacity: 0;
 
-			transition: display $animation-duration allow-discrete, overlay $animation-duration allow-discrete,
-				opacity $animation-duration;
+			transition: display $transition-duration allow-discrete, overlay $transition-duration allow-discrete,
+				opacity $transition-duration;
 		}
 	}
 
 	.mounted {
 		&::backdrop {
 			opacity: 0.4;
-		}
-
-		& .modalContent {
-			opacity: 1;
-			transform: scale(1);
 		}
 	}
 
@@ -195,25 +222,5 @@
 		width: 100%;
 		height: 100%;
 		z-index: 9999;
-	}
-
-	@keyframes fadeInBackdrop {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 0.4;
-		}
-	}
-
-	@keyframes fadeInModal {
-		from {
-			opacity: 0;
-			transform: scale(0.8);
-		}
-		to {
-			opacity: 1;
-			transform: scale(1);
-		}
 	}
 </style>

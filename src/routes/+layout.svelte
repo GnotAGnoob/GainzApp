@@ -41,24 +41,36 @@
 
 <div class="content">
 	{#if import.meta.env.MODE === "development"}
-		<EnvironmentBanner type={import.meta.env.MODE === "development" ? "positive" : "info"}>
-			This is a <span class="bannerText">{import.meta.env.MODE}</span> environment!
-		</EnvironmentBanner>
+		<div class="environmentBanner">
+			<EnvironmentBanner type={import.meta.env.MODE === "development" ? "positive" : "info"}>
+				This is a <span class="bannerText">{import.meta.env.MODE}</span> environment!
+			</EnvironmentBanner>
+		</div>
 	{/if}
-	<Header />
-	<FloatingCorner />
-	<Toaster />
+
+	<div class="floatingCorner">
+		<FloatingCorner />
+	</div>
+
+	<Toaster containerStyle="view-transition-name: toaster;" />
+
+	<div class="header">
+		<Header />
+	</div>
+
 	<div class="container">
 		<div class="wrapper">
 			<main class="main">
 				<slot />
 			</main>
+
 			<footer class="footer">
 				<div>© 2023 Daniel Svátek</div>
 				<div>v{data.version}</div>
 			</footer>
 		</div>
 	</div>
+
 	<div id="modal" />
 </div>
 
@@ -88,8 +100,19 @@
 		flex-direction: column;
 
 		flex-grow: 1;
+	}
 
-		view-transition-name: main;
+	.environmentBanner {
+		view-transition-name: environment-banner;
+	}
+
+	.header {
+		position: sticky;
+
+		top: 0;
+		view-transition-name: header;
+
+		z-index: 100;
 	}
 
 	.footer {
@@ -113,10 +136,22 @@
 		flex-direction: column;
 		flex-shrink: 0;
 		flex-grow: 1;
+
+		view-transition-name: main;
 	}
 
 	.bannerText {
 		font-weight: 700;
+	}
+
+	.floatingCorner {
+		view-transition-name: floating-corner;
+
+		z-index: 100;
+	}
+
+	#modal {
+		view-transition-name: modal;
 	}
 
 	@keyframes fade-in {

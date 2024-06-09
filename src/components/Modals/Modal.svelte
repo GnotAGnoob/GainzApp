@@ -1,10 +1,8 @@
 <script lang="ts">
-	import { scale } from "svelte/transition";
 	import Icon from "@iconify/svelte";
 	import Button from "../Atoms/Button/Button.svelte";
 	import type { Size } from "./types";
 	import Portal from "../Portal.svelte";
-	import { DEFAULT_TRANSITION_CONFIG } from "$src/lib/transitions";
 
 	export let size: Size = "md";
 	export let isOpen: boolean;
@@ -12,10 +10,11 @@
 	/** if defined the outside component handles what happens if backdrop / close button is clicked */
 	export let onOpenChange: ((isOpen: boolean) => void) | undefined = undefined;
 
-	let isLocalOpen = false;
-
 	let modalElement: HTMLDialogElement | null = null;
 	let modalContentElement: HTMLDivElement;
+
+	let isOpenLocal = false;
+	let isDialogTransitionReady = false;
 
 	const handleClose = () => {
 		if (closeDisabledText) return;
@@ -37,24 +36,40 @@
 	$: {
 		onOpenChange?.(isOpen);
 
-		if (isOpen) {
+		if (isOpen && !isOpenLocal) {
+			isOpenLocal = true;
+		} else if (isOpen && isOpenLocal) {
 			modalElement?.addEventListener("mouseup", onBackdropClick);
 			modalElement?.showModal();
-			isLocalOpen = true;
-		} else {
+
+			setTimeout(() => {
+				isDialogTransitionReady = true;
+			});
+		} else if (!isOpen && isOpenLocal) {
 			modalElement?.removeEventListener("mouseup", onBackdropClick);
 			modalElement?.close();
 
-			modalElement?.addEventListener("animationend", () => {
-				isLocalOpen = false;
-			});
+			const transitionEnd = () => {
+				isOpenLocal = false;
+			};
+
+			modalElement?.addEventListener("transitionend", transitionEnd, { once: true });
+			modalElement?.addEventListener(
+				"transitioncancel",
+				() => {
+					modalElement?.removeEventListener("transitionend", transitionEnd);
+				},
+				{ once: true },
+			);
+		} else {
+			isDialogTransitionReady = false;
 		}
 	}
 </script>
 
-{#if isOpen || isLocalOpen}
+{#if isOpenLocal || isOpen}
 	<Portal target="#modal">
-		<dialog class="modal" bind:this={modalElement}>
+		<dialog class="modal" bind:this={modalElement} class:mounted={isOpen && isOpenLocal && isDialogTransitionReady}>
 			<div class="modalInside modalInside_{size}">
 				<div class="modalContent" bind:this={modalContentElement}>
 					<div class="close">
@@ -78,7 +93,7 @@
 {/if}
 
 <style lang="scss">
-	$transition: 2s;
+	$animation-duration: 0.15s;
 
 	.modal {
 		width: 100%;
@@ -86,12 +101,10 @@
 		max-width: unset;
 		max-height: unset;
 		border: none;
+		transition: overlay $animation-duration ease-out allow-discrete,
+			display $animation-duration ease-out allow-discrete;
 
 		background-color: transparent;
-
-		opacity: 0;
-		transition: opacity $transition ease-out, overlay $transition ease-out allow-discrete,
-			display $transition ease-out allow-discrete;
 
 		&Inside {
 			margin-inline: auto;
@@ -125,29 +138,30 @@
 			background-color: var(--background-color);
 			box-shadow: $box-shadow;
 
+			// animation: fadeInModal $animation-duration ease-out;
+			opacity: 0;
 			transform: scale(0.8);
-			transition: transform $transition ease-out;
-		}
-
-		&[open] &Content {
-			animation: fade-in $transition ease-out;
-			transform: scale(1);
+			transition: opacity $animation-duration ease-out, transform $animation-duration ease-out;
 		}
 
 		&::backdrop {
 			background-color: var(--accent-neutral-900);
 			opacity: 0;
 
-			transition: display $transition allow-discrete, overlay $transition allow-discrete, opacity $transition;
+			// animation: fadeInBackdrop $animation-duration ease-out;
+			transition: display $animation-duration allow-discrete, overlay $animation-duration allow-discrete,
+				opacity $animation-duration;
+		}
+	}
+
+	.mounted {
+		&::backdrop {
+			opacity: 0.4;
 		}
 
-		&[open] {
+		& .modalContent {
 			opacity: 1;
-
-			&::backdrop {
-				opacity: 0.4;
-				animation: backdrop-fade-in $transition ease-out;
-			}
+			transform: scale(1);
 		}
 	}
 
@@ -164,27 +178,32 @@
 		}
 	}
 
-	/* Animation keyframes */
+	.interactivityDisables {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 9999;
+	}
 
-	@keyframes fade-in {
-		0% {
+	@keyframes fadeInBackdrop {
+		from {
 			opacity: 0;
-			transform: scale(0.8);
 		}
-
-		100% {
-			opacity: 1;
-			transform: scale(1);
+		to {
+			opacity: 0.4;
 		}
 	}
 
-	@keyframes backdrop-fade-in {
-		0% {
+	@keyframes fadeInModal {
+		from {
 			opacity: 0;
+			transform: scale(0.8);
 		}
-
-		100% {
-			opacity: 0.4;
+		to {
+			opacity: 1;
+			transform: scale(1);
 		}
 	}
 </style>

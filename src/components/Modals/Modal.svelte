@@ -3,8 +3,9 @@
 	import Button from "../Atoms/Button/Button.svelte";
 	import type { Size } from "./types";
 	import Portal from "../Portal.svelte";
-	import { browser } from "$app/environment";
 	import type { EventHandler } from "svelte/elements";
+	import { fade, scale } from "svelte/transition";
+	import { DEFAULT_TRANSITION_CONFIG } from "$src/lib/transitions";
 
 	export let size: Size = "md";
 	export let isOpen: boolean;
@@ -14,10 +15,6 @@
 
 	let modalElement: HTMLDialogElement | null = null;
 	let modalContentElement: HTMLDivElement;
-
-	let isOpenLocal = false;
-	let isDialogTransitionReady = false;
-	let scrollPadding = 0;
 
 	const handleClose = () => {
 		if (closeDisabledText) return;
@@ -31,77 +28,42 @@
 	};
 
 	const onBackdropClick = (event: MouseEvent) => {
+		event.preventDefault();
 		if (!modalContentElement.contains(event.target as Node)) {
 			handleClose();
 		}
 	};
-
-	const transitionEndClose = () => {
-		isOpenLocal = false;
-
-		if (browser) {
-			document.documentElement.style.setProperty("--scrollbar-padding", "0");
-		}
-	};
-
-	const transitionEndCancel = (event: Event) => {
-		event.preventDefault();
-		modalElement?.removeEventListener("transitionend", transitionEndClose);
-	};
-
-	$: {
-		onOpenChange?.(isOpen);
-
-		if (isOpen && !isOpenLocal) {
-			isOpenLocal = true;
-			scrollPadding = window.innerWidth - document.documentElement.clientWidth;
-		} else if (isOpen && isOpenLocal) {
-			modalElement?.showModal();
-
-			modalElement?.removeEventListener("transitionend", transitionEndClose);
-			modalElement?.removeEventListener("transitioncancel", transitionEndCancel);
-
-			modalElement?.addEventListener("mouseup", onBackdropClick);
-
-			if (browser) {
-				document.documentElement.style.setProperty("--scrollbar-padding", `${scrollPadding}px`);
-			}
-
-			setTimeout(() => {
-				isDialogTransitionReady = true;
-			});
-		} else if (!isOpen && isOpenLocal) {
-			modalElement?.close();
-
-			modalElement?.removeEventListener("mouseup", onBackdropClick);
-
-			setTimeout(() => {
-				modalElement?.addEventListener("transitionend", transitionEndClose, { once: true });
-				modalElement?.addEventListener("transitioncancel", transitionEndCancel, { once: true });
-			});
-		} else {
-			isDialogTransitionReady = false;
-		}
-	}
 
 	const handleCancel: EventHandler<Event, HTMLDialogElement> = (event) => {
 		event.preventDefault();
 
 		handleClose();
 	};
+
+	$: if (isOpen) {
+		modalElement?.showModal();
+		modalElement?.addEventListener("mouseup", onBackdropClick);
+	} else {
+		modalElement?.removeEventListener("mouseup", onBackdropClick);
+	}
 </script>
 
-{#if isOpenLocal || isOpen}
+{#if isOpen}
 	<Portal target="#modal">
 		<dialog
 			class="modal"
 			bind:this={modalElement}
-			class:mounted={isOpen && isOpenLocal && isDialogTransitionReady}
 			on:cancel={handleCancel}
+			transition:fade={DEFAULT_TRANSITION_CONFIG}
 		>
+			<div class="modalBackground" />
 			<div class="modalInsideWrapper">
 				<div class="modalInside modalInside_{size}">
-					<div class="modalContent" bind:this={modalContentElement}>
+					<div
+						class="modalContent"
+						bind:this={modalContentElement}
+						transition:scale={{ ...DEFAULT_TRANSITION_CONFIG, start: 0.8, opacity: 1 }}
+					>
 						<div class="close">
 							<Button
 								on:click={handleClose}
@@ -124,18 +86,20 @@
 {/if}
 
 <style lang="scss">
-	$transition-duration: 0.15s;
-
 	.modal {
 		width: 100%;
 		height: 100%;
 		max-width: unset;
 		max-height: unset;
 		border: none;
-		transition: overlay $transition-duration ease-out allow-discrete,
-			display $transition-duration ease-out allow-discrete;
-
 		background-color: transparent;
+
+		&Background {
+			position: fixed;
+			inset: 0;
+			background-color: var(--accent-neutral-900);
+			opacity: 0.4;
+		}
 
 		&Inside {
 			margin-inline: auto;
@@ -162,16 +126,6 @@
 
 				width: 100%;
 				height: 100%;
-
-				opacity: 0;
-				transform: scale(0.8);
-
-				transition: opacity $transition-duration ease-out, transform $transition-duration ease-out;
-
-				.mounted & {
-					opacity: 1;
-					transform: scale(1);
-				}
 			}
 		}
 
@@ -188,17 +142,7 @@
 		}
 
 		&::backdrop {
-			background-color: var(--accent-neutral-900);
-			opacity: 0;
-
-			transition: display $transition-duration allow-discrete, overlay $transition-duration allow-discrete,
-				opacity $transition-duration;
-		}
-	}
-
-	.mounted {
-		&::backdrop {
-			opacity: 0.4;
+			background-color: transparent;
 		}
 	}
 
@@ -213,14 +157,5 @@
 			line-height: 0;
 			transform: rotate(45deg);
 		}
-	}
-
-	.interactivityDisables {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: 9999;
 	}
 </style>

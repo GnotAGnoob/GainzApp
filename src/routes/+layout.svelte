@@ -104,6 +104,8 @@
 
 	.environmentBanner {
 		view-transition-name: environment-banner;
+
+		z-index: 100;
 	}
 
 	.header {

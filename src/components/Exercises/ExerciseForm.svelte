@@ -132,9 +132,9 @@
 				bind:exercise
 				categories={dropdownCategories?.filter(
 					(category) =>
-						category.includes(exercise.category.toLowerCase()) &&
+						category.includes(exercise.category) &&
 						(categoryNames.includes(category) ||
-							(formCategories.has(category) && category !== exercise.category.toLowerCase())),
+							(formCategories.has(category) && category !== exercise.category)),
 				)}
 				onRemove={() => onRemoveExercise(index)}
 				onSelectCategory={() => onSelectCategory(index)}

@@ -8,8 +8,6 @@
 	export let side: "top" | "right" | "bottom" | "left" | undefined = "bottom";
 	export let sideOffset = 6;
 	export let collisionPadding = 16;
-
-	// todo vyjizdeni dropdownu
 </script>
 
 <div class="wrapper">

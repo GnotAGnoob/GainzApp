@@ -3,9 +3,8 @@
 	import Button from "../Atoms/Button/Button.svelte";
 	import type { Size } from "./types";
 	import Portal from "../Portal.svelte";
-	import { browser } from "$app/environment";
 	import type { EventHandler } from "svelte/elements";
-	import { fade, scale, slide } from "svelte/transition";
+	import { fade, scale } from "svelte/transition";
 	import { DEFAULT_TRANSITION_CONFIG } from "$src/lib/transitions";
 
 	export let size: Size = "md";
@@ -16,9 +15,6 @@
 
 	let modalElement: HTMLDialogElement | null = null;
 	let modalContentElement: HTMLDivElement;
-
-	const localState: "open" | "close" | "ready" | "closing" = "close";
-	const scrollPadding = 0;
 
 	const handleClose = () => {
 		if (closeDisabledText) return;
@@ -38,126 +34,11 @@
 		}
 	};
 
-	// const transitionEndClose = () => {
-	// 	console.log("transitionEndClose");
-	// 	localState = "close";
-
-	// 	if (browser) {
-	// 		document.documentElement.style.setProperty("--scrollbar-padding", "0");
-	// 	}
-	// };
-
-	// const transitionEndCancel = (event: Event) => {
-	// 	console.log("transitionEndCancel", event);
-	// 	modalElement?.removeEventListener("transitionend", transitionEndClose);
-	// };
-
-	// $: {
-	// 	onOpenChange?.(isOpen);
-	// 	console.log("isOpen", isOpen, localState);
-
-	// 	if (isOpen && localState === "close") {
-	// 		localState = "ready";
-	// 		// scrollPadding = window.innerWidth - document.documentElement.clientWidth;
-	// 	}
-	// }
-
-	// $: {
-	// 	if (isOpen && localState === "ready") {
-	// 		modalElement?.addEventListener("mouseup", onBackdropClick);
-
-	// 		if (browser) {
-	// 			document.documentElement.style.setProperty("--scrollbar-padding", `${scrollPadding}px`);
-	// 		}
-
-	// 		setTimeout(() => {
-	// 			modalElement?.showModal();
-
-	// 			localState = "open";
-	// 		});
-	// 	}
-	// }
-
-	// $: {
-	// 	if (isOpen && localState === "open") {
-	// 		console.log("opexxxn");
-	// 		modalElement?.removeEventListener("transitionend", transitionEndClose);
-	// 		modalElement?.removeEventListener("transitioncancel", transitionEndCancel);
-	// 	}
-	// }
-
-	// $: {
-	// 	if (!isOpen && localState === "open") {
-	// 		localState = "closing";
-	// 		// modalElement?.removeEventListener("mouseup", onBackdropClick);
-	// 	}
-	// }
-
-	// $: {
-	// 	if (!isOpen && localState === "closing") {
-	// 		setTimeout(() => {
-	// 			modalElement?.addEventListener("transitionend", transitionEndClose, { once: true });
-	// 			modalElement?.addEventListener("transitioncancel", transitionEndCancel, { once: true });
-	// 		});
-	// 	}
-	// }
-
-	// $: {
-	// 	if (!isOpen && localState === "close") {
-	// 		console.log("close");
-	// 		modalElement?.close();
-	// 	}
-	// }
-
 	const handleCancel: EventHandler<Event, HTMLDialogElement> = (event) => {
 		event.preventDefault();
 
 		handleClose();
 	};
-
-	// const transitionEndClose = () => {
-	// 	console.log("transitionEndClose");
-	// 	localState = "close";
-
-	// 	if (browser) {
-	// 		document.documentElement.style.setProperty("--scrollbar-padding", "0");
-	// 	}
-	// };
-
-	// const transitionEndCancel = (event: Event) => {
-	// 	console.log("transitionEndCancel", event);
-	// 	modalElement?.removeEventListener("transitionend", transitionEndClose);
-	// };
-
-	// $: {
-	// 	console.log("localState", localState);
-
-	// 	onOpenChange?.(isOpen);
-
-	// 	if (isOpen && localState === "close") {
-	// 		localState = "ready";
-
-	// 		if (browser) {
-	// 			scrollPadding = window.innerWidth - document.documentElement.clientWidth;
-	// 		}
-	// 	} else if (isOpen && localState === "ready") {
-	// 		if (browser) {
-	// 			document.documentElement.style.setProperty("--scrollbar-padding", `${scrollPadding}px`);
-	// 		}
-
-	// 		modalElement?.showModal();
-	// 		localState = "open";
-	// 	} else if (localState === "open" && !isOpen) {
-	// 		// idk why
-	// 		setTimeout(() => {
-	// 			localState = "closing";
-	// 		});
-	// 	} else if (!isOpen && localState === "closing") {
-	// 		console.log("closing");
-	// 		modalElement?.addEventListener("transitioncancel", transitionEndCancel, { once: true });
-	// 		modalElement?.addEventListener("transitionend", transitionEndClose, { once: true });
-	// 	}
-	// }
 
 	$: if (isOpen) {
 		modalElement?.showModal();

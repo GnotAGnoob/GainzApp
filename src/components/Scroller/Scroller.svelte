@@ -114,6 +114,7 @@
 		--_background-color: var(--accent-neutral-200);
 		--_button-background-hover: var(--accent-neutral-300);
 		--_side-padding: $space-sm;
+		--_text-secondary-color: var(--text-secondary-2);
 
 		--_background-start: 0%;
 
@@ -148,16 +149,19 @@
 		&_positive {
 			--_button-background-hover: var(--accent-positive-300);
 			--_background-color: var(--accent-positive-200);
+			--_text-secondary-color: var(--accent-positive-700);
 		}
 
 		&_info {
 			--_button-background-hover: var(--accent-info-300);
 			--_background-color: var(--accent-info-200);
+			--_text-secondary-color: var(--accent-info-700);
 		}
 
 		&_background {
 			--_button-background-hover: var(--accent-neutral-100);
 			--_background-color: var(--background-color);
+			--_text-secondary-color: var(--text-secondary-2);
 		}
 
 		&_mediumFade {

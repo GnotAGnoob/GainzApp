@@ -5,6 +5,8 @@
 	import Portal from "../Portal.svelte";
 	import { browser } from "$app/environment";
 	import type { EventHandler } from "svelte/elements";
+	import { fade, scale, slide } from "svelte/transition";
+	import { DEFAULT_TRANSITION_CONFIG } from "$src/lib/transitions";
 
 	export let size: Size = "md";
 	export let isOpen: boolean;
@@ -15,9 +17,8 @@
 	let modalElement: HTMLDialogElement | null = null;
 	let modalContentElement: HTMLDivElement;
 
-	let isOpenLocal = false;
-	let isDialogTransitionReady = false;
-	let scrollPadding = 0;
+	const localState: "open" | "close" | "ready" | "closing" = "close";
+	const scrollPadding = 0;
 
 	const handleClose = () => {
 		if (closeDisabledText) return;
@@ -31,77 +32,157 @@
 	};
 
 	const onBackdropClick = (event: MouseEvent) => {
+		event.preventDefault();
 		if (!modalContentElement.contains(event.target as Node)) {
 			handleClose();
 		}
 	};
 
-	const transitionEndClose = () => {
-		isOpenLocal = false;
+	// const transitionEndClose = () => {
+	// 	console.log("transitionEndClose");
+	// 	localState = "close";
 
-		if (browser) {
-			document.documentElement.style.setProperty("--scrollbar-padding", "0");
-		}
-	};
+	// 	if (browser) {
+	// 		document.documentElement.style.setProperty("--scrollbar-padding", "0");
+	// 	}
+	// };
 
-	const transitionEndCancel = (event: Event) => {
-		event.preventDefault();
-		modalElement?.removeEventListener("transitionend", transitionEndClose);
-	};
+	// const transitionEndCancel = (event: Event) => {
+	// 	console.log("transitionEndCancel", event);
+	// 	modalElement?.removeEventListener("transitionend", transitionEndClose);
+	// };
 
-	$: {
-		onOpenChange?.(isOpen);
+	// $: {
+	// 	onOpenChange?.(isOpen);
+	// 	console.log("isOpen", isOpen, localState);
 
-		if (isOpen && !isOpenLocal) {
-			isOpenLocal = true;
-			scrollPadding = window.innerWidth - document.documentElement.clientWidth;
-		} else if (isOpen && isOpenLocal) {
-			modalElement?.showModal();
+	// 	if (isOpen && localState === "close") {
+	// 		localState = "ready";
+	// 		// scrollPadding = window.innerWidth - document.documentElement.clientWidth;
+	// 	}
+	// }
 
-			modalElement?.removeEventListener("transitionend", transitionEndClose);
-			modalElement?.removeEventListener("transitioncancel", transitionEndCancel);
+	// $: {
+	// 	if (isOpen && localState === "ready") {
+	// 		modalElement?.addEventListener("mouseup", onBackdropClick);
 
-			modalElement?.addEventListener("mouseup", onBackdropClick);
+	// 		if (browser) {
+	// 			document.documentElement.style.setProperty("--scrollbar-padding", `${scrollPadding}px`);
+	// 		}
 
-			if (browser) {
-				document.documentElement.style.setProperty("--scrollbar-padding", `${scrollPadding}px`);
-			}
+	// 		setTimeout(() => {
+	// 			modalElement?.showModal();
 
-			setTimeout(() => {
-				isDialogTransitionReady = true;
-			});
-		} else if (!isOpen && isOpenLocal) {
-			modalElement?.close();
+	// 			localState = "open";
+	// 		});
+	// 	}
+	// }
 
-			modalElement?.removeEventListener("mouseup", onBackdropClick);
+	// $: {
+	// 	if (isOpen && localState === "open") {
+	// 		console.log("opexxxn");
+	// 		modalElement?.removeEventListener("transitionend", transitionEndClose);
+	// 		modalElement?.removeEventListener("transitioncancel", transitionEndCancel);
+	// 	}
+	// }
 
-			setTimeout(() => {
-				modalElement?.addEventListener("transitionend", transitionEndClose, { once: true });
-				modalElement?.addEventListener("transitioncancel", transitionEndCancel, { once: true });
-			});
-		} else {
-			isDialogTransitionReady = false;
-		}
-	}
+	// $: {
+	// 	if (!isOpen && localState === "open") {
+	// 		localState = "closing";
+	// 		// modalElement?.removeEventListener("mouseup", onBackdropClick);
+	// 	}
+	// }
+
+	// $: {
+	// 	if (!isOpen && localState === "closing") {
+	// 		setTimeout(() => {
+	// 			modalElement?.addEventListener("transitionend", transitionEndClose, { once: true });
+	// 			modalElement?.addEventListener("transitioncancel", transitionEndCancel, { once: true });
+	// 		});
+	// 	}
+	// }
+
+	// $: {
+	// 	if (!isOpen && localState === "close") {
+	// 		console.log("close");
+	// 		modalElement?.close();
+	// 	}
+	// }
 
 	const handleCancel: EventHandler<Event, HTMLDialogElement> = (event) => {
 		event.preventDefault();
 
 		handleClose();
 	};
+
+	// const transitionEndClose = () => {
+	// 	console.log("transitionEndClose");
+	// 	localState = "close";
+
+	// 	if (browser) {
+	// 		document.documentElement.style.setProperty("--scrollbar-padding", "0");
+	// 	}
+	// };
+
+	// const transitionEndCancel = (event: Event) => {
+	// 	console.log("transitionEndCancel", event);
+	// 	modalElement?.removeEventListener("transitionend", transitionEndClose);
+	// };
+
+	// $: {
+	// 	console.log("localState", localState);
+
+	// 	onOpenChange?.(isOpen);
+
+	// 	if (isOpen && localState === "close") {
+	// 		localState = "ready";
+
+	// 		if (browser) {
+	// 			scrollPadding = window.innerWidth - document.documentElement.clientWidth;
+	// 		}
+	// 	} else if (isOpen && localState === "ready") {
+	// 		if (browser) {
+	// 			document.documentElement.style.setProperty("--scrollbar-padding", `${scrollPadding}px`);
+	// 		}
+
+	// 		modalElement?.showModal();
+	// 		localState = "open";
+	// 	} else if (localState === "open" && !isOpen) {
+	// 		// idk why
+	// 		setTimeout(() => {
+	// 			localState = "closing";
+	// 		});
+	// 	} else if (!isOpen && localState === "closing") {
+	// 		console.log("closing");
+	// 		modalElement?.addEventListener("transitioncancel", transitionEndCancel, { once: true });
+	// 		modalElement?.addEventListener("transitionend", transitionEndClose, { once: true });
+	// 	}
+	// }
+
+	$: if (isOpen) {
+		modalElement?.showModal();
+		modalElement?.addEventListener("mouseup", onBackdropClick);
+	} else {
+		modalElement?.removeEventListener("mouseup", onBackdropClick);
+	}
 </script>
 
-{#if isOpenLocal || isOpen}
+{#if isOpen}
 	<Portal target="#modal">
 		<dialog
 			class="modal"
 			bind:this={modalElement}
-			class:mounted={isOpen && isOpenLocal && isDialogTransitionReady}
 			on:cancel={handleCancel}
+			transition:fade={DEFAULT_TRANSITION_CONFIG}
 		>
+			<div class="modalBackground" />
 			<div class="modalInsideWrapper">
 				<div class="modalInside modalInside_{size}">
-					<div class="modalContent" bind:this={modalContentElement}>
+					<div
+						class="modalContent"
+						bind:this={modalContentElement}
+						transition:scale={{ ...DEFAULT_TRANSITION_CONFIG, start: 0.8, opacity: 1 }}
+					>
 						<div class="close">
 							<Button
 								on:click={handleClose}
@@ -124,18 +205,20 @@
 {/if}
 
 <style lang="scss">
-	$transition-duration: 0.15s;
-
 	.modal {
 		width: 100%;
 		height: 100%;
 		max-width: unset;
 		max-height: unset;
 		border: none;
-		transition: overlay $transition-duration ease-out allow-discrete,
-			display $transition-duration ease-out allow-discrete;
-
 		background-color: transparent;
+
+		&Background {
+			position: fixed;
+			inset: 0;
+			background-color: var(--accent-neutral-900);
+			opacity: 0.4;
+		}
 
 		&Inside {
 			margin-inline: auto;
@@ -162,16 +245,6 @@
 
 				width: 100%;
 				height: 100%;
-
-				opacity: 0;
-				transform: scale(0.8);
-
-				transition: opacity $transition-duration ease-out, transform $transition-duration ease-out;
-
-				.mounted & {
-					opacity: 1;
-					transform: scale(1);
-				}
 			}
 		}
 
@@ -188,17 +261,7 @@
 		}
 
 		&::backdrop {
-			background-color: var(--accent-neutral-900);
-			opacity: 0;
-
-			transition: display $transition-duration allow-discrete, overlay $transition-duration allow-discrete,
-				opacity $transition-duration;
-		}
-	}
-
-	.mounted {
-		&::backdrop {
-			opacity: 0.4;
+			background-color: transparent;
 		}
 	}
 
@@ -213,14 +276,5 @@
 			line-height: 0;
 			transform: rotate(45deg);
 		}
-	}
-
-	.interactivityDisables {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: 9999;
 	}
 </style>

@@ -31,7 +31,7 @@ export async function POST({ request, locals }) {
 			unitSet.add(exercise.unit);
 		});
 		const categories = [...categoriesSet].map((categoryName) => ({
-			name: categoryName,
+			name: categoryName.toLowerCase(),
 			userId,
 		}));
 
@@ -69,7 +69,7 @@ export async function POST({ request, locals }) {
 			const [unitsReturned, categoriesReturned] = await Promise.all([unitsPromise, categoriesPromise]);
 
 			const insertExercises = exercises.map((exercise) => ({
-				name: exercise.name,
+				name: exercise.name.toLowerCase(),
 				unitId: unitsReturned.find((unit) => unit.name === exercise.unit)?.id as number,
 				categoryId: categoriesReturned.find((category) => category.name === exercise.category)?.id as number,
 				userId,

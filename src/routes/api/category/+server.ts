@@ -17,7 +17,7 @@ export async function POST({ request, locals }) {
 		await db.transaction(async (transaction) => {
 			returnedCategory = await transaction
 				.insert(category)
-				.values({ name: newCategory, userId })
+				.values({ name: newCategory.toLowerCase(), userId })
 				// @ts-ignore
 				.returning({ id: category.id, name: category.name });
 		});

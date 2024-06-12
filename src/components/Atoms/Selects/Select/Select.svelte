@@ -96,7 +96,7 @@
 		{sameWidth}
 		fitViewport
 		transition={slide}
-		transitionConfig={DEFAULT_TRANSITION_CONFIG}
+		transitionConfig={{ ...DEFAULT_TRANSITION_CONFIG, duration: 150 }}
 	>
 		<div class="optionsWrapper">
 			<div class="options">

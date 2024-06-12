@@ -33,7 +33,7 @@
 			</div>
 			{#if isContentClickable}
 				{#if isOpen}
-					<div class="content" transition:slide={DEFAULT_TRANSITION_CONFIG}>
+					<div class="content" transition:slide={{ ...DEFAULT_TRANSITION_CONFIG, duration: 200 }}>
 						<slot name="content" />
 					</div>
 				{/if}
@@ -45,7 +45,7 @@
 
 	{#if !isContentClickable}
 		{#if isOpen}
-			<div class="content" transition:slide={DEFAULT_TRANSITION_CONFIG}>
+			<div class="content" transition:slide={{ ...DEFAULT_TRANSITION_CONFIG, duration: 200 }}>
 				<slot name="content" />
 			</div>
 		{/if}
@@ -55,8 +55,6 @@
 </div>
 
 <style lang="scss">
-	$_transition-timing: 0.15s ease-in-out;
-
 	.wrapper {
 		display: flex;
 

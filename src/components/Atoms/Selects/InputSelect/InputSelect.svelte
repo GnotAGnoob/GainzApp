@@ -34,6 +34,7 @@
 	let portal: string | null = "#modal";
 	let isMounted = false;
 	let checkElement: HTMLElement | null = null;
+	let optionsElement: HTMLElement | null = null;
 	const isOpenInitial = isOpen;
 
 	$: {
@@ -92,11 +93,11 @@
 		{sameWidth}
 		fitViewport
 		transition={slide}
-		transitionConfig={DEFAULT_TRANSITION_CONFIG}
+		transitionConfig={{ ...DEFAULT_TRANSITION_CONFIG, duration: 150 }}
 	>
 		<div class="optionsWrapper">
 			<div class="options">
-				<div class="optionsMain">
+				<div class="optionsMain" bind:this={optionsElement}>
 					<slot />
 				</div>
 				<slot name="bottom" />

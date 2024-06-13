@@ -103,8 +103,6 @@
 
 		&Inside {
 			margin-inline: auto;
-			margin-top: 15vh;
-			margin-bottom: $space-xl;
 			max-width: 100%;
 
 			width: fit-content;
@@ -132,7 +130,7 @@
 		&Content {
 			position: relative;
 
-			margin-inline: min($space-xl, 2.5vw);
+			margin: 15vh min($space-xl, 2.5vw) $space-xl;
 			border-radius: $border-md;
 			padding: $space-md;
 			padding-top: $space-lg;

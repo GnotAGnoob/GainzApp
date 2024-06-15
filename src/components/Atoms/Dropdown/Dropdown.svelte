@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DEFAULT_TRANSITION_CONFIG } from "$src/lib/transitions";
+	import { TRANSITION_CONFIG, TRANSITION_DURATION_FAST } from "$src/lib/transitions";
 	import { DropdownMenu } from "bits-ui";
 	import { slide } from "svelte/transition";
 
@@ -23,7 +23,7 @@
 			{align}
 			{collisionPadding}
 			transition={slide}
-			transitionConfig={DEFAULT_TRANSITION_CONFIG}
+			transitionConfig={{ ...TRANSITION_CONFIG, duration: TRANSITION_DURATION_FAST }}
 		>
 			<div class="container">
 				<div class="contentWrapper">

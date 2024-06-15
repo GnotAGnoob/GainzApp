@@ -5,7 +5,8 @@
 	import Portal from "../Portal.svelte";
 	import type { EventHandler } from "svelte/elements";
 	import { fade, scale } from "svelte/transition";
-	import { DEFAULT_TRANSITION_CONFIG } from "$src/lib/transitions";
+	import { TRANSITION_CONFIG } from "$src/lib/transitions";
+	import { browser } from "$app/environment";
 
 	export let size: Size = "md";
 	export let isOpen: boolean;
@@ -40,29 +41,34 @@
 		handleClose();
 	};
 
-	$: if (isOpen) {
-		modalElement?.showModal();
-		modalElement?.addEventListener("mouseup", onBackdropClick);
+	const scrollPadding = browser && window.innerWidth - document.documentElement.clientWidth;
+
+	$: if (isOpen && modalElement) {
+		modalElement.showModal();
+		modalElement.addEventListener("mouseup", onBackdropClick);
+
+		if (browser) {
+			document.documentElement.style.setProperty("--scrollbar-padding", `${scrollPadding}px`);
+		}
+	} else if (modalElement) {
+		modalElement.removeEventListener("mouseup", onBackdropClick);
 	} else {
-		modalElement?.removeEventListener("mouseup", onBackdropClick);
+		if (browser) {
+			document.documentElement.style.setProperty("--scrollbar-padding", "0px");
+		}
 	}
 </script>
 
 {#if isOpen}
 	<Portal target="#modal">
-		<dialog
-			class="modal"
-			bind:this={modalElement}
-			on:cancel={handleCancel}
-			transition:fade={DEFAULT_TRANSITION_CONFIG}
-		>
+		<dialog class="modal" bind:this={modalElement} on:cancel={handleCancel} transition:fade={TRANSITION_CONFIG}>
 			<div class="modalBackground" />
 			<div class="modalInsideWrapper">
 				<div class="modalInside modalInside_{size}">
 					<div
 						class="modalContent"
 						bind:this={modalContentElement}
-						transition:scale={{ ...DEFAULT_TRANSITION_CONFIG, start: 0.8, opacity: 1 }}
+						transition:scale={{ ...TRANSITION_CONFIG, start: 0.8, opacity: 1 }}
 					>
 						<div class="close">
 							<Button

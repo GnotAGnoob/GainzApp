@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DEFAULT_TRANSITION_CONFIG } from "$src/lib/transitions";
+	import { TRANSITION_CONFIG } from "$src/lib/transitions";
 	import Icon from "@iconify/svelte";
 	import { slide } from "svelte/transition";
 
@@ -33,7 +33,7 @@
 			</div>
 			{#if isContentClickable}
 				{#if isOpen}
-					<div class="content" transition:slide={{ ...DEFAULT_TRANSITION_CONFIG, duration: 200 }}>
+					<div class="content" transition:slide={TRANSITION_CONFIG}>
 						<slot name="content" />
 					</div>
 				{/if}
@@ -45,7 +45,7 @@
 
 	{#if !isContentClickable}
 		{#if isOpen}
-			<div class="content" transition:slide={{ ...DEFAULT_TRANSITION_CONFIG, duration: 200 }}>
+			<div class="content" transition:slide={TRANSITION_CONFIG}>
 				<slot name="content" />
 			</div>
 		{/if}

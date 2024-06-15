@@ -9,16 +9,18 @@
 	export let bestWorkout: PageDisplaySupersetExercise;
 	export let workoutHistory: PageDisplaySupersetExercise[];
 
-	let collapseElement: Collapse;
-
 	let isOpen = false;
 
 	$: lastWorkout = workoutHistory[0];
 	$: isEnoughHistory = workoutHistory.length > 1;
+
+	const handleClick = () => {
+		isOpen = !isOpen;
+	};
 </script>
 
 <div class="exercise" class:isOpen>
-	<Collapse isDisabled={!isEnoughHistory} isContentClickable bind:isOpen bind:this={collapseElement}>
+	<Collapse isDisabled={!isEnoughHistory} isContentClickable bind:isOpen>
 		<div class="title" slot="title">
 			<slot />
 			<div class="workoutsWrapper" class:workoutsWrapper_open={isOpen}>
@@ -29,12 +31,24 @@
 							workout={bestWorkout}
 							type="positive"
 							isBottomBorderless={isEnoughHistory}
+							onClick={handleClick}
 						/>
 					</div>
 				{:else}
 					<div class="workouts">
-						<Workout title={dictionary.BEST} workout={bestWorkout} type="positive" isBottomBorderless />
-						<Workout title={dictionary.LAST} workout={lastWorkout} isBottomBorderless={isEnoughHistory} />
+						<Workout
+							title={dictionary.BEST}
+							workout={bestWorkout}
+							type="positive"
+							isBottomBorderless
+							onClick={handleClick}
+						/>
+						<Workout
+							title={dictionary.LAST}
+							workout={lastWorkout}
+							isBottomBorderless={isEnoughHistory}
+							onClick={handleClick}
+						/>
 					</div>
 				{/if}
 			</div>
@@ -47,7 +61,7 @@
 		</div>
 		<svelte:fragment slot="footer">
 			{#if isEnoughHistory}
-				<button class="historyButton" class:historyButton_open={isOpen} on:click={collapseElement.handleClick}>
+				<button class="historyButton" class:historyButton_open={isOpen} on:click={handleClick}>
 					<div>{dictionary.HISTORY}</div>
 					<div class="icon">
 						<Icon icon="solar:alt-arrow-right-bold" />

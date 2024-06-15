@@ -9,7 +9,7 @@
 	export let arrowSize: "sm" | "md" | "lg" | undefined = undefined;
 	export let arrowPosition: "left" | "right" | undefined = undefined;
 
-	export const handleClick = () => {
+	const handleClick = () => {
 		isOpen = !isOpen;
 	};
 </script>

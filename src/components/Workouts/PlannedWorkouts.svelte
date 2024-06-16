@@ -7,6 +7,9 @@
 	import EditablePlanWorkoutCard from "./WorkoutCard/EditablePlanWorkoutCard.svelte";
 	import PlanWorkoutCard from "./WorkoutCard/PlanWorkoutCard.svelte";
 	import EmptyCard from "../Atoms/EmptyCard.svelte";
+	import { DEFAULT_TRANSITION_CONFIG, getFlyTransitionConfig } from "$src/lib/transitions";
+	import { flip } from "svelte/animate";
+	import { fly } from "svelte/transition";
 
 	export let plannedWorkouts: PagePlannedWorkout[] = [];
 	plannedWorkoutsStore.set(plannedWorkouts);
@@ -26,6 +29,8 @@
 	const onConfirm = () => {
 		isAddNewWorkout = false;
 	};
+
+	const flyConfig = getFlyTransitionConfig();
 </script>
 
 <PlannedWorkoutsTemplate on:click={onAddWorkout} {disableNewWorkoutTitle}>
@@ -40,10 +45,14 @@
 				isScrollToEnd={isAddNewWorkout}
 			>
 				{#each $plannedWorkoutsStore as workout, index (workout.id)}
-					<EditablePlanWorkoutCard title={index + 1} bind:workout />
+					<div class="editable" animate:flip={DEFAULT_TRANSITION_CONFIG} transition:fly={flyConfig}>
+						<EditablePlanWorkoutCard title={index + 1} bind:workout />
+					</div>
 				{/each}
 				{#if isAddNewWorkout}
-					<PlanWorkoutCard title={dictionary.CREATING_NEW_WORKOUT} {onCancel} {onConfirm} />
+					<div class="" transition:fly={flyConfig}>
+						<PlanWorkoutCard title={dictionary.CREATING_NEW_WORKOUT} {onCancel} {onConfirm} />
+					</div>
 				{/if}
 			</Scroller>
 		</div>
@@ -63,5 +72,9 @@
 
 	.empty {
 		margin-top: $space-sm;
+	}
+
+	.editable {
+		flex: 1;
 	}
 </style>

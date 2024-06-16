@@ -39,9 +39,12 @@
 	@import "../workouts.scss";
 
 	.wrapper {
+		--_width: #{$space-xxxl + $space-lg};
 		display: flex;
 
-		width: $space-xxxl + $space-lg;
+		min-width: var(--_width);
+		width: var(--_width);
+		height: 100%;
 
 		justify-content: center;
 		flex-direction: column;
@@ -49,15 +52,15 @@
 		gap: $space-xs;
 
 		@media (min-width: $bp-360) {
-			width: $space-xxxl + $space-xl;
+			--_width: #{$space-xxxl + $space-xl};
 		}
 
 		@media (min-width: $bp-456) {
-			width: $space-xxxl + $space-xxl;
+			--_width: #{$space-xxxl + $space-xxl};
 		}
 
 		@media (min-width: $bp-1200) {
-			width: $space-xxxl + $space-xxxl;
+			--_width: #{$space-xxxl + $space-xxxl};
 		}
 	}
 

@@ -48,8 +48,18 @@
 	};
 
 	const onClick = (index: number) => {
-		activeElement = index;
-		calculateLine(true);
+		// @ts-ignore
+		if (!document.startViewTransition) {
+			activeElement = index;
+			calculateLine(true);
+			return;
+		}
+
+		// @ts-ignore
+		document.startViewTransition(async () => {
+			activeElement = index;
+			calculateLine(true);
+		});
 	};
 
 	onMount(() => {
@@ -64,24 +74,34 @@
 <svelte:window on:resize={onResize} />
 
 <div class="wrapper">
-	<div class="items" bind:this={parentElement}>
-		<slot prop={onClick} />
+	<div class="itemsWrapper">
+		<div class="items" bind:this={parentElement}>
+			<slot prop={onClick} />
+			{#if left !== undefined && right !== undefined}
+				<span class="line" style={`right: ${right}px; left: ${left}px`} />
+			{/if}
+		</div>
 	</div>
-	{#if left !== undefined && right !== undefined}
-		<span class="line" style={`right: ${right}px; left: ${left}px`} />
-	{/if}
+
+	<div class="content">
+		<slot name="content" />
+	</div>
 </div>
 
 <style lang="scss">
-	.wrapper {
-		position: relative;
-	}
 	.items {
 		display: flex;
+		position: relative;
 
 		align-items: center;
 
 		gap: $space-lg;
+
+		&Wrapper {
+			display: flex;
+
+			justify-content: center;
+		}
 	}
 
 	.line {

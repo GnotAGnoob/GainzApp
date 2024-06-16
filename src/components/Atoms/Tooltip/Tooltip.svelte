@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { DEFAULT_TRANSITION_CONFIG } from "$src/lib/transitions";
+	import { TRANSITION_CONFIG, TRANSITION_DURATION_FAST } from "$src/lib/transitions";
 	import { Tooltip } from "bits-ui";
 	import { scale } from "svelte/transition";
 
@@ -24,7 +24,7 @@
 			{side}
 			collisionPadding={16}
 			transition={scale}
-			transitionConfig={DEFAULT_TRANSITION_CONFIG}
+			transitionConfig={{ ...TRANSITION_CONFIG, duration: TRANSITION_DURATION_FAST }}
 		>
 			<div class="content">
 				<slot name="tooltip" />

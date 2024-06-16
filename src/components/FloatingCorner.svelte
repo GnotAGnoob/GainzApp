@@ -58,7 +58,7 @@
 		position: fixed;
 
 		bottom: $space-md;
-		right: $space-md;
+		right: calc($space-md + var(--scrollbar-padding, 0px));
 		justify-content: flex-end;
 
 		z-index: 100;

@@ -5,7 +5,7 @@
 	import Icon from "@iconify/svelte";
 	import { onMount } from "svelte";
 	import { slide } from "svelte/transition";
-	import { DEFAULT_TRANSITION_CONFIG } from "$src/lib/transitions";
+	import { TRANSITION_CONFIG, TRANSITION_DURATION_FAST } from "$src/lib/transitions";
 
 	export let disabled = false;
 	export let isMultiChoice = false;
@@ -96,7 +96,7 @@
 		{sameWidth}
 		fitViewport
 		transition={slide}
-		transitionConfig={{ ...DEFAULT_TRANSITION_CONFIG, duration: 150 }}
+		transitionConfig={{ ...TRANSITION_CONFIG, duration: TRANSITION_DURATION_FAST }}
 	>
 		<div class="optionsWrapper">
 			<div class="options">

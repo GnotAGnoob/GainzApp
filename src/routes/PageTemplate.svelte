@@ -61,7 +61,7 @@
 		gap: $space-lg;
 		margin-top: $space-md;
 
-		view-transition-name: xxx;
+		view-transition-name: workout-page;
 
 		@media (min-width: $bp-900) {
 			gap: $space-lg + $space-md;
@@ -76,11 +76,14 @@
 
 	.content {
 		margin-top: $space-sm + $space-xs;
-		view-transition-name: history;
+	}
 
-		&_planned {
-			view-transition-name: planned;
-		}
+	.planned {
+		view-transition-name: planned;
+	}
+
+	.history {
+		view-transition-name: history;
 	}
 
 	.icon {

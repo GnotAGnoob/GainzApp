@@ -1,5 +1,5 @@
 import { quadOut } from "svelte/easing";
-import type { FlyParams, TransitionConfig } from "svelte/transition";
+import { fly, type FlyParams, type TransitionConfig } from "svelte/transition";
 
 export const TRANSITION_DURATION = 300;
 export const TRANSITION_DURATION_FAST = 150;
@@ -18,3 +18,25 @@ export const getFlyTransitionConfig = (x = 0, y = 50): FlyParams => ({
 	x,
 	y,
 });
+
+export const flyThin = (
+	node: Element,
+	{ delay = 0, duration = TRANSITION_DURATION, easing = quadOut, x = 0, y = 0, opacity = 0 }: FlyParams = {},
+): TransitionConfig => {
+	return {
+		duration,
+		delay,
+		easing,
+
+		css: (t, u) => {
+			const eased = easing(t);
+			const basicFly = fly(node, { duration, easing, x, y, opacity }).css?.(t, u);
+			const width = node.getBoundingClientRect().width;
+			console.log(width);
+			console.log(basicFly);
+
+			return `${basicFly};
+					width: ${width * eased}px;`;
+		},
+	};
+};

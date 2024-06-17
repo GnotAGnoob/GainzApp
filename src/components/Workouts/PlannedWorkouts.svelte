@@ -7,7 +7,7 @@
 	import EditablePlanWorkoutCard from "./WorkoutCard/EditablePlanWorkoutCard.svelte";
 	import PlanWorkoutCard from "./WorkoutCard/PlanWorkoutCard.svelte";
 	import EmptyCard from "../Atoms/EmptyCard.svelte";
-	import { DEFAULT_TRANSITION_CONFIG, getFlyTransitionConfig } from "$src/lib/transitions";
+	import { TRANSITION_CONFIG, getFlyTransitionConfig } from "$src/lib/transitions";
 	import { flip } from "svelte/animate";
 	import { fly } from "svelte/transition";
 
@@ -33,6 +33,15 @@
 	const flyConfig = getFlyTransitionConfig();
 </script>
 
+<!-- option 1 use of events + render outside and inside have the saved empty width:
+on:introstart={() => status = 'intro started'}
+	on:outrostart={() => status = 'outro started'}
+	on:introend={() => status = 'intro ended'}
+	on:outroend={() => status = 'outro ended'}
+
+	option 2 make own transition - might be good for the page transition
+
+-->
 <PlannedWorkoutsTemplate on:click={onAddWorkout} {disableNewWorkoutTitle}>
 	{#if $plannedWorkoutsStore.length || isAddNewWorkout}
 		<div class="scroller">
@@ -45,7 +54,7 @@
 				isScrollToEnd={isAddNewWorkout}
 			>
 				{#each $plannedWorkoutsStore as workout, index (workout.id)}
-					<div class="editable" animate:flip={DEFAULT_TRANSITION_CONFIG} transition:fly={flyConfig}>
+					<div class="editable" animate:flip={TRANSITION_CONFIG} transition:fly={flyConfig}>
 						<EditablePlanWorkoutCard title={index + 1} bind:workout />
 					</div>
 				{/each}

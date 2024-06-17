@@ -5,7 +5,7 @@
 	import Portal from "../Portal.svelte";
 	import type { EventHandler } from "svelte/elements";
 	import { fade, scale } from "svelte/transition";
-	import { TRANSITION_CONFIG } from "$src/lib/transitions";
+	import { TRANSITION_CONFIG, TRANSITION_DURATION_FAST } from "$src/lib/transitions";
 	import { browser } from "$app/environment";
 
 	export let size: Size = "md";
@@ -61,29 +61,41 @@
 
 {#if isOpen}
 	<Portal target="#modal">
-		<dialog class="modal" bind:this={modalElement} on:cancel={handleCancel} transition:fade={TRANSITION_CONFIG}>
+		<dialog
+			class="modal"
+			bind:this={modalElement}
+			on:cancel={handleCancel}
+			transition:fade={{ ...TRANSITION_CONFIG, duration: TRANSITION_DURATION_FAST }}
+		>
 			<div class="modalBackground" />
 			<div class="modalInsideWrapper">
 				<div class="modalInside modalInside_{size}">
-					<div
-						class="modalContent"
-						bind:this={modalContentElement}
-						transition:scale={{ ...TRANSITION_CONFIG, start: 0.8, opacity: 1 }}
-					>
-						<div class="close">
-							<Button
-								on:click={handleClose}
-								padding="sm"
-								type="noBackground"
-								isPaddingSame
-								disabledTitle={closeDisabledText}
-							>
-								<div class="closeIcon">
-									<Icon icon="iconoir:plus" />
-								</div>
-							</Button>
+					<div class="modalMargins">
+						<div
+							class="modalContent"
+							bind:this={modalContentElement}
+							transition:scale={{
+								...TRANSITION_CONFIG,
+								duration: TRANSITION_DURATION_FAST,
+								start: 0.8,
+								opacity: 1,
+							}}
+						>
+							<div class="close">
+								<Button
+									on:click={handleClose}
+									padding="sm"
+									type="noBackground"
+									isPaddingSame
+									disabledTitle={closeDisabledText}
+								>
+									<div class="closeIcon">
+										<Icon icon="iconoir:plus" />
+									</div>
+								</Button>
+							</div>
+							<slot />
 						</div>
-						<slot />
 					</div>
 				</div>
 			</div>
@@ -136,13 +148,16 @@
 		&Content {
 			position: relative;
 
-			margin: 15vh min($space-xl, 2.5vw) $space-xl;
 			border-radius: $border-md;
 			padding: $space-md;
 			padding-top: $space-lg;
 
 			background-color: var(--background-color);
 			box-shadow: $box-shadow;
+		}
+
+		&Margins {
+			padding: 15vh min($space-xl, 2.5vw) $space-xl;
 		}
 
 		&::backdrop {

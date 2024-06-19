@@ -10,6 +10,7 @@
 	import { TRANSITION_CONFIG, getFlyTransitionConfig } from "$src/lib/transitions";
 	import { flip } from "svelte/animate";
 	import { fly } from "svelte/transition";
+	import ThinOutAndFly from "../Transitions/ThinOutAndFly.svelte";
 
 	export let plannedWorkouts: PagePlannedWorkout[] = [];
 	plannedWorkoutsStore.set(plannedWorkouts);
@@ -59,9 +60,12 @@ on:introstart={() => status = 'intro started'}
 					</div>
 				{/each}
 				{#if isAddNewWorkout}
-					<div class="" transition:fly={flyConfig}>
+					<ThinOutAndFly isHorizontal>
 						<PlanWorkoutCard title={dictionary.CREATING_NEW_WORKOUT} {onCancel} {onConfirm} />
-					</div>
+					</ThinOutAndFly>
+					<!-- <div class="" transition:fly={flyConfig}>
+						<PlanWorkoutCard title={dictionary.CREATING_NEW_WORKOUT} {onCancel} {onConfirm} />
+					</div> -->
 				{/if}
 			</Scroller>
 		</div>

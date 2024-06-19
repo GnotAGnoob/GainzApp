@@ -31,7 +31,7 @@
 							workout={bestWorkout}
 							type="positive"
 							isBottomBorderless={isEnoughHistory}
-							onClick={handleClick}
+							onClick={isEnoughHistory ? handleClick : undefined}
 						/>
 					</div>
 				{:else}

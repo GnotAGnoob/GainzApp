@@ -10,8 +10,6 @@
 	export let type: StylesType = "info";
 	export let isBottomBorderless = false;
 	export let onClick: (() => void) | undefined = undefined;
-
-	const isButton = !!onClick;
 </script>
 
 <div class="workout workout_{type}" class:workout_bottomBorderNone={isBottomBorderless}>
@@ -23,16 +21,8 @@
 	</h5>
 	{#if workout}
 		<div class="scroller">
-			<Scroller {type} arrowsPosition="top">
-				{#if isButton}
-					<button on:click={onClick} type="button">
-						<DisplaySets {type} sets={workout.sets} />
-					</button>
-				{:else}
-					<div>
-						<DisplaySets {type} sets={workout.sets} />
-					</div>
-				{/if}
+			<Scroller {type} arrowsPosition="top" {onClick}>
+				<DisplaySets {type} sets={workout.sets} />
 			</Scroller>
 		</div>
 	{/if}

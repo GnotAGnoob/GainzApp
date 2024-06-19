@@ -13,6 +13,7 @@
 	export let arrowsPosition: "top" | "full" | undefined = undefined;
 	export let bottomPadding: "small" | "medium" | "large" = "small";
 	export let isScrollToEnd = false;
+	export let onClick: (() => void) | undefined = undefined;
 
 	let scrollElement: HTMLElement | null = null;
 	let isOverflowingLeft = false;
@@ -99,13 +100,25 @@
 		on:scroll={setOverflowing}
 		class:contentWrapper_reverse={isScrollReverse}
 	>
-		<svelte:element
-			this={wrapperTag}
-			class="contentContainer contentContainer_{bottomPadding}"
-			class:contentContainer_reverse={isScrollReverse}
-		>
-			<slot />
-		</svelte:element>
+		{#if onClick}
+			<button class="elementButton" on:click={onClick} type="button">
+				<svelte:element
+					this={wrapperTag}
+					class="contentContainer contentContainer_{bottomPadding}"
+					class:contentContainer_reverse={isScrollReverse}
+				>
+					<slot />
+				</svelte:element>
+			</button>
+		{:else}
+			<svelte:element
+				this={wrapperTag}
+				class="contentContainer contentContainer_{bottomPadding}"
+				class:contentContainer_reverse={isScrollReverse}
+			>
+				<slot />
+			</svelte:element>
+		{/if}
 	</div>
 </div>
 
@@ -184,7 +197,6 @@
 
 			display: flex;
 
-			width: max-content;
 			margin: auto;
 			padding-inline: var(--_side-padding);
 			gap: $space-md;
@@ -258,5 +270,9 @@
 			background-color: transparent;
 			--_button-background-hover: var(--accent-neutral-200);
 		}
+	}
+
+	.elementButton {
+		width: 100%;
 	}
 </style>

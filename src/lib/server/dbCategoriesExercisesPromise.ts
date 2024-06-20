@@ -25,7 +25,7 @@ export const bestSupersetExercises = (userId: string, database: Database = db) =
 		.select({
 			id: supersetExercise.id,
 			totalWeight: sql<number>`
-				SUM(POWER("setWeight".repetition, ${REPETITION_EMPHASIS}) * "setWeight".weight) AS "totalWeight"`,
+				SUM(POWER("setWeight".repetition, ${REPETITION_EMPHASIS}) * ("setWeight".weight + 1)) AS "totalWeight"`,
 		})
 		.from(supersetExercise)
 		.innerJoin(setWeight, eq(setWeight.supersetExerciseId, supersetExercise.id))

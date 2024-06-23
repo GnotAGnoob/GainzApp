@@ -7,6 +7,10 @@
 	import EditablePlanWorkoutCard from "./WorkoutCard/EditablePlanWorkoutCard.svelte";
 	import PlanWorkoutCard from "./WorkoutCard/PlanWorkoutCard.svelte";
 	import EmptyCard from "../Atoms/EmptyCard.svelte";
+	import { TRANSITION_CONFIG, getFlyTransitionConfig } from "$src/lib/transitions";
+	import { flip } from "svelte/animate";
+	import { fly } from "svelte/transition";
+	import ThinOutAndFly from "../Transitions/ThinOutAndFly.svelte";
 
 	export let plannedWorkouts: PagePlannedWorkout[] = [];
 	plannedWorkoutsStore.set(plannedWorkouts);
@@ -26,8 +30,19 @@
 	const onConfirm = () => {
 		isAddNewWorkout = false;
 	};
+
+	const flyConfig = getFlyTransitionConfig();
 </script>
 
+<!-- option 1 use of events + render outside and inside have the saved empty width:
+on:introstart={() => status = 'intro started'}
+	on:outrostart={() => status = 'outro started'}
+	on:introend={() => status = 'intro ended'}
+	on:outroend={() => status = 'outro ended'}
+
+	option 2 make own transition - might be good for the page transition
+
+-->
 <PlannedWorkoutsTemplate on:click={onAddWorkout} {disableNewWorkoutTitle}>
 	{#if $plannedWorkoutsStore.length || isAddNewWorkout}
 		<div class="scroller">
@@ -40,10 +55,17 @@
 				isScrollToEnd={isAddNewWorkout}
 			>
 				{#each $plannedWorkoutsStore as workout, index (workout.id)}
-					<EditablePlanWorkoutCard title={index + 1} bind:workout />
+					<div class="editable" animate:flip={TRANSITION_CONFIG} transition:fly={flyConfig}>
+						<EditablePlanWorkoutCard title={index + 1} bind:workout />
+					</div>
 				{/each}
 				{#if isAddNewWorkout}
-					<PlanWorkoutCard title={dictionary.CREATING_NEW_WORKOUT} {onCancel} {onConfirm} />
+					<ThinOutAndFly isHorizontal>
+						<PlanWorkoutCard title={dictionary.CREATING_NEW_WORKOUT} {onCancel} {onConfirm} />
+					</ThinOutAndFly>
+					<!-- <div class="" transition:fly={flyConfig}>
+						<PlanWorkoutCard title={dictionary.CREATING_NEW_WORKOUT} {onCancel} {onConfirm} />
+					</div> -->
 				{/if}
 			</Scroller>
 		</div>
@@ -63,5 +85,9 @@
 
 	.empty {
 		margin-top: $space-sm;
+	}
+
+	.editable {
+		flex: 1;
 	}
 </style>

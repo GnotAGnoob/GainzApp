@@ -52,6 +52,8 @@
 		display: flex;
 
 		width: 100%;
+		// added beacause transition view was jumping
+		height: $space-lg + $space-md + $space-xs;
 		border-bottom: $header-border-height solid var(--accent-neutral-200);
 
 		flex-direction: column;

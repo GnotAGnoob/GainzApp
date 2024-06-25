@@ -10,7 +10,7 @@ export const apiRoutes = {
 	exercises: "/api/exercises/",
 	category: "/api/category/",
 	exercisesSearch: "/api/exercises/search/",
-	exercisesWorkoutHistory: "/api/exercises/workoutHistory/",
+	exercisesWorkoutHistory: "/api/exercises/workout-history/",
 	planWorkout: "/api/workout/plan/",
 	completeWorkout: "/api/workout/complete/",
 };

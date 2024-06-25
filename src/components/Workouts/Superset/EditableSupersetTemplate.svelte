@@ -13,6 +13,7 @@
 	export let onDeleteSuperset: () => void;
 	export let disabledDeleteText: string | undefined = undefined;
 	export let isOnMountOpen = false;
+	export let isScrollToView = false;
 	export let onSelectExercise: (
 		exercise: Partial<PageCreateSupersetExercise>,
 	) => Partial<PageCreateSupersetExercise> | null;
@@ -53,9 +54,13 @@
 		newSupersetExercise = null;
 	};
 
-	$: {
-		buttonElement?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-	}
+	const scrollToView = () => {
+		if (isScrollToView) {
+			buttonElement?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+		}
+	};
+
+	$: newSupersetExercise, buttonElement, scrollToView();
 </script>
 
 <div class="superset">

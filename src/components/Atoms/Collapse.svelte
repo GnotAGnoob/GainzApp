@@ -59,6 +59,8 @@
 		display: flex;
 
 		flex-direction: column;
+
+		flex: 1;
 	}
 
 	.button {
@@ -75,11 +77,15 @@
 
 		&Wrapper {
 			position: relative;
+
+			height: 100%;
 		}
 	}
 
 	.title {
 		display: flex;
+
+		height: 100%;
 
 		align-items: center;
 		gap: $space-xs;

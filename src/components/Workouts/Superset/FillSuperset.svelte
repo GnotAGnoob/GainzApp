@@ -26,8 +26,10 @@
 			supersetExercises = [
 				...supersetExercises,
 				{
+					animationId: Math.random().toString(),
 					exercise: {
 						...supersetExercise.exercise,
+						animationId: Math.random().toString(),
 						bestWorkout: additionalInfo?.bestWorkout,
 						workoutHistory: additionalInfo?.workoutHistory,
 					},
@@ -53,9 +55,14 @@
 	{isScrollToView}
 >
 	<div class="container" class:containerCenter={supersetExercises.length < 2}>
-		{#each supersetExercises as supersetExercise, index (supersetExercise)}
+		{#each supersetExercises as supersetExercise, index (supersetExercise.animationId)}
 			<div class="exercise" animate:flip={TRANSITION_CONFIG} transition:fade={TRANSITION_CONFIG}>
-				<FillExercise bind:supersetExercise onDelete={() => onDelete(index)} {isLoading} {isFetching} />
+				<FillExercise
+					bind:supersetExercise
+					onDelete={() => onDelete(index)}
+					{isLoading}
+					isFetching={isFetching && !supersetExercise.exercise.workoutHistory}
+				/>
 			</div>
 		{/each}
 	</div>

@@ -60,7 +60,7 @@
 		}
 	};
 
-	$: newSupersetExercise, buttonElement, scrollToView();
+	$: buttonElement, scrollToView();
 </script>
 
 <div class="superset">

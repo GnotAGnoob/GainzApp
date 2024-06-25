@@ -58,7 +58,6 @@
 	};
 
 	export const fetchAdditionalData = async () => {
-		// todo fix
 		if (isFetching) return;
 
 		const exerciseIds = new Set<number>();
@@ -122,7 +121,7 @@
 	disableConfirmButtonText={isSomeSetEmpty ? dictionary.YOU_HAVE_HAVE_TO_FILL_ATLEAST_ONE_SET : undefined}
 	{isLoading}
 >
-	{#each workout?.supersets || [] as superset, index (superset)}
+	{#each workout?.supersets || [] as superset, index (superset.animationId)}
 		<!-- todo in transition slide -->
 		<div animate:flip={TRANSITION_CONFIG} out:fade={TRANSITION_CONFIG}>
 			<FillSuperset

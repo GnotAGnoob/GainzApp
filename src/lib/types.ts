@@ -15,3 +15,7 @@ type InputEventTemplate<E, T extends EventTarget> = E & {
 export type KeyboardEventType<T extends EventTarget> = InputEventTemplate<KeyboardEvent, T>;
 export type ClipboardEventType<T extends EventTarget> = InputEventTemplate<ClipboardEvent, T>;
 export type InputEventType<T extends EventTarget> = InputEventTemplate<InputEvent, T>;
+
+export interface AnimationId {
+	animationId: number | string;
+}

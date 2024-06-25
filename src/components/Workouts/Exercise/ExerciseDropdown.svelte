@@ -10,6 +10,7 @@
 	import { InputSelect, InputSelectItem } from "$src/components/Atoms/Selects/InputSelect";
 	import type { SelectType } from "$src/components/Atoms/Selects/types";
 	import { onMount } from "svelte";
+	import type { OnMountBehaviour } from "$src/components/Atoms/types";
 
 	const formatExercise = (supersetExercise: Partial<PageCreateSupersetExercise>) => {
 		const categoryName = supersetExercise.exercise?.category?.name;
@@ -21,6 +22,7 @@
 	export let onCancel: () => void;
 	export let onSelect: ((supersetExercise: PageCreateSupersetExercise) => void) | undefined = undefined;
 	export let isOpen = false;
+	export let onMountBehaviour: OnMountBehaviour = "none";
 
 	let value = formatExercise(supersetExercise);
 	let dropdownItems: PageCreateSupersetExercise[] = [];
@@ -80,7 +82,7 @@
 		bind:inputValue={value}
 		onSelectedChange={handleSelect}
 		{onOpenChange}
-		onMountBehaviour="select"
+		{onMountBehaviour}
 		maxTextLength={MAX_DROPDOWN_SEARCH_LENGTH}
 		{isOpen}
 	>

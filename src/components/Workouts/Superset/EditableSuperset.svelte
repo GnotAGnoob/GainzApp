@@ -25,10 +25,7 @@
 					exercise: supersetExercise.exercise,
 				},
 			];
-			return null;
 		}
-
-		return supersetExercise;
 	};
 </script>
 

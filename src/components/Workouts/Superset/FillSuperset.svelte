@@ -1,6 +1,6 @@
 <script lang="ts">
 	import FillExercise from "../Exercise/FillExercise.svelte";
-	import type { PageFillSupersetExercise } from "$src/routes/types";
+	import type { PageFillSupersetExercise, PageCreateSupersetExercise } from "$src/routes/types";
 	import EditableSupersetTemplate from "./EditableSupersetTemplate.svelte";
 	import { exerciseAdditionalInfo } from "$src/lib/stores/exerciseAddionalInfo";
 	import { TRANSITION_CONFIG, TRANSITION_DURATION_FAST } from "$src/lib/transitions";
@@ -20,7 +20,7 @@
 		supersetExercises = supersetExercises.filter((_, i) => i !== index);
 	};
 
-	const handleSelectExercise = (supersetExercise: Partial<PageFillSupersetExercise>) => {
+	const handleSelectExercise = (supersetExercise: Partial<PageCreateSupersetExercise>) => {
 		if (supersetExercise?.exercise?.category && supersetExercise?.exercise) {
 			const additionalInfo = $exerciseAdditionalInfo.get(supersetExercise.exercise.id);
 			supersetExercises = [
@@ -33,14 +33,10 @@
 						bestWorkout: additionalInfo?.bestWorkout,
 						workoutHistory: additionalInfo?.workoutHistory,
 					},
-					sets: supersetExercise.sets || [],
+					sets: [],
 				},
 			];
-
-			return null;
 		}
-
-		return supersetExercise;
 	};
 
 	const animationConfig = { ...TRANSITION_CONFIG, duration: TRANSITION_DURATION_FAST };

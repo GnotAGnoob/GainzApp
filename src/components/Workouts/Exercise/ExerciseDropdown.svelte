@@ -22,7 +22,7 @@
 	export let onCancel: () => void;
 	export let onSelect: ((supersetExercise: PageCreateSupersetExercise) => void) | undefined = undefined;
 	export let isOpen = false;
-	export let onMountBehaviour: OnMountBehaviour = "none";
+	export let onMountBehaviour: OnMountBehaviour = "select";
 
 	let value = formatExercise(supersetExercise);
 	let dropdownItems: PageCreateSupersetExercise[] = [];

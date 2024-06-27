@@ -21,7 +21,8 @@ interface PageSupersetExerciseTemplate<T = object> {
 		};
 }
 
-export type PageFillSupersetExercise = PageSupersetExerciseTemplate<PageSupersetExerciseInfo> & AnimationId;
+export type PageFillSupersetExercise = PageSupersetExerciseTemplate<PageSupersetExerciseInfo & AnimationId> &
+	AnimationId;
 
 export type PageCreateSupersetExercise = Pick<PageSupersetExerciseTemplate, "exercise">;
 

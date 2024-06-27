@@ -9,8 +9,7 @@
 	export let onDelete: () => void;
 	export let disabledText: string | undefined = undefined;
 	export let onSelect: ((supersetExercise: PageCreateSupersetExercise) => void) | undefined = undefined;
-	$: isCategoryEmpty = !supersetExercise.exercise.category.name.length;
-	let isInEditMode = isCategoryEmpty;
+	let isInEditMode = !supersetExercise.exercise.category.name.length;
 
 	$: if (disabledText) {
 		isInEditMode = false;

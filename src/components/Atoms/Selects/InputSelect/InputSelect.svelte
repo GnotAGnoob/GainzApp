@@ -36,7 +36,10 @@
 	let checkElement: HTMLElement | null = null;
 	const isOpenInitial = isOpen || onMountBehaviour !== "none";
 
-	isOpen = false;
+	// svelte otherwise complains in components that use this component
+	$: {
+		isOpen = false;
+	}
 
 	onMount(() => {
 		isMounted = true;

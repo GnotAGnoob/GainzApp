@@ -14,9 +14,7 @@
 	export let disabledDeleteText: string | undefined = undefined;
 	export let isOnMountOpen = false;
 	export let isScrollToView = false;
-	export let onSelectExercise: (
-		exercise: Partial<PageCreateSupersetExercise>,
-	) => Partial<PageCreateSupersetExercise> | null;
+	export let onSelectExercise: (exercise: Partial<PageCreateSupersetExercise>) => void;
 
 	let newSupersetExercise: Partial<PageCreateSupersetExercise> | null = isOnMountOpen ? {} : null;
 	let buttonElement: HTMLElement | null = null;
@@ -45,7 +43,8 @@
 	const handleSelectExercise = (supersetExercise: PageCreateSupersetExercise) => {
 		if (isLoading || !newSupersetExercise) return;
 
-		newSupersetExercise = onSelectExercise(supersetExercise);
+		onSelectExercise(supersetExercise);
+		newSupersetExercise = null;
 	};
 
 	const handleCancelNewExercise = () => {
@@ -60,7 +59,7 @@
 		}
 	};
 
-	$: newSupersetExercise, buttonElement, scrollToView();
+	$: buttonElement, scrollToView();
 </script>
 
 <div class="superset">
@@ -86,7 +85,7 @@
 					bind:supersetExercise={newSupersetExercise}
 					onCancel={handleCancelNewExercise}
 					onSelect={handleSelectExercise}
-					isOpen
+					onMountBehaviour="select"
 				/>
 			</div>
 		{:else}

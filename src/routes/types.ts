@@ -2,6 +2,7 @@ import type { Category } from "$src/db/schema/category";
 import type { Exercise } from "$src/db/schema/exercise";
 import type { InsertSetWeight } from "$src/db/schema/setWeight";
 import type { Unit } from "$src/db/schema/unit";
+import type { AnimationId } from "$src/lib/types";
 import type { PageDisplaySupersetExercise, PageSupersetExerciseInfo } from "./exercises/types";
 
 export interface PageSetWeight {
@@ -20,7 +21,7 @@ interface PageSupersetExerciseTemplate<T = object> {
 		};
 }
 
-export type PageFillSupersetExercise = PageSupersetExerciseTemplate<PageSupersetExerciseInfo>;
+export type PageFillSupersetExercise = PageSupersetExerciseTemplate<PageSupersetExerciseInfo> & AnimationId;
 
 export type PageCreateSupersetExercise = Pick<PageSupersetExerciseTemplate, "exercise">;
 
@@ -36,7 +37,7 @@ export interface PageSupersetGeneric<T> {
 
 export type PageCreateSuperset = Omit<PageSupersetGeneric<PageCreateSupersetExercise>, "id">;
 
-export type PageFillSuperset = PageSupersetGeneric<PageFillSupersetExercise>;
+export type PageFillSuperset = PageSupersetGeneric<PageFillSupersetExercise> & AnimationId;
 
 export type PagePlannedSuperset = Required<PageSupersetGeneric<PagePlannedSupersetExercise>>;
 

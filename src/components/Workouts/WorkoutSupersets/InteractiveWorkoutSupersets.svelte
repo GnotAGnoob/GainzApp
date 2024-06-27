@@ -4,7 +4,7 @@
 	import EditableSuperset from "../Superset/EditableSuperset.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
 	import { fade } from "svelte/transition";
-	import { TRANSITION_CONFIG } from "$src/lib/transitions";
+	import { TRANSITION_CONFIG, TRANSITION_DURATION_FAST } from "$src/lib/transitions";
 	import { flip } from "svelte/animate";
 	import { onMount } from "svelte";
 
@@ -38,12 +38,14 @@
 	onMount(() => {
 		isScrollToView = true;
 	});
+
+	const animationConfig = { ...TRANSITION_CONFIG, duration: TRANSITION_DURATION_FAST };
 </script>
 
 <WorkoutSupersetsTemplate bind:workout {onConfirm} {onCancel} {errorMessage} isSameAllowed={false}>
 	{#each workout?.supersets || [] as superset, index (superset)}
 		<!-- todo in transition slide -->
-		<div animate:flip={TRANSITION_CONFIG} out:fade={TRANSITION_CONFIG}>
+		<div animate:flip={animationConfig} out:fade={animationConfig}>
 			<EditableSuperset
 				bind:supersetExercises={superset.supersetExercises}
 				order={index + 1}

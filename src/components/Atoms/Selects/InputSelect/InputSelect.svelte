@@ -26,7 +26,6 @@
 	export let onOpenChange: ((isOpen: boolean) => void) | undefined = undefined;
 	export let onInputFocus: (() => void) | undefined = undefined;
 	export let onInputBlur: (() => void) | undefined = undefined;
-	export let isOpen = onMountBehaviour !== "none";
 	export let inputValue: string | undefined = undefined;
 	export let touchedInput = false;
 	export let label: string | undefined = undefined;
@@ -34,13 +33,11 @@
 	let portal: string | null = "#modal";
 	let isMounted = false;
 	let checkElement: HTMLElement | null = null;
-	const isOpenInitial = isOpen;
-
-	isOpen = false;
+	let isOpen = false;
 
 	onMount(() => {
 		isMounted = true;
-		isOpen = isOpenInitial;
+		isOpen = onMountBehaviour !== "none";
 		const modalElement = checkElement?.closest("#modal");
 
 		if (modalElement) {

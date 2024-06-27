@@ -17,6 +17,11 @@
 	const handleSelect = (newSupersetExercise: PageCreateSupersetExercise) => {
 		supersetExercise = {
 			...newSupersetExercise,
+			exercise: {
+				...supersetExercise.exercise,
+				...newSupersetExercise.exercise,
+			},
+			animationId: supersetExercise.animationId,
 			sets: supersetExercise.sets,
 		};
 	};

@@ -39,7 +39,6 @@
 			bind:supersetExercise
 			onCancel={turnEditModeOff}
 			onSelect={handleSelectExercise}
-			isOpen
 			onMountBehaviour="select"
 		/>
 	</div>

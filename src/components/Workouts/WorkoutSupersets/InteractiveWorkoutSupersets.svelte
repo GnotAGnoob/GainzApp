@@ -3,6 +3,10 @@
 	import WorkoutSupersetsTemplate from "./WorkoutSupersetsTemplate.svelte";
 	import EditableSuperset from "../Superset/EditableSuperset.svelte";
 	import { dictionary } from "$src/lib/language/dictionary";
+	import { fade } from "svelte/transition";
+	import { TRANSITION_CONFIG } from "$src/lib/transitions";
+	import { flip } from "svelte/animate";
+	import { onMount } from "svelte";
 
 	export let workout: PageCreateWorkout;
 	export let onCancel: () => void;
@@ -10,6 +14,7 @@
 	export let errorMessage: string | undefined = undefined;
 
 	let supersetLength = workout.supersets.length;
+	let isScrollToView = false;
 
 	let isLastOpenEdit = false;
 	$: {
@@ -29,18 +34,26 @@
 
 		workout.supersets = workout.supersets.filter((_, i) => i !== index);
 	};
+
+	onMount(() => {
+		isScrollToView = true;
+	});
 </script>
 
 <WorkoutSupersetsTemplate bind:workout {onConfirm} {onCancel} {errorMessage} isSameAllowed={false}>
-	{#each workout?.supersets || [] as superset, index}
-		<EditableSuperset
-			bind:supersetExercises={superset.supersetExercises}
-			order={index + 1}
-			onDeleteSuperset={() => onDeleteSuperset(index)}
-			disabledDeleteText={workout.supersets.length <= 1
-				? dictionary.YOU_HAVE_TO_HAVE_ATLEAST_ONE_SUPERSET
-				: undefined}
-			isOnMountOpenEdit={index === workout.supersets.length - 1 && isLastOpenEdit}
-		/>
+	{#each workout?.supersets || [] as superset, index (superset)}
+		<!-- todo in transition slide -->
+		<div animate:flip={TRANSITION_CONFIG} out:fade={TRANSITION_CONFIG}>
+			<EditableSuperset
+				bind:supersetExercises={superset.supersetExercises}
+				order={index + 1}
+				onDeleteSuperset={() => onDeleteSuperset(index)}
+				disabledDeleteText={workout.supersets.length <= 1
+					? dictionary.YOU_HAVE_TO_HAVE_ATLEAST_ONE_SUPERSET
+					: undefined}
+				isOnMountOpenEdit={index === workout.supersets.length - 1 && isLastOpenEdit}
+				{isScrollToView}
+			/>
+		</div>
 	{/each}
 </WorkoutSupersetsTemplate>

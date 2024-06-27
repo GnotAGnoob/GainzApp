@@ -7,6 +7,10 @@
 	import { apiRoutes } from "$src/lib/paths";
 	import { exerciseAdditionalInfo } from "$src/lib/stores/exerciseAddionalInfo";
 	import { remapWorkout } from "$src/lib/remaps";
+	import { TRANSITION_CONFIG } from "$src/lib/transitions";
+	import { fade } from "svelte/transition";
+	import { flip } from "svelte/animate";
+	import { onMount } from "svelte";
 
 	export let workout: PageFillWorkout;
 	export let overrideOnCancel: (() => void) | undefined = undefined;
@@ -15,6 +19,7 @@
 	export let isLoading = false;
 
 	let isFetching = false;
+	let isScrollToView = false;
 	let workoutCopy = structuredClone(workout);
 
 	$: isSomeSetEmpty = workout.supersets.some((superset) =>
@@ -53,6 +58,7 @@
 	};
 
 	export const fetchAdditionalData = async () => {
+		// todo fix
 		if (isFetching) return;
 
 		const exerciseIds = new Set<number>();
@@ -102,6 +108,10 @@
 		fetchAdditionalData();
 		workoutCopy = remapWorkout(workoutCopy, $exerciseAdditionalInfo);
 	}
+
+	onMount(() => {
+		isScrollToView = true;
+	});
 </script>
 
 <WorkoutSupersetsTemplate
@@ -112,17 +122,21 @@
 	disableConfirmButtonText={isSomeSetEmpty ? dictionary.YOU_HAVE_HAVE_TO_FILL_ATLEAST_ONE_SET : undefined}
 	{isLoading}
 >
-	{#each workout?.supersets || [] as superset, index}
-		<FillSuperset
-			bind:supersetExercises={superset.supersetExercises}
-			order={index + 1}
-			{isLoading}
-			{isFetching}
-			onDeleteSuperset={() => onDeleteSuperset(index)}
-			disabledDeleteText={workout.supersets.length <= 1
-				? dictionary.YOU_HAVE_TO_HAVE_ATLEAST_ONE_SUPERSET
-				: undefined}
-			isOnMountOpenEdit={index === workout.supersets.length - 1 && isLastOpenEdit}
-		/>
+	{#each workout?.supersets || [] as superset, index (superset)}
+		<!-- todo in transition slide -->
+		<div animate:flip={TRANSITION_CONFIG} out:fade={TRANSITION_CONFIG}>
+			<FillSuperset
+				bind:supersetExercises={superset.supersetExercises}
+				order={index + 1}
+				{isLoading}
+				{isFetching}
+				onDeleteSuperset={() => onDeleteSuperset(index)}
+				disabledDeleteText={workout.supersets.length <= 1
+					? dictionary.YOU_HAVE_TO_HAVE_ATLEAST_ONE_SUPERSET
+					: undefined}
+				isOnMountOpenEdit={index === workout.supersets.length - 1 && isLastOpenEdit}
+				{isScrollToView}
+			/>
+		</div>
 	{/each}
 </WorkoutSupersetsTemplate>

@@ -42,6 +42,7 @@
 		display: flex;
 
 		width: $space-xxxl + $space-lg;
+		height: 100%;
 
 		justify-content: center;
 		flex-direction: column;

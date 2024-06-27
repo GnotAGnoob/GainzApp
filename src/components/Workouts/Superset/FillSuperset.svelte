@@ -3,6 +3,9 @@
 	import type { PageFillSupersetExercise } from "$src/routes/types";
 	import EditableSupersetTemplate from "./EditableSupersetTemplate.svelte";
 	import { exerciseAdditionalInfo } from "$src/lib/stores/exerciseAddionalInfo";
+	import { TRANSITION_CONFIG } from "$src/lib/transitions";
+	import { fade } from "svelte/transition";
+	import { flip } from "svelte/animate";
 
 	export let supersetExercises: PageFillSupersetExercise[] = [];
 	export let order: number;
@@ -11,6 +14,7 @@
 	export let onDeleteSuperset: () => void;
 	export let disabledDeleteText: string | undefined = undefined;
 	export let isOnMountOpenEdit = false;
+	export let isScrollToView = false;
 
 	const onDelete = (index: number) => {
 		supersetExercises = supersetExercises.filter((_, i) => i !== index);
@@ -46,10 +50,13 @@
 	{onDeleteSuperset}
 	{disabledDeleteText}
 	isOnMountOpen={isOnMountOpenEdit}
+	{isScrollToView}
 >
 	<div class="container" class:containerCenter={supersetExercises.length < 2}>
-		{#each supersetExercises as supersetExercise, index}
-			<FillExercise bind:supersetExercise onDelete={() => onDelete(index)} {isLoading} {isFetching} />
+		{#each supersetExercises as supersetExercise, index (supersetExercise)}
+			<div class="exercise" animate:flip={TRANSITION_CONFIG} transition:fade={TRANSITION_CONFIG}>
+				<FillExercise bind:supersetExercise onDelete={() => onDelete(index)} {isLoading} {isFetching} />
+			</div>
 		{/each}
 	</div>
 </EditableSupersetTemplate>
@@ -62,7 +69,7 @@
 
 		flex-direction: row;
 		flex-wrap: wrap;
-		align-items: flex-start;
+		align-items: stretch;
 
 		justify-content: center;
 
@@ -72,5 +79,12 @@
 		&Center {
 			justify-content: center;
 		}
+	}
+
+	.exercise {
+		display: flex;
+
+		flex: 1;
+		justify-content: center;
 	}
 </style>

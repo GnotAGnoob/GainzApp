@@ -9,6 +9,7 @@
 	import type { ExerciseSearchResult } from "$src/routes/api/exercises/search/types";
 	import { InputSelect, InputSelectItem } from "$src/components/Atoms/Selects/InputSelect";
 	import type { SelectType } from "$src/components/Atoms/Selects/types";
+	import { onMount } from "svelte";
 
 	const formatExercise = (supersetExercise: Partial<PageCreateSupersetExercise>) => {
 		const categoryName = supersetExercise.exercise?.category?.name;
@@ -19,15 +20,14 @@
 	export let supersetExercise: Partial<PageCreateSupersetExercise>;
 	export let onCancel: () => void;
 	export let onSelect: ((supersetExercise: PageCreateSupersetExercise) => void) | undefined = undefined;
+	export let isOpen = false;
 
 	let value = formatExercise(supersetExercise);
 	let dropdownItems: PageCreateSupersetExercise[] = [];
 
-	let isOpen = true;
-
-	$: if (isOpen) {
+	onMount(() => {
 		fetchDropdownData();
-	}
+	});
 
 	const fetchDropdownData = async () => {
 		try {
@@ -65,6 +65,8 @@
 			value = formatExercise(supersetExercise);
 			onCancel();
 			return;
+		} else {
+			fetchDropdownData();
 		}
 	};
 
@@ -80,7 +82,7 @@
 		{onOpenChange}
 		onMountBehaviour="select"
 		maxTextLength={MAX_DROPDOWN_SEARCH_LENGTH}
-		bind:isOpen
+		{isOpen}
 	>
 		{#each dropdownItems as item (item.exercise.id)}
 			<InputSelectItem value={item}>{formatExercise(item)}</InputSelectItem>

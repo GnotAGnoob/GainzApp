@@ -6,7 +6,7 @@
 	export let disableNewWorkoutTitle: string | false | null | undefined = undefined;
 </script>
 
-<section class="wrapper">
+<div class="wrapper">
 	<slot />
 	<div class="button">
 		<Button fontSize="md" type="info" paddingSide="xl" on:click disabledTitle={disableNewWorkoutTitle}>
@@ -14,7 +14,7 @@
 			<span>{dictionary.PLAN_NEW_WORKOUTS}</span>
 		</Button>
 	</div>
-</section>
+</div>
 
 <style lang="scss">
 	.wrapper {

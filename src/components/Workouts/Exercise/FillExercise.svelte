@@ -52,11 +52,12 @@
 
 <style lang="scss">
 	.container {
+		display: flex;
 		max-width: $space-xxxl + $space-xxl;
 		min-width: $space-xxxl;
 		width: 100%;
 
-		flex: 1;
+		flex-direction: column;
 	}
 
 	.wrapper {
@@ -64,6 +65,7 @@
 
 		margin-top: $space-xs;
 
+		flex: 1;
 		flex-direction: column;
 		gap: $space-md;
 	}

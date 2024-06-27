@@ -20,6 +20,7 @@
 	export let supersetExercise: Partial<PageCreateSupersetExercise>;
 	export let onCancel: () => void;
 	export let onSelect: ((supersetExercise: PageCreateSupersetExercise) => void) | undefined = undefined;
+	export let isOpen = false;
 
 	let value = formatExercise(supersetExercise);
 	let dropdownItems: PageCreateSupersetExercise[] = [];
@@ -81,7 +82,7 @@
 		{onOpenChange}
 		onMountBehaviour="select"
 		maxTextLength={MAX_DROPDOWN_SEARCH_LENGTH}
-		isOpen
+		{isOpen}
 	>
 		{#each dropdownItems as item (item.exercise.id)}
 			<InputSelectItem value={item}>{formatExercise(item)}</InputSelectItem>

@@ -86,6 +86,7 @@
 					bind:supersetExercise={newSupersetExercise}
 					onCancel={handleCancelNewExercise}
 					onSelect={handleSelectExercise}
+					isOpen
 				/>
 			</div>
 		{:else}

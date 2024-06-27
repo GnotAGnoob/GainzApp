@@ -36,9 +36,7 @@
 	let checkElement: HTMLElement | null = null;
 	const isOpenInitial = isOpen;
 
-	$: {
-		isOpen = false;
-	}
+	isOpen = false;
 
 	onMount(() => {
 		isMounted = true;

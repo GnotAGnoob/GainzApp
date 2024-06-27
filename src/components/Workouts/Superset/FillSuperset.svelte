@@ -29,7 +29,6 @@
 					animationId: Math.random().toString(),
 					exercise: {
 						...supersetExercise.exercise,
-						animationId: Math.random().toString(),
 						bestWorkout: additionalInfo?.bestWorkout,
 						workoutHistory: additionalInfo?.workoutHistory,
 					},

@@ -11,8 +11,8 @@ export const TRANSITION_CONFIG: TransitionConfig = {
 	delay: 0,
 };
 
-export const getFlyTransitionConfig = (x = 0, y = 50): FlyParams => ({
-	duration: TRANSITION_DURATION,
+export const getFlyTransitionConfig = (x = 0, y = 50, duration = TRANSITION_DURATION): FlyParams => ({
+	duration,
 	easing: quadOut,
 	delay: 0,
 	x,

@@ -3,7 +3,7 @@
 	import type { PageFillSupersetExercise } from "$src/routes/types";
 	import EditableSupersetTemplate from "./EditableSupersetTemplate.svelte";
 	import { exerciseAdditionalInfo } from "$src/lib/stores/exerciseAddionalInfo";
-	import { TRANSITION_CONFIG } from "$src/lib/transitions";
+	import { TRANSITION_CONFIG, TRANSITION_DURATION_FAST } from "$src/lib/transitions";
 	import { fade } from "svelte/transition";
 	import { flip } from "svelte/animate";
 
@@ -42,6 +42,8 @@
 
 		return supersetExercise;
 	};
+
+	const animationConfig = { ...TRANSITION_CONFIG, duration: TRANSITION_DURATION_FAST };
 </script>
 
 <EditableSupersetTemplate
@@ -56,7 +58,7 @@
 >
 	<div class="container" class:containerCenter={supersetExercises.length < 2}>
 		{#each supersetExercises as supersetExercise, index (supersetExercise.animationId)}
-			<div class="exercise" animate:flip={TRANSITION_CONFIG} transition:fade={TRANSITION_CONFIG}>
+			<div class="exercise" animate:flip={animationConfig} transition:fade={animationConfig}>
 				<FillExercise
 					bind:supersetExercise
 					onDelete={() => onDelete(index)}

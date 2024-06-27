@@ -35,7 +35,13 @@
 
 {#if isInEditMode}
 	<div class="input">
-		<ExerciseDropdown bind:supersetExercise onCancel={turnEditModeOff} onSelect={handleSelectExercise} isOpen />
+		<ExerciseDropdown
+			bind:supersetExercise
+			onCancel={turnEditModeOff}
+			onSelect={handleSelectExercise}
+			isOpen
+			onMountBehaviour="select"
+		/>
 	</div>
 {:else}
 	<div class="exercise">

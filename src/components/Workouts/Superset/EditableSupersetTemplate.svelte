@@ -86,6 +86,7 @@
 					onCancel={handleCancelNewExercise}
 					onSelect={handleSelectExercise}
 					isOpen
+					onMountBehaviour="select"
 				/>
 			</div>
 		{:else}

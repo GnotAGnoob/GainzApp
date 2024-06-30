@@ -13,7 +13,7 @@
 </script>
 
 <div class="categories">
-	{#each categories as category (category.id)}
+	{#each $categoriesStore as category (category.id)}
 		<ExerciseCategory {category} />
 	{/each}
 </div>

@@ -106,7 +106,7 @@
 						error: dictionary.CREATING_CATEGORY_FAILED,
 					});
 
-					$categories = [...$categories, response.data];
+					$categories = [...$categories, response.data].sort((a, b) => a.name.localeCompare(b.name));
 					resolve();
 				} catch (error) {
 					if (axios.isAxiosError(error)) {

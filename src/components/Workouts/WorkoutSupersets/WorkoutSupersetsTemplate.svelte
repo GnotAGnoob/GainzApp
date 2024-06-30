@@ -109,6 +109,7 @@
 		gap: $space-sm + $space-xs;
 
 		height: 100%;
+		min-height: 0;
 	}
 
 	.content {

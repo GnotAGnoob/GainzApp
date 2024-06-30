@@ -22,11 +22,7 @@
 	export let disabledRemoveExerciseTitle: string | undefined;
 	export let isCategoryOnMountFocus = false;
 
-	$: {
-		exercise.category = exercise.category.toLowerCase();
-	}
-
-	$: isCreateButtonHidden = !exercise.category.length || categories.includes(exercise.category);
+	$: isCreateButtonHidden = !exercise.category.length || categories.includes(exercise.category.toLowerCase());
 
 	const handleCreateNew = () => {
 		onCreateNewCategory(exercise.category);

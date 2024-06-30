@@ -15,9 +15,9 @@ export async function POST({ request, locals }) {
 
 		const schema = z.array(
 			z.object({
-				name: z.string().max(MAX_TEXT_LENGTH),
-				category: z.string().max(MAX_TEXT_LENGTH),
-				unit: z.string().max(MAX_TEXT_LENGTH),
+				name: z.string().max(MAX_TEXT_LENGTH).toLowerCase(),
+				category: z.string().max(MAX_TEXT_LENGTH).toLowerCase(),
+				unit: z.string().max(MAX_TEXT_LENGTH).toLowerCase(),
 			}),
 		);
 
@@ -31,7 +31,7 @@ export async function POST({ request, locals }) {
 			unitSet.add(exercise.unit);
 		});
 		const categories = [...categoriesSet].map((categoryName) => ({
-			name: categoryName.toLowerCase(),
+			name: categoryName,
 			userId,
 		}));
 

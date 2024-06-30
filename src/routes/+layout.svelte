@@ -153,6 +153,7 @@
 	}
 
 	#modal {
+		z-index: 150;
 		view-transition-name: modal;
 	}
 

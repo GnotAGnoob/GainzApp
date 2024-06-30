@@ -38,7 +38,6 @@
 		display: flex;
 
 		padding-top: $space-xs;
-		height: 100%;
 
 		flex-direction: column;
 		gap: $space-sm;
@@ -91,12 +90,6 @@
 	}
 
 	.scroller {
-		display: flex;
-
-		align-items: center;
-		justify-content: center;
-		flex: 1;
-
 		z-index: 1;
 	}
 </style>

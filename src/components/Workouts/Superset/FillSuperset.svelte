@@ -73,7 +73,6 @@
 
 		flex-direction: row;
 		flex-wrap: wrap;
-		align-items: stretch;
 
 		justify-content: center;
 

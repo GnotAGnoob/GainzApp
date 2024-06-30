@@ -77,15 +77,11 @@
 
 		&Wrapper {
 			position: relative;
-
-			height: 100%;
 		}
 	}
 
 	.title {
 		display: flex;
-
-		height: 100%;
 
 		align-items: center;
 		gap: $space-xs;

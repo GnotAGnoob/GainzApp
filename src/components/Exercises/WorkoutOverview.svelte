@@ -25,7 +25,7 @@
 			<slot />
 			<div class="workoutsWrapper" class:workoutsWrapper_open={isOpen}>
 				{#if lastWorkout.id === bestWorkout.id}
-					<div class="workout">
+					<div>
 						<Workout
 							title={dictionary.BEST_AND_LAST}
 							workout={bestWorkout}
@@ -78,7 +78,6 @@
 	.title,
 	.content {
 		width: 100%;
-		height: 100%;
 	}
 
 	.content {
@@ -88,26 +87,18 @@
 	}
 
 	.exercise {
-		display: flex;
 		position: relative;
 
 		min-width: $space-xxl + $space-xl;
-		flex: 1;
-		flex-direction: column;
 
 		z-index: 1;
 	}
 
 	.workout {
-		height: 100%;
 		&s {
 			display: grid;
 
 			grid-template-columns: 1fr 1fr;
-
-			&Wrapper {
-				height: 100%;
-			}
 		}
 	}
 

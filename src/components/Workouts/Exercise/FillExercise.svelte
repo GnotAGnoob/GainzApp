@@ -58,6 +58,7 @@
 <style lang="scss">
 	.container {
 		display: flex;
+
 		max-width: $space-xxxl + $space-xxl;
 		min-width: $space-xxxl;
 		width: 100%;
@@ -70,9 +71,10 @@
 
 		margin-top: $space-xs;
 
-		flex: 1;
 		flex-direction: column;
 		gap: $space-md;
+		justify-content: space-between;
+		flex: 1;
 	}
 
 	.icon {
@@ -85,7 +87,7 @@
 		width: 100%;
 		height: $space-xl + $space-lg;
 		border-radius: $border-md;
-		margin: auto;
+		margin-inline: auto;
 
 		align-items: center;
 		justify-content: center;

@@ -12,6 +12,7 @@ import type { WorkoutHistory } from "./types";
 import { bestSupersetExercises, mapSupersetExercises } from "$src/lib/server/dbCategoriesExercisesPromise";
 import { STATUS, status } from "$src/db/schema/status";
 
+// needs to be a POST request because we are getting an array of ids in the body
 export async function POST({ request, locals }) {
 	try {
 		const userId = await getUserId(locals);

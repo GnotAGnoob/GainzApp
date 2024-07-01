@@ -52,12 +52,17 @@
 		const oldWorkout = workout;
 		$plannedWorkouts = $plannedWorkouts.filter((plannedWorkout) => plannedWorkout.id !== workout.id);
 		try {
-			const { data } = await axios.delete<PagePlannedWorkout[]>(`${apiRoutes.planWorkout}${workout.id}`);
+			const { data } = await toast.promise(
+				axios.delete<PagePlannedWorkout[]>(`${apiRoutes.planWorkout}${workout.id}`),
+				{
+					loading: `${dictionary.DELETING_WORKOUT}`,
+					success: `${dictionary.WORKOUT_SUCCESSFULLY_DELETED}`,
+					error: dictionary.DELETING_WORKOUT_FAILED,
+				},
+			);
 
 			$plannedWorkouts = data;
 		} catch (error) {
-			toast.error(dictionary.DELETING_WORKOUT_FAILED);
-
 			workout = oldWorkout;
 
 			if (axios.isAxiosError(error)) {

@@ -9,6 +9,7 @@
 	import { dictionary } from "$src/lib/language/dictionary";
 	import { remapWorkout } from "$src/lib/remaps";
 	import { exerciseAdditionalInfo } from "$src/lib/stores/exerciseAddionalInfo";
+	import toast from "$src/lib/toast";
 
 	export let workout: PagePlannedWorkout;
 	export let isOpen: boolean;
@@ -23,9 +24,13 @@
 	const onConfirm = async () => {
 		isLoading = true;
 		try {
-			const { data } = await axios.put<PagePlannedWorkouts>(
-				apiRoutes.completeWorkout + workout.id,
-				remappedWorkout,
+			const { data } = await toast.promise(
+				axios.put<PagePlannedWorkouts>(apiRoutes.completeWorkout + workout.id, remappedWorkout),
+				{
+					loading: `${dictionary.SAVING_WORKOUT}`,
+					success: `${dictionary.WORKOUT_SUCCESSFULLY_SAVED}`,
+					error: dictionary.SAVING_WORKOUT_FAILED,
+				},
 			);
 			$plannedWorkouts = data.plannedWorkouts;
 			$workoutHistory = data.workoutHistory;

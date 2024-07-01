@@ -68,12 +68,17 @@
 		try {
 			category.name = newValue;
 
-			const { data } = await axios.patch<Category>(`${apiRoutes.category}${category.id}`, { name: newValue });
+			const { data } = await toast.promise(
+				axios.patch<Category>(`${apiRoutes.category}${category.id}`, { name: newValue }),
+				{
+					loading: `${dictionary.RENAMING_CATEGORY}`,
+					success: `${dictionary.RENAMING_CATEGORY_SUCCESSFUL}`,
+					error: dictionary.RENAMING_CATEGORY_FAILED,
+				},
+			);
 
 			category.name = data.name;
 		} catch (error) {
-			toast.error(dictionary.RENAMING_CATEGORY_FAILED);
-
 			category.name = oldValue;
 
 			if (axios.isAxiosError(error)) {
@@ -91,11 +96,14 @@
 
 		try {
 			$categories = $categories.filter((c) => c.id !== category.id);
-			const { data } = await axios.delete<PageCategory[]>(`${apiRoutes.category}${category.id}`);
+			const { data } = await toast.promise(axios.delete<PageCategory[]>(`${apiRoutes.category}${category.id}`), {
+				loading: `${dictionary.DELETING_CATEGORY}`,
+				success: `${dictionary.DELETING_CATEGORY_SUCCESSFUL}`,
+				error: dictionary.DELETING_CATEGORY_FAILED,
+			});
+
 			$categories = data;
 		} catch (error) {
-			toast.error(dictionary.DELETING_CATEGORY_FAILED);
-
 			$categories = oldCategories;
 
 			if (axios.isAxiosError(error)) {

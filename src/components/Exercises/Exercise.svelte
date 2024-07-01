@@ -28,12 +28,17 @@
 		try {
 			exercise.name = newValue;
 
-			await axios.patch<Exercise & { categoryId: number }>(`${apiRoutes.exercise}${exercise.id}`, {
-				name: newValue,
-			});
+			await toast.promise(
+				axios.patch<Exercise & { categoryId: number }>(`${apiRoutes.exercise}${exercise.id}`, {
+					name: newValue,
+				}),
+				{
+					loading: `${dictionary.RENAMING_EXERCISE}`,
+					success: `${dictionary.RENAMING_EXERCISE_SUCCESSFUL}`,
+					error: dictionary.RENAMING_EXERCISE_FAILED,
+				},
+			);
 		} catch (error) {
-			toast.error(dictionary.RENAMING_CATEGORY_FAILED);
-
 			exercise.name = oldValue;
 
 			if (axios.isAxiosError(error)) {
@@ -54,10 +59,14 @@
 		const oldExercises = [...$exercises];
 		try {
 			$exercises = $exercises.filter((e) => e.id !== exercise.id);
-			const { data } = await axios.delete<PageExercise[]>(`${apiRoutes.exercise}${exercise.id}`);
+
+			const { data } = await toast.promise(axios.delete<PageExercise[]>(`${apiRoutes.exercise}${exercise.id}`), {
+				loading: `${dictionary.DELETING_EXERCISE}`,
+				success: `${dictionary.DELETING_EXERCISE_SUCCESSFUL}`,
+				error: dictionary.DELETING_EXERCISE_FAILED,
+			});
 			$exercises = data;
 		} catch (error) {
-			toast.error(dictionary.DELETING_EXERCISE_FAILED);
 			$exercises = oldExercises;
 			if (axios.isAxiosError(error)) {
 				errorMessage = error.response?.data;

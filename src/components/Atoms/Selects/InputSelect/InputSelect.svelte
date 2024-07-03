@@ -6,6 +6,7 @@
 	import { onMount } from "svelte";
 	import { slide } from "svelte/transition";
 	import { TRANSITION_CONFIG, TRANSITION_DURATION_FAST } from "$src/lib/transitions";
+	import SelectItemLoading from "../SelectItemLoading.svelte";
 
 	export let disabled = false;
 	export let isMultiChoice = false;
@@ -29,6 +30,7 @@
 	export let inputValue: string | undefined = undefined;
 	export let touchedInput = false;
 	export let label: string | undefined = undefined;
+	export let isLoading = false;
 
 	let portal: string | null = "#modal";
 	let isMounted = false;
@@ -44,6 +46,8 @@
 			portal = null;
 		}
 	});
+
+	const slideConfig = { ...TRANSITION_CONFIG, duration: TRANSITION_DURATION_FAST };
 
 	// TODO: fix double click when dropdown is open and click to input
 </script>
@@ -87,14 +91,23 @@
 		{sameWidth}
 		fitViewport
 		transition={slide}
-		transitionConfig={{ ...TRANSITION_CONFIG, duration: TRANSITION_DURATION_FAST }}
+		transitionConfig={slideConfig}
 	>
 		<div class="optionsWrapper">
+			<!-- fix animation? -->
 			<div class="options">
-				<div class="optionsMain">
-					<slot />
-				</div>
-				<slot name="bottom" />
+				{#if isLoading}
+					<div class="loading">
+						<SelectItemLoading />
+					</div>
+				{:else}
+					<div class="optionsInner" in:slide={slideConfig}>
+						<div class="optionsMain">
+							<slot />
+						</div>
+						<slot name="bottom" />
+					</div>
+				{/if}
 			</div>
 		</div>
 	</Combobox.Content>
@@ -105,16 +118,14 @@
 		position: absolute;
 	}
 
-	.options {
-		display: flex;
-
+	.loading {
 		width: 100%;
-		flex-direction: column;
-		max-height: $space-xxxl + $space-xxl;
-		overflow: hidden;
+	}
 
+	.options {
 		box-shadow: $box-shadow;
 
+		width: 100%;
 		background-color: var(--background-color);
 
 		&Wrapper {
@@ -122,6 +133,14 @@
 
 			height: inherit;
 			max-height: inherit;
+		}
+
+		&Inner {
+			display: flex;
+
+			flex-direction: column;
+			max-height: $space-xxxl + $space-xxl;
+			overflow: hidden;
 		}
 
 		&Main {

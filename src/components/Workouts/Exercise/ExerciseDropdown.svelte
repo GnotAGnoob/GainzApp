@@ -25,6 +25,7 @@
 
 	let value = formatExercise(supersetExercise);
 	let dropdownItems: PageCreateSupersetExercise[] = [];
+	let isLoading = false;
 
 	onMount(() => {
 		fetchDropdownData();
@@ -32,15 +33,19 @@
 
 	const fetchDropdownData = async () => {
 		try {
+			isLoading = true;
 			const { data } = await axios.get<ExerciseSearchResult[]>(apiRoutes.exercisesSearch, {
 				params: { text: value.trim(), limit: MAX_DROPDOWN_ITEMS },
 			});
+
 			dropdownItems = data.map((item) => {
 				return { exercise: { ...item.exercise, category: item.category, unit: item.unit } };
 			});
 		} catch (error) {
 			toast.error(dictionary.UNKNOWN_ERROR);
 		}
+
+		isLoading = false;
 	};
 
 	const debounceFetch = debounce(fetchDropdownData, DEBOUNCE_TIME);
@@ -83,6 +88,7 @@
 		{onOpenChange}
 		{onMountBehaviour}
 		maxTextLength={MAX_DROPDOWN_SEARCH_LENGTH}
+		isLoading={isLoading && !dropdownItems.length}
 	>
 		{#each dropdownItems as item (item.exercise.id)}
 			<InputSelectItem value={item}>{formatExercise(item)}</InputSelectItem>

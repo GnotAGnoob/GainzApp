@@ -106,7 +106,7 @@
 			<div class="options">
 				<!-- add animation? -->
 				{#if isLoading}
-					<div>
+					<div class="loading">
 						<SelectItemLoading />
 					</div>
 				{:else}
@@ -125,6 +125,10 @@
 <style lang="scss">
 	.check {
 		position: absolute;
+	}
+
+	.loading {
+		width: 100%;
 	}
 
 	.options {

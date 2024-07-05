@@ -59,8 +59,6 @@
 	.container {
 		display: flex;
 
-		max-width: $space-xxxl + $space-xxl;
-		min-width: $space-xxxl;
 		width: 100%;
 
 		flex-direction: column;

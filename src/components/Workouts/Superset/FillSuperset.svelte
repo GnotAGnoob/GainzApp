@@ -85,6 +85,9 @@
 	.exercise {
 		display: flex;
 
+		max-width: $space-xxxl + $space-xxl;
+		min-width: $space-xxxl;
+
 		flex: 1;
 		justify-content: center;
 	}

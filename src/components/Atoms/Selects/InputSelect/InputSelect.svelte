@@ -37,6 +37,14 @@
 	let checkElement: HTMLElement | null = null;
 	let isOpen = false;
 
+	let scrollContainer: HTMLElement | null = null;
+
+	export function scrollToTop() {
+		if (scrollContainer) {
+			scrollContainer.scrollTo({ top: 0, behavior: "instant" });
+		}
+	}
+
 	onMount(() => {
 		isMounted = true;
 		isOpen = onMountBehaviour !== "none";
@@ -102,7 +110,7 @@
 					</div>
 				{:else}
 					<div class="optionsInner" in:slide={slideConfig}>
-						<div class="optionsMain">
+						<div class="optionsMain" bind:this={scrollContainer}>
 							<slot />
 						</div>
 						<slot name="bottom" />

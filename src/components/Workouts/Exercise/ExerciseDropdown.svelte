@@ -26,6 +26,7 @@
 	let value = formatExercise(supersetExercise);
 	let dropdownItems: PageCreateSupersetExercise[] = [];
 	let isLoading = false;
+	let inputDropdownElement: InputSelect | undefined;
 
 	onMount(() => {
 		fetchDropdownData();
@@ -41,6 +42,8 @@
 			dropdownItems = data.map((item) => {
 				return { exercise: { ...item.exercise, category: item.category, unit: item.unit } };
 			});
+
+			inputDropdownElement?.scrollToTop();
 		} catch (error) {
 			toast.error(dictionary.UNKNOWN_ERROR);
 		}
@@ -83,6 +86,7 @@
 
 <div class="input">
 	<InputSelect
+		bind:this={inputDropdownElement}
 		bind:inputValue={value}
 		onSelectedChange={handleSelect}
 		{onOpenChange}

@@ -22,6 +22,18 @@
 	export let disabledRemoveExerciseTitle: string | undefined;
 	export let isCategoryOnMountFocus = false;
 
+	let dropdownElement: InputSelect | undefined;
+	let oldCategories: string[] = [];
+
+	$: {
+		const areCategoriesDifferent = JSON.stringify(categories) !== JSON.stringify(oldCategories);
+
+		if (areCategoriesDifferent) {
+			oldCategories = categories;
+			dropdownElement?.scrollToTop();
+		}
+	}
+
 	$: isCreateButtonHidden = !exercise.category.length || categories.includes(exercise.category.toLowerCase());
 
 	const handleCreateNew = () => {
@@ -33,6 +45,7 @@
 	<div class="inputs">
 		<div class="input">
 			<InputSelect
+				bind:this={dropdownElement}
 				bind:inputValue={exercise.category}
 				label={dictionary.CATEGORY}
 				onMountBehaviour={!exercise.category && isCategoryOnMountFocus ? "focus" : "none"}

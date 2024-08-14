@@ -43,6 +43,13 @@
       "when": 1718551646674,
       "tag": "0005_sticky_thunderbird",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1723648822498,
+      "tag": "0006_long_jubilee",
+      "breakpoints": true
     }
   ]
 }

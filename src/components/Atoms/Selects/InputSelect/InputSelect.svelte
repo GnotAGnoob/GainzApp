@@ -148,6 +148,7 @@
 
 			flex-direction: column;
 			max-height: $space-xxxl + $space-xxl;
+			height: 100%;
 			overflow: hidden;
 		}
 

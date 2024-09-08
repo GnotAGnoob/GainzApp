@@ -113,6 +113,10 @@
 	}
 
 	.content {
+		display: flex;
+
+		flex-direction: column;
+		gap: $space-xs;
 		flex: 1;
 		overflow-y: auto;
 		overflow-x: hidden;

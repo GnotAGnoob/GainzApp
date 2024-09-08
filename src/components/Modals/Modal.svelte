@@ -134,7 +134,7 @@
 			}
 
 			&_lg {
-				width: $space-xxxxl + $space-xxxl;
+				width: $space-5xl;
 			}
 
 			&Wrapper {

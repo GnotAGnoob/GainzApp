@@ -13,6 +13,7 @@ $space-xl: $base-size * math.pow($koeficient, 5);
 $space-xxl: $base-size * math.pow($koeficient, 6);
 $space-xxxl: $base-size * math.pow($koeficient, 7);
 $space-xxxxl: $base-size * math.pow($koeficient, 8);
+$space-5xl: $base-size * math.pow($koeficient, 9);
 
 $space-px: pxToRem(1);
 

@@ -57,6 +57,13 @@
       "when": 1731601904172,
       "tag": "0007_condemned_serpent_society",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1734020441687,
+      "tag": "0008_wakeful_sentry",
+      "breakpoints": true
     }
   ]
 }
